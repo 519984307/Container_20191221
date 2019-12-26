@@ -27,16 +27,19 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwidget.cpp \
-    picturewidget.cpp
+    picturewidget.cpp \
+    settingwidget.cpp
 
 HEADERS += \
         mainwidget.h\
     getimages_interface.h \
-    picturewidget.h
+    picturewidget.h \
+    settingwidget.h
 
 FORMS += \
         mainwidget.ui \
-    picturewidget.ui
+    picturewidget.ui \
+    settingwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

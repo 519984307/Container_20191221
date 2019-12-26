@@ -1,22 +1,25 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 
+#include"picturewidget.h"
+#include "settingwidget.h"
+
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
-
-    pGetimagesInterface=nullptr;
-
-  loadPlugin();
-    initCamer("192.168.1.101",23001);
 }
 
 MainWidget::~MainWidget()
 {
     delete pGetimagesInterface;
     delete ui;
+}
+
+void MainWidget::InitializeObject()
+{
+    pGetimagesInterface=nullptr;;
 }
 
 void MainWidget::loadPlugin()
@@ -57,7 +60,7 @@ void MainWidget::pictureStream(const QByteArray &jpgStream, const QString &camer
 {   
     QPixmap *map = new QPixmap();
     map->loadFromData(jpgStream);
-    ui->label->setPixmap(*map);
+    //ui->label->setPixmap(*map);
 
     delete map;
 }
@@ -69,8 +72,7 @@ void MainWidget::message(const QString &msg)
 
 void MainWidget::on_pushButton_clicked()
 {
-    if( putCommand(tr("capture 10\n")))
-    {
-        qDebug()<<1;
-    }
+    PictureWidget *p=new PictureWidget();
+    SettingWidget *d=new SettingWidget ();
+    d->show();
 }
