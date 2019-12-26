@@ -28,18 +28,21 @@ SOURCES += \
         main.cpp \
         mainwidget.cpp \
     picturewidget.cpp \
-    settingwidget.cpp
+    settingwidget.cpp \
+    datawidget.cpp
 
 HEADERS += \
         mainwidget.h\
     getimages_interface.h \
     picturewidget.h \
-    settingwidget.h
+    settingwidget.h \
+    datawidget.h
 
 FORMS += \
         mainwidget.ui \
     picturewidget.ui \
-    settingwidget.ui
+    settingwidget.ui \
+    datawidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

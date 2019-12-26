@@ -3,6 +3,7 @@
 
 #include"picturewidget.h"
 #include "settingwidget.h"
+#include"datawidget.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -74,5 +75,6 @@ void MainWidget::on_pushButton_clicked()
 {
     PictureWidget *p=new PictureWidget();
     SettingWidget *d=new SettingWidget ();
-    d->show();
+    DataWidget *b=new DataWidget () ;
+    b->show();
 }
