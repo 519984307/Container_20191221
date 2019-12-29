@@ -44,6 +44,16 @@ void MainWidget::InitializeOtherWindow()
         item->addChild(sunItem);//添加子项
         widgetMap.insert(sunItem,new CamerSetting (this));
     }
+
+    item=ui->treeWidget->topLevelItem(2);//获取服务根
+    childImte=new QTreeWidgetItem(item,QStringList(tr("Log")));
+    item->addChild(childImte);
+    widgetMap.insert(childImte,new ServiceWidget (this));
+
+    item=ui->treeWidget->topLevelItem(3);//获取数据库根
+    childImte=new QTreeWidgetItem(item,QStringList(tr("Data")));
+    item->addChild(childImte);
+    widgetMap.insert(childImte,new DataBaseWidget (this));
 }
 
 void MainWidget::InitializeCamerWindow()
@@ -142,6 +152,12 @@ void MainWidget::hideWindows()
          if(SystemSetting* tmp=qobject_cast<SystemSetting*>(value)){
              tmp->setVisible(false);
          }
+         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
+             tmp->setVisible(false);
+         }
+         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
+             tmp->setVisible(false);
+         }
     }
 }
 
@@ -172,6 +188,14 @@ void MainWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item, int column)
             tmp->move(168,80);
             tmp->setVisible(true);
         }
+        if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
+            tmp->move(168,80);
+            tmp->setVisible(true);
+        }
+        if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
+            tmp->move(168,80);
+            tmp->setVisible(true);
+        }
     }
 }
 
@@ -188,6 +212,12 @@ void MainWidget::resizeEvent(QResizeEvent *size)
             tmp->resize( size->size().width()-168,size->size().height()-80);
         }
         if(SystemSetting* tmp=qobject_cast<SystemSetting*>(pWidget)){
+            tmp->resize( size->size().width()-168,size->size().height()-80);
+        }
+        if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(pWidget)){
+            tmp->resize( size->size().width()-168,size->size().height()-80);
+        }
+        if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-80);
         }
     }

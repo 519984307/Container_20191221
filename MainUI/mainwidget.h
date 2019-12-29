@@ -18,6 +18,8 @@
 #include "datawidget.h"
 #include "camersetting.h"
 #include "systemsetting.h"
+#include "servicewidget.h"
+#include "databasewidget.h"
 //------------------------------------------------------------------------------------------------------------
 
 namespace Ui {

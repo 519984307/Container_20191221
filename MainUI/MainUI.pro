@@ -32,7 +32,9 @@ SOURCES += \
     datawidget.cpp \
     setting.cpp \
     camersetting.cpp \
-    systemsetting.cpp
+    systemsetting.cpp \
+    servicewidget.cpp \
+    databasewidget.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -42,7 +44,9 @@ HEADERS += \
     datawidget.h \
     setting.h \
     camersetting.h \
-    systemsetting.h
+    systemsetting.h \
+    servicewidget.h \
+    databasewidget.h
 
 FORMS += \
         mainwidget.ui \
@@ -50,7 +54,9 @@ FORMS += \
     settingwidget.ui \
     datawidget.ui \
     camersetting.ui \
-    systemsetting.ui
+    systemsetting.ui \
+    servicewidget.ui \
+    databasewidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
