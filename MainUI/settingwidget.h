@@ -17,6 +17,10 @@ public:
 
 private:
     Ui::SettingWidget *ui;
+
+public:
+    void  writeINI();
+    void readINI();
 };
 
 #endif // SETTINGWIDGET_H

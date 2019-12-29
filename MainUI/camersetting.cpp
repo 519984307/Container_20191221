@@ -1,9 +1,9 @@
-#include "datawidget.h"
-#include "ui_datawidget.h"
+#include "camersetting.h"
+#include "ui_camersetting.h"
 
-DataWidget::DataWidget(QWidget *parent) :
+CamerSetting::CamerSetting(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::DataWidget)
+    ui(new Ui::CamerSetting)
 {
     ui->setupUi(this);
 
@@ -12,7 +12,7 @@ DataWidget::DataWidget(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 }
 
-DataWidget::~DataWidget()
+CamerSetting::~CamerSetting()
 {
     delete ui;
 }

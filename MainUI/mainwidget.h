@@ -6,9 +6,19 @@
 #include <QPluginLoader>
 #include <QPixmap>
 #include <QDebug>
+#include <QTreeWidgetItem>
+#include<QResizeEvent>
 
+//------------------------------------------------------------------------------------------------------------Interface
 #include "getimages_interface.h"
+//------------------------------------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------------------------------------UI
+#include "picturewidget.h"
+#include "datawidget.h"
+#include "camersetting.h"
+#include "systemsetting.h"
+//------------------------------------------------------------------------------------------------------------
 
 namespace Ui {
 class MainWidget;
@@ -20,11 +30,16 @@ class MainWidget : public QWidget
 
 public:
     explicit MainWidget(QWidget *parent = nullptr);
-    ~MainWidget();
+    ~MainWidget()override;
+
+private://变量
+     int channelCounnt;
 
 private://对象
     Ui::MainWidget *ui;
-    GetImagesInterface *pGetimagesInterface;
+    GetImagesInterface *pGetimagesInterface;   
+    QList<QString> camerName;
+    QMap< QTreeWidgetItem*,QObject*> widgetMap;
 
 private://函数
 
@@ -32,6 +47,21 @@ private://函数
     /// \brief InitializeObject 初始化对象
     ///
     void InitializeObject();
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief InitializeOtherWindow 初始化其他窗口
+    ///
+    void InitializeOtherWindow();
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief InitializeDataWindow 初始化数据窗口
+    ///
+    void InitializeDataWindow();
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief InitializeCamerWindow 初始化相机窗口
+    ///
+    void InitializeCamerWindow();
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief loadPlugin 加载插件
@@ -43,6 +73,11 @@ private://函数
     /// \param plugin 插件对象
     ///
     void processingPlug(QObject *plugin);
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief hideWindows 隐藏所有窗口
+    ///
+    void hideWindows();
 
 private slots://槽
 
@@ -66,7 +101,18 @@ private slots://槽
     ///
     void message(const QString &msg);
 
-    void on_pushButton_clicked();
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief resizeEvent 重写窗口改变大小事件
+    /// \param size 窗口尺寸
+    ///
+    void resizeEvent(QResizeEvent *size)override;
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief on_treeWidget_itemActivated 导航栏选取事件
+    /// \param item 选取项
+    /// \param column 列
+    ///
+    void on_treeWidget_itemActivated(QTreeWidgetItem *item, int column);
 
 signals://信号
 

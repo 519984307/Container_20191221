@@ -29,20 +29,28 @@ SOURCES += \
         mainwidget.cpp \
     picturewidget.cpp \
     settingwidget.cpp \
-    datawidget.cpp
+    datawidget.cpp \
+    setting.cpp \
+    camersetting.cpp \
+    systemsetting.cpp
 
 HEADERS += \
         mainwidget.h\
     getimages_interface.h \
     picturewidget.h \
     settingwidget.h \
-    datawidget.h
+    datawidget.h \
+    setting.h \
+    camersetting.h \
+    systemsetting.h
 
 FORMS += \
         mainwidget.ui \
     picturewidget.ui \
     settingwidget.ui \
-    datawidget.ui
+    datawidget.ui \
+    camersetting.ui \
+    systemsetting.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -56,3 +64,6 @@ OBJECTS_DIR=tmp/obj
 
 VERSION=1.0
 CONFIG+=console
+
+RESOURCES += \
+    ico.qrc

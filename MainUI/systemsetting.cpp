@@ -1,9 +1,9 @@
-#include "datawidget.h"
-#include "ui_datawidget.h"
+#include "systemsetting.h"
+#include "ui_systemsetting.h"
 
-DataWidget::DataWidget(QWidget *parent) :
+SystemSetting::SystemSetting(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::DataWidget)
+    ui(new Ui::SystemSetting)
 {
     ui->setupUi(this);
 
@@ -12,7 +12,7 @@ DataWidget::DataWidget(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 }
 
-DataWidget::~DataWidget()
+SystemSetting::~SystemSetting()
 {
     delete ui;
 }
