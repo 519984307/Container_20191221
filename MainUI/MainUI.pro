@@ -46,7 +46,8 @@ HEADERS += \
     camersetting.h \
     systemsetting.h \
     servicewidget.h \
-    databasewidget.h
+    databasewidget.h \
+    infraredlogic_interface.h
 
 FORMS += \
         mainwidget.ui \

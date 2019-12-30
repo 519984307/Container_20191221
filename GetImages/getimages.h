@@ -8,11 +8,11 @@ class GETIMAGESSHARED_EXPORT GetImages:public GetImagesInterface
 {
     Q_OBJECT
     Q_INTERFACES(GetImagesInterface)
-    Q_PLUGIN_METADATA(IID  "ZBY.ContainerServer.GetImagesInterface/1.0")
+    Q_PLUGIN_METADATA(IID  GetImagesInterfaceIID)
 
 public:
     GetImages(QObject *parent = nullptr);
-    ~GetImages()override;
+    ~GetImages()Q_DECL_OVERRIDE;
 
 private slots:
 

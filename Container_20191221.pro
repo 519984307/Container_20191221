@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     GetImages \
-    MainUI
+    MainUI \
+    InfraredLogic
