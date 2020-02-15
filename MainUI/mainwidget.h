@@ -13,7 +13,7 @@
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
-#include "infraredlogic_interface.h"
+#include "infraredlogicinterface.h"
 
 //------------------------------------------------------------------------------------------------------------Headers
 #include "setting.h"
@@ -25,6 +25,10 @@
 #include "systemsetting.h"
 #include "servicewidget.h"
 #include "databasewidget.h"
+
+//------------------------------------------------------------------------------------------------------------Process
+#include "imageprocessing.h"
+#include "logicalprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -52,7 +56,7 @@ private:
     QList<QString> CamerNameList;
 
     ///
-    /// \brief ThreadList 插件现场池
+    /// \brief ThreadList 插件线程池
     ///
     QList<QThread*> ThreadList;
 
@@ -79,11 +83,15 @@ private:
      */
     QHash<QTreeWidgetItem*,QObject*> ItemWidgetMap;
 
-    /*
-     *  插件列表
-     */
-    QVector<QObject*> GetImagePluginList;
-    QVector<QObject*> SerialPortPluginList;
+    ///
+    /// \brief pImageProcessing 图片处理类
+    ///
+    ImageProcessing* pImageProcessing;
+
+    ///
+    /// \brief pLogicalProcessing 红外逻辑处理类
+    ///
+    LogicalProcessing* pLogicalProcessing;
 
 private:
 
@@ -115,19 +123,19 @@ private:
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief ProcessingPlug 分析插件
     ///
-    void processingPlugins(QDir path);
+    void processingPlugins(QDir path,int num);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief camerPlugin 处理相机插件
     /// \param Camer 相机类
     ///
-    void getImagePlugin();
+    void getImagePlugin(GetImagesInterface* pGetimagesInterface,int num);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief serialportPlugin 处理串口插件
     /// \param SerialPort 串口类
     ///
-    void serialportPlugin();
+    void serialportPlugin(InfraredlogicInterface* pInfraredlogicInterface,int num);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口

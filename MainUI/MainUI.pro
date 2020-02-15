@@ -33,7 +33,9 @@ SOURCES += \
     camersetting.cpp \
     systemsetting.cpp \
     servicewidget.cpp \
-    databasewidget.cpp
+    databasewidget.cpp \
+    imageprocessing.cpp \
+    logicalprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -44,8 +46,10 @@ HEADERS += \
     systemsetting.h \
     servicewidget.h \
     databasewidget.h \
-    infraredlogic_interface.h \
-    getimagesinterface.h
+    imageprocessing.h \
+    logicalprocessing.h \
+    getimagesinterface.h \
+    infraredlogicinterface.h
 
 FORMS += \
         mainwidget.ui \

@@ -30,7 +30,7 @@ SOURCES += \
 HEADERS += \
         infraredlogic.h \
         infraredlogic_global.h \ 
-    infraredlogic_interface.h
+    infraredlogicinterface.h
 
 unix {
     target.path = /usr/lib

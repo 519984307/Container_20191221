@@ -2,7 +2,7 @@
 #define INFRAREDLOGIC_H
 
 #include "infraredlogic_global.h"
-#include "infraredlogic_interface.h"
+#include "infraredlogicinterface.h"
 
 class INFRAREDLOGICSHARED_EXPORT InfraredLogic:public InfraredlogicInterface
 {

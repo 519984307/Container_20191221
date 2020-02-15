@@ -24,8 +24,6 @@ MainWidget::~MainWidget()
     }
 
     ItemWidgetMap.clear();
-    GetImagePluginList.clear();
-    SerialPortPluginList.clear();
     CamerNameList.clear();
     ThreadList.clear();
 
@@ -286,7 +284,7 @@ void MainWidget::loadPlugins()
                   QFile::copy(QDir::toNativeSeparators(tr("%1/%2").arg(path).arg(fileName)),QDir::toNativeSeparators(tr("%1/%2_%3").arg(pluginsDir.absolutePath()).arg(i).arg(fileName)));
             }
 
-            processingPlugins(pluginsDir);
+            processingPlugins(pluginsDir,num);
 
             ///返回上层目录
             pluginsDir.cdUp();
@@ -295,7 +293,7 @@ void MainWidget::loadPlugins()
     }
 }
 
-void MainWidget::processingPlugins(QDir path)
+void MainWidget::processingPlugins(QDir path, int num)
 {   
     ///加载插件
     const QStringList entryList=path.entryList(QDir::Files);
@@ -306,46 +304,39 @@ void MainWidget::processingPlugins(QDir path)
 
         if(plugin){
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
-                GetImagePluginList.append(pGetimagesInterface);
+                getImagePlugin(pGetimagesInterface,num--);
             }
             if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
-                SerialPortPluginList.append(pInfraredlogicInterface);
+                serialportPlugin(pInfraredlogicInterface,num--);
             }
         }
         else {
             delete  plugin;
         }
     }
-
-    if(GetImagePluginList.count()>0){
-        getImagePlugin();
-    }
-    if(SerialPortPluginList.count()>0){
-        serialportPlugin();
-    }
 }
 
-void MainWidget::getImagePlugin()
+void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
-//    for(int i=1;i<=channelCounnt;i++){
-//        DataWidget* pDataWidget=qobject_cast<DataWidget*>(WidgetIntMap[i]);
-//        GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(GetImagePluginMap[i]);
+    for(auto object:CamerWidgetMap.values(num)){
+        PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(object);
 
+        connect(pPictureWidget,&PictureWidget::playViedoStreamSignals,pGetimagesInterface,&GetImagesInterface::playViedoStreamSlot);
+        connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
 //        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pDataWidget, &DataWidget::camerIDstates);
 //        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pDataWidget,&DataWidget::pictureStream);
 //        connect(pDataWidget,&DataWidget::initCamer,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
 //        connect(pDataWidget,&DataWidget::putCommand,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
-//        connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
+    }
 
-//        ///线程运行
-//        QThread* thread=new QThread(this);
-//        pGetimagesInterface->moveToThread(thread);
-//        thread->start();
-//        ThreadList.append(thread);
-//    }
+    ///线程运行
+    QThread* thread=new QThread(this);
+    pGetimagesInterface->moveToThread(thread);
+    thread->start();
+    ThreadList.append(thread);
 }
 
-void MainWidget::serialportPlugin()
+void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)
 {
 //    LogicMap.insert(item->child(i),pInfraredlogicInterface);
 //    DataWidget* pDataWidget=qobject_cast<DataWidget*>(WidgetMap.value(item->child(i)));
