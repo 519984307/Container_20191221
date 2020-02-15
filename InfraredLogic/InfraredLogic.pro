@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = InfraredLogic
+TARGET = InfraredLogic_GIC
 TEMPLATE = lib
 
 CONFIG += plugin

@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = HCNetSDK
+TARGET = HCNetSDK_IMG
 TEMPLATE = lib
 
 CONFIG += plugin

@@ -39,9 +39,6 @@ public:
     ~MainWidget()override;
 
 private:
-     int channelCounnt;
-
-private:
     Ui::MainWidget *ui;
 
     ///
@@ -64,27 +61,29 @@ private:
     ///
     QString  separators;
 
+    ///
+    /// \brief channelCounnt 通道数
+    ///
+    int channelCounnt;
+
+private:
+
     /*
      * 窗口字典
      */
-    QMap<QTreeWidgetItem*,QObject*> WidgetMap;
-    QMap<int,QObject*> WidgetIntMap;
+    QMultiHash<int,QObject*>CamerWidgetMap;
+    QHash<int,QObject*>DataWidgetMap;
+
     /*
-     * 数据字典
+     * treeWidget判断显示窗口
      */
-    QMap<QTreeWidgetItem*,QObject*> DataMap;
+    QHash<QTreeWidgetItem*,QObject*> ItemWidgetMap;
+
     /*
-     * 逻辑字典
+     *  插件列表
      */
-    QMap<QTreeWidgetItem*,QObject*> LogicMap;
-    /*
-     *  图片插件字典
-     */
-    QMap<int,QObject*> GetImagePluginMap;
-    /*
-     * 逻辑插件字典
-     */
-    QMap<int,QObject*> SerialPortPluginMap;
+    QVector<QObject*> GetImagePluginList;
+    QVector<QObject*> SerialPortPluginList;
 
 private:
 
