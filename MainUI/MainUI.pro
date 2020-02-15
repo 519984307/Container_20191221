@@ -28,7 +28,6 @@ SOURCES += \
         main.cpp \
         mainwidget.cpp \
     picturewidget.cpp \
-    settingwidget.cpp \
     datawidget.cpp \
     setting.cpp \
     camersetting.cpp \
@@ -38,21 +37,19 @@ SOURCES += \
 
 HEADERS += \
         mainwidget.h\
-    getimages_interface.h \
     picturewidget.h \
-    settingwidget.h \
     datawidget.h \
     setting.h \
     camersetting.h \
     systemsetting.h \
     servicewidget.h \
     databasewidget.h \
-    infraredlogic_interface.h
+    infraredlogic_interface.h \
+    getimagesinterface.h
 
 FORMS += \
         mainwidget.ui \
     picturewidget.ui \
-    settingwidget.ui \
     datawidget.ui \
     camersetting.ui \
     systemsetting.ui \
@@ -69,8 +66,7 @@ RCC_DIR=tmp/rcc
 UI_DIR=tmp/ui
 OBJECTS_DIR=tmp/obj
 
-VERSION=1.0
-CONFIG+=console
+QMAKE_LFLAGS+="-Wl,-rpath=./plugins/"
 
 RESOURCES += \
     ico.qrc

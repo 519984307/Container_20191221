@@ -56,6 +56,12 @@ private://函数
      /// \param mode 模式(敞开|常闭)
      ///
      void setAlarmMode(bool model)Q_DECL_OVERRIDE;
+
+     ///
+     /// \brief exitWhile 退出循环
+     /// \param exit 条件
+     ///
+     virtual void exitWhile(bool exit)Q_DECL_OVERRIDE;
 };
 
 #endif // INFRAREDLOGIC_H

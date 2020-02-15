@@ -6,13 +6,14 @@ InfraredLogic::InfraredLogic(QObject *parent)
 
     memset(status,0,sizeof (int));
     memset(tmpStatus,0,sizeof (int));
+
     exit=false;
 }
 
 InfraredLogic::~InfraredLogic()
 {
-    exit=true;
-    free(status);
+//    free(status);
+//    free(tmpStatus);
 }
 
 bool InfraredLogic::compareStatus(int *before, int *after)
@@ -127,6 +128,11 @@ void InfraredLogic::serialLogic(int *status)
 void InfraredLogic::setAlarmMode(bool model)
 {
     this->model=model;
+}
+
+void InfraredLogic::exitWhile(bool exit)
+{
+    this->exit=exit;
 }
 
 void InfraredLogic::startSlave(const QString &portName1, const QString &portName2)

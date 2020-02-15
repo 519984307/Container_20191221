@@ -13,26 +13,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <property name="spacing">
-    <number>0</number>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_System_Setting_Channel">
       <attribute name="title">
@@ -318,7 +303,7 @@
       <attribute name="title">
        <string>Agreement</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_15">
+      <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_8">
          <property name="title">
@@ -334,18 +319,11 @@
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
-          <string>The test data</string>
+          <string>Camera version</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_14">
           <item row="0" column="0">
-           <widget class="QLineEdit" name="lineEdit_4"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="text">
-             <string>To send data</string>
-            </property>
-           </widget>
+           <widget class="QComboBox" name="comboBox_5"/>
           </item>
          </layout>
         </widget>

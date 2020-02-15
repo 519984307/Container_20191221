@@ -8,7 +8,7 @@ class InfraredlogicInterface:public QObject
     Q_OBJECT
 
 public:
-    virtual ~InfraredlogicInterface();
+    virtual ~InfraredlogicInterface(){}
 
 signals:
 
@@ -44,6 +44,12 @@ public slots://槽
    /// \param mode 模式(敞开|常闭)
    ///
    virtual void setAlarmMode(bool model)=0;
+
+     ///
+     /// \brief exitWhile 退出循环
+     /// \param exit
+     ///
+   virtual void exitWhile(bool exit)=0;
 };
 
 #define InfraredlogicInterfaceIID "ZBY.ContainerServer.InfraredlogicInterface/1.0"

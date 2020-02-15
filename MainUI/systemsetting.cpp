@@ -16,3 +16,9 @@ SystemSetting::~SystemSetting()
 {
     delete ui;
 }
+
+//Setting setting;
+//setting.pSetting->beginGroup(tr("MAIN"));
+//setting.pSetting->setValue(tr("ChannelNumber"),QVariant(ui->spinBox->value()));
+//setting.pSetting->endGroup();
+//ui->spinBox->setValue(setting.pSetting->value(tr("ChannelNumber")).toInt());

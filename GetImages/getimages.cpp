@@ -1,5 +1,4 @@
 #include "getimages.h"
-#include<iostream>
 
 GetImages::GetImages(QObject *parent)
 {
@@ -24,10 +23,11 @@ GetImages::~GetImages()
     delete pTimerLinkCamer;
 }
 
-void GetImages::initCamerSlot(const QString &camerIP, quint16 camerPort)
+void GetImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &user,const QString &pow)
 {
     this->camerIP=camerIP;
     this->camerPort=camerPort;
+
 
     startLinkCamer();
 }
@@ -67,6 +67,10 @@ bool GetImages::putCommandSlot(const QString &command)
     return (false);
 }
 
+void GetImages::playViedoStreamSlot(uint64_t winID,bool play)
+{
+}
+
 void GetImages::stateChanged(QAbstractSocket::SocketState socketState)
 {
     emit messageSignal(tr("%1 Camera link state is %2").arg(camerIP).arg(socketState));
@@ -92,7 +96,7 @@ void GetImages::readFortune()
 
             emit messageSignal(tr("%1 Get camera image data").arg(camerIP));
             emit pictureStreamSignal(jpgStream,camerIP);
-            QThread::msleep(100);
+            QThread::msleep(10);
         }
         jpgStream.clear();
     }

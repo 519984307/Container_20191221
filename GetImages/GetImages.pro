@@ -4,9 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += network
-
 QT       -= gui
+QT       += network
 
 TARGET = GetImages
 TEMPLATE = lib
@@ -32,7 +31,7 @@ SOURCES += \
 HEADERS += \
         getimages.h \
     getimages_global.h \
-    getimages_interface.h
+    getimagesinterface.h
 
 unix {
     target.path = /usr/lib
@@ -40,6 +39,4 @@ unix {
 }
 
 DESTDIR+=../MainUI/plugins
-
-VERSION=1.0
 

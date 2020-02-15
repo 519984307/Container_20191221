@@ -1,10 +1,10 @@
 #ifndef GETIMAGES_H
 #define GETIMAGES_H
 
-#include "getimages_interface.h"
 #include "getimages_global.h"
+#include "getimagesinterface.h"
 
-class GETIMAGESSHARED_EXPORT GetImages:public GetImagesInterface
+class GETIMAGESSHARED_EXPORT GetImages: public GetImagesInterface
 {
     Q_OBJECT
     Q_INTERFACES(GetImagesInterface)
@@ -79,9 +79,27 @@ private:
 
 public:
 
-    void initCamerSlot(const QString &camerIP, quint16 camerPort) Q_DECL_OVERRIDE;
+    ///
+    /// \brief initCamerSlot 重写相机初始化函数
+    /// \param camerIP
+    /// \param camerPort
+    /// \param user
+    /// \param pow
+    ///
+    void initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &user,const QString &pow) Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief putCommandSlot 重写抓拍函数
+    /// \param command
+    /// \return
+    ///
     bool putCommandSlot(const QString &command) Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief playViedoStreamSlot 重写播放视频流函数
+    /// \param pUser
+    ///
+    void playViedoStreamSlot(uint64_t winID, bool play) Q_DECL_OVERRIDE;
 };
 
 #endif // GETIMAGES_H

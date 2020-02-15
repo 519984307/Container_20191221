@@ -6,12 +6,17 @@
 #include <QPluginLoader>
 #include <QPixmap>
 #include <QDebug>
+#include <QThread>
 #include <QTreeWidgetItem>
-#include<QResizeEvent>
+#include <QResizeEvent>
+#include <QStatusBar>
 
 //------------------------------------------------------------------------------------------------------------Interface
-#include "getimages_interface.h"
-//------------------------------------------------------------------------------------------------------------
+#include "getimagesinterface.h"
+#include "infraredlogic_interface.h"
+
+//------------------------------------------------------------------------------------------------------------Headers
+#include "setting.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -20,7 +25,6 @@
 #include "systemsetting.h"
 #include "servicewidget.h"
 #include "databasewidget.h"
-//------------------------------------------------------------------------------------------------------------
 
 namespace Ui {
 class MainWidget;
@@ -34,16 +38,55 @@ public:
     explicit MainWidget(QWidget *parent = nullptr);
     ~MainWidget()override;
 
-private://变量
+private:
      int channelCounnt;
 
-private://对象
+private:
     Ui::MainWidget *ui;
-    GetImagesInterface *pGetimagesInterface;   
-    QList<QString> camerName;
-    QMap< QTreeWidgetItem*,QObject*> widgetMap;
 
-private://函数
+    ///
+    /// \brief statusBar 系统状态栏
+    ///
+    QStatusBar *statusBar;
+
+    ///
+    /// \brief CamerNameList 通道相机列表
+    ///
+    QList<QString> CamerNameList;
+
+    ///
+    /// \brief ThreadList 插件现场池
+    ///
+    QList<QThread*> ThreadList;
+
+    ///
+    /// \brief Separators 路径分割符
+    ///
+    QString  separators;
+
+    /*
+     * 窗口字典
+     */
+    QMap<QTreeWidgetItem*,QObject*> WidgetMap;
+    QMap<int,QObject*> WidgetIntMap;
+    /*
+     * 数据字典
+     */
+    QMap<QTreeWidgetItem*,QObject*> DataMap;
+    /*
+     * 逻辑字典
+     */
+    QMap<QTreeWidgetItem*,QObject*> LogicMap;
+    /*
+     *  图片插件字典
+     */
+    QMap<int,QObject*> GetImagePluginMap;
+    /*
+     * 逻辑插件字典
+     */
+    QMap<int,QObject*> SerialPortPluginMap;
+
+private:
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief InitializeObject 初始化对象
@@ -68,34 +111,36 @@ private://函数
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief loadPlugin 加载插件
     ///
-    void loadPlugin();
+    void loadPlugins();
 
     ///------------------------------------------------------------------------------------------------------------MainUI
-    /// \brief ProcessingPlug 处理插件
-    /// \param plugin 插件对象
+    /// \brief ProcessingPlug 分析插件
     ///
-    void processingPlug(QObject *plugin);
+    void processingPlugins(QDir path);
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief camerPlugin 处理相机插件
+    /// \param Camer 相机类
+    ///
+    void getImagePlugin();
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief serialportPlugin 处理串口插件
+    /// \param SerialPort 串口类
+    ///
+    void serialportPlugin();
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
     ///
     void hideWindows();
 
-private slots://槽
-
-    ///------------------------------------------------------------------------------------------------------------GetImgaes
-    /// \brief camerIDstates 相机状态
-    /// \param camerIP 相机地址
-    /// \param state 相机状态
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief setStatusBar 设置状态栏
     ///
-    void camerIDstates(const QString &camerIP,bool state);
+    void setStatusBar();
 
-    ///------------------------------------------------------------------------------------------------------------GetImgaes
-    /// \brief pictureStream 接受图片流
-    /// \param jpgStream 图片流
-    /// \param camerIP 相机地址
-    ///
-    void pictureStream(const QByteArray &jpgStream,const QString &camerIP);
+private slots:
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief message 日志
@@ -114,23 +159,7 @@ private slots://槽
     /// \param item 选取项
     /// \param column 列
     ///
-    void on_treeWidget_itemActivated(QTreeWidgetItem *item, int column);
-
-signals://信号
-
-    ///------------------------------------------------------------------------------------------------------------GetImgaes
-    /// \brief initCamer 初始化相机
-    /// \param camerIP 相机地址
-    /// \param camerPort 相机端口
-    ///
-    void initCamer(const QString &camerIP, quint16 camerPort);
-
-    ///------------------------------------------------------------------------------------------------------------GetImgaes
-    /// \brief putCommand 相机指令
-    /// \param command 指令
-    /// \return  返回执行状态
-    ///
-    bool putCommand(const QString &command);
+    void on_treeWidget_itemActivated(QTreeWidgetItem *item);
 
 };
 

@@ -17,6 +17,13 @@ public:
 
 private:
     Ui::PictureWidget *ui;
+
+signals:
+    void playViedoStreamSignals(uint64_t winID,bool play);
+
+private slots:
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
 };
 
 #endif // PICTUREWIDGET_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>702</width>
-    <height>457</height>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="0" column="1">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -435,28 +435,9 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Identify the results</string>
+          <string>Identify container the results</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_4">
-            <property name="maximumSize">
-             <size>
-              <width>70</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: rgb(85, 170, 0);</string>
-            </property>
-            <property name="text">
-             <string>ISO2</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLineEdit" name="lineEdit">
             <property name="font">
@@ -471,25 +452,6 @@
             </property>
             <property name="text">
              <string>WDFU1234567</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLineEdit" name="lineEdit_2">
-            <property name="maximumSize">
-             <size>
-              <width>70</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: rgb(85, 170, 0);</string>
-            </property>
-            <property name="text">
-             <string>ISO1</string>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -519,6 +481,72 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineEdit_2">
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(85, 170, 0);</string>
+            </property>
+            <property name="text">
+             <string>ISO1</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_4">
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(85, 170, 0);</string>
+            </property>
+            <property name="text">
+             <string>ISO2</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QLineEdit" name="lineEdit_5">
+            <property name="font">
+             <font>
+              <pointsize>15</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
+            <property name="text">
+             <string>粤B050CS</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -529,8 +557,8 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>98</height>
+           <width>28</width>
+           <height>70</height>
           </size>
          </property>
         </spacer>
