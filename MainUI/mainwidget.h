@@ -10,6 +10,7 @@
 #include <QTreeWidgetItem>
 #include <QResizeEvent>
 #include <QStatusBar>
+#include <QCloseEvent>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
@@ -86,12 +87,13 @@ private:
     ///图片处理类
     QHash<int,QObject*> ImageProcessingMap;
 
-    ///
-    /// \brief pLogicalProcessing 红外逻辑处理类
-    ///
-    LogicalProcessing* pLogicalProcessing;
-
 private:
+
+    ///
+    /// \brief closeEvent 重新窗口关闭事件
+    /// \param event
+    ///
+    void closeEvent(QCloseEvent *event)Q_DECL_OVERRIDE;
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief InitializeObject 初始化对象
@@ -165,6 +167,14 @@ private slots:
     /// \param column 列
     ///
     void on_treeWidget_itemActivated(QTreeWidgetItem *item);
+
+signals:
+
+    ///
+    /// \brief closeWIdgetEvent 窗口关闭信号
+    ///
+    void closeWIdgetEvent();
+
 };
 
 #endif // MAINWIDGET_H

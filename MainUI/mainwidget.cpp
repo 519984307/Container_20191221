@@ -15,22 +15,31 @@ MainWidget::MainWidget(QWidget *parent) :
     setStatusBar();
     loadPlugins();
 
-    ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1]);
+    ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[3]);
     emit pImageProcessing->initCamer("192.168.0.200",8000,"admin","Zby123456");
 }
 
 MainWidget::~MainWidget()
 {
     foreach (auto thread, ThreadList) {
-        thread->terminate();
+        thread->quit();
         thread->wait();
+        thread->terminate();
     }
 
+    ThreadList.clear();
+    ImageProcessingMap.clear();
     ItemWidgetMap.clear();
     CamerNameList.clear();
     ThreadList.clear();
 
     delete ui;
+}
+
+void MainWidget::closeEvent(QCloseEvent *event)
+{
+    ///关闭所以视频流
+    emit closeWIdgetEvent();
 }
 
 void MainWidget::InitializeObject()
@@ -291,7 +300,7 @@ void MainWidget::processingPlugins(QDir path, int num)
         QObject *plugin = pluginLoader.instance();
 
         if(plugin){
-            if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
+            if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){                
                 getImagePlugin(pGetimagesInterface,num--);
             }
             if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
@@ -311,6 +320,7 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     ImageProcessing* pImageProcessing=new ImageProcessing (this);
     ImageProcessingMap.insert(num,pImageProcessing);
 
+    connect(this,&MainWidget::closeWIdgetEvent,pGetimagesInterface,&GetImagesInterface::closeWIdgetEvent);
     connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
     connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);

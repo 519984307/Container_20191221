@@ -59,6 +59,11 @@ public slots:
     ///
     virtual void resizeEventSlot()=0;
 
+    ///
+    /// \brief closeEvent 关闭窗口事件
+    ///
+    virtual void closeWIdgetEvent()=0;
+
 };
 
 #define GetImagesInterfaceIID "ZBY.ContainerServer.GetImagesInterface/1.0"

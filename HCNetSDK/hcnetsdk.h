@@ -170,6 +170,11 @@ public:
     /// \brief resizeEventSlot 通知动态库调整窗口
     ///
     void resizeEventSlot()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief closeEvent 重写窗口关闭事件
+    ///
+    void closeWIdgetEvent()Q_DECL_OVERRIDE;
 };
 
 #endif // HCNETSDK_H
