@@ -2,6 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     InfraredLogic\
-    GetImages \
+    #GetImages \
     HCNetSDK \
     MainUI

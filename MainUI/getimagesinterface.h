@@ -50,8 +50,14 @@ public slots:
     ///
     /// \brief playViedoStreamSlot 预览实时视频
     /// \param winID 窗口句柄
+    /// \param play 播放状态
     ///
-    virtual void playViedoStreamSlot(uint64_t winID,bool play)=0;
+    virtual void playStreamSlot(uint winID,bool play)=0;
+
+    ///
+    /// \brief resizeEventSlot 调整窗口通知动态库
+    ///
+    virtual void resizeEventSlot()=0;
 
 };
 

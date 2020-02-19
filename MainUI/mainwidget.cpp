@@ -14,6 +14,9 @@ MainWidget::MainWidget(QWidget *parent) :
 
     setStatusBar();
     loadPlugins();
+
+    ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1]);
+    emit pImageProcessing->initCamer("192.168.0.200",8000,"admin","Zby123456");
 }
 
 MainWidget::~MainWidget()
@@ -33,9 +36,7 @@ MainWidget::~MainWidget()
 void MainWidget::InitializeObject()
 {
     Setting setting;
-    /*
-    *读取通道数
-    */
+    ///读取通道数
     channelCounnt =setting.pSetting->value(tr("MAIN/ChannelNumber")).toInt();
     CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate";
 }
@@ -44,9 +45,7 @@ void MainWidget::InitializeOtherWindow()
 {
     QTreeWidgetItemIterator it(ui->treeWidget);
     while(*it){
-        /*
-        * 获取设置根
-        */
+        ///获取设置根
         if((*it)->text(0)=="Setting"){
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
             (*it)->addChild(childImte);
@@ -54,25 +53,19 @@ void MainWidget::InitializeOtherWindow()
             ItemWidgetMap.insert(childImte,new SystemSetting(this) );
             for(int i=1;i<=channelCounnt;i++){
                 auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
-                /*
-                 * 添加子项
-                 */
+                ///添加子项
                 (*it)->addChild(sunItem);
                 ItemWidgetMap.insert(sunItem,new CamerSetting (this));
             }
         }
         if((*it)->text(0)=="Service"){
-            /*
-              * 获取服务根
-            */
+            ///获取服务根
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Log")));
             (*it)->addChild(childImte);
             ItemWidgetMap.insert(childImte,new ServiceWidget (this));
         }
         if((*it)->text(0)=="Database"){
-            /*
-             * 获取数据库根
-             */
+            ///获取数据库根
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Data")));
             (*it)->addChild(childImte);
             ItemWidgetMap.insert(childImte,new DataBaseWidget (this));
@@ -86,21 +79,21 @@ void MainWidget::InitializeCamerWindow()
     QTreeWidgetItemIterator it(ui->treeWidget);
     while(*it){
         if((*it)->text(0)=="Camera"){
-            /*
-             * 获取相机根
-             */
+            ///获取相机根
+            int j=1;
             for(int i=1;i<=channelCounnt;i++){
                 auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
-                /*
-                 * 添加子项
-                 */
+                ///添加子项
                 (*it)->addChild(childImte);
                 for(auto name:CamerNameList){
                     auto sunItem=new QTreeWidgetItem (childImte,QStringList(name));
                     childImte->addChild(sunItem);
-
                     PictureWidget *picutre= new PictureWidget (this);
-                    CamerWidgetMap.insert(i,picutre);
+                    ///过滤车牌界面
+                    if(name!="Plate"){
+                        CamerWidgetMap.insert(j,picutre);
+                        j++;
+                    }
                     ItemWidgetMap.insert(sunItem,picutre);
                 }
             }
@@ -114,14 +107,10 @@ void MainWidget::InitializeDataWindow()
     QTreeWidgetItemIterator it(ui->treeWidget);
     while(*it){
         if((*it)->text(0)=="Data"){
-            /*
-             * 获取数据根
-             */
+            ///获取数据根
             for(int i=1;i<=channelCounnt;i++){
                 auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
-                /*
-                 * 添加子项
-                 */
+                ///添加子项
                 (*it)->addChild(childImte);
 
                 DataWidget* data=new DataWidget(this);
@@ -129,9 +118,7 @@ void MainWidget::InitializeDataWindow()
                 ItemWidgetMap.insert(childImte,data);
 
                 if(i==1){
-                    /*
-                     * 显示第一个窗口
-                     */
+                    ///显示第一个窗口
                     on_treeWidget_itemActivated(childImte);
                 }
             }
@@ -271,9 +258,10 @@ void MainWidget::loadPlugins()
                 }
             }
 
-            QString name=pluginName.split("_")[1];            int num=channelCounnt;
+            QString name=pluginName.split("_")[1];
+            int num=channelCounnt;
             if(name=="IMG"){
-                num=num*4;///每条道4个相机
+                num=num*4;///每条道4个相机,车牌相机车外.
             }
             else if (name=="GIC") {
                 num=num*2;///每条道2个串口
@@ -318,22 +306,25 @@ void MainWidget::processingPlugins(QDir path, int num)
 
 void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
-    for(auto object:CamerWidgetMap.values(num)){
-        PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(object);
+    PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(CamerWidgetMap[num]);
 
-        connect(pPictureWidget,&PictureWidget::playViedoStreamSignals,pGetimagesInterface,&GetImagesInterface::playViedoStreamSlot);
-        connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
-//        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pDataWidget, &DataWidget::camerIDstates);
-//        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pDataWidget,&DataWidget::pictureStream);
-//        connect(pDataWidget,&DataWidget::initCamer,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
-//        connect(pDataWidget,&DataWidget::putCommand,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
-    }
+    ImageProcessing* pImageProcessing=new ImageProcessing (this);
+    ImageProcessingMap.insert(num,pImageProcessing);
+
+    connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
+    connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
+    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
+    connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstates);
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStream);
+    connect(pImageProcessing,&ImageProcessing::initCamer,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
+    connect(pImageProcessing,&ImageProcessing::putCommand,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
 
     ///线程运行
-    QThread* thread=new QThread(this);
-    pGetimagesInterface->moveToThread(thread);
-    thread->start();
-    ThreadList.append(thread);
+    QThread* pThread=new QThread(this);
+    pGetimagesInterface->moveToThread(pThread);
+    pImageProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
 }
 
 void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)

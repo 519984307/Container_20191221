@@ -39,3 +39,5 @@ unix {
 }
 
 DESTDIR+=../MainUI/plugins
+
+QMAKE_LFLAGS+="-Wl,-rpath=../MainUI/plugins/HCNetSDK/"

@@ -18,12 +18,31 @@ public:
 private:
     Ui::PictureWidget *ui;
 
-signals:
-    void playViedoStreamSignals(uint64_t winID,bool play);
+    ///
+    /// \brief resizeEvent 重写窗口调整事件
+    /// \param size
+    ///
+    void resizeEvent(QResizeEvent* size);
 
 private slots:
     void on_pushButton_2_clicked();
     void on_pushButton_3_clicked();
+    void on_pushButton_clicked();
+
+signals:
+
+    ///
+    /// \brief playStreamSignal 播放流
+    /// \param winID 窗口ID
+    /// \param play 播放状态
+    ///
+    void playStreamSignal(uint winID,bool play);
+
+    ///
+    /// \brief resizeEventSignal 窗口调整刷新
+    ///
+    void resizeEventSignal();
+
 };
 
 #endif // PICTUREWIDGET_H

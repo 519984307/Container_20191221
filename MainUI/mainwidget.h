@@ -75,7 +75,7 @@ private:
     /*
      * 窗口字典
      */
-    QMultiHash<int,QObject*>CamerWidgetMap;
+    QHash<int,QObject*>CamerWidgetMap;
     QHash<int,QObject*>DataWidgetMap;
 
     /*
@@ -83,10 +83,8 @@ private:
      */
     QHash<QTreeWidgetItem*,QObject*> ItemWidgetMap;
 
-    ///
-    /// \brief pImageProcessing 图片处理类
-    ///
-    ImageProcessing* pImageProcessing;
+    ///图片处理类
+    QHash<int,QObject*> ImageProcessingMap;
 
     ///
     /// \brief pLogicalProcessing 红外逻辑处理类
@@ -167,7 +165,6 @@ private slots:
     /// \param column 列
     ///
     void on_treeWidget_itemActivated(QTreeWidgetItem *item);
-
 };
 
 #endif // MAINWIDGET_H

@@ -17,6 +17,7 @@ HCNetSDK::HCNetSDK(QObject *parent)
         NET_DVR_Cleanup_L=reinterpret_cast<NET_DVR_CleanupFUN>(pDLL->resolve("NET_DVR_Cleanup"));
         NET_DVR_Init_L=reinterpret_cast<NET_DVR_InitFUN>(pDLL->resolve("NET_DVR_Init"));
         NET_DVR_Login_V40_L=reinterpret_cast<NET_DVR_Login_V40FUN>(pDLL->resolve("NET_DVR_Login_V40"));
+        NET_DVR_Logout_L=reinterpret_cast<NET_DVR_LogoutFUN>(pDLL->resolve("NET_DVR_Logout"));
         NET_DVR_ChangeWndResolution_L=reinterpret_cast<NET_DVR_ChangeWndResolutionFUN>(pDLL->resolve("NET_DVR_ChangeWndResolution"));
         NET_DVR_CaptureJPEGPicture_NEW_L=reinterpret_cast<NET_DVR_CaptureJPEGPicture_NEWFUN>(pDLL->resolve("NET_DVR_CaptureJPEGPicture_NEW"));
         NET_DVR_RealPlay_V40_L=reinterpret_cast<NET_DVR_RealPlay_V40FUN>(pDLL->resolve("NET_DVR_RealPlay_V40"));
@@ -30,6 +31,9 @@ HCNetSDK::HCNetSDK(QObject *parent)
 
 HCNetSDK::~HCNetSDK()
 {
+    NET_DVR_StopRealPlay_L(this->streamID);
+    NET_DVR_Logout_L(this->lUserID);
+    NET_DVR_Cleanup_L();
     delete pDLL;
 }
 
@@ -37,7 +41,8 @@ bool HCNetSDK::initSDk()
 {
     NET_DVR_LOCAL_SDK_PATH SDKPath={};
     NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
-    strcpy(SDKPath.sPath,tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("plugins/HCNetSDK").toLocal8Bit().data());
+    QString path= QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("plugins/HCNetSDK"));
+    strcpy(SDKPath.sPath,path.toLocal8Bit().data());
     NET_DVR_SetSDKInitCfg_L(cfgType,&SDKPath);
 
     NET_DVR_USER_LOGIN_INFO LoginInfo={};
@@ -45,7 +50,7 @@ bool HCNetSDK::initSDk()
     strcpy(LoginInfo.sDeviceAddress,this->ip.toLatin1().data());
     strcpy(LoginInfo.sUserName,this->name.toLatin1().data());
     strcpy(LoginInfo.sPassword,this->pow.toLatin1().data());
-    LoginInfo.wPort=uint16_t(this->port);
+    LoginInfo.wPort=static_cast<uint16_t>(this->port);
     LoginInfo.bUseAsynLogin=1;
     LoginInfo.cbLoginResult=HCNetSDK::loginResultCallBack;
     LoginInfo.pUser=this;
@@ -63,18 +68,15 @@ void HCNetSDK::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, v
 {
     HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
     emit pThis->messageSignal(tr("ID:%1,ERROR:%2,HANDLE:%3").arg(lUserID).arg(dwType).arg(lHandle));
-    delete pThis;
 }
 
 void HCNetSDK::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
 {   
-    HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
-    emit pThis->messageSignal(tr("ID:%1,STATUS:%2,DEVTYPE:%3").arg(lUserID).arg(dwResult).arg(lpDeviceInfo->wDevType));
+    HCNetSDK* pThis=static_cast<HCNetSDK*>(pUser);
 
     pThis->lUserID=lUserID;
     pThis->dwResult=dwResult;
-
-    delete pThis;
+    emit pThis->messageSignal(tr("ID:%1,STATUS:%2").arg(lUserID).arg(dwResult));
 }
 
 void HCNetSDK::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
@@ -111,10 +113,10 @@ bool HCNetSDK::putCommandSlot(const QString &command)
     return true;
 }
 
-void HCNetSDK::playViedoStreamSlot(uint64_t winID,bool play)
+void HCNetSDK::playStreamSlot(uint winID,bool play)
 {
     NET_DVR_PREVIEWINFO struPlayInfo = {};
-    struPlayInfo.hPlayWnd    =static_cast<uint>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
+    struPlayInfo.hPlayWnd    =winID;//static_cast<uint>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 1;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
     struPlayInfo.dwLinkMode   = 5;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
@@ -122,7 +124,7 @@ void HCNetSDK::playViedoStreamSlot(uint64_t winID,bool play)
 
     if(dwResult){
         if(play){
-            streamID =NET_DVR_RealPlay_V40_L(lUserID,&struPlayInfo,nullptr,this);
+            streamID =NET_DVR_RealPlay_V40_L(lUserID,&struPlayInfo,nullptr,nullptr);
             if(streamID==-1){
                  emit messageSignal(tr("open stream Error:%1").arg(NET_DVR_GetLastError_L()));
             }
@@ -131,4 +133,9 @@ void HCNetSDK::playViedoStreamSlot(uint64_t winID,bool play)
             NET_DVR_StopRealPlay_L(streamID);
         }
     }
+}
+
+void HCNetSDK::resizeEventSlot()
+{
+    NET_DVR_ChangeWndResolution_L(this->streamID);
 }

@@ -86,6 +86,12 @@ private:
     ///
     NET_DVR_Login_V40FUN NET_DVR_Login_V40_L;
 
+    typedef   BOOL (* NET_DVR_LogoutFUN)(LONG lUserID);
+    ///
+    /// \brief NET_DVR_Logout_L 登出相机
+    ///
+    NET_DVR_LogoutFUN NET_DVR_Logout_L;
+
     typedef BOOL (*NET_DVR_ChangeWndResolutionFUN)(LONG iRealHandle);
     ///
     /// \brief NET_DVR_ChangeWndResolution_L 通知窗口重画图像
@@ -154,10 +160,16 @@ public:
     bool putCommandSlot(const QString &command) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief playViedoStreamSlot 重写播放视频流函数
-    /// \param pUser
+    /// \brief playStreamSlot 重写播放视频流函数
+    /// \param winID 窗口句柄
+    /// \param play 播放状态
     ///
-    void playViedoStreamSlot(uint64_t winID, bool play) Q_DECL_OVERRIDE;
+    void playStreamSlot(uint winID, bool play) Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief resizeEventSlot 通知动态库调整窗口
+    ///
+    void resizeEventSlot()Q_DECL_OVERRIDE;
 };
 
 #endif // HCNETSDK_H

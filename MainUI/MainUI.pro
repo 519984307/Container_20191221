@@ -70,7 +70,7 @@ RCC_DIR=tmp/rcc
 UI_DIR=tmp/ui
 OBJECTS_DIR=tmp/obj
 
-QMAKE_LFLAGS+="-Wl,-rpath=./plugins/"
+QMAKE_LFLAGS+="-Wl,-rpath=./plugins/,-rpath=./plugins/HCNetSDK"
 
 RESOURCES += \
     ico.qrc

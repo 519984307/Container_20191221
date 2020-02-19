@@ -6,6 +6,7 @@
 #include <QLibrary>
 #include <QSysInfo>
 #include <QObject>
+#include<QDir>
 
 #if defined(HCNETSDK_LIBRARY)
 #  define HCNETSDKSHARED_EXPORT Q_DECL_EXPORT
