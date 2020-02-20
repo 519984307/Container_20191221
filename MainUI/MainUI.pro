@@ -35,7 +35,8 @@ SOURCES += \
     servicewidget.cpp \
     databasewidget.cpp \
     imageprocessing.cpp \
-    logicalprocessing.cpp
+    logicalprocessing.cpp \
+    getsysinfo.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -49,7 +50,8 @@ HEADERS += \
     imageprocessing.h \
     logicalprocessing.h \
     getimagesinterface.h \
-    infraredlogicinterface.h
+    infraredlogicinterface.h \
+    getsysinfo.h
 
 FORMS += \
         mainwidget.ui \
@@ -74,3 +76,8 @@ QMAKE_LFLAGS+="-Wl,-rpath=./plugins/,-rpath=./plugins/HCNetSDK"
 
 RESOURCES += \
     ico.qrc
+
+DISTFILES += \
+    libAudioRender.so \
+    libSuperRender.so \
+    libPlayCtrl.so

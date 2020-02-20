@@ -11,6 +11,7 @@
 #include <QResizeEvent>
 #include <QStatusBar>
 #include <QCloseEvent>
+#include<QLabel>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
@@ -30,6 +31,7 @@
 //------------------------------------------------------------------------------------------------------------Process
 #include "imageprocessing.h"
 #include "logicalprocessing.h"
+#include "getsysinfo.h"
 
 namespace Ui {
 class MainWidget;
@@ -44,12 +46,25 @@ public:
     ~MainWidget()override;
 
 private:
-    Ui::MainWidget *ui;
 
     ///
     /// \brief statusBar 系统状态栏
     ///
     QStatusBar *statusBar;
+
+    ///
+    /// \brief pStatusBarLabel 状态栏文本
+    ///
+    QLabel*pStatusBarLabel;
+
+
+private:
+    Ui::MainWidget *ui;
+
+    ///
+    /// \brief pGetSysInfo CPU,MEM状态
+    ///
+    GetSysInfo* pGetSysInfo;
 
     ///
     /// \brief CamerNameList 通道相机列表
@@ -88,6 +103,11 @@ private:
     QHash<int,QObject*> ImageProcessingMap;
 
 private:
+
+    ///
+    /// \brief connetObject 链接信号槽
+    ///
+    void connetObject();
 
     ///
     /// \brief closeEvent 重新窗口关闭事件
@@ -168,12 +188,25 @@ private slots:
     ///
     void on_treeWidget_itemActivated(QTreeWidgetItem *item);
 
+    ///
+    /// \brief statusMsgSlot CPU,MEN状态
+    /// \param msg 信息体
+    ///
+    void statusMsgSlot(const QString &msg);
+
 signals:
 
     ///
     /// \brief closeStreamSignal 关闭视频流
     ///
     void closeStreamSignal();
+
+    ///
+    /// \brief exitWhileSignal 退出CPU,MEM状态线程
+    /// \param status 标志位
+    ///
+    void exitWhileSignal(bool status);
+
 };
 
 #endif // MAINWIDGET_H

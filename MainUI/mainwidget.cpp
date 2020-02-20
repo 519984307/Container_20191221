@@ -13,7 +13,9 @@ MainWidget::MainWidget(QWidget *parent) :
     InitializeOtherWindow();
 
     setStatusBar();
-    loadPlugins();
+    loadPlugins();  
+
+    connetObject();
 
     ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4]);
     emit pImageProcessing->initCamer("192.168.0.200",8000,"admin","Zby123456");
@@ -21,24 +23,37 @@ MainWidget::MainWidget(QWidget *parent) :
 
 MainWidget::~MainWidget()
 {
-    delete ui;
-}
-
-void MainWidget::closeEvent(QCloseEvent *event)
-{
-    emit closeStreamSignal();
-
-    foreach (auto thread, ThreadList) {
-        thread->quit();
-        thread->wait();
-        //thread->exit();
-        //thread->terminate();
-    }
     ThreadList.clear();
     ImageProcessingMap.clear();
     ItemWidgetMap.clear();
     CamerNameList.clear();
     ThreadList.clear();
+
+    delete pGetSysInfo;
+
+    delete ui;
+}
+
+void MainWidget::connetObject()
+{
+    pGetSysInfo=new GetSysInfo ();
+    pGetSysInfo->start();
+
+    connect(this,&MainWidget::exitWhileSignal,pGetSysInfo,&GetSysInfo::exitWhileSlot);
+    connect(pGetSysInfo,&GetSysInfo::statusMsgSignal,this,&MainWidget::statusMsgSlot);
+}
+
+void MainWidget::closeEvent(QCloseEvent *event)
+{
+    emit closeStreamSignal();
+    foreach (auto thread, ThreadList) {
+        thread->quit();
+        thread->wait();
+    }
+
+    emit exitWhileSignal(false);
+    pGetSysInfo->quit();
+    pGetSysInfo->wait();
 }
 
 void MainWidget::InitializeObject()
@@ -163,11 +178,16 @@ void MainWidget::hideWindows()
 void MainWidget::setStatusBar()
 {
     statusBar=new QStatusBar(this);
+    pStatusBarLabel=new QLabel(this);
+
     statusBar->setStyleSheet("background-color:rgb(39,39,40);color:red");
-    statusBar->addPermanentWidget(new QLabel (tr("CPU:     |"),this));
-    statusBar->addPermanentWidget(new QLabel (tr("RAM:     |"),this));
-    statusBar->addPermanentWidget(new QLabel (tr("GPU:     |"),this));
     this->ui->gridLayout_2->addWidget(statusBar);
+}
+
+void MainWidget::statusMsgSlot(const QString &msg)
+{
+    pStatusBarLabel->setText(msg);
+    statusBar->addPermanentWidget(pStatusBarLabel );
 }
 
 void MainWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item)
@@ -316,7 +336,7 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
 {
     PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(CamerWidgetMap[num]);
 
-    ImageProcessing* pImageProcessing=new ImageProcessing (this);
+    ImageProcessing* pImageProcessing=new ImageProcessing ();
     ImageProcessingMap.insert(num,pImageProcessing);
 
     connect(this,&MainWidget::closeStreamSignal,pGetimagesInterface,&GetImagesInterface::closeStreamSlot,Qt::BlockingQueuedConnection);

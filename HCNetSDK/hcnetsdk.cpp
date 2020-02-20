@@ -1,5 +1,11 @@
 #include "hcnetsdk.h"
 
+#if defined(Q_OS_WIN32)
+    #define OS 0
+#elif defined(Q_OS_LINUX)
+    #define OS 1
+#endif
+
 HCNetSDK* HCNetSDK::pThis=nullptr;
 
 HCNetSDK::HCNetSDK(QObject *parent)
@@ -8,13 +14,13 @@ HCNetSDK::HCNetSDK(QObject *parent)
 
     HCNetSDK::pThis=this;
 
-    lUserID=-1;dwResult=0;
+    lUserID=-1;dwResult=0;streamID=-1;
 
-    if(QSysInfo::windowsVersion()){
-        pDLL=new QLibrary("./plugins/HCNetSDK/libhcnetsdk.dll");
+    if(OS){
+        pDLL= new QLibrary("./plugins/HCNetSDK/libhcnetsdk.so");
     }
     else {
-        pDLL=new QLibrary("./plugins/HCNetSDK/libhcnetsdk.so");
+        pDLL = new QLibrary("./plugins/HCNetSDK/libhcnetsdk.dll");
     }
 
     if(pDLL->load()){
@@ -156,7 +162,9 @@ void HCNetSDK::resizeEventSlot()
 
 void HCNetSDK::closeStreamSlot()
 {
-    NET_DVR_StopRealPlay_L(streamID);
-    NET_DVR_Logout_L(lUserID);
+    if(streamID!=-1||lUserID!=-1){
+        NET_DVR_StopRealPlay_L(streamID);
+        NET_DVR_Logout_L(lUserID);
+    }
     NET_DVR_Cleanup_L();
 }
