@@ -13,7 +13,7 @@ class PictureWidget : public QWidget
 
 public:
     explicit PictureWidget(QWidget *parent = nullptr);
-    ~PictureWidget();
+    ~PictureWidget()Q_DECL_OVERRIDE;
 
 private:
     Ui::PictureWidget *ui;
@@ -22,7 +22,7 @@ private:
     /// \brief resizeEvent 重写窗口调整事件
     /// \param size
     ///
-    void resizeEvent(QResizeEvent* size);
+    void resizeEvent(QResizeEvent* size)Q_DECL_OVERRIDE;
 
 private slots:
     void on_pushButton_2_clicked();
@@ -39,10 +39,9 @@ signals:
     void playStreamSignal(uint winID,bool play);
 
     ///
-    /// \brief resizeEventSignal 窗口调整刷新
+    /// \brief resizeEventSignal 窗口调整刷新信号
     ///
     void resizeEventSignal();
-
 };
 
 #endif // PICTUREWIDGET_H

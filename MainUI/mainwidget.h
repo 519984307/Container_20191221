@@ -171,10 +171,9 @@ private slots:
 signals:
 
     ///
-    /// \brief closeWIdgetEvent 窗口关闭信号
+    /// \brief closeStreamSignal 关闭视频流
     ///
-    void closeWIdgetEvent();
-
+    void closeStreamSignal();
 };
 
 #endif // MAINWIDGET_H

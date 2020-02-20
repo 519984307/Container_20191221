@@ -60,10 +60,9 @@ public slots:
     virtual void resizeEventSlot()=0;
 
     ///
-    /// \brief closeEvent 关闭窗口事件
+    /// \brief closeStream 关闭视频流
     ///
-    virtual void closeWIdgetEvent()=0;
-
+    virtual void closeStreamSlot()=0;
 };
 
 #define GetImagesInterfaceIID "ZBY.ContainerServer.GetImagesInterface/1.0"

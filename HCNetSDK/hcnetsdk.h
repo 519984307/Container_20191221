@@ -19,11 +19,13 @@ private:
 
     ///端口
     int port;
+
     ///地址,用户名,密码
     QString  ip,name ,pow;
 
     ///登录用户ID,视频流ID
     LONG lUserID,streamID;
+
     ///登录结果
     DWORD dwResult;
 
@@ -32,29 +34,9 @@ private:
     ///
     QLibrary *pDLL;
 
-    ///
-    /// \brief initSDk 初始化SDK
-    /// \return
-    ///
-    bool initSDk();
+    static HCNetSDK* pThis;
 
-    ///
-    /// \brief exceptionCallBack_V30 接收异常、重连等消息的窗口句柄或回调函数。
-    /// \param dwType 异常或重连等消息的类型
-    /// \param lUserID 登录ID
-    /// \param lHandle 出现异常的相应类型的句柄
-    /// \param pUser 用户数据
-    ///
-    static void CALLBACK exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser);
-
-    ///
-    /// \brief fLoginResultCallBack 登录状态回调函数
-    /// \param lUserID 用户ID，NET_DVR_Login_V40的返回值
-    /// \param dwResult 登录状态：0- 异步登录失败，1- 异步登录成功
-    /// \param lpDeviceInfo 设备信息，设备序列号、通道、能力等参数
-    /// \param pUser 用户数据
-    ///
-    static void CALLBACK loginResultCallBack(LONG lUserID,DWORD dwResult,LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo,void *pUser);
+private:
 
     typedef   BOOL  (*NET_DVR_SetExceptionCallBack_V30FUN)(UINT reserved1, void* reserved2, void (CALLBACK* fExceptionCallBack)(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser), void *pUser);
     ///
@@ -141,6 +123,46 @@ private:
     ///
     NET_DVR_StopRealPlayFUN NET_DVR_StopRealPlay_L;
 
+
+    typedef   BOOL  (*NET_DVR_RemoteControlFUN)(LONG lUserID, DWORD dwCommand, LPVOID lpInBuffer, DWORD dwInBufferSize);
+    ///
+    /// \brief NET_DVR_RemoteControl_L 远程控制,设备运行状态
+    ///
+    NET_DVR_RemoteControlFUN NET_DVR_RemoteControl_L;
+
+private:
+
+    ///
+    /// \brief getDeviceStatus 获取设备运行状态
+    /// \param lUserID 登录ID
+    /// \return
+    ///
+    bool getDeviceStatus(LONG lUserID);
+
+    ///
+    /// \brief initSDk 初始化SDK
+    /// \return
+    ///
+    bool initSDk();
+
+    ///
+    /// \brief exceptionCallBack_V30 接收异常、重连等消息的窗口句柄或回调函数。
+    /// \param dwType 异常或重连等消息的类型
+    /// \param lUserID 登录ID
+    /// \param lHandle 出现异常的相应类型的句柄
+    /// \param pUser 用户数据
+    ///
+    static void CALLBACK exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser);
+
+    ///
+    /// \brief fLoginResultCallBack 登录状态回调函数
+    /// \param lUserID 用户ID，NET_DVR_Login_V40的返回值
+    /// \param dwResult 登录状态：0- 异步登录失败，1- 异步登录成功
+    /// \param lpDeviceInfo 设备信息，设备序列号、通道、能力等参数
+    /// \param pUser 用户数据
+    ///
+    static void CALLBACK loginResultCallBack(LONG lUserID,DWORD dwResult,LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo,void *pUser);
+
 public:
 
     ///
@@ -172,9 +194,9 @@ public:
     void resizeEventSlot()Q_DECL_OVERRIDE;
 
     ///
-    /// \brief closeEvent 重写窗口关闭事件
+    /// \brief closeStream 关闭视频流
     ///
-    void closeWIdgetEvent()Q_DECL_OVERRIDE;
+    void closeStreamSlot()Q_DECL_OVERRIDE;
 };
 
 #endif // HCNETSDK_H

@@ -1,10 +1,14 @@
 #include "hcnetsdk.h"
 
+HCNetSDK* HCNetSDK::pThis=nullptr;
+
 HCNetSDK::HCNetSDK(QObject *parent)
 {
     this->setParent(parent);
 
-    lUserID=-1;dwResult=-1;
+    HCNetSDK::pThis=this;
+
+    lUserID=-1;dwResult=0;
 
     if(QSysInfo::windowsVersion()){
         pDLL=new QLibrary("./plugins/HCNetSDK/libhcnetsdk.dll");
@@ -28,6 +32,7 @@ HCNetSDK::HCNetSDK(QObject *parent)
         NET_DVR_GetLocalIP_L=reinterpret_cast<NET_DVR_GetLocalIPFUN>(pDLL->resolve("NET_DVR_GetLocalIP"));
         NET_DVR_SetValidIP_L=reinterpret_cast<NET_DVR_SetValidIPFUN>(pDLL->resolve("NET_DVR_SetValidIP"));
         NET_DVR_StopRealPlay_L=reinterpret_cast<NET_DVR_StopRealPlayFUN>(pDLL->resolve("NET_DVR_StopRealPlay"));
+        NET_DVR_RemoteControl_L=reinterpret_cast<NET_DVR_RemoteControlFUN>(pDLL->resolve("NET_DVR_RemoteControl"));
     }
 }
 
@@ -35,6 +40,16 @@ HCNetSDK::~HCNetSDK()
 {
     pDLL->unload();
     delete pDLL;
+}
+
+bool HCNetSDK::getDeviceStatus(LONG lUserID)
+{
+    if(NET_DVR_RemoteControl_L(lUserID,NET_DVR_CHECK_USER_STATUS,nullptr,4)){
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 bool HCNetSDK::initSDk()
@@ -53,7 +68,7 @@ bool HCNetSDK::initSDk()
     LoginInfo.wPort=static_cast<uint16_t>(this->port);
     LoginInfo.bUseAsynLogin=1;
     LoginInfo.cbLoginResult=HCNetSDK::loginResultCallBack;
-    LoginInfo.pUser=this;
+    LoginInfo.pUser=nullptr;
 
     if(NET_DVR_Init_L()){
         NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,HCNetSDK::exceptionCallBack_V30,nullptr);
@@ -66,14 +81,13 @@ bool HCNetSDK::initSDk()
 
 void HCNetSDK::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
-    HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
+    //HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
     emit pThis->messageSignal(tr("ID:%1,ERROR:%2,HANDLE:%3").arg(lUserID).arg(dwType).arg(lHandle));
 }
 
 void HCNetSDK::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
 {   
-    HCNetSDK* pThis=static_cast<HCNetSDK*>(pUser);
-
+    //HCNetSDK* pThis=static_cast<HCNetSDK*>(pUser);
     pThis->lUserID=lUserID;
     pThis->dwResult=dwResult;
     emit pThis->messageSignal(tr("ID:%1,STATUS:%2").arg(lUserID).arg(dwResult));
@@ -119,7 +133,7 @@ void HCNetSDK::playStreamSlot(uint winID,bool play)
     struPlayInfo.hPlayWnd    =winID;//static_cast<uint>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 1;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
-    struPlayInfo.dwLinkMode   = 0;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
+    struPlayInfo.dwLinkMode   = 1;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
     struPlayInfo.bBlocked     = 0;       //0- 非阻塞取流，1- 阻塞取流
 
     if(dwResult){
@@ -140,9 +154,9 @@ void HCNetSDK::resizeEventSlot()
     NET_DVR_ChangeWndResolution_L(this->streamID);
 }
 
-void HCNetSDK::closeWIdgetEvent()
+void HCNetSDK::closeStreamSlot()
 {
-    NET_DVR_StopRealPlay_L(this->streamID);
-    NET_DVR_Logout_L(this->lUserID);
+    NET_DVR_StopRealPlay_L(streamID);
+    NET_DVR_Logout_L(lUserID);
     NET_DVR_Cleanup_L();
 }
