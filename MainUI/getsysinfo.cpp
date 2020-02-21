@@ -52,7 +52,9 @@ void GetSysInfo::run()
                     ideS=strCpu[i].toDouble();
                 }
             }
-            sleep(5);
+
+            sleep(1);
+
             process.start("cat /proc/stat");
             process.waitForFinished();
             str = process.readLine();
