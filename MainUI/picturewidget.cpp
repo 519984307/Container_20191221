@@ -38,4 +38,20 @@ void PictureWidget::on_pushButton_3_clicked()
 
 void PictureWidget::on_pushButton_clicked()
 {
+    ///先关闭流
+    emit on_pushButton_3_clicked();
+    emit putCommandSignal();
+}
+
+void PictureWidget::on_pushButton_4_clicked()
+{
+
+}
+
+void PictureWidget::pictureStreamSlot(const QByteArray &jpgStream, const QString &camerIP)
+{
+    QPixmap *labelPix = new QPixmap();
+    labelPix->loadFromData(jpgStream);
+    ui->label->setPixmap(*labelPix);
+    delete labelPix;
 }

@@ -127,6 +127,7 @@ bool HCNetSDK::putCommandSlot(const QString &command)
         else {
             QByteArray bye(buff,200000);
             emit pictureStreamSignal(bye,this->ip);
+            bye.clear();
         }
     }
     free(buff);

@@ -2,7 +2,7 @@
 
 ImageProcessing::ImageProcessing(QObject *parent) : QObject(parent)
 {
-    //this->setParent(parent);
+    this->setParent(nullptr);
 }
 
 void ImageProcessing::camerIDstates(const QString &camerIP, bool state)

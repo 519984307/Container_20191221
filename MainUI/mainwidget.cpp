@@ -24,10 +24,13 @@ MainWidget::MainWidget(QWidget *parent) :
 MainWidget::~MainWidget()
 {
     ThreadList.clear();
-    ImageProcessingMap.clear();
     ItemWidgetMap.clear();
     CamerNameList.clear();
     ThreadList.clear();
+
+    for(auto obj:ImageProcessingMap.values()){
+        delete obj;
+    }
 
     delete pGetSysInfo;
 
@@ -340,6 +343,9 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     ImageProcessingMap.insert(num,pImageProcessing);
 
     connect(this,&MainWidget::closeStreamSignal,pGetimagesInterface,&GetImagesInterface::closeStreamSlot,Qt::BlockingQueuedConnection);
+
+    connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
     connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
     connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
