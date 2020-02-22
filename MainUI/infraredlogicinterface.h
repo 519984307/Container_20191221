@@ -16,19 +16,19 @@ signals:
     /// \brief message 日志
     /// \param msg 信息体
     ///
-     void message(const QString &msg);
+     void messageSignal(const QString &msg);
 
      ///
      /// \brief logicStatus 红外信号状态
      /// \param status 状态码
      ///
-     void logicStatus(int* status);
+     void logicStatusSignal(int* status);
 
      ///
      /// \brief setLogicPutImage 逻辑抓图
      /// \param putCommnd 逻辑
      ///
-     void logicPutImage(int putCommnd);
+     void logicPutImageSignal(int putCommnd);
 
 public slots://槽
 
@@ -37,19 +37,19 @@ public slots://槽
    /// \param portName1 串口1
    /// \param portName2 串口2
    ///
-   virtual void startSlave(const QString &portName1, const QString &portName2)=0;
+   virtual void startSlaveSlot(const QString &portName1, const QString &portName2)=0;
 
    ///
    /// \brief setAlarmModeSlot 设置红外模式
    /// \param mode 模式(敞开|常闭)
    ///
-   virtual void setAlarmMode(bool model)=0;
+   virtual void setAlarmModeSlot(bool model)=0;
 
      ///
      /// \brief exitWhile 退出循环
      /// \param exit
      ///
-   virtual void exitWhile(bool exit)=0;
+   virtual void exitWhileSlot(bool exit)=0;
 };
 
 #define InfraredlogicInterfaceIID "ZBY.ContainerServer.InfraredlogicInterface/1.0"

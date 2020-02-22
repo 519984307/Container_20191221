@@ -44,24 +44,26 @@ private://函数
      ///
       void serialLogic(int *status);
 
+public:
+
      ///
      /// \brief startSlave 设置参数,启动串口
      /// \param portName1 串口1
      /// \param portName2 串口2
      ///
-     void startSlave(const QString &portName1, const QString &portName2) Q_DECL_OVERRIDE;
+     void startSlaveSlot(const QString &portName1, const QString &portName2) Q_DECL_OVERRIDE;
 
      ///
      /// \brief setAlarmModeSlot 设置红外模式
      /// \param mode 模式(敞开|常闭)
      ///
-     void setAlarmMode(bool model)Q_DECL_OVERRIDE;
+     void setAlarmModeSlot(bool model)Q_DECL_OVERRIDE;
 
      ///
      /// \brief exitWhile 退出循环
      /// \param exit 条件
      ///
-     virtual void exitWhile(bool exit)Q_DECL_OVERRIDE;
+     void exitWhileSlot(bool exit)Q_DECL_OVERRIDE;
 };
 
 #endif // INFRAREDLOGIC_H

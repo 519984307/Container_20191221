@@ -102,6 +102,9 @@ private:
     ///图片处理类
     QHash<int,QObject*> ImageProcessingMap;
 
+    ///红外逻辑处理类
+    QHash<int,QObject*> LogicalProcessingMap;
+
 private:
 
     ///

@@ -20,6 +20,12 @@ private:
 
 public slots:
 
+    ///
+    /// \brief logicStatusSlot 红外状态
+    /// \param status 状态
+    ///
+    void logicStatusSlot(int* status);
+
 signals:
 
 };

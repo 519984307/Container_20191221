@@ -45,7 +45,7 @@ public slots:
     /// \brief putCommandSlots 抓拍指令
     /// \param command 抓拍命令
     ///
-    virtual bool putCommandSlot(const QString &command)=0;
+    virtual bool putCommandSlot(const QString &command="")=0;
 
     ///
     /// \brief playViedoStreamSlot 预览实时视频

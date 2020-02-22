@@ -17,8 +17,8 @@ MainWidget::MainWidget(QWidget *parent) :
 
     connetObject();
 
-    ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4]);
-    emit pImageProcessing->initCamer("192.168.0.200",8000,"admin","Zby123456");
+    ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[120]);
+    emit pImageProcessing->initCamer("192.168.1.100",8000,"admin","Zby123456");
 }
 
 MainWidget::~MainWidget()
@@ -295,7 +295,7 @@ void MainWidget::loadPlugins()
                 num=num*4;///每条道4个相机,车牌相机车外.
             }
             else if (name=="GIC") {
-                num=num*2;///每条道2个串口
+                ;///每条道2个串口共用一个插件.
             }
 
             ///创建新插件
@@ -339,18 +339,20 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
 {
     PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(CamerWidgetMap[num]);
 
-    ImageProcessing* pImageProcessing=new ImageProcessing ();
+    ImageProcessing* pImageProcessing=new ImageProcessing (nullptr);
     ImageProcessingMap.insert(num,pImageProcessing);
 
     connect(this,&MainWidget::closeStreamSignal,pGetimagesInterface,&GetImagesInterface::closeStreamSlot,Qt::BlockingQueuedConnection);
 
     connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
     connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
     connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
+
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStream);
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
     connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstates);
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStream);
+
     connect(pImageProcessing,&ImageProcessing::initCamer,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
     connect(pImageProcessing,&ImageProcessing::putCommand,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
 
@@ -364,15 +366,19 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
 
 void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)
 {
-//    LogicMap.insert(item->child(i),pInfraredlogicInterface);
-//    DataWidget* pDataWidget=qobject_cast<DataWidget*>(WidgetMap.value(item->child(i)));
+    DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num]);
 
-//    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatus,pDataWidget,&DataWidget::logicStatus);
-//    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImage,pDataWidget,&DataWidget::logicPutImage);
-//    connect(pDataWidget,&DataWidget::startSlave,pInfraredlogicInterface,&InfraredlogicInterface::startSlave);
-//    connect(pDataWidget,&DataWidget::setAlarmMode,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmMode);
-//    connect(pDataWidget,&DataWidget::exitWhile,pInfraredlogicInterface,&InfraredlogicInterface::exitWhile);
-//    connect(pInfraredlogicInterface,&InfraredlogicInterface::message,this,&MainWidget::message);
+    LogicalProcessing* pLogicalProcessing=new LogicalProcessing (nullptr);
+    LogicalProcessingMap.insert(num,pLogicalProcessing);
+
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pLogicalProcessing,&LogicalProcessing::logicStatusSlot);
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pLogicalProcessing,&LogicalProcessing::logicPutImageSlot);
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::message);
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
+
+    connect(pLogicalProcessing,&LogicalProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
+    connect(pLogicalProcessing,&LogicalProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
+    connect(pLogicalProcessing,&LogicalProcessing::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot);
 }
 
 void MainWidget::message(const QString &msg)

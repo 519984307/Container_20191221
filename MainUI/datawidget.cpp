@@ -16,3 +16,12 @@ DataWidget::~DataWidget()
 {
     delete ui;
 }
+
+void DataWidget::logicStatusSlot(int *status)
+{
+    ui->checkBox_2->setChecked(status[0]);
+    ui->checkBox_3->setChecked(status[1]);
+    ui->checkBox_4->setChecked(status[3]);
+    ui->checkBox_5->setChecked(status[4]);
+    ui->checkBox_6->setChecked(status[2]);
+}

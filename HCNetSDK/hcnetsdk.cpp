@@ -116,8 +116,8 @@ bool HCNetSDK::putCommandSlot(const QString &command)
     uint charLen=200000;
     uint dataLen=0;
     char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
-    pJpegFile.wPicSize=2;
-    pJpegFile.wPicQuality=184;
+    pJpegFile.wPicSize=0xff;
+    pJpegFile.wPicQuality=0;
 
     if(dwResult){
         if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,&dataLen)){
@@ -125,12 +125,13 @@ bool HCNetSDK::putCommandSlot(const QString &command)
             return false;
         }
         else {
-            QByteArray bye(buff,200000);
+            QByteArray bye(buff, 200000);
             emit pictureStreamSignal(bye,this->ip);
             bye.clear();
         }
     }
     free(buff);
+    buff=nullptr;
     return true;
 }
 

@@ -8,10 +8,11 @@ InfraredLogic::InfraredLogic(QObject *parent)
     memset(tmpStatus,0,sizeof (int));
 
     exit=false;
+    model=false;
 }
 
 InfraredLogic::~InfraredLogic()
-{
+{   
 //    free(status);
 //    free(tmpStatus);
 }
@@ -20,10 +21,10 @@ bool InfraredLogic::compareStatus(int *before, int *after)
 {
     for (int i=0;i<6;i++) {
         if(before[i]!=after[i]) {
-            return false;
+            return true;
         }
     }
-    return  true;
+    return  false;
 }
 
 void InfraredLogic::serialLogic(int *status)
@@ -36,14 +37,14 @@ void InfraredLogic::serialLogic(int *status)
     if(!model) {
         one=1;two=0;
     }
-    if(!compareStatus(status,tmpStatus)){
+    if(compareStatus(status,tmpStatus)){
         //clearn
         if(status[0]==one){
             if(status[1]==two){
                 if(status[3]==two){
                     if(status[4]==two)
                     {
-                        emit logicPutImage(-1);
+                        emit logicPutImageSignal(-1);
                     }
                 }
             }
@@ -54,7 +55,7 @@ void InfraredLogic::serialLogic(int *status)
             if(status[1]==one){
                 if(status[3]==one){
                     if(status[4]==one){
-                        emit logicPutImage(0);
+                        emit logicPutImageSignal(0);
                         _22G1=false;
                         _45G1=true;
                     }
@@ -66,7 +67,7 @@ void InfraredLogic::serialLogic(int *status)
                 if(status[1]==two){
                     if(status[3]==one){
                         if(status[4]==one){
-                            emit logicPutImage(1);
+                            emit logicPutImageSignal(1);
                             _45G1=false;
                         }
                     }
@@ -89,7 +90,7 @@ void InfraredLogic::serialLogic(int *status)
                 if(status[1]==two){
                     if(status[3]==one){
                         if(status[4]==one){
-                            emit logicPutImage(2);
+                            emit logicPutImageSignal(2);
                             _22G1=false;
                         }
                     }
@@ -102,7 +103,7 @@ void InfraredLogic::serialLogic(int *status)
             if(status[1]==two){
                 if(status[3]==one){
                     if(status[4]==one){
-                        emit logicPutImage(3);
+                        emit logicPutImageSignal(3);
                         _22G1_22G1=true;
                     }
                 }
@@ -113,7 +114,7 @@ void InfraredLogic::serialLogic(int *status)
                 if(status[1]==two){
                     if(status[3]==one){
                         if(status[4]==one){
-                            emit logicPutImage(4);
+                            emit logicPutImageSignal(4);
                             _22G1_22G1=false;
                         }
                     }
@@ -125,17 +126,17 @@ void InfraredLogic::serialLogic(int *status)
     memcpy(tmpStatus,status,sizeof (tmpStatus));
 }
 
-void InfraredLogic::setAlarmMode(bool model)
+void InfraredLogic::setAlarmModeSlot(bool model)
 {
     this->model=model;
 }
 
-void InfraredLogic::exitWhile(bool exit)
+void InfraredLogic::exitWhileSlot(bool exit)
 {
     this->exit=exit;
 }
 
-void InfraredLogic::startSlave(const QString &portName1, const QString &portName2)
+void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &portName2)
 {
     QSerialPort serial1,serial2;
     bool com1=false;
@@ -148,49 +149,49 @@ void InfraredLogic::startSlave(const QString &portName1, const QString &portName
 
     //COM1
     if(!serial1.open(QIODevice::ReadOnly)){
-        emit message(tr("Can't open %1, error code %2").arg(portName1).arg(serial1.error()));
+        emit messageSignal(tr("Can't open %1, error code %2").arg(portName1).arg(serial1.error()));
     }
     else{
         //设置DTR电平高
         if(serial1.setDataTerminalReady(true)){
-            emit message(tr("set 1% DataTerminalReady successful").arg(portName1));
+            emit messageSignal(tr("set 1% DataTerminalReady successful").arg(portName1));
             com1=true;
         }
         else {
-            emit message(tr("Can't set DTR  %1, error code %2").arg(portName1).arg(serial1.error()));
+            emit messageSignal(tr("Can't set DTR  %1, error code %2").arg(portName1).arg(serial1.error()));
         }
         //设置RTS电平高,可以不设置
         if(serial1.setRequestToSend(true))
         {
-            emit message(tr("set 1% RequestToSend successful").arg(portName1));
+            emit messageSignal(tr("set 1% RequestToSend successful").arg(portName1));
         }
         else
         {
-            emit message(tr("Can't set RTS  %1, error code %2").arg(portName1).arg(serial1.error()));
+            emit messageSignal(tr("Can't set RTS  %1, error code %2").arg(portName1).arg(serial1.error()));
         }
     }
 
     //COM2
     if(!serial2.open(QIODevice::ReadOnly)){
-        emit message(tr("Can't open %1, error code %2").arg(portName2).arg(serial2.error()));
+        emit messageSignal(tr("Can't open %1, error code %2").arg(portName2).arg(serial2.error()));
     }
     else{
         //设置DTR电平高
         if(serial2.setDataTerminalReady(true)){
-            emit message(tr("set %1 DataTerminalReady successful").arg(portName2));
+            emit messageSignal(tr("set %1 DataTerminalReady successful").arg(portName2));
             com2=true;
         }
         else {
-            emit message(tr("Can't set DTR  %1, error code %2").arg(portName2).arg(serial2.error()));
+            emit messageSignal(tr("Can't set DTR  %1, error code %2").arg(portName2).arg(serial2.error()));
         }
         //设置RTS电平高,可以不设置
         if(serial2.setRequestToSend(true))
         {
-            emit message(tr("set %1 RequestToSend successful").arg(portName2));
+            emit messageSignal(tr("set %1 RequestToSend successful").arg(portName2));
         }
         else
         {
-            emit message(tr("Can't set RTS  %1, error code %2").arg(portName2).arg(serial2.error()));
+            emit messageSignal(tr("Can't set RTS  %1, error code %2").arg(portName2).arg(serial2.error()));
         }
     }
 
@@ -220,9 +221,9 @@ void InfraredLogic::startSlave(const QString &portName1, const QString &portName
             status[5]= (serial2.pinoutSignals()&QSerialPort::DataCarrierDetectSignal)?one:zero;
         }
 
-        if(compareStatus(status,tmpStatus)){//比对红外状态有没有变化,有变化才做相应处理.
-            serialLogic(status);//逻辑判断
-            emit logicStatus(status);//传递状态
+        if(compareStatus(status,tmpStatus)){///比对红外状态有没有变化,有变化才做相应处理.
+            serialLogic(status);///逻辑判断
+            emit logicStatusSignal(status);///传递状态
         }
         memcpy(tmpStatus,status,sizeof (status));
     }

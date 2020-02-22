@@ -5,12 +5,12 @@ LogicalProcessing::LogicalProcessing(QObject *parent) : QObject(parent)
     this->setParent(parent);
 }
 
-void LogicalProcessing::logicStatus(int *status)
+void LogicalProcessing::logicStatusSlot(int *status)
 {
 
 }
 
-void LogicalProcessing::logicPutImage(int putCommnd)
+void LogicalProcessing::logicPutImageSlot(int putCommnd)
 {
 
 }
