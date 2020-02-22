@@ -1,4 +1,4 @@
-#include "hcnetsdk.h"
+#include "captureimages.h"
 
 #if defined(Q_OS_WIN32)
     #define OS 0
@@ -6,13 +6,13 @@
     #define OS 1
 #endif
 
-HCNetSDK* HCNetSDK::pThis=nullptr;
+CaptureImages* CaptureImages::pThis=nullptr;
 
-HCNetSDK::HCNetSDK(QObject *parent)
+CaptureImages::CaptureImages(QObject *parent)
 {
     this->setParent(parent);
 
-    HCNetSDK::pThis=this;
+    CaptureImages::pThis=this;
 
     lUserID=-1;dwResult=0;streamID=-1;
 
@@ -42,13 +42,13 @@ HCNetSDK::HCNetSDK(QObject *parent)
     }
 }
 
-HCNetSDK::~HCNetSDK()
+CaptureImages::~CaptureImages()
 {
     pDLL->unload();
     delete pDLL;
 }
 
-bool HCNetSDK::getDeviceStatus(LONG lUserID)
+bool CaptureImages::getDeviceStatus(LONG lUserID)
 {
     if(NET_DVR_RemoteControl_L(lUserID,NET_DVR_CHECK_USER_STATUS,nullptr,4)){
         return true;
@@ -58,7 +58,7 @@ bool HCNetSDK::getDeviceStatus(LONG lUserID)
     }
 }
 
-bool HCNetSDK::initSDk()
+bool CaptureImages::initSDk()
 {
     NET_DVR_LOCAL_SDK_PATH SDKPath={};
     NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
@@ -73,11 +73,11 @@ bool HCNetSDK::initSDk()
     strcpy(LoginInfo.sPassword,this->pow.toLatin1().data());
     LoginInfo.wPort=static_cast<uint16_t>(this->port);
     LoginInfo.bUseAsynLogin=1;
-    LoginInfo.cbLoginResult=HCNetSDK::loginResultCallBack;
+    LoginInfo.cbLoginResult=CaptureImages::loginResultCallBack;
     LoginInfo.pUser=nullptr;
 
     if(NET_DVR_Init_L()){
-        NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,HCNetSDK::exceptionCallBack_V30,nullptr);
+        NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,nullptr);
         NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), true);
         NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
         return  true;
@@ -85,13 +85,13 @@ bool HCNetSDK::initSDk()
      return false;
 }
 
-void HCNetSDK::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
+void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
     //HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
     emit pThis->messageSignal(tr("ID:%1,ERROR:%2,HANDLE:%3").arg(lUserID).arg(dwType).arg(lHandle));
 }
 
-void HCNetSDK::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
+void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
 {   
     //HCNetSDK* pThis=static_cast<HCNetSDK*>(pUser);
     pThis->lUserID=lUserID;
@@ -99,7 +99,7 @@ void HCNetSDK::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVIC
     emit pThis->messageSignal(tr("ID:%1,STATUS:%2").arg(lUserID).arg(dwResult));
 }
 
-void HCNetSDK::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
+void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
 {
     this->ip=camerIP;
     this->port=camerPort;
@@ -109,7 +109,7 @@ void HCNetSDK::initCamerSlot(const QString &camerIP, quint16 camerPort,const QSt
     initSDk();
 }
 
-bool HCNetSDK::putCommandSlot(const QString &command)
+bool CaptureImages::putCommandSlot(const QString &command)
 {
     NET_DVR_JPEGPARA   pJpegFile={};
 
@@ -135,7 +135,7 @@ bool HCNetSDK::putCommandSlot(const QString &command)
     return true;
 }
 
-void HCNetSDK::playStreamSlot(uint winID,bool play)
+void CaptureImages::playStreamSlot(uint winID,bool play)
 {
     NET_DVR_PREVIEWINFO struPlayInfo = {};
     struPlayInfo.hPlayWnd    =winID;//static_cast<uint>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
@@ -157,12 +157,12 @@ void HCNetSDK::playStreamSlot(uint winID,bool play)
     }
 }
 
-void HCNetSDK::resizeEventSlot()
+void CaptureImages::resizeEventSlot()
 {
     NET_DVR_ChangeWndResolution_L(this->streamID);
 }
 
-void HCNetSDK::closeStreamSlot()
+void CaptureImages::closeStreamSlot()
 {
     if(streamID!=-1||lUserID!=-1){
         NET_DVR_StopRealPlay_L(streamID);

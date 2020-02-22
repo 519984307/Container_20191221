@@ -1,19 +1,19 @@
-#ifndef HCNETSDK_H
-#define HCNETSDK_H
+#ifndef CAPTUREIMAGES_H
+#define CAPTUREIMAGES_H
 
 #include "HCNetSDK.h"
-#include "hcnetsdk_global.h"
+#include "captureimages_global.h"
 #include "getimagesinterface.h"
 
-class HCNETSDKSHARED_EXPORT HCNetSDK:public GetImagesInterface
+class CAPTUREIMAGESSHARED_EXPORT CaptureImages:public GetImagesInterface
 {
     Q_OBJECT
     Q_INTERFACES(GetImagesInterface)
     Q_PLUGIN_METADATA(IID  GetImagesInterfaceIID)
 
 public:
-    HCNetSDK(QObject *parent = nullptr);
-    ~HCNetSDK()Q_DECL_OVERRIDE;
+    CaptureImages(QObject *parent = nullptr);
+    ~CaptureImages()Q_DECL_OVERRIDE;
 
 private:
 
@@ -34,7 +34,7 @@ private:
     ///
     QLibrary *pDLL;
 
-    static HCNetSDK* pThis;
+    static CaptureImages* pThis;
 
 private:
 
@@ -199,4 +199,4 @@ public:
     void closeStreamSlot()Q_DECL_OVERRIDE;
 };
 
-#endif // HCNETSDK_H
+#endif // CAPTUREIMAGES_H
