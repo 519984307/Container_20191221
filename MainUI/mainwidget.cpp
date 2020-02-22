@@ -379,6 +379,13 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
     connect(pLogicalProcessing,&LogicalProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
     connect(pLogicalProcessing,&LogicalProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
     connect(pLogicalProcessing,&LogicalProcessing::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot);
+
+    ///线程运行
+    QThread* pThread=new QThread(this);
+    pInfraredlogicInterface->moveToThread(pThread);
+    pLogicalProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
 }
 
 void MainWidget::message(const QString &msg)
