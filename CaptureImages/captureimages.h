@@ -140,10 +140,9 @@ private:
     bool getDeviceStatus(LONG lUserID);
 
     ///
-    /// \brief initSDk 初始化SDK
-    /// \return
+    /// \brief loginCamer 登录相机
     ///
-    bool initSDk();
+    void loginCamer();
 
     ///
     /// \brief exceptionCallBack_V30 接收异常、重连等消息的窗口句柄或回调函数。
@@ -179,7 +178,7 @@ public:
     /// \param command 指令
     /// \return
     ///
-    bool putCommandSlot(const QString &command="") Q_DECL_OVERRIDE;
+    bool putCommandSlot(const QString &command) Q_DECL_OVERRIDE;
 
     ///
     /// \brief playStreamSlot 重写播放视频流函数

@@ -14,20 +14,35 @@ public:
     explicit InfraredLogic(QObject *parent = nullptr);
     ~InfraredLogic() Q_DECL_OVERRIDE;
 
-private://变量
+private:
 
-    int status[6];   //红外信号状态
-    int tmpStatus[6];//临时红外信号
+    ///
+    /// \brief status 红外信号状态
+    ///
+    int status[6];
 
-     //箱型逻辑条件
+    ///
+    /// \brief tmpStatus 临时红外信号
+    ///
+    int tmpStatus[6];
+
+     /*箱型逻辑条件*/
      bool _45G1;
      bool _22G1;
      bool _22G1_22G1;
 
-     bool exit;//退出循环状态
-     bool model;//红外模式(常开|常闭)
 
-private://函数
+     ///
+     /// \brief exit 退出循环状态
+     ///
+     bool exit;
+
+     ///
+     /// \brief model 红外模式(常开|常闭)
+     ///
+     bool model;
+
+private:
 
      ///
      /// \brief compareStatus 比较红外状态

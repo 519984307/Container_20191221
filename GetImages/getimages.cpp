@@ -67,8 +67,18 @@ bool GetImages::putCommandSlot(const QString &command)
     return (false);
 }
 
-void GetImages::playViedoStreamSlot(uint64_t winID,bool play)
+void GetImages::playStreamSlot(uint winID,bool play)
 {
+}
+
+void GetImages::resizeEventSlot()
+{
+
+}
+
+void GetImages::closeStreamSlot()
+{
+
 }
 
 void GetImages::stateChanged(QAbstractSocket::SocketState socketState)

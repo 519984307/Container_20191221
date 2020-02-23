@@ -99,7 +99,17 @@ public:
     /// \brief playViedoStreamSlot 重写播放视频流函数
     /// \param pUser
     ///
-    void playViedoStreamSlot(uint64_t winID, bool play) Q_DECL_OVERRIDE;
+    void playStreamSlot(uint winID, bool play) Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief resizeEventSlot 调整窗口通知动态库
+    ///
+    void resizeEventSlot()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief closeStream 关闭视频流
+    ///
+    void closeStreamSlot()Q_DECL_OVERRIDE;
 };
 
 #endif // GETIMAGES_H

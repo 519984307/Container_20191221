@@ -9,7 +9,7 @@
 
 GetSysInfo::GetSysInfo()
 {
-    status=true;
+    status=false;
 }
 
 void GetSysInfo::run()
@@ -23,7 +23,7 @@ void GetSysInfo::run()
 
         QList<QString> msgList;
 
-        while (status) {
+        while (!status) {
 
             QProcess process;
 

@@ -99,10 +99,14 @@ private:
      */
     QHash<QTreeWidgetItem*,QObject*> ItemWidgetMap;
 
-    ///图片处理类
+    ///
+    /// \brief ImageProcessingMap 图片处理类
+    ///
     QHash<int,QObject*> ImageProcessingMap;
 
-    ///红外逻辑处理类
+    ///
+    /// \brief LogicalProcessingMap 红外逻辑处理类
+    ///
     QHash<int,QObject*> LogicalProcessingMap;
 
 private:
@@ -205,7 +209,7 @@ signals:
     void closeStreamSignal();
 
     ///
-    /// \brief exitWhileSignal 退出CPU,MEM状态线程
+    /// \brief exitWhileSignal 退出循环线程
     /// \param status 标志位
     ///
     void exitWhileSignal(bool status);

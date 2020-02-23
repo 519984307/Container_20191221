@@ -6,9 +6,10 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4):
+QT += widgets
 
-TARGET = MainUI
+TARGET = Container
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -72,12 +73,12 @@ RCC_DIR=tmp/rcc
 UI_DIR=tmp/ui
 OBJECTS_DIR=tmp/obj
 
-QMAKE_LFLAGS+="-Wl,-rpath=./plugins/,-rpath=./plugins/HCNetSDK"
+#QMAKE_LFLAGS+="-Wl,-rpath=./plugins/,-rpath=./plugins/HCNetSDK"
 
 RESOURCES += \
     ico.qrc
 
-DISTFILES += \
-    libAudioRender.so \
-    libSuperRender.so \
-    libPlayCtrl.so
+#DISTFILES += \
+#    libAudioRender.so \
+#    libSuperRender.so \
+#    libPlayCtrl.so

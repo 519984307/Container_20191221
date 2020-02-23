@@ -6,7 +6,7 @@
 #include <QLibrary>
 #include <QSysInfo>
 #include <QObject>
-#include<QDir>
+#include <QDir>
 
 #if defined(CAPTUREIMAGES_LIBRARY)
 #  define CAPTUREIMAGESSHARED_EXPORT Q_DECL_EXPORT

@@ -75,7 +75,7 @@ signals:
     /// \param command /*保留*/
     /// \return
     ///
-    bool putCommandSignal(const QString &command="");
+    bool putCommandSignal(const QString &command=nullptr);
 };
 
 #endif // PICTUREWIDGET_H

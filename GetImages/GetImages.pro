@@ -7,7 +7,7 @@
 QT       -= gui
 QT       += network
 
-TARGET = GetImages_IMG
+TARGET = GetImages_IMGL
 TEMPLATE = lib
 
 CONFIG += plugin

@@ -5,11 +5,15 @@
 #-------------------------------------------------
 
 QT       -= gui
+QT       += serialport
+
 
 TARGET = InfraredLogic_GIC
+
 TEMPLATE = lib
 
 CONFIG += plugin
+#CONFIG+=serialport
 
 DEFINES += INFRAREDLOGIC_LIBRARY
 
@@ -39,5 +43,3 @@ unix {
 
 
 DESTDIR+=../MainUI/plugins
-
-VERSION=1.0

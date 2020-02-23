@@ -2,7 +2,7 @@
 
 Setting::Setting()
 {
-    pSetting=new QSettings(QCoreApplication::applicationDirPath()+"/SYSTEM.INI",QSettings::IniFormat);
+    pSetting=new QSettings(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()+"/SYSTEM.INI"),QSettings::IniFormat);
     pSetting->setIniCodec("UTF-8");
 }
 

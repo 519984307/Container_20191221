@@ -14,6 +14,7 @@ CaptureImages::CaptureImages(QObject *parent)
 
     CaptureImages::pThis=this;
 
+    /* 登录ID,登录状态,视频流状态 */
     lUserID=-1;dwResult=0;streamID=-1;
 
     if(OS){
@@ -22,6 +23,20 @@ CaptureImages::CaptureImages(QObject *parent)
     else {
         pDLL = new QLibrary("./plugins/HCNetSDK/libhcnetsdk.dll");
     }
+}
+
+CaptureImages::~CaptureImages()
+{
+    pDLL->unload();
+    delete pDLL;
+}
+
+void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
+{
+    this->ip=camerIP;
+    this->port=camerPort;
+    this->name=CamerUser;
+    this->pow=CamerPow;
 
     if(pDLL->load()){
         NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(pDLL->resolve("NET_DVR_SetExceptionCallBack_V30"));
@@ -39,14 +54,14 @@ CaptureImages::CaptureImages(QObject *parent)
         NET_DVR_SetValidIP_L=reinterpret_cast<NET_DVR_SetValidIPFUN>(pDLL->resolve("NET_DVR_SetValidIP"));
         NET_DVR_StopRealPlay_L=reinterpret_cast<NET_DVR_StopRealPlayFUN>(pDLL->resolve("NET_DVR_StopRealPlay"));
         NET_DVR_RemoteControl_L=reinterpret_cast<NET_DVR_RemoteControlFUN>(pDLL->resolve("NET_DVR_RemoteControl"));
+
+        loginCamer();
+    }
+    else {
+        emit pThis->messageSignal(tr("ERROR:Failed to load the dynamic library"));
     }
 }
 
-CaptureImages::~CaptureImages()
-{
-    pDLL->unload();
-    delete pDLL;
-}
 
 bool CaptureImages::getDeviceStatus(LONG lUserID)
 {
@@ -58,7 +73,7 @@ bool CaptureImages::getDeviceStatus(LONG lUserID)
     }
 }
 
-bool CaptureImages::initSDk()
+void CaptureImages::loginCamer()
 {
     NET_DVR_LOCAL_SDK_PATH SDKPath={};
     NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
@@ -80,9 +95,8 @@ bool CaptureImages::initSDk()
         NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,nullptr);
         NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), true);
         NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
-        return  true;
     }
-     return false;
+    emit pThis->messageSignal(tr("IP:%1,Camera login failed.").arg(ip));
 }
 
 void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
@@ -99,28 +113,18 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     emit pThis->messageSignal(tr("ID:%1,STATUS:%2").arg(lUserID).arg(dwResult));
 }
 
-void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
-{
-    this->ip=camerIP;
-    this->port=camerPort;
-    this->name=CamerUser;
-    this->pow=CamerPow;
-
-    initSDk();
-}
-
 bool CaptureImages::putCommandSlot(const QString &command)
 {
     NET_DVR_JPEGPARA   pJpegFile={};
 
     uint charLen=200000;
-    uint dataLen=0;
+    LPDWORD dataLen=nullptr;
     char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
     pJpegFile.wPicSize=0xff;
     pJpegFile.wPicQuality=0;
 
     if(dwResult){
-        if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,&dataLen)){
+        if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
             emit messageSignal(tr("put command Error:%1").arg(NET_DVR_GetLastError_L()));
             return false;
         }
@@ -138,7 +142,7 @@ bool CaptureImages::putCommandSlot(const QString &command)
 void CaptureImages::playStreamSlot(uint winID,bool play)
 {
     NET_DVR_PREVIEWINFO struPlayInfo = {};
-    struPlayInfo.hPlayWnd    =winID;//static_cast<uint>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
+    struPlayInfo.hPlayWnd    =reinterpret_cast<HWND>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
     struPlayInfo.lChannel     = 1;       //预览通道号
     struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
     struPlayInfo.dwLinkMode   = 1;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
@@ -159,7 +163,9 @@ void CaptureImages::playStreamSlot(uint winID,bool play)
 
 void CaptureImages::resizeEventSlot()
 {
-    NET_DVR_ChangeWndResolution_L(this->streamID);
+    if(dwResult){
+         NET_DVR_ChangeWndResolution_L(this->streamID);
+    }
 }
 
 void CaptureImages::closeStreamSlot()
@@ -167,6 +173,6 @@ void CaptureImages::closeStreamSlot()
     if(streamID!=-1||lUserID!=-1){
         NET_DVR_StopRealPlay_L(streamID);
         NET_DVR_Logout_L(lUserID);
+        NET_DVR_Cleanup_L();
     }
-    NET_DVR_Cleanup_L();
 }
