@@ -49,7 +49,7 @@ public slots:
      /// \brief exitWhile 退出循环
      /// \param exit
      ///
-   virtual void exitWhileSlot(bool exit)=0;
+   virtual void exitWhileSlot(bool EXIT)=0;
 };
 
 #define InfraredlogicInterfaceIID "ZBY.ContainerServer.InfraredlogicInterface/1.0"

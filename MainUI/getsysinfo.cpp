@@ -23,9 +23,11 @@ void GetSysInfo::run()
 
         QList<QString> msgList;
 
+        QProcess process;
+
         while (!status) {
 
-            QProcess process;
+            QCoreApplication::processEvents();
 
             ///Mem
             process.start("free -m");
@@ -53,7 +55,7 @@ void GetSysInfo::run()
                 }
             }
 
-            sleep(1);
+            sleep(2);
 
             process.start("cat /proc/stat");
             process.waitForFinished();

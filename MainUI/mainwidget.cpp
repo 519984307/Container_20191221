@@ -16,13 +16,21 @@ MainWidget::MainWidget(QWidget *parent) :
     loadPlugins();  
     connetObject();
 
-    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[120])){
-        emit pImageProcessing->initCamer("192.168.1.100",8000,"admin","Zby123456");
+    for(auto b:ImageProcessingMap.values()){
+        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
+            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+        }
     }
 
-//    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[10])){
-//        emit pLogicalProcessing->startSlaveSignal("com4","com5");
-//    }
+
+
+    for(auto a :LogicalProcessingMap.values()){
+
+        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
+            emit pLogicalProcessing->startSlaveSignal("com4","com5");
+        }
+    }
+
 }
 
 MainWidget::~MainWidget()
@@ -30,7 +38,6 @@ MainWidget::~MainWidget()
     ThreadList.clear();
     ItemWidgetMap.clear();
     CamerNameList.clear();
-    ThreadList.clear();
 
     for(auto obj:ImageProcessingMap.values()){
         delete obj;
@@ -372,12 +379,12 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
 
     connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStream);
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStreamSlot);
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
-    connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstates);
+    connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
 
-    connect(pImageProcessing,&ImageProcessing::initCamer,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
-    connect(pImageProcessing,&ImageProcessing::putCommand,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+    connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
+    connect(pImageProcessing,&ImageProcessing::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
 
     /*  线程运行    */
     QThread* pThread=new QThread(this);
@@ -394,12 +401,12 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
     LogicalProcessing* pLogicalProcessing=new LogicalProcessing (nullptr);
     LogicalProcessingMap.insert(num,pLogicalProcessing);
 
-    connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot);
+    connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
 
     connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pLogicalProcessing,&LogicalProcessing::logicStatusSlot);
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
     connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pLogicalProcessing,&LogicalProcessing::logicPutImageSlot);
     connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::message);
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
 
     connect(pLogicalProcessing,&LogicalProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
     connect(pLogicalProcessing,&LogicalProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);

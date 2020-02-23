@@ -14,6 +14,11 @@ public:
     explicit InfraredLogic(QObject *parent = nullptr);
     ~InfraredLogic() Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief exit 退出循环状态
+    ///
+    bool exit;
+
 private:
 
     ///
@@ -32,10 +37,7 @@ private:
      bool _22G1_22G1;
 
 
-     ///
-     /// \brief exit 退出循环状态
-     ///
-     bool exit;
+
 
      ///
      /// \brief model 红外模式(常开|常闭)
@@ -78,7 +80,7 @@ public:
      /// \brief exitWhile 退出循环
      /// \param exit 条件
      ///
-     void exitWhileSlot(bool exit)Q_DECL_OVERRIDE;
+     void exitWhileSlot(bool EXIT)Q_DECL_OVERRIDE;
 };
 
 #endif // INFRAREDLOGIC_H

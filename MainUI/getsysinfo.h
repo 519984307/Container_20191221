@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QThread>
 #include <QProcess>
+#include <QCoreApplication>
 
 class GetSysInfo : public QThread
 {

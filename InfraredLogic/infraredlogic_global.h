@@ -4,6 +4,7 @@
 #include <QtCore/qglobal.h>
 #include <QThread>
 #include <QtSerialPort/QSerialPort>
+#include <QCoreApplication>
 
 #if defined(INFRAREDLOGIC_LIBRARY)
 #  define INFRAREDLOGICSHARED_EXPORT Q_DECL_EXPORT

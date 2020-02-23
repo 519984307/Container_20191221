@@ -5,12 +5,12 @@ ImageProcessing::ImageProcessing(QObject *parent) : QObject(parent)
     this->setParent(parent);
 }
 
-void ImageProcessing::camerIDstates(const QString &camerIP, bool state)
+void ImageProcessing::camerIDstatesSlot(const QString &camerIP, bool state)
 {
 
 }
 
-void ImageProcessing::pictureStream(const QByteArray &jpgStream, const QString &camerIP)
+void ImageProcessing::pictureStreamSlot(const QByteArray &jpgStream, const QString &camerIP)
 {
 
 }
