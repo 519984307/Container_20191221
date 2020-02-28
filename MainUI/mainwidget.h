@@ -94,6 +94,11 @@ private:
     QHash<int,QObject*>CamerWidgetMap;
     QHash<int,QObject*>DataWidgetMap;
 
+    ///
+    /// \brief channelCamerMultiMap 通道对应的相机.
+    ///
+    QMultiHash<int,QObject*>channelCamerMultiMap;
+
     /*
      * treeWidget判断显示窗口
      */
@@ -112,9 +117,14 @@ private:
 private:
 
     ///
-    /// \brief connetObject 链接信号槽
+    /// \brief bindingCamerObjects 绑定相机对象
     ///
-    void connetObject();
+    void bindingCamerObjects();
+
+    ///
+    /// \brief connetObject 初始化系统状态类
+    ///
+    void initSysInfo();
 
     ///
     /// \brief closeEvent 重新窗口关闭事件
@@ -209,7 +219,7 @@ signals:
     void closeStreamSignal();
 
     ///
-    /// \brief exitWhileSignal 退出循环线程
+    /// \brief exitWhileSignal 退出循环线程,系统状态循环和逻辑循环
     /// \param status 标志位
     ///
     void exitWhileSignal(bool status);

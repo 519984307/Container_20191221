@@ -93,7 +93,7 @@ void CaptureImages::loginCamer()
 
     if(NET_DVR_Init_L()){
         NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,nullptr);
-        NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), true);
+        //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), true);
         NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
     }
     emit pThis->messageSignal(tr("IP:%1,Camera login failed.").arg(ip));
@@ -113,7 +113,7 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     emit pThis->messageSignal(tr("ID:%1,STATUS:%2").arg(lUserID).arg(dwResult));
 }
 
-bool CaptureImages::putCommandSlot(const QString &command)
+bool CaptureImages::putCommandSlot(const int &imgNumber)
 {
     NET_DVR_JPEGPARA   pJpegFile={};
 
@@ -130,7 +130,7 @@ bool CaptureImages::putCommandSlot(const QString &command)
         }
         else {
             QByteArray bye(buff, 200000);
-            emit pictureStreamSignal(bye,this->ip);
+            emit pictureStreamSignal(bye,imgNumber);
             bye.clear();
         }
     }

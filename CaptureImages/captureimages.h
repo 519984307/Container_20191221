@@ -174,11 +174,11 @@ public:
     void initCamerSlot(const QString &camerIP, quint16 camerPort, const QString &CamerUser, const QString &CamerPow) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief putCommandSlot 抓拍动作
-    /// \param command 指令
+    /// \brief putCommandSlot 抓取图片
+    /// \param imgNumber 编号
     /// \return
     ///
-    bool putCommandSlot(const QString &command) Q_DECL_OVERRIDE;
+    bool putCommandSlot(const int &imgNumber) Q_DECL_OVERRIDE;
 
     ///
     /// \brief playStreamSlot 重写播放视频流函数

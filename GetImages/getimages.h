@@ -93,7 +93,7 @@ public:
     /// \param command
     /// \return
     ///
-    bool putCommandSlot(const QString &command) Q_DECL_OVERRIDE;
+    bool putCommandSlot(const int &command) Q_DECL_OVERRIDE;
 
     ///
     /// \brief playViedoStreamSlot 重写播放视频流函数

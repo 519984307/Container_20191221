@@ -28,7 +28,7 @@ signals:
      /// \brief setLogicPutImage 逻辑抓图
      /// \param putCommnd 逻辑
      ///
-     void logicPutImageSignal(int putCommnd);
+     void logicPutImageSignal(const int &putCommnd);
 
 public slots://槽
 

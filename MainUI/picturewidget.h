@@ -54,7 +54,7 @@ public slots:
     /// \param jpgStream 图片流
     /// \param camerIP 相机地址
     ///
-    void pictureStreamSlot(const QByteArray &jpgStream,const QString &camerIP);
+    void pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber);
 
 signals:
 
@@ -71,11 +71,18 @@ signals:
     void resizeEventSignal();
 
     ///
-    /// \brief putCommandSignal 抓取图片动作
-    /// \param command /*保留*/
+    /// \brief putCommandSignal 抓取图片
+    /// \param command 图片编号
     /// \return
     ///
-    bool putCommandSignal(const QString &command=nullptr);
+    bool putCommandSignal(const int &imgNumber=0);
+
+    ///
+    /// \brief pictureStreamSignal
+    /// \param jpgStream
+    /// \param command
+    ///
+    void pictureStreamSignal(const QByteArray &jpgStream, const int &imgNumber);
 };
 
 #endif // PICTUREWIDGET_H

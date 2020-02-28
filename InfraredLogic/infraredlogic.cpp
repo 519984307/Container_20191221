@@ -252,33 +252,92 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
     //        memcpy(tmpStatus,status,sizeof (status));
     //    }
 
+//    while (1)
+//    {
+//                QCoreApplication::processEvents();
+//                QThread::msleep(10);
+
+//        if(this->exit){
+//            break;
+//        }
+
+//        qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+//        /*A1*/
+//        status[0]= qrand()%2;
+//        //A2
+//        status[1]= qrand()%2;
+//        /*D1*/
+//        status[2]= qrand()%2;
+
+//        status[3]=qrand()%2;
+//        /*B2*/
+//        status[4]= qrand()%2;
+//        /*D2*/
+//        status[5]= qrand()%2;
+//                if(compareStatus(status,tmpStatus)){
+//                    //serialLogic(status); /* 逻辑判断 */
+//                    emit logicStatusSignal(status);/* 传递状态 */
+//                }
+//        //emit logicStatusSignal(status);/* 传递状态 */
+
+//    }
     while (1)
     {
-                QCoreApplication::processEvents();
-                QThread::msleep(10);
+        QCoreApplication::processEvents();
 
         if(this->exit){
             break;
         }
 
-        qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
         /*A1*/
-        status[0]= qrand()%2;
-        //A2
-        status[1]= qrand()%2;
-        /*D1*/
-        status[2]= qrand()%2;
-
-        status[3]=qrand()%2;
+        status[0]= 1;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(1);
+QCoreApplication::processEvents();
+        /* A2 */
+        status[1]= 1;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(1);
+QCoreApplication::processEvents();
+        /*B1*/
+        status[3]=1;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(1);
+QCoreApplication::processEvents();
+         /*B2*/
+        status[4]= 1;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(5);
+QCoreApplication::processEvents();
+        /* A1*/
+        status[0]= 0;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(1);
+QCoreApplication::processEvents();
+        /* A2 */
+        status[1]=0;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(1);
+QCoreApplication::processEvents();
+        /*B1*/
+        status[3]= 0;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(1);
+QCoreApplication::processEvents();
         /*B2*/
-        status[4]= qrand()%2;
-        /*D2*/
-        status[5]= qrand()%2;
-                if(compareStatus(status,tmpStatus)){
-                    emit logicStatusSignal(status);/* 传递状态 */
-                }
-        //emit logicStatusSignal(status);/* 传递状态 */
-
+        status[4]= 0;
+        serialLogic(status); /* 逻辑判断 */
+        emit logicStatusSignal(status);/* 传递状态 */
+        QThread::sleep(5);
+QCoreApplication::processEvents();
+        //memcpy(tmpStatus,status,sizeof (status));
     }
 
 }

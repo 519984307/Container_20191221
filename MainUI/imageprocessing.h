@@ -7,7 +7,7 @@ class ImageProcessing : public QObject
 {
     Q_OBJECT
 public:
-    explicit ImageProcessing(QObject *parent = nullptr);
+    explicit ImageProcessing(QObject *parent = nullptr);   
 
 signals:
 
@@ -23,23 +23,23 @@ signals:
     /// \param command 指令
     /// \return  返回执行状态
     ///
-    bool putCommandSignal(const QString &command);
+    bool putCommandSignal(const int &command);
 
 public slots:
 
-    ///------------------------------------------------------------------------------------------------------------GetImgaes
-    /// \brief camerIDstates 相机状态
-    /// \param camerIP 相机地址
-    /// \param state 相机状态
-    ///
-    void camerIDstatesSlot(const QString &camerIP,bool state);
+//    ///------------------------------------------------------------------------------------------------------------GetImgaes
+//    /// \brief camerIDstates 相机状态
+//    /// \param camerIP 相机地址
+//    /// \param state 相机状态
+//    ///
+//    void camerIDstatesSlot(const QString &camerIP,bool state);
 
-    ///------------------------------------------------------------------------------------------------------------GetImgaes
-    /// \brief pictureStream 接受图片流
-    /// \param jpgStream 图片流
-    /// \param camerIP 相机地址
-    ///
-    void pictureStreamSlot(const QByteArray &jpgStream,const QString &camerIP);
+//    ///------------------------------------------------------------------------------------------------------------GetImgaes
+//    /// \brief pictureStream 接受图片流
+//    /// \param jpgStream 图片流
+//    /// \param camerIP 相机地址
+//    ///
+//    void pictureStreamSlot(const QByteArray &jpgStream,const int &command);
 };
 
 #endif // IMAGEPROCESSING_H

@@ -57,11 +57,11 @@ void GetImages::disconnected()
     //emit message(tr("%1 Camera link disconnected").arg(id));
 }
 
-bool GetImages::putCommandSlot(const QString &command)
+bool GetImages::putCommandSlot(const int &command)
 {
     if(tcpSocket->isValid()){
-        //const char * str_data=command.toLatin1()
-        tcpSocket->write((command.toLatin1()));
+        const char * str_data="capture 01 ";
+        tcpSocket->write(str_data);
         return(tcpSocket->flush());
     }
     return (false);
@@ -105,7 +105,7 @@ void GetImages::readFortune()
             jpgStream=jpgStream.mid(start,end-start+2);
 
             emit messageSignal(tr("%1 Get camera image data").arg(camerIP));
-            emit pictureStreamSignal(jpgStream,camerIP);
+            emit pictureStreamSignal(jpgStream,-1);
             QThread::msleep(10);
         }
         jpgStream.clear();

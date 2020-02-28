@@ -12,25 +12,38 @@ MainWidget::MainWidget(QWidget *parent) :
     InitializeCamerWindow();
     InitializeOtherWindow();
 
+    loadPlugins();
+    bindingCamerObjects();
     setStatusBar();
-    loadPlugins();  
-    connetObject();
+    initSysInfo();
 
-    for(auto b:ImageProcessingMap.values()){
-        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
-            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-        }
+    /* test */
+//    for(auto b:ImageProcessingMap.values()){
+//        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
+//            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+//        }
+//    }
+//    for(auto a :LogicalProcessingMap.values()){
+
+//        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
+//            emit pLogicalProcessing->startSlaveSignal("com4","com5");
+//        }
+//    }
+    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1])){
+        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
     }
-
-
-
-    for(auto a :LogicalProcessingMap.values()){
-
-        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
-            emit pLogicalProcessing->startSlaveSignal("com4","com5");
-        }
+    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[2])){
+        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
     }
-
+    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[3])){
+        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+    }
+    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4])){
+        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+    }
+    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[1])){
+        emit pLogicalProcessing->startSlaveSignal("com4","com5");
+    }
 }
 
 MainWidget::~MainWidget()
@@ -38,6 +51,7 @@ MainWidget::~MainWidget()
     ThreadList.clear();
     ItemWidgetMap.clear();
     CamerNameList.clear();
+    channelCamerMultiMap.clear();
 
     for(auto obj:ImageProcessingMap.values()){
         delete obj;
@@ -51,36 +65,39 @@ MainWidget::~MainWidget()
     delete ui;
 }
 
-void MainWidget::connetObject()
+void MainWidget::bindingCamerObjects()
 {
-    /*
-     * 状态栏类
-     */
-    pGetSysInfo=new GetSysInfo ();
-    pGetSysInfo->start();
-    connect(this,&MainWidget::exitWhileSignal,pGetSysInfo,&GetSysInfo::exitWhileSlot);
-    connect(pGetSysInfo,&GetSysInfo::statusMsgSignal,this,&MainWidget::statusMsgSlot);
+    /* 通道编号 */
+    for(int lan:DataWidgetMap.keys()){
+        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[lan])){
+            pLogicalProcessing->setCamerMultiMap(channelCamerMultiMap.values(lan));
+            if(DataWidget* pDataWidget=static_cast<DataWidget*>(DataWidgetMap[lan])){
+                connect(pLogicalProcessing,&LogicalProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+            }
+        }
+    }
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
 {
-    /*
-     * 关闭视频流
-     */
     emit closeStreamSignal();
-
-    /*
-     * 退出循环线程
-     */
     emit exitWhileSignal(true);
+
+    pGetSysInfo->quit();
+    pGetSysInfo->wait();
 
     foreach (auto thread, ThreadList) {
         thread->quit();
         thread->wait();
     }
+}
 
-    pGetSysInfo->quit();
-    pGetSysInfo->wait();
+void MainWidget::initSysInfo()
+{
+    pGetSysInfo=new GetSysInfo ();
+    pGetSysInfo->start();
+    connect(this,&MainWidget::exitWhileSignal,pGetSysInfo,&GetSysInfo::exitWhileSlot);
+    connect(pGetSysInfo,&GetSysInfo::statusMsgSignal,this,&MainWidget::statusMsgSlot);
 }
 
 void MainWidget::InitializeObject()
@@ -88,7 +105,9 @@ void MainWidget::InitializeObject()
     Setting setting;
     /* 读取通道数 */
     channelCounnt =setting.pSetting->value(tr("%1").arg("MAIN/ChannelNumber")).toInt();
-    CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate";
+    /* CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate"; */
+    CamerNameList<<"Before"<<"After"<<"Left"<<"Right";
+
 }
 
 void MainWidget::InitializeOtherWindow()
@@ -139,6 +158,9 @@ void MainWidget::InitializeCamerWindow()
                     auto sunItem=new QTreeWidgetItem (childImte,QStringList(name));
                     childImte->addChild(sunItem);
                     PictureWidget *picutre= new PictureWidget (this);
+
+                    channelCamerMultiMap.insert(i,picutre);
+
                     /*  过滤车牌界面  */
                     if(name!="Plate"){
                         CamerWidgetMap.insert(j,picutre);
@@ -379,9 +401,9 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
 
     connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStreamSlot);
+    //connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStreamSlot);
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
-    connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
+    //connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
 
     connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
     connect(pImageProcessing,&ImageProcessing::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
@@ -403,9 +425,10 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
 
     connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
 
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pLogicalProcessing,&LogicalProcessing::logicStatusSlot);
+    //connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pLogicalProcessing,&LogicalProcessing::logicStatusSlot);
     connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
     connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pLogicalProcessing,&LogicalProcessing::logicPutImageSlot);
+    //connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pDataWidget,&DataWidget::logicPutImageSlot);
     connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::message);
 
     connect(pLogicalProcessing,&LogicalProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
@@ -422,6 +445,6 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
 
 void MainWidget::message(const QString &msg)
 {
-    this->statusBar->showMessage(msg.toLatin1(),6000);
+    this->statusBar->showMessage(msg.toLatin1(),10000);
     //qDebug()<<msg.toLatin1();
 }
