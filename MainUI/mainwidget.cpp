@@ -119,12 +119,12 @@ void MainWidget::InitializeOtherWindow()
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
             (*it)->addChild(childImte);
 
-            ItemWidgetMap.insert(childImte,new SystemSetting(this) );
+            ItemWidgetMap.insert(childImte,new SystemSettingWidget(this) );
             for(int i=1;i<=channelCounnt;i++){
                 auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
                 /*  添加子项    */
                 (*it)->addChild(sunItem);
-                ItemWidgetMap.insert(sunItem,new CamerSetting (this));
+                ItemWidgetMap.insert(sunItem,new CamerSettingWidget (this));
             }
         }
         if((*it)->text(0)=="Service"){
@@ -209,10 +209,10 @@ void MainWidget::hideWindows()
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(value)){
             tmp->setVisible(false);
         }
-         if(CamerSetting* tmp=qobject_cast<CamerSetting*>(value)){
+         if(CamerSettingWidget* tmp=qobject_cast<CamerSettingWidget*>(value)){
              tmp->setVisible(false);
          }
-         if(SystemSetting* tmp=qobject_cast<SystemSetting*>(value)){
+         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
              tmp->setVisible(false);
          }
          if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
@@ -257,11 +257,11 @@ void MainWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item)
             tmp->move(168,80);
             tmp->setVisible(true);
         }
-        if(CamerSetting* tmp=qobject_cast<CamerSetting*>(value)){
+        if(CamerSettingWidget* tmp=qobject_cast<CamerSettingWidget*>(value)){
             tmp->move(168,80);
             tmp->setVisible(true);
         }
-        if(SystemSetting* tmp=qobject_cast<SystemSetting*>(value)){
+        if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
             tmp->move(168,80);
             tmp->setVisible(true);
         }
@@ -285,10 +285,10 @@ void MainWidget::resizeEvent(QResizeEvent *size)
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-105);
         }
-        if(CamerSetting* tmp=qobject_cast<CamerSetting*>(pWidget)){
+        if(CamerSettingWidget* tmp=qobject_cast<CamerSettingWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-105);
         }
-        if(SystemSetting* tmp=qobject_cast<SystemSetting*>(pWidget)){
+        if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-105);
         }
         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(pWidget)){

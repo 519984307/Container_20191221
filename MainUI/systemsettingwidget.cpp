@@ -1,9 +1,9 @@
-#include "systemsetting.h"
-#include "ui_systemsetting.h"
+#include "systemsettingwidget.h"
+#include "ui_systemsettingwidget.h"
 
-SystemSetting::SystemSetting(QWidget *parent) :
+SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SystemSetting)
+    ui(new Ui::SystemSettingWidget)
 {
     ui->setupUi(this);
 
@@ -12,7 +12,7 @@ SystemSetting::SystemSetting(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 }
 
-SystemSetting::~SystemSetting()
+SystemSettingWidget::~SystemSettingWidget()
 {
     delete ui;
 }

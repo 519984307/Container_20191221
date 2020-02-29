@@ -31,8 +31,8 @@ SOURCES += \
     picturewidget.cpp \
     datawidget.cpp \
     setting.cpp \
-    camersetting.cpp \
-    systemsetting.cpp \
+    camersettingwidget.cpp \
+    systemsettingwidget.cpp \
     servicewidget.cpp \
     databasewidget.cpp \
     imageprocessing.cpp \
@@ -45,8 +45,8 @@ HEADERS += \
     picturewidget.h \
     datawidget.h \
     setting.h \
-    camersetting.h \
-    systemsetting.h \
+    camersettingwidget.h \
+    systemsettingwidget.h \
     servicewidget.h \
     databasewidget.h \
     imageprocessing.h \
@@ -60,8 +60,8 @@ FORMS += \
         mainwidget.ui \
     picturewidget.ui \
     datawidget.ui \
-    camersetting.ui \
-    systemsetting.ui \
+    camersettingwidget.ui \
+    systemsettingwidget.ui \
     servicewidget.ui \
     databasewidget.ui \
     checkdatabasewidget.ui

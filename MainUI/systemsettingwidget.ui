@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SystemSetting</class>
- <widget class="QWidget" name="SystemSetting">
+ <class>SystemSettingWidget</class>
+ <widget class="QWidget" name="SystemSettingWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

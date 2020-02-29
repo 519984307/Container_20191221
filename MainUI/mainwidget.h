@@ -23,8 +23,8 @@
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
 #include "datawidget.h"
-#include "camersetting.h"
-#include "systemsetting.h"
+#include "camersettingwidget.h"
+#include "systemsettingwidget.h"
 #include "servicewidget.h"
 #include "databasewidget.h"
 
