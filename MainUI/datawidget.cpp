@@ -30,36 +30,49 @@ void DataWidget::logicStatusSlot(int *status)
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
     QPixmap *labelPix = new QPixmap();
+    QPixmap labelPixFit;
     if(jpgStream!=nullptr){
         labelPix->loadFromData(jpgStream);
+        int w=ui->label->size().width();/* 防止图片发生小的偏移 */
+        int h=ui->label->size().height();
+        labelPixFit=labelPix->scaled(w-4,h-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     }
-
-    switch (imgNumber) {
-    case -1:
+    else{
         ui->label_13->clear();
         ui->label_6->clear();
         ui->label_2->clear();
         ui->label_5->clear();
         ui->label->clear();
         ui->label_4->clear();
-        break;
+        return;
+    }
+
+    switch (imgNumber) {
+/*    case -1:
+//        ui->label_13->clear();
+//        ui->label_6->clear();
+//        ui->label_2->clear();
+//        ui->label_5->clear();
+//        ui->label->clear();
+//        ui->label_4->clear();
+//        break;*/
     case 1:
-            ui->label_13->setPixmap(*labelPix);
+            ui->label_13->setPixmap(labelPixFit);
         break;
     case 2:
-            ui->label_6->setPixmap(*labelPix);
+            ui->label_6->setPixmap(labelPixFit);
         break;
     case 3:
-            ui->label_2->setPixmap(*labelPix);
+            ui->label_2->setPixmap(labelPixFit);
         break;
     case 4:
-        ui->label_5->setPixmap(*labelPix);
+        ui->label_5->setPixmap(labelPixFit);
         break;
     case 5:
-            ui->label->setPixmap(*labelPix);
+            ui->label->setPixmap(labelPixFit);
         break;
     case 6:
-            ui->label_4->setPixmap(*labelPix);
+            ui->label_4->setPixmap(labelPixFit);
         break;
     }
     delete labelPix;

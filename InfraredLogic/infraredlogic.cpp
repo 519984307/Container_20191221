@@ -289,54 +289,70 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
             break;
         }
 
+        QCoreApplication::processEvents();
+
         /*A1*/
         status[0]= 1;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
         QThread::sleep(1);
-QCoreApplication::processEvents();
+
+        QCoreApplication::processEvents();
+
         /* A2 */
         status[1]= 1;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
         QThread::sleep(1);
-QCoreApplication::processEvents();
+
+        QCoreApplication::processEvents();
+
         /*B1*/
         status[3]=1;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
         QThread::sleep(1);
-QCoreApplication::processEvents();
+
+        QCoreApplication::processEvents();
+
          /*B2*/
         status[4]= 1;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(5);
-QCoreApplication::processEvents();
+        QThread::sleep(10);
+
+        QCoreApplication::processEvents();
+
         /* A1*/
         status[0]= 0;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
         QThread::sleep(1);
-QCoreApplication::processEvents();
+
+        QCoreApplication::processEvents();
+
         /* A2 */
         status[1]=0;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
         QThread::sleep(1);
-QCoreApplication::processEvents();
+
+        QCoreApplication::processEvents();
+
         /*B1*/
         status[3]= 0;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
         QThread::sleep(1);
-QCoreApplication::processEvents();
+
+        QCoreApplication::processEvents();
+
         /*B2*/
         status[4]= 0;
         serialLogic(status); /* 逻辑判断 */
         emit logicStatusSignal(status);/* 传递状态 */
+
         QThread::sleep(5);
-QCoreApplication::processEvents();
         //memcpy(tmpStatus,status,sizeof (status));
     }
 

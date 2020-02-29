@@ -13,7 +13,7 @@ class DataWidget : public QWidget
 
 public:
     explicit DataWidget(QWidget *parent = nullptr);
-    ~DataWidget();
+    ~DataWidget()Q_DECL_OVERRIDE;
 
 private:
     Ui::DataWidget *ui;

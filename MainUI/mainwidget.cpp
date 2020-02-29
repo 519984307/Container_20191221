@@ -18,32 +18,32 @@ MainWidget::MainWidget(QWidget *parent) :
     initSysInfo();
 
     /* test */
-//    for(auto b:ImageProcessingMap.values()){
-//        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
-//            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//        }
-//    }
-//    for(auto a :LogicalProcessingMap.values()){
+    for(auto b:ImageProcessingMap.values()){
+        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
+            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+        }
+    }
+    for(auto a :LogicalProcessingMap.values()){
 
-//        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
-//            emit pLogicalProcessing->startSlaveSignal("com4","com5");
-//        }
+        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
+            emit pLogicalProcessing->startSlaveSignal("com4","com5");
+        }
+    }
+//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1])){
+//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
 //    }
-    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1])){
-        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-    }
-    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[2])){
-        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-    }
-    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[3])){
-        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-    }
-    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4])){
-        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-    }
-    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[1])){
-        emit pLogicalProcessing->startSlaveSignal("com4","com5");
-    }
+//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[2])){
+//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+//    }
+//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[3])){
+//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+//    }
+//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4])){
+//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+//    }
+//    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[1])){
+//        emit pLogicalProcessing->startSlaveSignal("com4","com5");
+//    }
 }
 
 MainWidget::~MainWidget()
