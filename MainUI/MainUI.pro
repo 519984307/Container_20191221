@@ -37,7 +37,8 @@ SOURCES += \
     databasewidget.cpp \
     imageprocessing.cpp \
     logicalprocessing.cpp \
-    getsysinfo.cpp
+    getsysinfo.cpp \
+    checkdatabasewidget.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -52,7 +53,8 @@ HEADERS += \
     logicalprocessing.h \
     getimagesinterface.h \
     infraredlogicinterface.h \
-    getsysinfo.h
+    getsysinfo.h \
+    checkdatabasewidget.h
 
 FORMS += \
         mainwidget.ui \
@@ -61,7 +63,8 @@ FORMS += \
     camersetting.ui \
     systemsetting.ui \
     servicewidget.ui \
-    databasewidget.ui
+    databasewidget.ui \
+    checkdatabasewidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
