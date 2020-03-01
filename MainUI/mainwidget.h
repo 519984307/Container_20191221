@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
 #include "datawidget.h"
-#include "camersettingwidget.h"
+#include "channelsettingwidget.h"
 #include "systemsettingwidget.h"
 #include "servicewidget.h"
 #include "databasewidget.h"

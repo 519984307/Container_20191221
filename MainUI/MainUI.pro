@@ -31,21 +31,20 @@ SOURCES += \
     picturewidget.cpp \
     datawidget.cpp \
     setting.cpp \
-    camersettingwidget.cpp \
     systemsettingwidget.cpp \
     servicewidget.cpp \
     databasewidget.cpp \
     imageprocessing.cpp \
     logicalprocessing.cpp \
     getsysinfo.cpp \
-    checkdatabasewidget.cpp
+    checkdatabasewidget.cpp \
+    channelsettingwidget.cpp
 
 HEADERS += \
         mainwidget.h\
     picturewidget.h \
     datawidget.h \
     setting.h \
-    camersettingwidget.h \
     systemsettingwidget.h \
     servicewidget.h \
     databasewidget.h \
@@ -54,17 +53,18 @@ HEADERS += \
     getimagesinterface.h \
     infraredlogicinterface.h \
     getsysinfo.h \
-    checkdatabasewidget.h
+    checkdatabasewidget.h \
+    channelsettingwidget.h
 
 FORMS += \
         mainwidget.ui \
     picturewidget.ui \
     datawidget.ui \
-    camersettingwidget.ui \
     systemsettingwidget.ui \
     servicewidget.ui \
     databasewidget.ui \
-    checkdatabasewidget.ui
+    checkdatabasewidget.ui \
+    channelsettingwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

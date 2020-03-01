@@ -62,8 +62,8 @@ void SystemSettingWidget::writeINI()
     jsonChild.insert("FTP",QJsonValue(jsonObj3));
 
     QJsonObject jsonObj4;
-    jsonObj4.insert(tr("Minimization"),int(ui->Minimization->checkState()));
-    jsonObj4.insert(tr("SaveLog"),int(ui->SaveLog->checkState()));
+    jsonObj4.insert(tr("Minimization"),int(ui->Minimization->isChecked()));
+    jsonObj4.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
     jsonObj4.insert(tr("Language"), ui->Language->currentIndex());
     jsonChild.insert("Other",QJsonValue(jsonObj4));
 

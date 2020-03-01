@@ -124,7 +124,7 @@ void MainWidget::InitializeOtherWindow()
                 auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
                 /*  添加子项    */
                 (*it)->addChild(sunItem);
-                ItemWidgetMap.insert(sunItem,new CamerSettingWidget (this));
+                ItemWidgetMap.insert(sunItem,new ChannelSettingWidget (this));
             }
         }
         if((*it)->text(0)=="Service"){
@@ -209,7 +209,7 @@ void MainWidget::hideWindows()
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(value)){
             tmp->setVisible(false);
         }
-         if(CamerSettingWidget* tmp=qobject_cast<CamerSettingWidget*>(value)){
+         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
              tmp->setVisible(false);
          }
          if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
@@ -257,7 +257,7 @@ void MainWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item)
             tmp->move(168,80);
             tmp->setVisible(true);
         }
-        if(CamerSettingWidget* tmp=qobject_cast<CamerSettingWidget*>(value)){
+        if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
             tmp->move(168,80);
             tmp->setVisible(true);
         }
@@ -285,7 +285,7 @@ void MainWidget::resizeEvent(QResizeEvent *size)
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-105);
         }
-        if(CamerSettingWidget* tmp=qobject_cast<CamerSettingWidget*>(pWidget)){
+        if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-105);
         }
         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(pWidget)){
