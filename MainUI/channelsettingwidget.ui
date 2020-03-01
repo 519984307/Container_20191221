@@ -128,35 +128,35 @@
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QLineEdit" name="lineEdit_48">
+          <widget class="QLineEdit" name="BeforeCamer">
            <property name="placeholderText">
             <string>192.168.1.100;admin;123456;</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_49">
+          <widget class="QLineEdit" name="AfterCamer">
            <property name="placeholderText">
             <string>192.168.1.100;admin;123456;</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_50">
+          <widget class="QLineEdit" name="LeftCamer">
            <property name="placeholderText">
             <string>192.168.1.100;admin;123456;</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_51">
+          <widget class="QLineEdit" name="RgihtCamer">
            <property name="placeholderText">
             <string>192.168.1.100;admin;123456;</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_52">
+          <widget class="QLineEdit" name="PlateCamer">
            <property name="placeholderText">
             <string>192.168.1.100;admin;123456;</string>
            </property>
@@ -206,7 +206,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_29">
           <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox_7">
+           <widget class="QComboBox" name="LicensePlate">
             <item>
              <property name="text">
               <string>HCNet</string>
@@ -287,7 +287,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_20">
           <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox_5">
+           <widget class="QComboBox" name="SerialPortMode">
             <item>
              <property name="text">
               <string>SerialPort</string>
@@ -306,7 +306,7 @@
        <item row="1" column="0">
         <widget class="QStackedWidget" name="stackedWidget_2">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_3">
           <layout class="QGridLayout" name="gridLayout_25">
@@ -352,7 +352,7 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QSpinBox" name="spinBox_4"/>
+               <widget class="QSpinBox" name="SerialPortTow"/>
               </item>
               <item row="1" column="0">
                <widget class="QPushButton" name="pushButton">
@@ -375,7 +375,7 @@
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="QSpinBox" name="spinBox_2"/>
+               <widget class="QSpinBox" name="SerialPortOne"/>
               </item>
              </layout>
             </widget>
@@ -402,7 +402,7 @@
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_12">
              <property name="title">
-              <string>Serial server</string>
+              <string>Serial Port server</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_22">
               <property name="leftMargin">
@@ -423,16 +423,23 @@
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_7">
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_5"/>
+                 <widget class="QLineEdit" name="SerialAddrOne"/>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_6"/>
+                 <widget class="QSpinBox" name="PortOne"/>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_7"/>
+                 <widget class="QLineEdit" name="SerialAddrTow"/>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_8"/>
+                 <widget class="QSpinBox" name="PortTow">
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="value">
+                   <number>1</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -482,14 +489,17 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_23">
           <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton_5">
+           <widget class="QRadioButton" name="SerialPortOpenState">
             <property name="text">
              <string>Normally open</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QRadioButton" name="radioButton_6">
+           <widget class="QRadioButton" name="SerialPortCloseState">
             <property name="text">
              <string>Normally closed</string>
             </property>
@@ -567,7 +577,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>comboBox_5</sender>
+   <sender>SerialPortMode</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>stackedWidget_2</receiver>
    <slot>setCurrentIndex(int)</slot>

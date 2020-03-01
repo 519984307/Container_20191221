@@ -18,17 +18,17 @@ MainWidget::MainWidget(QWidget *parent) :
     initSysInfo();
 
     /* test */
-    for(auto b:ImageProcessingMap.values()){
-        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
-            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-        }
-    }
-    for(auto a :LogicalProcessingMap.values()){
+//    for(auto b:ImageProcessingMap.values()){
+//        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
+//            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+//        }
+//    }
+//    for(auto a :LogicalProcessingMap.values()){
 
-        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
-            emit pLogicalProcessing->startSlaveSignal("com4","com5");
-        }
-    }
+//        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
+//            emit pLogicalProcessing->startSlaveSignal("com4","com5");
+//        }
+//    }
 //    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1])){
 //        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
 //    }
@@ -38,12 +38,12 @@ MainWidget::MainWidget(QWidget *parent) :
 //    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[3])){
 //        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
 //    }
-//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4])){
-//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//    }
-//    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[1])){
-//        emit pLogicalProcessing->startSlaveSignal("com4","com5");
-//    }
+    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4])){
+        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+    }
+    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[1])){
+        emit pLogicalProcessing->startSlaveSignal("com4","com5");
+    }
 }
 
 MainWidget::~MainWidget()
@@ -114,8 +114,8 @@ void MainWidget::InitializeOtherWindow()
 {
     QTreeWidgetItemIterator it(ui->treeWidget);
     while(*it){
-        /*  获取设置根   */
         if((*it)->text(0)=="Setting"){
+            /*  获取设置根   */
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
             (*it)->addChild(childImte);
 
@@ -124,7 +124,7 @@ void MainWidget::InitializeOtherWindow()
                 auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
                 /*  添加子项    */
                 (*it)->addChild(sunItem);
-                ItemWidgetMap.insert(sunItem,new ChannelSettingWidget (this));
+                ItemWidgetMap.insert(sunItem,new ChannelSettingWidget (i,this));/* 传递通道编号 */
             }
         }
         if((*it)->text(0)=="Service"){

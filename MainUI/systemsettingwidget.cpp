@@ -17,12 +17,12 @@ SystemSettingWidget::~SystemSettingWidget()
     delete ui;
 }
 
-void SystemSettingWidget::writeINI()
+void SystemSettingWidget::jsonWrite()
 {
     QFile file(QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("SYSTEM.json")));
 
     if(!file.open(QIODevice::ReadWrite)){
-        emit mesageSignal(tr("open SYSTEM.json error:%1").arg(file.OpenError));
+        emit messageSignal(tr("open SYSTEM.json error:%1").arg(file.OpenError));
     }
 
     QJsonDocument jsonDoc;
@@ -73,7 +73,7 @@ void SystemSettingWidget::writeINI()
     file.close();
 }
 
-void SystemSettingWidget::readINI()
+void SystemSettingWidget::jsonRead()
 {
 
 }
@@ -81,7 +81,7 @@ void SystemSettingWidget::readINI()
 void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(button==ui->buttonBox->button(QDialogButtonBox::Save)){
-        writeINI();
+        jsonWrite();
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Discard)){
 

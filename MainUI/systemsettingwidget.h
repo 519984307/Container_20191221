@@ -11,9 +11,6 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 #include <QJsonValue>
-#include <QXmlStreamWriter>
-
-//#include<setting.h>
 
 namespace Ui {
 class SystemSettingWidget;
@@ -34,22 +31,22 @@ private:
     Ui::SystemSettingWidget *ui;
 
     ///
-    /// \brief writeINI 写入参数到配置文件
+    /// \brief jsonWrite 写入参数到配置文件
     ///
-    void writeINI();
+    void jsonWrite();
 
     ///
-    /// \brief readINI 读取参数到配置文件
+    /// \brief jsonRead 读取参数到配置文件
     ///
-    void readINI();
+    void jsonRead();
 
 signals:
 
     ///
-    /// \brief mesageSignal 日志信息信号
+    /// \brief messageSignal 日志信息信号
     /// \param msg 信息
     ///
-    void mesageSignal(const QString &msg);
+    void messageSignal(const QString &msg);
 };
 
 #endif // SYSTEMSETTING_H
