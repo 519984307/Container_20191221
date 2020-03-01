@@ -6,40 +6,82 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>436</height>
+    <width>627</width>
+    <height>473</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_System_Setting_Channel">
       <attribute name="title">
        <string>Channel</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>The channel number</string>
+          <string>The Channel Number</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <property name="horizontalSpacing">
+           <number>6</number>
+          </property>
           <item row="0" column="0">
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="ChannelNumber">
             <property name="frame">
              <bool>true</bool>
             </property>
-            <property name="readOnly">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="prefix">
              <string/>
@@ -47,45 +89,74 @@
             <property name="minimum">
              <number>1</number>
             </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="SaveImage_1">
          <property name="title">
-          <string>Image path one</string>
+          <string>Save Image One</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="checkBox">
-            <property name="text">
-             <string>Save image </string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
            <widget class="QLineEdit" name="lineEdit_2"/>
           </item>
-          <item row="1" column="1">
+          <item row="0" column="1">
            <widget class="QPushButton" name="pushButton">
             <property name="text">
              <string>Check Path</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QComboBox" name="comboBox">
+          <item row="1" column="0">
+           <widget class="QComboBox" name="ImageFormat_1">
             <property name="editable">
              <bool>false</bool>
             </property>
-            <property name="currentText">
-             <string/>
-            </property>
+            <item>
+             <property name="text">
+              <string>CHANNEL/YYYY/MM/DD/</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>CHANNEL/YYYY_MM_DD</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YYYY/MM/DD/CHANNEL/</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YYYY_MM_DD/CHANNEL/</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>CHANNEL/YYYY/DD</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YYYY/DD/CHANNEL</string>
+             </property>
+            </item>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="1" column="1">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Image format</string>
@@ -96,39 +167,65 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="SaveImage_2">
          <property name="title">
-          <string>Image path two</string>
+          <string>Save Image Two</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="checkBox_2">
-            <property name="text">
-             <string>Save image </string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
            <widget class="QLineEdit" name="lineEdit_3"/>
           </item>
-          <item row="1" column="1">
+          <item row="0" column="1">
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
              <string>Check Path</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QComboBox" name="comboBox_2">
+          <item row="1" column="0">
+           <widget class="QComboBox" name="ImageFormat_2">
             <property name="editable">
              <bool>false</bool>
             </property>
-            <property name="currentText">
-             <string/>
-            </property>
+            <item>
+             <property name="text">
+              <string>CHANNEL/YYYY/MM/DD/</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>CHANNEL/YYYY_MM_DD</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YYYY/MM/DD/CHANNEL/</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YYYY_MM_DD/CHANNEL/</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>CHANNEL/YYYY/DD</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>YYYY/DD/CHANNEL</string>
+             </property>
+            </item>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="1" column="1">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Image format</string>
@@ -138,19 +235,6 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_System_Setting_Recognizer">
@@ -158,6 +242,21 @@
        <string>Recognizer</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_4">
          <property name="sizePolicy">
@@ -171,7 +270,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton">
+           <widget class="QRadioButton" name="ColorDisplay">
             <property name="text">
              <string>Color display</string>
             </property>
@@ -181,7 +280,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QRadioButton" name="radioButton_2">
+           <widget class="QRadioButton" name="AutomaticCorrection">
             <property name="text">
              <string>Automatic correction</string>
             </property>
@@ -209,7 +308,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton_3">
+           <widget class="QRadioButton" name="Server">
             <property name="text">
              <string>Server</string>
             </property>
@@ -219,7 +318,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLineEdit" name="lineEdit_10">
+           <widget class="QLineEdit" name="ServerIP">
             <property name="text">
              <string>127.0.0.1</string>
             </property>
@@ -233,7 +332,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLineEdit" name="lineEdit_11">
+           <widget class="QLineEdit" name="ServerPort">
             <property name="text">
              <string>55555</string>
             </property>
@@ -247,14 +346,14 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QRadioButton" name="radioButton_4">
+           <widget class="QRadioButton" name="Client">
             <property name="text">
              <string>Client</string>
             </property>
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLineEdit" name="lineEdit_13">
+           <widget class="QLineEdit" name="ClientIP">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -268,7 +367,7 @@
            </widget>
           </item>
           <item row="3" column="2" colspan="2">
-           <widget class="QLineEdit" name="lineEdit_12">
+           <widget class="QLineEdit" name="ClientPort">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -284,19 +383,6 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>102</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_System_Setting_Agreement">
@@ -304,6 +390,21 @@
        <string>Agreement</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_8">
          <property name="title">
@@ -311,7 +412,23 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_16">
           <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox_4"/>
+           <widget class="QComboBox" name="ProtocolV">
+            <item>
+             <property name="text">
+              <string>[Number|ISO]</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>[Number]</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>[Plate|Number|ISO]</string>
+             </property>
+            </item>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -323,7 +440,18 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_14">
           <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox_5"/>
+           <widget class="QComboBox" name="CameraV">
+            <item>
+             <property name="text">
+              <string>HCSDK</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>TCP</string>
+             </property>
+            </item>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -348,25 +476,40 @@
        <string>FTP</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_10">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLineEdit" name="lineEdit_15"/>
+          <widget class="QLineEdit" name="FtpAddress"/>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_16"/>
+          <widget class="QLineEdit" name="FtpPort"/>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_17"/>
+          <widget class="QLineEdit" name="FtpUser"/>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_18"/>
+          <widget class="QLineEdit" name="FtpPassword"/>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_19"/>
+          <widget class="QLineEdit" name="FtpLocalImgPath"/>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_20"/>
+          <widget class="QLineEdit" name="FtpRemoteImgPath"/>
          </item>
         </layout>
        </item>
@@ -389,26 +532,26 @@
          <item>
           <widget class="QLabel" name="label_26">
            <property name="text">
-            <string>Account</string>
+            <string>User</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_27">
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string>Paaword</string>
+            <string>Pasword</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_28">
+          <widget class="QLabel" name="label_4">
            <property name="text">
             <string>Local image path</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_29">
+          <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Remote image path</string>
            </property>
@@ -436,6 +579,21 @@
        <string>Other</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_11">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
@@ -443,14 +601,14 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_13">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="checkBox_3">
+           <widget class="QCheckBox" name="Minimization">
             <property name="text">
              <string>Startup minimization</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="checkBox_4">
+           <widget class="QCheckBox" name="SaveLog">
             <property name="text">
              <string>Save the log</string>
             </property>
@@ -466,7 +624,18 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_12">
           <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox_3"/>
+           <widget class="QComboBox" name="Language">
+            <item>
+             <property name="text">
+              <string>English</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Chinese</string>
+             </property>
+            </item>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -488,8 +657,99 @@
      </widget>
     </widget>
    </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Discard|QDialogButtonBox::Save</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>Server</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ServerIP</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>68</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>119</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Server</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ServerPort</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>361</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Client</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ClientIP</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>263</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Client</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ClientPort</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>344</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
