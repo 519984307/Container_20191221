@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QMultiHash>
+#include <QMutexLocker>
 
 class LogicalProcessing : public QObject
 {

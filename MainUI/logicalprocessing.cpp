@@ -60,5 +60,6 @@ void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
 
 void LogicalProcessing::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
+    QMutexLocker &locker();
     emit pictureStreamSignal(jpgStream,imgNumber);
 }

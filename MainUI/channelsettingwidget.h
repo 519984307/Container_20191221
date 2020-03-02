@@ -34,6 +34,15 @@ private:
     ///
     int channelNumber;
 
+    ///
+    /// \brief getJsonValue 获取配置项
+    /// \param child 配置项子名称
+    /// \param key 配置项值
+    /// \param obj JSON对象
+    /// \return
+    ///
+    QVariant  getJsonValue(const QString &child,const QString &key,QJsonObject obj);
+
     void jsonWrite();
     void jsonRead();
 
