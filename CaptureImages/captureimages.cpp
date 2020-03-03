@@ -117,7 +117,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
 {
     NET_DVR_JPEGPARA   pJpegFile={};
 
-    uint charLen=300000;
+    uint32_t charLen=300000;
     LPDWORD dataLen=nullptr;
     char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
     pJpegFile.wPicSize=0xff;
@@ -131,7 +131,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
         else {
             QByteArray bye(buff, charLen);
             emit pictureStreamSignal(bye,imgNumber);
-            //bye.clear();
+            bye.clear();
         }
     }
     free(buff);

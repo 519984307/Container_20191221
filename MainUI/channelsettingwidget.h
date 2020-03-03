@@ -26,6 +26,88 @@ public:
     explicit ChannelSettingWidget(int number,QWidget *parent = nullptr);
     ~ChannelSettingWidget();
 
+public:
+
+    ///
+    /// \brief Alias 通道别名
+    ///
+    QString Alias;
+
+    ///
+    /// \brief LicensePlate 车牌协议
+    ///
+    int LicensePlate;
+
+    ///
+    /// \brief AfterCamer 后相机
+    ///
+    QString AfterCamer;
+
+    ///
+    /// \brief BeforeCamer 前相机
+    ///
+    QString BeforeCamer;
+
+    ///
+    /// \brief LeftCamer 左相机
+    ///
+    QString LeftCamer;
+
+    ///
+    /// \brief RgihtCamer 右相机
+    ///
+    QString RgihtCamer;
+
+    ///
+    /// \brief PlateCamer 车牌相机
+    ///
+    QString PlateCamer;
+
+    ///
+    /// \brief PortOne 串口端口1
+    ///
+    int PortOne;
+
+    ///
+    /// \brief PortTow 串口端口2
+    ///
+    int PortTow;
+
+    ///
+    /// \brief SerialAddrOne 串口服务地址1
+    ///
+    QString SerialAddrOne;
+
+    ///
+    /// \brief SerialAddrTow 串口服务地址2
+    ///
+    QString SerialAddrTow;
+
+    ///
+    /// \brief SerialPortCloseState 串口常闭
+    ///
+    int SerialPortCloseState;
+
+    ///
+    /// \brief SerialPortMode 串口模式
+    ///
+    int SerialPortMode;
+
+    ///
+    /// \brief SerialPortOpenState 串口常开
+    ///
+    int SerialPortOpenState;
+
+    ///
+    /// \brief SerialPortTow 串口2
+    ///
+    int SerialPortTow;
+
+    ///
+    /// \brief SerialPortOne 串口1
+    ///
+    int SerialPortOne;
+
 private:
     Ui::ChannelSettingWidget *ui;
 
@@ -43,8 +125,8 @@ private:
     ///
     QVariant  getJsonValue(const QString &child,const QString &key,QJsonObject obj);
 
-    void jsonWrite();
-    void jsonRead();
+    bool jsonWrite();
+    bool jsonRead();
 
 signals:
 
@@ -56,6 +138,7 @@ signals:
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
+
 };
 
 #endif // CAMERSETTING_H

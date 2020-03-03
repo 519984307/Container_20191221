@@ -7,15 +7,18 @@ LogicalProcessing::LogicalProcessing(QObject *parent) : QObject(parent)
 
 void LogicalProcessing::setCamerMultiMap(QList<QObject *> camerList)
 {
-    /* 相机顺序 右,左,后,前 */
-    pPictureWidgetBEFORE=qobject_cast<PictureWidget*>(camerList[0]);
-    pPictureWidgetAFTER=qobject_cast<PictureWidget*>(camerList[1]);
-    pPictureWidgetLEFT=qobject_cast<PictureWidget*>(camerList[2]);
-    pPictureWidgetRIGHT=qobject_cast<PictureWidget*>(camerList[3]);
-    connect(pPictureWidgetBEFORE,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
-    connect(pPictureWidgetAFTER,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
-    connect(pPictureWidgetLEFT,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
-    connect(pPictureWidgetRIGHT,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
+    if(camerList.count()==4)
+    {
+        /* 相机顺序 右,左,后,前 */
+        pPictureWidgetBEFORE=qobject_cast<PictureWidget*>(camerList[0]);
+        pPictureWidgetAFTER=qobject_cast<PictureWidget*>(camerList[1]);
+        pPictureWidgetLEFT=qobject_cast<PictureWidget*>(camerList[2]);
+        pPictureWidgetRIGHT=qobject_cast<PictureWidget*>(camerList[3]);
+        connect(pPictureWidgetBEFORE,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
+        connect(pPictureWidgetAFTER,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
+        connect(pPictureWidgetLEFT,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
+        connect(pPictureWidgetRIGHT,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
+    }
 }
 
 //void LogicalProcessing::logicStatusSlot(int *status)

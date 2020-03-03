@@ -18,7 +18,7 @@
 #include "infraredlogicinterface.h"
 
 //------------------------------------------------------------------------------------------------------------Headers
-#include "setting.h"
+//#include "setting.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -60,6 +60,11 @@ private:
 
 private:
     Ui::MainWidget *ui;
+
+    ///
+    /// \brief pSystemSettingWidget 系统设置窗口对象
+    ///
+    SystemSettingWidget* pSystemSettingWidget;
 
     ///
     /// \brief pGetSysInfo CPU,MEM状态
@@ -117,25 +122,25 @@ private:
 private:
 
     ///
-    /// \brief bindingCamerObjects 绑定相机对象
+    /// \brief bindCamerObjects 绑定相机对象
     ///
-    void bindingCamerObjects();
+    void bindCamerObjects();
 
     ///
-    /// \brief connetObject 初始化系统状态类
+    /// \brief connetObject 初始化系统资源使用状态
     ///
     void initSysInfo();
 
     ///
-    /// \brief closeEvent 重新窗口关闭事件
+    /// \brief closeEvent 重写窗口关闭事件
     /// \param event
     ///
     void closeEvent(QCloseEvent *event)Q_DECL_OVERRIDE;
 
     ///------------------------------------------------------------------------------------------------------------MainUI
-    /// \brief InitializeObject 初始化对象
+    /// \brief InitializeSystemSet 初始化系统设定
     ///
-    void InitializeObject();
+    void InitializeSystemSet();
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief InitializeOtherWindow 初始化其他窗口
@@ -219,7 +224,7 @@ signals:
     void closeStreamSignal();
 
     ///
-    /// \brief exitWhileSignal 退出循环线程,系统状态循环和逻辑循环
+    /// \brief exitWhileSignal 退出循环线程,系统资源使用状态,和串口逻辑循环.
     /// \param status 标志位
     ///
     void exitWhileSignal(bool status);

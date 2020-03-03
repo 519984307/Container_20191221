@@ -12,6 +12,13 @@ ChannelSettingWidget::ChannelSettingWidget(int number, QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 
     this->channelNumber=number;
+
+    /* 加载配置 */
+    if(!jsonRead()){
+        if(jsonWrite()){
+            jsonRead();
+        }
+    }
 }
 
 ChannelSettingWidget::~ChannelSettingWidget()
@@ -19,7 +26,7 @@ ChannelSettingWidget::~ChannelSettingWidget()
     delete ui;
 }
 
-void ChannelSettingWidget::jsonWrite()
+bool ChannelSettingWidget::jsonWrite()
 {
     /* 创建通道配置文件夹 */
     QDir mkPath(QCoreApplication::applicationDirPath());
@@ -28,7 +35,8 @@ void ChannelSettingWidget::jsonWrite()
 
     QFile file(QDir::toNativeSeparators(tr("%1/CHANNEL%2.json").arg(mkPath.path()).arg(channelNumber)));
     if(!file.open(QIODevice::ReadWrite)){
-        emit messageSignal(tr("open SYSTEM.json error:%1").arg(file.OpenError));
+        emit messageSignal(tr("open CHANNEL%1.json error:%2").arg(channelNumber).arg(file.OpenError));
+        return false;
     }
 
     QJsonDocument jsonDoc;
@@ -67,14 +75,16 @@ void ChannelSettingWidget::jsonWrite()
 
     file.write(jsonDoc.toJson());
     file.close();
+
+    return true;
 }
 
-#include <iostream>
-void ChannelSettingWidget::jsonRead()
+bool ChannelSettingWidget::jsonRead()
 {
     QFile file(QDir::toNativeSeparators(tr("%1/%2/CHANNEL%3.json").arg(QCoreApplication::applicationDirPath()).arg("Json").arg(channelNumber)));
     if(!file.open(QIODevice::ReadOnly)){
-        emit messageSignal(tr("open SYSTEM.json error:%1").arg(file.OpenError));
+        emit messageSignal(tr("Failed to load the CHANNEL%1 parameter, create the default parameter.error:%2").arg(channelNumber).arg(file.OpenError));
+        return false;
     }
 
     QByteArray arr=file.readAll();
@@ -91,23 +101,24 @@ void ChannelSettingWidget::jsonRead()
 
                 /* 读取子目录 */
                 if(value.isObject()){
-                    QString Alias= getJsonValue("Other","Alias",value.toObject()).toString();
-                    std::cout<<Alias.toStdString()<<std::endl;
-                    int LicensePlate=getJsonValue("Plate","LicensePlate",value.toObject()).toInt();
-                    std::cout<<LicensePlate<<std::endl;
-                    QString AfterCamer= getJsonValue("Camer","AfterCamer",value.toObject()).toString();
-                    QString BeforeCamer= getJsonValue("Camer","BeforeCamer",value.toObject()).toString();
-                    QString LeftCamer= getJsonValue("Camer","LeftCamer",value.toObject()).toString();
-                    QString RgihtCamer= getJsonValue("Camer","RgihtCamer",value.toObject()).toString();
-                    QString PlateCamer= getJsonValue("Camer","PlateCamer",value.toObject()).toString();
-                    int PortOne= getJsonValue("SerialPort","PortOne",value.toObject()).toInt();
-                    int PortTow= getJsonValue("SerialPort","PortTow",value.toObject()).toInt();
-                    QString SerialAddrOne= getJsonValue("SerialPort","SerialAddrOne",value.toObject()).toString();
-                    QString SerialAddrTow= getJsonValue("SerialPort","SerialAddrTow",value.toObject()).toString();
-                    int SerialPortCloseState= getJsonValue("SerialPort","SerialPortCloseState",value.toObject()).toInt();
-                    int SerialPortMode= getJsonValue("SerialPort","SerialPortMode",value.toObject()).toInt();
-                    int SerialPortOpenState= getJsonValue("SerialPort","SerialPortOpenState",value.toObject()).toInt();
-                    int SerialPortTow= getJsonValue("SerialPort","SerialPortTow",value.toObject()).toInt();
+                    Alias= getJsonValue("Other","Alias",value.toObject()).toString();
+                    LicensePlate=getJsonValue("Plate","LicensePlate",value.toObject()).toInt();
+                    AfterCamer= getJsonValue("Camer","AfterCamer",value.toObject()).toString();
+                    BeforeCamer= getJsonValue("Camer","BeforeCamer",value.toObject()).toString();
+                    LeftCamer= getJsonValue("Camer","LeftCamer",value.toObject()).toString();
+                    RgihtCamer= getJsonValue("Camer","RgihtCamer",value.toObject()).toString();
+                    PlateCamer= getJsonValue("Camer","PlateCamer",value.toObject()).toString();
+                    PortOne= getJsonValue("SerialPort","PortOne",value.toObject()).toInt();
+                    PortTow= getJsonValue("SerialPort","PortTow",value.toObject()).toInt();
+                    SerialAddrOne= getJsonValue("SerialPort","SerialAddrOne",value.toObject()).toString();
+                    SerialAddrTow= getJsonValue("SerialPort","SerialAddrTow",value.toObject()).toString();
+                    SerialPortCloseState= getJsonValue("SerialPort","SerialPortCloseState",value.toObject()).toInt();
+                    SerialPortMode= getJsonValue("SerialPort","SerialPortMode",value.toObject()).toInt();
+                    SerialPortOpenState= getJsonValue("SerialPort","SerialPortOpenState",value.toObject()).toInt();
+                    SerialPortTow= getJsonValue("SerialPort","SerialPortTow",value.toObject()).toInt();
+                    SerialPortOne= getJsonValue("SerialPort","SerialPortOne",value.toObject()).toInt();
+
+                    return  true;
                     }
                 }
             }
@@ -115,6 +126,7 @@ void ChannelSettingWidget::jsonRead()
     else {
         emit messageSignal(tr("load CHANNEL.json error:%1").arg(jsonError.errorString()));
     }
+    return false;
 }
 
 QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)
@@ -128,7 +140,6 @@ QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString 
             if(obj.contains(key)){
                 jsonValue=obj.value(key);
                 if(jsonValue.isString()){
-                    //int value=jsonValue.toString();
                     return jsonValue.toString();
                 }
                 else {

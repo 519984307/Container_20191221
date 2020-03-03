@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>394</height>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget_2">
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_One_Channel_Camer">
       <attribute name="title">
@@ -306,7 +306,7 @@
        <item row="1" column="0">
         <widget class="QStackedWidget" name="stackedWidget_2">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page_3">
           <layout class="QGridLayout" name="gridLayout_25">
