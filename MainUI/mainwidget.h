@@ -93,11 +93,20 @@ private:
 
 private:
 
-    /*
-     * 窗口字典
-     */
+    ///
+    /// \brief CamerWidgetMap 相机窗口字典
+    ///
     QHash<int,QObject*>CamerWidgetMap;
+
+    ///
+    /// \brief DataWidgetMap 数据窗口字典
+    ///
     QHash<int,QObject*>DataWidgetMap;
+
+    ///
+    /// \brief ChannelSettingWidgetMap 通道设定窗口字典
+    ///
+    QHash<int,QObject*>ChannelSettingWidgetMap;
 
     ///
     /// \brief channelCamerMultiMap 通道对应的相机.
@@ -141,6 +150,11 @@ private:
     /// \brief InitializeSystemSet 初始化系统设定
     ///
     void InitializeSystemSet();
+
+    ///------------------------------------------------------------------------------------------------------------MainUI
+    /// \brief InitializeChannelSet 初始化通道设定
+    ///
+    void InitializeChannelSet();
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief InitializeOtherWindow 初始化其他窗口

@@ -20,7 +20,7 @@ private:
 
 public slots:
 
-    ///
+    ///z
     /// \brief logicStatusSlot 红外状态
     /// \param status 状态值
     ///

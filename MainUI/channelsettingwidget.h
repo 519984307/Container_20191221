@@ -125,8 +125,22 @@ private:
     ///
     QVariant  getJsonValue(const QString &child,const QString &key,QJsonObject obj);
 
+    ///
+    /// \brief jsonWrite 写入配置文件
+    /// \return
+    ///
     bool jsonWrite();
+
+    ///
+    /// \brief jsonRead 读取配置文件
+    /// \return
+    ///
     bool jsonRead();
+
+    ///
+    /// \brief jsonWritetoUI 回写配置到UI
+    ///
+    void jsonWritetoUI();
 
 signals:
 

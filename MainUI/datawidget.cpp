@@ -30,12 +30,8 @@ void DataWidget::logicStatusSlot(int *status)
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
     QPixmap *labelPix = new QPixmap();
-    QPixmap labelPixFit;
     if(jpgStream!=nullptr){
         labelPix->loadFromData(jpgStream);
-        int w=ui->label->size().width();/* 防止图片发生小的偏移 */
-        int h=ui->label->size().height();
-        labelPixFit=labelPix->scaled(w-4,h-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     }
     else{
         ui->label_13->clear();
@@ -47,15 +43,9 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         return;
     }
 
+    /* 防止图片发生偏移 */
+    QPixmap  labelPixFit=labelPix->scaled(ui->label->size().width()-4,ui->label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     switch (imgNumber) {
-/*    case -1:
-//        ui->label_13->clear();
-//        ui->label_6->clear();
-//        ui->label_2->clear();
-//        ui->label_5->clear();
-//        ui->label->clear();
-//        ui->label_4->clear();
-//        break;*/
     case 1:
             ui->label_13->setPixmap(labelPixFit);
         break;
@@ -75,6 +65,7 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
             ui->label_4->setPixmap(labelPixFit);
         break;
     }
+
     delete labelPix;
 }
 

@@ -166,6 +166,12 @@ private:
     ///
     bool jsonRead();
 
+    ///
+    /// \brief J sonWriteToUI 反写配置到UI
+    /// \return
+    ///
+    void jsonWritetoUI();
+
 private slots:
 
     void on_buttonBox_clicked(QAbstractButton *button);

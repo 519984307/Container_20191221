@@ -51,8 +51,10 @@ void PictureWidget::on_pushButton_4_clicked()
 void PictureWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
     emit pictureStreamSignal(jpgStream,imgNumber);
-    QPixmap *labelPix = new QPixmap();
-    labelPix->loadFromData(jpgStream);
-    ui->label->setPixmap(*labelPix);
-    delete labelPix;
+    if(jpgStream!=nullptr){
+        QPixmap *labelPix = new QPixmap();
+        labelPix->loadFromData(jpgStream);
+        ui->label->setPixmap(*labelPix);
+        delete labelPix;
+    }
 }

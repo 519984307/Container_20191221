@@ -27,6 +27,7 @@ CaptureImages::CaptureImages(QObject *parent)
 
 CaptureImages::~CaptureImages()
 {
+    //delete  CaptureImages::pThis;
     pDLL->unload();
     delete pDLL;
 }
@@ -126,16 +127,21 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
     if(dwResult){
         if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
             emit messageSignal(tr("put command Error:%1").arg(NET_DVR_GetLastError_L()));
+            dataLen=nullptr;    delete  dataLen;
+            free(buff);    buff=nullptr;    delete buff;
             return false;
         }
         else {
-            QByteArray bye(buff, charLen);
-            emit pictureStreamSignal(bye,imgNumber);
-            bye.clear();
+            QByteArray arrayJpg(buff,charLen);
+            //QByteArray bye(buff, charLen);
+            emit pictureStreamSignal(arrayJpg,imgNumber);
+            arrayJpg.clear();
+            arrayJpg.resize(0);
+
         }
     }
-    free(buff);
-    buff=nullptr;
+    dataLen=nullptr;    delete  dataLen;
+    free(buff);    buff=nullptr;    delete buff;
     return true;
 }
 

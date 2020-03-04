@@ -11,6 +11,7 @@ MainWidget::MainWidget(QWidget *parent) :
     InitializeDataWindow();
     InitializeCamerWindow();
     InitializeOtherWindow();
+    InitializeChannelSet();
 
     loadPlugins();
     bindCamerObjects();
@@ -46,6 +47,20 @@ MainWidget::MainWidget(QWidget *parent) :
 //    }
 }
 
+void MainWidget::closeEvent(QCloseEvent *event)
+{
+    emit closeStreamSignal();
+    emit exitWhileSignal(true);
+
+    pGetSysInfo->quit();
+    pGetSysInfo->wait();
+
+    foreach (auto thread, ThreadList) {
+        thread->quit();
+        thread->wait();
+    }
+}
+
 MainWidget::~MainWidget()
 {
     for(auto obj:ImageProcessingMap.values()){
@@ -54,13 +69,26 @@ MainWidget::~MainWidget()
     for(auto obj:LogicalProcessingMap.values()){
         delete obj;
     }
+    for(auto obj:CamerWidgetMap.values()){
+        delete obj;
+    }
+    for(auto obj:DataWidgetMap.values()){
+        delete obj;
+    }
+    for(auto obj:ChannelSettingWidgetMap.values()){
+        delete obj;
+    }
 
     ImageProcessingMap.clear();
     LogicalProcessingMap.clear();
     ThreadList.clear();
     ItemWidgetMap.clear();
+    DataWidgetMap.clear();
+    CamerWidgetMap.clear();
     CamerNameList.clear();
     channelCamerMultiMap.clear();
+    ChannelSettingWidgetMap.clear();
+
     delete pGetSysInfo;
     delete ui;
 }
@@ -144,7 +172,9 @@ void MainWidget::InitializeOtherWindow()
                 auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
                 /*  添加子项    */
                 (*it)->addChild(sunItem);
-                ItemWidgetMap.insert(sunItem,new ChannelSettingWidget (i,this));/* 传递通道编号 */
+                ChannelSettingWidget* pChannelSettingWidget=new ChannelSettingWidget (i,this);/* 构造参数通道编号 */
+                ChannelSettingWidgetMap.insert(i,pChannelSettingWidget);
+                ItemWidgetMap.insert(sunItem,pChannelSettingWidget);
             }
         }
         if((*it)->text(0)=="Service"){
@@ -161,6 +191,11 @@ void MainWidget::InitializeOtherWindow()
         }
         ++it;
     }
+}
+
+void MainWidget::InitializeChannelSet()
+{
+
 }
 
 void MainWidget::loadPlugins()
@@ -427,20 +462,6 @@ void MainWidget::resizeEvent(QResizeEvent *size)
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(pWidget)){
             tmp->resize( size->size().width()-168,size->size().height()-105);
         }
-    }
-}
-
-void MainWidget::closeEvent(QCloseEvent *event)
-{
-    emit closeStreamSignal();
-    emit exitWhileSignal(true);
-
-    pGetSysInfo->quit();
-    pGetSysInfo->wait();
-
-    foreach (auto thread, ThreadList) {
-        thread->quit();
-        thread->wait();
     }
 }
 

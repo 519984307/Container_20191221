@@ -19,6 +19,9 @@ ChannelSettingWidget::ChannelSettingWidget(int number, QWidget *parent) :
             jsonRead();
         }
     }
+    else {/* 回写配置到UI */
+        jsonWritetoUI();
+    }
 }
 
 ChannelSettingWidget::~ChannelSettingWidget()
@@ -127,6 +130,29 @@ bool ChannelSettingWidget::jsonRead()
         emit messageSignal(tr("load CHANNEL.json error:%1").arg(jsonError.errorString()));
     }
     return false;
+}
+
+void ChannelSettingWidget::jsonWritetoUI()
+{
+    ui->BeforeCamer->setText(BeforeCamer);
+    ui->AfterCamer->setText(AfterCamer);
+    ui->LeftCamer->setText(LeftCamer);
+    ui->RgihtCamer->setText(RgihtCamer);
+    ui->PlateCamer->setText(PlateCamer);
+
+    ui->LicensePlate->setCurrentIndex(LicensePlate);
+
+    ui->SerialPortMode->setCurrentIndex(SerialPortMode);
+    ui->SerialPortOne->setValue(SerialPortOne);
+    ui->SerialPortTow->setValue(SerialPortTow);
+    ui->SerialAddrOne->setText(SerialAddrOne);
+    ui->SerialAddrTow->setText(SerialAddrTow);
+    ui->PortOne->setValue(PortOne);
+    ui->PortTow->setValue(PortTow);
+    ui->SerialPortOpenState->setChecked(SerialPortOpenState);
+    ui->SerialPortCloseState->setChecked(SerialPortCloseState);
+
+    ui->Alias->setText(Alias);
 }
 
 QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)

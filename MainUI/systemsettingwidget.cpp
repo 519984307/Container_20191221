@@ -17,6 +17,9 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
             jsonRead();
         }
     }
+    else {/* 外部更改配置,回写配置到UI */
+        jsonWritetoUI();
+    }
 }
 
 SystemSettingWidget::~SystemSettingWidget()
@@ -144,6 +147,38 @@ bool SystemSettingWidget::jsonRead()
         emit messageSignal(tr("load SYSTEM.json error:%1").arg(jsonError.errorString()));
     }
     return false;
+}
+
+void SystemSettingWidget::jsonWritetoUI()
+{
+    ui->ChannelNumber->setValue(ChannelNumber);
+    ui->SaveImage_1->setChecked(SaveImageOne);
+    ui->SaveImage_2->setChecked(SaveImageTow);
+    ui->ImageFormat_1->setCurrentIndex(ImageFormatOne);
+    ui->ImageFormat_2->setCurrentIndex(ImageFormatTow);
+
+    ui->ColorDisplay->setChecked(ColorDisplay);
+    ui->AutomaticCorrection->setChecked(AutomaticCorrection);
+    ui->Server->setChecked(Server);
+    ui->ServerIP->setText(ServerIP);
+    ui->ServerPort->setText(QString::number(ServerPort));
+    ui->Client->setChecked(Client);
+    ui->ClientIP->setText(ClientIP);
+    ui->ClientPort->setText(QString::number(ClientPort));
+
+    ui->ProtocolV->setCurrentIndex(ProtocolVersion);
+    ui->CameraV->setCurrentIndex(CameraVersion);
+
+    ui->FtpAddress->setText(FtpAddress);
+    ui->FtpPort->setText(FtpPort);
+    ui->FtpUser->setText(FtpUser);
+    ui->FtpPassword->setText(FtpPassword);
+    ui->FtpLocalImgPath->setText(FtpLocalImgPath);
+    ui->FtpRemoteImgPath->setText(FtpRemoteImgPath);
+
+    ui->Minimization->setChecked(Minimization);
+    ui->SaveLog->setChecked(SaveLog);
+    ui->Language->setCurrentIndex(Language);
 }
 
 QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)
