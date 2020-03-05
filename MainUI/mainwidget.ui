@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item row="1" column="0" rowspan="2">
-    <widget class="QTreeWidget" name="treeWidget">
+    <widget class="QTreeWidget" name="Navigation">
      <property name="maximumSize">
       <size>
        <width>168</width>

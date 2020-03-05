@@ -104,7 +104,7 @@ bool ChannelSettingWidget::jsonRead()
 
                 /* 读取子目录 */
                 if(value.isObject()){
-                    Alias= getJsonValue("Other","Alias",value.toObject()).toString();
+                    Alias= getJsonValue("Other","Alias",value.toObject()).toString().toLocal8Bit();
                     LicensePlate=getJsonValue("Plate","LicensePlate",value.toObject()).toInt();
                     AfterCamer= getJsonValue("Camer","AfterCamer",value.toObject()).toString();
                     BeforeCamer= getJsonValue("Camer","BeforeCamer",value.toObject()).toString();
@@ -127,8 +127,11 @@ bool ChannelSettingWidget::jsonRead()
             }
         }
     else {
+        file.remove();
         emit messageSignal(tr("load CHANNEL.json error:%1").arg(jsonError.errorString()));
     }
+    file.close();
+
     return false;
 }
 

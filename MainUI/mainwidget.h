@@ -218,17 +218,19 @@ private slots:
     void resizeEvent(QResizeEvent *size)override;
 
     ///------------------------------------------------------------------------------------------------------------MainUI
-    /// \brief on_treeWidget_itemActivated 导航栏选取事件
+    /// \brief on_Navigation_itemActivated 导航栏选取事件
     /// \param item 选取项
     /// \param column 列
     ///
-    void on_treeWidget_itemActivated(QTreeWidgetItem *item);
+    void on_Navigation_itemActivated(QTreeWidgetItem *item);
 
     ///
     /// \brief statusMsgSlot CPU,MEN状态
     /// \param msg 信息体
     ///
     void statusMsgSlot(const QString &msg);
+
+
 
 signals:
 

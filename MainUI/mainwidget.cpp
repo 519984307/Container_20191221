@@ -89,7 +89,10 @@ MainWidget::~MainWidget()
     channelCamerMultiMap.clear();
     ChannelSettingWidgetMap.clear();
 
+//    delete  statusBar;
+//    delete pStatusBarLabel;
     delete pGetSysInfo;
+
     delete ui;
 }
 
@@ -103,7 +106,7 @@ void MainWidget::InitializeSystemSet()
 
 void MainWidget::InitializeDataWindow()
 {
-    QTreeWidgetItemIterator it(ui->treeWidget);
+    QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){
         if((*it)->text(0)=="Data"){
             /*  获取数据根   */
@@ -118,7 +121,7 @@ void MainWidget::InitializeDataWindow()
 
                 if(i==1){
                     /*  显示第一个窗口 */
-                    on_treeWidget_itemActivated(childImte);
+                    on_Navigation_itemActivated(childImte);
                 }
             }
         }
@@ -128,7 +131,7 @@ void MainWidget::InitializeDataWindow()
 
 void MainWidget::InitializeCamerWindow()
 {
-    QTreeWidgetItemIterator it(ui->treeWidget);
+    QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){
         if((*it)->text(0)=="Camera"){
             /*  获取相机根   */
@@ -159,8 +162,8 @@ void MainWidget::InitializeCamerWindow()
 
 void MainWidget::InitializeOtherWindow()
 {
-    QTreeWidgetItemIterator it(ui->treeWidget);
-    while(*it){
+    QTreeWidgetItemIterator it(ui->Navigation);
+    while(*it){        
         if((*it)->text(0)=="Setting"){
             /*  获取设置根   */
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
@@ -195,7 +198,32 @@ void MainWidget::InitializeOtherWindow()
 
 void MainWidget::InitializeChannelSet()
 {
+    QTreeWidgetItemIterator it(ui->Navigation);
+    while(*it){
+        if((*it)->text(0)=="Data"){
+            for (int i=1;i<=channelCounnt;i++) {
+                if(ChannelSettingWidget* pChannelSettingWidget=static_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+                    if(!pChannelSettingWidget->Alias.isEmpty()){
+                        (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
 
+                    }
+                }
+            }
+            //break;
+        }
+        if((*it)->text(0)=="Camera"){
+            for (int i=1;i<=channelCounnt;i++) {
+                if(ChannelSettingWidget* pChannelSettingWidget=static_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+                    if(!pChannelSettingWidget->Alias.isEmpty()){
+                        (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
+
+                    }
+                }
+            }
+            break;
+        }
+        ++it;
+    }
 }
 
 void MainWidget::loadPlugins()
@@ -344,11 +372,11 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
 void MainWidget::bindCamerObjects()
 {
     /* 获取通道编号 */
-    for(int lan:DataWidgetMap.keys()){
-        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[lan])){
+    for(int channel:DataWidgetMap.keys()){
+        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[channel])){
             /*  绑定相机组 */
-            pLogicalProcessing->setCamerMultiMap(channelCamerMultiMap.values(lan));
-            if(DataWidget* pDataWidget=static_cast<DataWidget*>(DataWidgetMap[lan])){
+            pLogicalProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel));
+            if(DataWidget* pDataWidget=static_cast<DataWidget*>(DataWidgetMap[channel])){
                 /* 抓拍图片流链接到数据界面 */
                 connect(pLogicalProcessing,&LogicalProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
             }
@@ -404,7 +432,7 @@ void MainWidget::statusMsgSlot(const QString &msg)
     statusBar->addPermanentWidget(pStatusBarLabel );
 }
 
-void MainWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item)
+void MainWidget::on_Navigation_itemActivated(QTreeWidgetItem *item)
 {
     if(ItemWidgetMap.find(item)==ItemWidgetMap.end()){
         return;
@@ -469,3 +497,5 @@ void MainWidget::message(const QString &msg)
 {
     this->statusBar->showMessage(msg.toLocal8Bit(),10000);
 }
+
+
