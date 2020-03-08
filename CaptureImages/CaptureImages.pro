@@ -31,7 +31,7 @@ HEADERS += \
     HCNetSDK.h \
     getimagesinterface.h \
     captureimages.h \
-    captureimages_global.h
+    captureimages_global.h \
 
 unix {
     target.path = /usr/lib

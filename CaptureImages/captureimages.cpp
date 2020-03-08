@@ -18,18 +18,18 @@ CaptureImages::CaptureImages(QObject *parent)
     lUserID=-1;dwResult=0;streamID=-1;
 
     if(OS){
-        pDLL= new QLibrary("./plugins/HCNetSDK/libhcnetsdk.so");
+        pDLLHCNet= new QLibrary("./plugins/HCNetSDK/libhcnetsdk.so");
     }
     else {
-        pDLL = new QLibrary("./plugins/HCNetSDK/libhcnetsdk.dll");
+        pDLLHCNet = new QLibrary("./plugins/HCNetSDK/libhcnetsdk.dll");
     }
 }
 
 CaptureImages::~CaptureImages()
 {
     //delete  CaptureImages::pThis;
-    pDLL->unload();
-    delete pDLL;
+    pDLLHCNet->unload();
+    delete pDLLHCNet;
 }
 
 void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
@@ -39,27 +39,28 @@ void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,cons
     this->name=CamerUser;
     this->pow=CamerPow;
 
-    if(pDLL->load()){
-        NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(pDLL->resolve("NET_DVR_SetExceptionCallBack_V30"));
-        NET_DVR_SetSDKInitCfg_L=reinterpret_cast<NET_DVR_SetSDKInitCfgFUN>(pDLL->resolve("NET_DVR_SetSDKInitCfg"));
-        NET_DVR_Cleanup_L=reinterpret_cast<NET_DVR_CleanupFUN>(pDLL->resolve("NET_DVR_Cleanup"));
-        NET_DVR_Init_L=reinterpret_cast<NET_DVR_InitFUN>(pDLL->resolve("NET_DVR_Init"));
-        NET_DVR_Login_V40_L=reinterpret_cast<NET_DVR_Login_V40FUN>(pDLL->resolve("NET_DVR_Login_V40"));
-        NET_DVR_Logout_L=reinterpret_cast<NET_DVR_LogoutFUN>(pDLL->resolve("NET_DVR_Logout"));
-        NET_DVR_ChangeWndResolution_L=reinterpret_cast<NET_DVR_ChangeWndResolutionFUN>(pDLL->resolve("NET_DVR_ChangeWndResolution"));
-        NET_DVR_CaptureJPEGPicture_NEW_L=reinterpret_cast<NET_DVR_CaptureJPEGPicture_NEWFUN>(pDLL->resolve("NET_DVR_CaptureJPEGPicture_NEW"));
-        NET_DVR_RealPlay_V40_L=reinterpret_cast<NET_DVR_RealPlay_V40FUN>(pDLL->resolve("NET_DVR_RealPlay_V40"));
-        NET_DVR_GetLastError_L=reinterpret_cast<NET_DVR_GetLastErrorFUN>(pDLL->resolve("NET_DVR_GetLastError"));
-        NET_DVR_SetLogToFile_L=reinterpret_cast<NET_DVR_SetLogToFileFUN>(pDLL->resolve("NET_DVR_SetLogToFile"));
-        NET_DVR_GetLocalIP_L=reinterpret_cast<NET_DVR_GetLocalIPFUN>(pDLL->resolve("NET_DVR_GetLocalIP"));
-        NET_DVR_SetValidIP_L=reinterpret_cast<NET_DVR_SetValidIPFUN>(pDLL->resolve("NET_DVR_SetValidIP"));
-        NET_DVR_StopRealPlay_L=reinterpret_cast<NET_DVR_StopRealPlayFUN>(pDLL->resolve("NET_DVR_StopRealPlay"));
-        NET_DVR_RemoteControl_L=reinterpret_cast<NET_DVR_RemoteControlFUN>(pDLL->resolve("NET_DVR_RemoteControl"));
+    if(pDLLHCNet->load()){
+        NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(pDLLHCNet->resolve("NET_DVR_SetExceptionCallBack_V30"));
+        NET_DVR_SetSDKInitCfg_L=reinterpret_cast<NET_DVR_SetSDKInitCfgFUN>(pDLLHCNet->resolve("NET_DVR_SetSDKInitCfg"));
+        NET_DVR_Cleanup_L=reinterpret_cast<NET_DVR_CleanupFUN>(pDLLHCNet->resolve("NET_DVR_Cleanup"));
+        NET_DVR_Init_L=reinterpret_cast<NET_DVR_InitFUN>(pDLLHCNet->resolve("NET_DVR_Init"));
+        NET_DVR_Login_V40_L=reinterpret_cast<NET_DVR_Login_V40FUN>(pDLLHCNet->resolve("NET_DVR_Login_V40"));
+        NET_DVR_Logout_L=reinterpret_cast<NET_DVR_LogoutFUN>(pDLLHCNet->resolve("NET_DVR_Logout"));
+        NET_DVR_ChangeWndResolution_L=reinterpret_cast<NET_DVR_ChangeWndResolutionFUN>(pDLLHCNet->resolve("NET_DVR_ChangeWndResolution"));
+        NET_DVR_CaptureJPEGPicture_NEW_L=reinterpret_cast<NET_DVR_CaptureJPEGPicture_NEWFUN>(pDLLHCNet->resolve("NET_DVR_CaptureJPEGPicture_NEW"));
+        NET_DVR_RealPlay_V40_L=reinterpret_cast<NET_DVR_RealPlay_V40FUN>(pDLLHCNet->resolve("NET_DVR_RealPlay_V40"));
+        NET_DVR_GetLastError_L=reinterpret_cast<NET_DVR_GetLastErrorFUN>(pDLLHCNet->resolve("NET_DVR_GetLastError"));
+        NET_DVR_SetLogToFile_L=reinterpret_cast<NET_DVR_SetLogToFileFUN>(pDLLHCNet->resolve("NET_DVR_SetLogToFile"));
+        NET_DVR_GetLocalIP_L=reinterpret_cast<NET_DVR_GetLocalIPFUN>(pDLLHCNet->resolve("NET_DVR_GetLocalIP"));
+        NET_DVR_SetValidIP_L=reinterpret_cast<NET_DVR_SetValidIPFUN>(pDLLHCNet->resolve("NET_DVR_SetValidIP"));
+        NET_DVR_StopRealPlay_L=reinterpret_cast<NET_DVR_StopRealPlayFUN>(pDLLHCNet->resolve("NET_DVR_StopRealPlay"));
+        NET_DVR_RemoteControl_L=reinterpret_cast<NET_DVR_RemoteControlFUN>(pDLLHCNet->resolve("NET_DVR_RemoteControl"));
+        NET_DVR_GetRealPlayerIndex_L=reinterpret_cast<NET_DVR_GetRealPlayerIndexFUN>(pDLLHCNet->resolve("NET_DVR_GetRealPlayerIndex"));
 
         loginCamer();
     }
     else {
-        emit pThis->messageSignal(tr("ERROR:Failed to load the dynamic library"));
+        emit pThis->messageSignal(tr("ERROR:Failed to load the dynamic pDLLHCNet"));
     }
 }
 
@@ -132,37 +133,40 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
             return false;
         }
         else {
-            QByteArray arrayJpg(buff,charLen);
+            QByteArray arrayJpg(buff,300000);
+            //arrayJpg.insert(0,buff,charLen);
             //QByteArray bye(buff, charLen);
             emit pictureStreamSignal(arrayJpg,imgNumber);
             arrayJpg.clear();
-            arrayJpg.resize(0);
-
+            //arrayJpg.resize(0);
         }
     }
-    dataLen=nullptr;    delete  dataLen;
-    free(buff);    buff=nullptr;    delete buff;
+    dataLen=nullptr; delete  dataLen;
+    free(buff);  buff=nullptr; delete buff;
     return true;
 }
 
 void CaptureImages::playStreamSlot(uint winID,bool play)
 {
-    NET_DVR_PREVIEWINFO struPlayInfo = {};
-    struPlayInfo.hPlayWnd    =reinterpret_cast<HWND>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
-    struPlayInfo.lChannel     = 1;       //预览通道号
-    struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
-    struPlayInfo.dwLinkMode   = 1;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
-    struPlayInfo.bBlocked     = 0;       //0- 非阻塞取流，1- 阻塞取流
-
     if(dwResult){
         if(play){
+            NET_DVR_PREVIEWINFO struPlayInfo = {};
+            struPlayInfo.hPlayWnd    =reinterpret_cast<HWND>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
+            struPlayInfo.lChannel     = 1;       //预览通道号
+            struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
+            struPlayInfo.dwLinkMode   = 1;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
+            struPlayInfo.bBlocked     = 1;       //0- 非阻塞取流，1- 阻塞取流
+
             streamID =NET_DVR_RealPlay_V40_L(lUserID,&struPlayInfo,nullptr,nullptr);
+
             if(streamID==-1){
                  emit messageSignal(tr("open stream Error:%1").arg(NET_DVR_GetLastError_L()));
             }
         }
         else {
-            NET_DVR_StopRealPlay_L(streamID);
+            if(!NET_DVR_StopRealPlay_L(streamID)){
+                emit messageSignal(tr("stop stream Error:%1").arg(NET_DVR_GetLastError_L()));
+            }
         }
     }
 }

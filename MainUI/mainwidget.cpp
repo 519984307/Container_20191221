@@ -16,7 +16,7 @@ MainWidget::MainWidget(QWidget *parent) :
     loadPlugins();
     bindCamerObjects();
     setStatusBar();
-    initSysInfo();
+    //initSysInfo();
 
     /* test */
     for(auto b:ImageProcessingMap.values()){
@@ -25,7 +25,6 @@ MainWidget::MainWidget(QWidget *parent) :
         }
     }
     for(auto a :LogicalProcessingMap.values()){
-
         if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
             emit pLogicalProcessing->startSlaveSignal("com4","com5");
         }
@@ -52,8 +51,8 @@ void MainWidget::closeEvent(QCloseEvent *event)
     emit closeStreamSignal();
     emit exitWhileSignal(true);
 
-    pGetSysInfo->quit();
-    pGetSysInfo->wait();
+//    pGetSysInfo->quit();
+//    pGetSysInfo->wait();
 
     foreach (auto thread, ThreadList) {
         thread->quit();
@@ -91,7 +90,7 @@ MainWidget::~MainWidget()
 
 //    delete  statusBar;
 //    delete pStatusBarLabel;
-    delete pGetSysInfo;
+    //delete pGetSysInfo;
 
     delete ui;
 }

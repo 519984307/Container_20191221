@@ -45,16 +45,20 @@ void PictureWidget::on_pushButton_clicked()
 
 void PictureWidget::on_pushButton_4_clicked()
 {
-
+    ui->label->clear();
 }
 
 void PictureWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
-    emit pictureStreamSignal(jpgStream,imgNumber);
-    if(jpgStream!=nullptr){
-        QPixmap *labelPix = new QPixmap();
-        labelPix->loadFromData(jpgStream);
-        ui->label->setPixmap(*labelPix);
-        delete labelPix;
+    if(imgNumber!=0){
+        emit pictureStreamSignal(jpgStream,imgNumber);
+    }
+    else {
+        if(jpgStream!=nullptr){
+            QPixmap *labelPix = new QPixmap();
+            labelPix->loadFromData(jpgStream);
+            ui->label->setPixmap(*labelPix);
+            delete labelPix;
+        }
     }
 }

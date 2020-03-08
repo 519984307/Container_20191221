@@ -31,7 +31,7 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 {
     QPixmap *labelPix = new QPixmap();
     if(jpgStream!=nullptr){
-        labelPix->loadFromData(jpgStream);
+        labelPix->loadFromData(jpgStream);        
     }
     else{
         ui->label_13->clear();
@@ -40,6 +40,8 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->label_5->clear();
         ui->label->clear();
         ui->label_4->clear();
+
+        delete labelPix;
         return;
     }
 

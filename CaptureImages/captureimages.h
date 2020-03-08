@@ -29,10 +29,7 @@ private:
     ///登录结果
     DWORD dwResult;
 
-    ///
-    /// \brief pDLL 海康动态库对象
-    ///
-    QLibrary *pDLL;
+    QLibrary *pDLLHCNet;
 
     static CaptureImages* pThis;
 
@@ -68,7 +65,7 @@ private:
     ///
     NET_DVR_Login_V40FUN NET_DVR_Login_V40_L;
 
-    typedef   BOOL (* NET_DVR_LogoutFUN)(LONG lUserID);
+    typedef   BOOL (*NET_DVR_LogoutFUN)(LONG lUserID);
     ///
     /// \brief NET_DVR_Logout_L 登出相机
     ///
@@ -123,12 +120,17 @@ private:
     ///
     NET_DVR_StopRealPlayFUN NET_DVR_StopRealPlay_L;
 
-
     typedef   BOOL  (*NET_DVR_RemoteControlFUN)(LONG lUserID, DWORD dwCommand, LPVOID lpInBuffer, DWORD dwInBufferSize);
     ///
     /// \brief NET_DVR_RemoteControl_L 远程控制,设备运行状态
     ///
     NET_DVR_RemoteControlFUN NET_DVR_RemoteControl_L;
+
+    typedef  int (*NET_DVR_GetRealPlayerIndexFUN)(LONG    lRealHandle);
+    ///
+    /// \brief NET_DVR_GetRealPlayerIndex_L 获取预览时用来解码和显示的播放器句柄。
+    ///
+    NET_DVR_GetRealPlayerIndexFUN NET_DVR_GetRealPlayerIndex_L;
 
 private:
 

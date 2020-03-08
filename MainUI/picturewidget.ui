@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
+    <width>527</width>
     <height>472</height>
    </rect>
   </property>
@@ -31,6 +31,12 @@
    </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -101,6 +107,9 @@
      <property name="text">
       <string/>
      </property>
+     <property name="pixmap">
+      <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
+     </property>
      <property name="scaledContents">
       <bool>true</bool>
      </property>
@@ -121,6 +130,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="ico.qrc"/>
+ </resources>
  <connections/>
 </ui>
