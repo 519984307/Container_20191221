@@ -63,14 +63,34 @@ private slots:
     ///
     void on_buttonBox_clicked(QAbstractButton *button);
 
+    ///
+    /// \brief on_Datatime_checkBox_stateChanged 时间筛选
+    /// \param arg1
+    ///
     void on_Datatime_checkBox_stateChanged(int arg1);
 
+    ///
+    /// \brief on_Channel_checkBox_stateChanged 通道筛选
+    /// \param arg1
+    ///
     void on_Channel_checkBox_stateChanged(int arg1);
 
+    ///
+    /// \brief on_Numbers_checkBox_stateChanged 箱号筛选
+    /// \param arg1
+    ///
     void on_Numbers_checkBox_stateChanged(int arg1);
 
+    ///
+    /// \brief on_Type_checkBox_stateChanged 箱型筛选
+    /// \param arg1
+    ///
     void on_Type_checkBox_stateChanged(int arg1);
 
+    ///
+    /// \brief on_Plate_checkBox_stateChanged 车牌筛选
+    /// \param arg1
+    ///
     void on_Plate_checkBox_stateChanged(int arg1);
 
     ///
@@ -78,6 +98,26 @@ private slots:
     /// \param index
     ///
     void on_tableView_clicked(const QModelIndex &index);
+
+    ///
+    /// \brief on_Home_pushButton_clicked 首页
+    ///
+    void on_Home_pushButton_clicked();
+
+    ///
+    /// \brief on_End_pushButton_clicked 末页
+    ///
+    void on_End_pushButton_clicked();
+
+    ///
+    /// \brief on_Before_pushButton_clicked 前一页
+    ///
+    void on_Before_pushButton_clicked();
+
+    ///
+    /// \brief on_After_pushButton_clicked 后一页
+    ///
+    void on_After_pushButton_clicked();
 
 private:
     Ui::DataBaseWidget *ui;   

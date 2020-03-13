@@ -17,6 +17,8 @@ DataBaseWidget::DataBaseWidget(QWidget *parent) :
     ui->DataTime_End_dateTimeEdit->setDate(QDate::currentDate());
     ui->DataTime_End_dateTimeEdit->setTime(QTime(23,59,59));
 
+    pModel=nullptr;
+
     init();
 }
 
@@ -94,7 +96,7 @@ void DataBaseWidget::loadDataBaseToView()
         }
         if(type){
             //pModel->setFilter(tr("ISOFront='%1' OR ISOAfter='%1'").arg(ui->Type_comboBox->currentText()));
-            filterList.append(tr("ISOFront='%1' OR ISOAfter='%1'").arg(ui->Type_comboBox->currentText()));
+            filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Type_comboBox->currentText()));
         }
 
         QString filter="";
@@ -117,9 +119,10 @@ void DataBaseWidget::loadDataBaseToView()
     rateDataBase();
 }
 
-#include<iostream>
 void DataBaseWidget::rateDataBase()
 {
+    emit on_tableView_clicked(pModel->index(0,0));
+
     double correct=0;    double error=0;
 
     QSqlRecord record;
@@ -259,6 +262,7 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     ui->numberAfter_label->setText(record.value("ContainerAfter").toString());
     ui->checkFront_label->setText(record.value("ISOFront").toString());
     ui->checkAfter_label->setText(record.value("ISOAfter").toString());
+    ui->Plate_label->setText(record.value("Plate").toString());
 
     if(record.value("CheckFront").toBool()){
         ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
@@ -272,5 +276,38 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     }
     else {
         ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->tableView->setCurrentIndex(index);
+    ui->tableView->setFocus();
+}
+
+void DataBaseWidget::on_Home_pushButton_clicked()
+{
+    if(pModel){
+        emit on_tableView_clicked(pModel->index(0,0));
+        ui->tableView->selectRow(0);
+    }
+}
+
+void DataBaseWidget::on_End_pushButton_clicked()
+{
+    if(pModel){
+        emit on_tableView_clicked(pModel->index(pModel->rowCount()-1,0));
+        ui->tableView->selectRow(pModel->rowCount()-1);
+    }
+}
+
+void DataBaseWidget::on_Before_pushButton_clicked()
+{
+    if(pModel&&ui->tableView->currentIndex().row()>0){
+        emit on_tableView_clicked(pModel->index(ui->tableView->currentIndex().row()-1,0));
+    }
+}
+
+void DataBaseWidget::on_After_pushButton_clicked()
+{
+    if(pModel&&ui->tableView->currentIndex().row()<pModel->rowCount()-1){
+        emit on_tableView_clicked(pModel->index(ui->tableView->currentIndex().row()+1,0));
     }
 }
