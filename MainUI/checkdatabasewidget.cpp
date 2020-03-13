@@ -12,3 +12,13 @@ CheckDataBaseWidget::~CheckDataBaseWidget()
 {
     delete ui;
 }
+
+void CheckDataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
+{
+    if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
+        ;
+    }
+    if(button==ui->buttonBox->button(QDialogButtonBox::Cancel)){
+        ;
+    }
+}

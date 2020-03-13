@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_System_Setting_Channel">
       <attribute name="title">
@@ -109,6 +109,21 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLineEdit" name="lineEdit_2"/>
           </item>
@@ -232,7 +247,7 @@
             </item>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="2" column="0" colspan="2">
            <spacer name="verticalSpacer_6">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -497,6 +512,219 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>DataBase</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_18">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Database Type</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_15">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="comboBox">
+            <item>
+             <property name="text">
+              <string>SQLITE</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SQL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>MYSQL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ODBC</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>PostgreSQL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Access</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Text Format</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_17">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="comboBox_2">
+            <item>
+             <property name="text">
+              <string>CSV</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>XML</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>JSON</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>TXT</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>198</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Log</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_21">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Save Log</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_19">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="comboBox_3">
+            <item>
+             <property name="text">
+              <string>TXT</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DataBase</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string>The level of logging</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_20">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>The system log</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkBox_2">
+            <property name="text">
+             <string>The error log</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>182</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab_System_Setting_FTP">
       <attribute name="title">
        <string>FTP</string>
@@ -626,17 +854,17 @@
           <string>The other options</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_13">
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QCheckBox" name="Minimization">
             <property name="text">
              <string>Startup minimization</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="SaveLog">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="checkBox_3">
             <property name="text">
-             <string>Save the log</string>
+             <string>Automatic startup</string>
             </property>
            </widget>
           </item>

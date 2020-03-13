@@ -32,6 +32,7 @@
 #include "imageprocessing.h"
 #include "logicalprocessing.h"
 #include "getsysinfo.h"
+#include "databasecorrelation.h"
 
 namespace Ui {
 class MainWidget;
@@ -46,6 +47,8 @@ public:
     ~MainWidget()override;
 
 private:
+
+    DataBaseCorrelation *pDataBaseCorrelation;
 
     ///
     /// \brief statusBar 系统状态栏

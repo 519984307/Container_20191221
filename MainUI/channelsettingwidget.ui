@@ -91,7 +91,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Before</string>
+            <string>Front</string>
            </property>
           </widget>
          </item>

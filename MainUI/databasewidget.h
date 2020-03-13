@@ -2,6 +2,12 @@
 #define DATABASEWIDGET_H
 
 #include <QWidget>
+#include <QAbstractItemView>
+#include <QAbstractButton>
+#include <QSqlTableModel>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlRecord>
 
 namespace Ui {
 class DataBaseWidget;
@@ -16,7 +22,88 @@ public:
     ~DataBaseWidget();
 
 private:
-    Ui::DataBaseWidget *ui;
+
+    ///
+    /// \brief loadDataBaseToView 加载数据库到界面
+    ///
+    void loadDataBaseToView();
+
+    ///
+    /// \brief init 初始化
+    ///
+    void init();
+
+private slots:
+
+    ///
+    /// \brief on_checkBox_stateChanged 切换箱号和车牌窗口
+    /// \param arg1
+    ///
+    void on_checkBox_stateChanged(int arg1);
+
+    ///
+    /// \brief on_Find_pushButton_clicked 查找数据
+    ///
+    void on_Find_pushButton_clicked();
+
+    ///
+    /// \brief on_ImageOrData_PushButton_toggled 切换图片和数据窗口
+    /// \param checked
+    ///
+    void on_ImageOrData_PushButton_toggled(bool checked);
+
+    ///
+    /// \brief on_buttonBox_clicked 打开查询对话框
+    /// \param button
+    ///
+    void on_buttonBox_clicked(QAbstractButton *button);
+
+    void on_Datatime_checkBox_stateChanged(int arg1);
+
+    void on_Channel_checkBox_stateChanged(int arg1);
+
+    void on_Numbers_checkBox_stateChanged(int arg1);
+
+    void on_Type_checkBox_stateChanged(int arg1);
+
+    void on_Plate_checkBox_stateChanged(int arg1);
+
+    ///
+    /// \brief on_tableView_clicked 选取数据
+    /// \param index
+    ///
+    void on_tableView_clicked(const QModelIndex &index);
+
+private:
+    Ui::DataBaseWidget *ui;   
+
+    /* 数据库对象 */
+    QSqlDatabase database;
+    QSqlTableModel *pModel;
+
+    //--------------------------------------------------------------- 查询帅筛选条件
+    bool channel,date,type,plate,number;
+
+    enum{
+        ID=0,
+        Timer=1,
+        Channel=2,
+        ContainerFront=3,
+        CheckFront=4,
+        ISOFront=5,
+        ContainerAfter=6,
+        CheckAfter=7,
+        ISOAfter=8,
+        ImgFront=9,
+        ImgLeftFront=10,
+        ImgRightFront=11,
+        ImgLeftAfter=12,
+        ImgRightAfter=13,
+        ImgAfter=14,
+        Plate=15,
+        PlateTimer=16,
+        PlateImg=17
+    };
 };
 
 #endif // DATABASEWIDGET_H

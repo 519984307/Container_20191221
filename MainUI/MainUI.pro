@@ -5,9 +5,10 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += widgets
+QT +=sql
 
 greaterThan(QT_MAJOR_VERSION, 4):
-QT += widgets
 
 TARGET = Container
 TEMPLATE = app
@@ -38,7 +39,9 @@ SOURCES += \
     logicalprocessing.cpp \
     getsysinfo.cpp \
     checkdatabasewidget.cpp \
-    channelsettingwidget.cpp
+    channelsettingwidget.cpp \
+    databasecorrelation.cpp \
+    imagewidget.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -54,7 +57,9 @@ HEADERS += \
     infraredlogicinterface.h \
     getsysinfo.h \
     checkdatabasewidget.h \
-    channelsettingwidget.h
+    channelsettingwidget.h \
+    databasecorrelation.h \
+    imagewidget.h
 
 FORMS += \
         mainwidget.ui \
@@ -64,7 +69,8 @@ FORMS += \
     servicewidget.ui \
     databasewidget.ui \
     checkdatabasewidget.ui \
-    channelsettingwidget.ui
+    channelsettingwidget.ui \
+    imagewidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

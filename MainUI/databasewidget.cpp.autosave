@@ -147,8 +147,9 @@ void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
         loadDataBaseToView();
     }
-//    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
-//    }
+    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+        ;
+    }
     ui->stackedWidget->setCurrentIndex(0);
 }
 

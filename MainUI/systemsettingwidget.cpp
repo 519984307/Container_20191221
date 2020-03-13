@@ -79,7 +79,7 @@ bool SystemSettingWidget::jsonWrite()
 
     QJsonObject jsonObj4;
     jsonObj4.insert(tr("Minimization"),int(ui->Minimization->isChecked()));
-    jsonObj4.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
+    //jsonObj4.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
     jsonObj4.insert(tr("Language"), ui->Language->currentIndex());
     jsonChild.insert("Other",QJsonValue(jsonObj4));
 
@@ -177,7 +177,7 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->FtpRemoteImgPath->setText(FtpRemoteImgPath);
 
     ui->Minimization->setChecked(Minimization);
-    ui->SaveLog->setChecked(SaveLog);
+    //ui->SaveLog->setChecked(SaveLog);
     ui->Language->setCurrentIndex(Language);
 }
 
