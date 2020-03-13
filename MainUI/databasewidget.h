@@ -82,10 +82,10 @@ private slots:
     void on_Numbers_checkBox_stateChanged(int arg1);
 
     ///
-    /// \brief on_Type_checkBox_stateChanged 箱型筛选
+    /// \brief on_IsoType_checkBox_stateChanged 箱型筛选
     /// \param arg1
     ///
-    void on_Type_checkBox_stateChanged(int arg1);
+    void on_IsoType_checkBox_stateChanged(int arg1);
 
     ///
     /// \brief on_Plate_checkBox_stateChanged 车牌筛选
@@ -119,6 +119,12 @@ private slots:
     ///
     void on_After_pushButton_clicked();
 
+    void on_Check_checkBox_stateChanged(int arg1);
+
+
+
+    void on_Type_checkBox_stateChanged(int arg1);
+
 private:
     Ui::DataBaseWidget *ui;   
 
@@ -127,27 +133,28 @@ private:
     QSqlTableModel *pModel;
 
     //--------------------------------------------------------------- 查询帅筛选条件
-    bool channel,date,type,plate,number;
+    bool channel,date,Isotype,plate,number,check,type;
 
     enum{
         ID=0,
         Timer=1,
         Channel=2,
-        ContainerFront=3,
-        CheckFront=4,
-        ISOFront=5,
-        ContainerAfter=6,
-        CheckAfter=7,
-        ISOAfter=8,
-        ImgFront=9,
-        ImgLeftFront=10,
-        ImgRightFront=11,
-        ImgLeftAfter=12,
-        ImgRightAfter=13,
-        ImgAfter=14,
-        Plate=15,
-        PlateTimer=16,
-        PlateImg=17
+        Type=3,
+        ContainerFront=4,
+        CheckFront=5,
+        ISOFront=6,
+        ContainerAfter=7,
+        CheckAfter=8,
+        ISOAfter=9,
+        ImgFront=10,
+        ImgLeftFront=11,
+        ImgRightFront=12,
+        ImgLeftAfter=13,
+        ImgRightAfter=14,
+        ImgAfter=15,
+        Plate=16,
+        PlateTimer=17,
+        PlateImg=18
     };
 };
 

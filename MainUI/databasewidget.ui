@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>677</width>
+    <width>721</width>
     <height>541</height>
    </rect>
   </property>
@@ -421,6 +421,21 @@
           <string/>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item row="0" column="0" colspan="4">
            <widget class="QLabel" name="Plate_label">
             <property name="sizePolicy">
@@ -785,32 +800,13 @@ color: rgb(255, 255, 255);</string>
      </widget>
      <widget class="QWidget" name="page_4">
       <layout class="QGridLayout" name="gridLayout_10">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item row="2" column="2">
-        <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout">
          <property name="spacing">
-          <number>6</number>
+          <number>14</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
          </property>
          <item>
           <widget class="QCheckBox" name="Datatime_checkBox">
@@ -837,9 +833,9 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="Type_checkBox">
+          <widget class="QCheckBox" name="IsoType_checkBox">
            <property name="text">
-            <string>Type</string>
+            <string>IsoType</string>
            </property>
           </widget>
          </item>
@@ -850,10 +846,27 @@ color: rgb(255, 255, 255);</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QCheckBox" name="Check_checkBox">
+           <property name="text">
+            <string>Check</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="Type_checkBox">
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item row="0" column="1" colspan="2">
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>6</number>
+         </property>
          <item>
           <widget class="QSplitter" name="splitter_11">
            <property name="orientation">
@@ -878,7 +891,7 @@ color: rgb(255, 255, 255);</string>
            </widget>
            <widget class="QDateTimeEdit" name="DataTime_End_dateTimeEdit">
             <property name="currentSection">
-             <enum>QDateTimeEdit::DaySection</enum>
+             <enum>QDateTimeEdit::YearSection</enum>
             </property>
             <property name="displayFormat">
              <string>yyyy/MM/dd hh:mm:ss</string>
@@ -917,7 +930,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="Type_comboBox">
+          <widget class="QComboBox" name="Iso_Type_comboBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -931,11 +944,6 @@ color: rgb(255, 255, 255);</string>
              <string>45G1</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>22G1_22G1</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>
@@ -943,6 +951,59 @@ color: rgb(255, 255, 255);</string>
            <property name="enabled">
             <bool>false</bool>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSplitter" name="splitter_12">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QRadioButton" name="Yes_radioButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Yes</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QRadioButton" name="No_radioButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>No</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="Type_comboBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>2</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
@@ -959,6 +1020,13 @@ color: rgb(255, 255, 255);</string>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="2">
+        <widget class="QDialogButtonBox" name="buttonBox">
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -17,6 +17,7 @@ void DataBaseCorrelation::initDataBase()
                       `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,\
                       `Timer`	TEXT NOT NULL,\
                       `Channel`	INTEGER NOT NULL,\
+                       'Type' INTEGER,\
                       `ContainerFront`	TEXT,\
                       `CheckFront`	INTEGER,\
                       `ISOFront`	TEXT,\
@@ -47,8 +48,9 @@ void DataBaseCorrelation::insertDataBase(const QHash<QString, QString> dataHash)
         model.setTable(tr("Containers"));
         model.select();
         QSqlRecord record=model.record();
-        record.setValue("Timer",dataHash.value("Timer","NULL"));
-        record.setValue("Channel",dataHash.value("Channel","NULL"));
+        record.setValue("Timer",dataHash.value("Timer","NUL"));
+        record.setValue("Channel",dataHash.value("Channel","NUL"));
+        record.setValue("Type",dataHash.value("Type",QString::number(0)));
         record.setValue("ContainerFront",dataHash.value("ContainerFront"));
         record.setValue("CheckFront",dataHash.value("CheckFront"));
         record.setValue("ISOFront",dataHash.value("ISOFront"));

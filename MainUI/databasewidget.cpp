@@ -31,7 +31,7 @@ DataBaseWidget::~DataBaseWidget()
 
 void DataBaseWidget::init()
 {
-    date=true;    channel=false;    type=false;    plate=false;    number=false;
+    date=true;    channel=false;    Isotype=false;    plate=false;    number=false;    check=false;    type=false;
 
     if(QSqlDatabase::contains("qt_sql_default_connection")){
         database=QSqlDatabase::database("qt_sql_default_connection");
@@ -95,8 +95,19 @@ void DataBaseWidget::loadDataBaseToView()
             filterList.append(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
         }
         if(type){
+            filterList.append(tr("Type='%1'").arg(ui->Type_comboBox->currentText()));
+        }
+        if(check){
+            if(ui->Yes_radioButton->isChecked()){
+                filterList.append(tr("(CheckFront='%1' AND (CheckAfter='%1' OR CheckAfter!='%2'))").arg(1).arg(0));
+            }
+            if(ui->No_radioButton->isChecked()){
+                filterList.append(tr("CheckFront='%1' OR CheckAfter='%1'").arg(0));
+            }
+        }
+        if(Isotype){
             //pModel->setFilter(tr("ISOFront='%1' OR ISOAfter='%1'").arg(ui->Type_comboBox->currentText()));
-            filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Type_comboBox->currentText()));
+            filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Iso_Type_comboBox->currentText()));
         }
 
         QString filter="";
@@ -226,17 +237,17 @@ void DataBaseWidget::on_Numbers_checkBox_stateChanged(int arg1)
     }
 }
 
-void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
+void DataBaseWidget::on_IsoType_checkBox_stateChanged(int arg1)
 {
     if(arg1==Qt::Checked){
-        ui->Type_comboBox->setEnabled(true);
+        ui->Iso_Type_comboBox->setEnabled(true);
 
-        type=true;
+        Isotype=true;
     }
     else     if(arg1==Qt::Unchecked){
-        ui->Type_comboBox->setEnabled(false);
+        ui->Iso_Type_comboBox->setEnabled(false);
 
-        type=false;
+        Isotype=false;
     }
 }
 
@@ -254,6 +265,37 @@ void DataBaseWidget::on_Plate_checkBox_stateChanged(int arg1)
     }
 }
 
+void DataBaseWidget::on_Check_checkBox_stateChanged(int arg1)
+{
+    if(arg1==Qt::Checked){
+        ui->Yes_radioButton->setEnabled(true);
+        ui->No_radioButton->setEnabled(true);
+
+        check=true;
+    }
+    else     if(arg1==Qt::Unchecked){
+        ui->Yes_radioButton->setEnabled(false);
+        ui->No_radioButton->setEnabled(false);
+
+        check=false;
+    }
+}
+
+void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
+{
+    if(arg1==Qt::Checked){
+        ui->Type_comboBox->setEnabled(true);
+
+        type=true;
+    }
+    else     if(arg1==Qt::Unchecked){
+        ui->Type_comboBox->setEnabled(false);
+
+        type=false;
+    }
+}
+
+
 void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
 {
     QSqlRecord record=pModel->record(index.row());
@@ -264,13 +306,23 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     ui->checkAfter_label->setText(record.value("ISOAfter").toString());
     ui->Plate_label->setText(record.value("Plate").toString());
 
-    if(record.value("CheckFront").toBool()){
-        ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
-    }
-    else {
-        ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-    }
-
+    /* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
+//    if(record.value("Type").toInt()>0){
+//        if(record.value("Type").toInt()==3){
+//            if(record.value("CheckAfter").toBool()){
+//                ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+//            }
+//            else {
+//                ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+//            }
+//        }
+//        if(record.value("CheckFront").toBool()){
+//            ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+//        }
+//        else {
+//            ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+//        }
+//    }
     if(record.value("CheckAfter").toBool()){
         ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
@@ -278,6 +330,14 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
         ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
 
+    if(record.value("CheckFront").toBool()){
+        ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    /* 选取第一条数据 */
     ui->tableView->setCurrentIndex(index);
     ui->tableView->setFocus();
 }
