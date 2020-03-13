@@ -413,7 +413,7 @@
         <widget class="QGroupBox" name="groupBox">
          <property name="maximumSize">
           <size>
-           <width>250</width>
+           <width>300</width>
            <height>120</height>
           </size>
          </property>
@@ -433,8 +433,11 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <property name="spacing">
+          <property name="horizontalSpacing">
            <number>2</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>0</number>
           </property>
           <item row="0" column="0">
            <widget class="QSplitter" name="splitter">
@@ -466,19 +469,6 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="2">
            <widget class="QSplitter" name="splitter_2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -507,20 +497,7 @@
             </widget>
            </widget>
           </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="4">
+          <item row="0" column="2">
            <widget class="QSplitter" name="splitter_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -549,20 +526,7 @@
             </widget>
            </widget>
           </item>
-          <item row="0" column="5">
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="6">
+          <item row="0" column="3">
            <widget class="QSplitter" name="splitter_4">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -924,6 +888,9 @@ color: rgb(255, 255, 255);</string>
           <widget class="QSpinBox" name="Channel_spinBox">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="minimum">
+            <number>1</number>
            </property>
           </widget>
          </item>

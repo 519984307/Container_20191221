@@ -29,6 +29,11 @@ private:
     void loadDataBaseToView();
 
     ///
+    /// \brief rateDataBase 统计数据
+    ///
+    void rateDataBase();
+
+    ///
     /// \brief init 初始化
     ///
     void init();

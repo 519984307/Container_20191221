@@ -88,13 +88,13 @@ void DataBaseWidget::loadDataBaseToView()
                 filterList.append(tr("ContainerAfter='%1'").arg(ui->Numbers_End_lineEdit->text()));
             }
         }
-        if(type){
-            //pModel->setFilter(tr("CheckFront='%1' OR CheckAfter='%1'").arg(ui->Type_comboBox->currentText()));
-            filterList.append(tr("(CheckFront='%1' OR CheckAfter='%1')").arg(ui->Type_comboBox->currentText()));
-        }
         if(plate){
             //pModel->setFilter(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
             filterList.append(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
+        }
+        if(type){
+            //pModel->setFilter(tr("ISOFront='%1' OR ISOAfter='%1'").arg(ui->Type_comboBox->currentText()));
+            filterList.append(tr("ISOFront='%1' OR ISOAfter='%1'").arg(ui->Type_comboBox->currentText()));
         }
 
         QString filter="";
@@ -113,6 +113,30 @@ void DataBaseWidget::loadDataBaseToView()
 
         filterList.clear();
     }
+
+    rateDataBase();
+}
+
+#include<iostream>
+void DataBaseWidget::rateDataBase()
+{
+    double correct=0;    double error=0;
+
+    QSqlRecord record;
+
+    for(int i=0;i<pModel->rowCount();i++){
+        record=pModel->record(i);
+        if(record.value("CheckFront").toBool()||record.value("CheckAfter").toBool()){
+            correct++;
+        }
+        else {
+            error++;
+        }
+    }
+    ui->total_label->setText(QString::number(pModel->rowCount()));
+    ui->correct_label->setText(QString::number(correct));
+    ui->error_label->setText(QString::number(error));
+    ui->rate_label->setText(tr("%1%").arg(QString::number(correct/pModel->rowCount()*100,'f',2)));
 }
 
 void DataBaseWidget::on_checkBox_stateChanged(int arg1)
@@ -147,8 +171,9 @@ void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
         loadDataBaseToView();
     }
-//    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
-//    }
+    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+        ;
+    }
     ui->stackedWidget->setCurrentIndex(0);
 }
 
