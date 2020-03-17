@@ -74,7 +74,17 @@
             <number>0</number>
            </property>
            <item row="0" column="0">
-            <widget class="QTableView" name="tableView"/>
+            <widget class="QTableView" name="tableView">
+             <property name="autoScroll">
+              <bool>true</bool>
+             </property>
+             <property name="autoScrollMargin">
+              <number>10</number>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -986,22 +996,22 @@ color: rgb(255, 255, 255);</string>
            </property>
            <item>
             <property name="text">
-             <string>0</string>
+             <string>No container</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>1</string>
+             <string>Small container</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>2</string>
+             <string>Large container</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>3</string>
+             <string>Double container</string>
             </property>
            </item>
           </widget>

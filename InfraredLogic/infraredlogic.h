@@ -26,6 +26,9 @@ private:
     ///
     int status[6];
 
+    int one;
+    int two;
+
     ///
     /// \brief tmpStatus 临时红外信号
     ///
@@ -40,7 +43,7 @@ private:
 
 
      ///
-     /// \brief model 红外模式(常开|常闭)
+     /// \brief model 红外模式(常开Flase|常闭True)
      ///
      bool model;
 

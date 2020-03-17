@@ -10,6 +10,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
+#include <QMutexLocker>
 
 class DataBaseCorrelation:public QObject
 {
@@ -17,13 +18,12 @@ class DataBaseCorrelation:public QObject
 
 public:
     DataBaseCorrelation(QObject *parent = nullptr);
+    ~DataBaseCorrelation();
 
 private:
 
-    QSqlDatabase database;
-
     ///
-    /// \brief initDataBase 初始化数据库
+    /// \brief initDataBase 初始化数据库,如果没有就创建
     ///
     void initDataBase();
 
@@ -41,7 +41,7 @@ public slots:
     /// \brief insertDataBase 插入数据库
     /// \param data
     ///
-    void insertDataBase(const QHash<QString,QString> dataHash);
+    void insertDataBaseSlot(QHash<QString, QString> dataHash);
 };
 
 #endif // DATABASECORRELATION_H

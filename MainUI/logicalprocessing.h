@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QMultiHash>
 #include <QMutexLocker>
+#include <QDateTime>
 
 class LogicalProcessing : public QObject
 {
@@ -17,9 +18,29 @@ public:
     /// \brief CamerMultiMap 绑定相机到通道,前后左右4台相机.
     /// \param tmpHash
     ///
-    void setCamerMultiMap(QList<QObject*> camerList);
+    void setCamerMultiMap(QList<QObject*> camerList, int channel);
 
 private:
+
+    ///
+    /// \brief data  写入数据库数据
+    ///
+    QHash<QString,QString> data;
+
+    ///
+    /// \brief timer 时间戳
+    ///
+    QString  timer;
+
+    ///
+    /// \brief name 图片中间名
+    ///
+    QString name;
+
+    ///
+    /// \brief channel 通道号
+    ///
+    int  channel;
 
     ///
     /// \brief pPictureWidgetBEFORE 前相机
@@ -69,6 +90,12 @@ signals:
     /// \param command 编号
     ///
      void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
+
+     ///
+     /// \brief insertDataBaseSignal 写入记录到数据库
+     /// \param dataHash
+     ///
+     void insertDataBaseSignal(QHash<QString,QString> dataHash);
 
 public slots:
 

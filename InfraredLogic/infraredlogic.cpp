@@ -10,6 +10,12 @@ InfraredLogic::InfraredLogic(QObject *parent)
 
     exit=false;
     model=false;
+
+    one=0;    two=1;
+    /* 常开(false) |常闭(true) */
+    if(!model) {
+        one=1;two=0;
+    }
 }
 
 InfraredLogic::~InfraredLogic()
@@ -36,11 +42,6 @@ void InfraredLogic::serialLogic(int *status)
      * 红外逻辑(一定要判断状态),1)如果A2无信号,过车释放A1,会导致后3张图偏移.
      * 常开[false|0,0,0,0]|常闭[true|1,1,1,1]
     */
-    int one=0;
-    int two=1;
-    if(!model) {
-        one=1;two=0;
-    }
     if(compareStatus(status,tmpStatus)){
         /*
          * clearn
@@ -283,6 +284,8 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
 //    }
     while (1)
     {
+        memcpy(tmpStatus,status,sizeof (status));
+
         QCoreApplication::processEvents();
 
         if(this->exit){

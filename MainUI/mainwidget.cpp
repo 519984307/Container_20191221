@@ -5,10 +5,9 @@ MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);   
 
-    pDataBaseCorrelation=new DataBaseCorrelation () ;
-
+    initOtherObject();
     InitializeSystemSet();
     InitializeDataWindow();
     InitializeCamerWindow();
@@ -95,6 +94,12 @@ MainWidget::~MainWidget()
     //delete pGetSysInfo;
 
     delete ui;
+}
+
+void MainWidget::initOtherObject()
+{
+    qRegisterMetaType<QHash<QString,QString>>("QHash<QString,QString");
+    pDataBaseCorrelation=new DataBaseCorrelation () ;
 }
 
 void MainWidget::InitializeSystemSet()
@@ -350,6 +355,9 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
     LogicalProcessing* pLogicalProcessing=new LogicalProcessing (nullptr);
     LogicalProcessingMap.insert(num,pLogicalProcessing);
 
+    /* 写数据到数据库 */
+    connect(pLogicalProcessing,&LogicalProcessing::insertDataBaseSignal,pDataBaseCorrelation,&DataBaseCorrelation::insertDataBaseSlot);
+
     connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
 
     //connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pLogicalProcessing,&LogicalProcessing::logicStatusSlot);
@@ -375,12 +383,18 @@ void MainWidget::bindCamerObjects()
     /* 获取通道编号 */
     for(int channel:DataWidgetMap.keys()){
         if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[channel])){
-            /*  绑定相机组 */
-            pLogicalProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel));
+            /*  绑定相机组抓拍的图片到逻辑处理 */
+            pLogicalProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel),channel);
             if(DataWidget* pDataWidget=static_cast<DataWidget*>(DataWidgetMap[channel])){
                 /* 抓拍图片流链接到数据界面 */
                 connect(pLogicalProcessing,&LogicalProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
             }
+//             /*  绑定相机组抓拍的图片到逻辑处理 */
+//            for(auto obj:channelCamerMultiMap.values(channel)){
+//                if(PictureWidget* pPictureWidget=static_cast<PictureWidget*>(obj)){
+//                    connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pLogicalProcessing,&LogicalProcessing::pictureStreamSlot);
+//                }
+//            }
         }
     }
 }

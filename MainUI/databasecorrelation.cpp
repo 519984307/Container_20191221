@@ -4,15 +4,23 @@ DataBaseCorrelation::DataBaseCorrelation(QObject *parent)
 {
     this->setParent(parent);
 
-    database=QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("History.db");
     initDataBase();
+}
+
+DataBaseCorrelation::~DataBaseCorrelation()
+{
+    for (auto obj:QSqlDatabase::database().connectionNames()) {
+        QSqlDatabase::removeDatabase(obj);
+    }
 }
 
 void DataBaseCorrelation::initDataBase()
 {
-    if(database.open()){
-        QSqlQuery query(database);
+    QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE","HISTORY");
+    db.setDatabaseName("History.db");
+
+    if(db.open()){
+        QSqlQuery query(db);
         query.prepare(tr("CREATE TABLE `Containers` (\
                       `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,\
                       `Timer`	TEXT NOT NULL,\
@@ -25,26 +33,39 @@ void DataBaseCorrelation::initDataBase()
                       `CheckAfter`	INTEGER,\
                       `ISOAfter`	TEXT,\
                       `ImgFront`	TEXT,\
+                      `ImgFrontNumber`	TEXT,\
                       `ImgLeftFront`	TEXT,\
+                      `ImgLeftFrontNumber`	TEXT,\
                       `ImgRightFront`	TEXT,\
+                      `ImgRightFrontNumber`	TEXT,\
                       `ImgLeftAfter`	TEXT,\
+                      `ImgLeftAfterNumber`	TEXT,\
                       `ImgRightAfter`	TEXT,\
+                      `ImgRightAfterNumber`	TEXT,\
                       `ImgAfter`	TEXT,\
+                      `ImgAfterNumber`	TEXT,\
                       `Plate`	 TEXT,\
                       `PlateTimer` 	TEXT,\
                       `PlateImg`	TEXT\
                   )"));
         if(!query.exec()){
-            emit messageSignal(tr("CREATE TABLE `Containers` ERROR:%1").arg(query.lastError().text()));
-        }
-        database.close();
+                          emit messageSignal(tr("CREATE TABLE `Containers` ERROR:%1").arg(query.lastError().text()));
+                      }
+                      query.clear();
     }
+    else {
+        emit messageSignal(tr("CREATE TABLE `Containers` ERROR:%1").arg(db.lastError().text()));
+    }
+    db.close();
 }
 
-void DataBaseCorrelation::insertDataBase(const QHash<QString, QString> dataHash)
+void DataBaseCorrelation::insertDataBaseSlot(QHash<QString, QString> dataHash)
 {
-    if(database.open()){
-        QSqlTableModel model;
+    QMutexLocker &locker();
+    QSqlDatabase db=QSqlDatabase::database("HISTORY");
+
+    if(db.open()){
+        QSqlTableModel model(this,db);
         model.setTable(tr("Containers"));
         model.select();
         QSqlRecord record=model.record();
@@ -69,9 +90,12 @@ void DataBaseCorrelation::insertDataBase(const QHash<QString, QString> dataHash)
 
         model.insertRecord(0,record);
         model.submitAll();
-        database.close();
+        model.clear();
+
+        dataHash.clear();
     }
     else {
-        emit messageSignal(tr("CREATE TABLE `Containers` ERROR:%1").arg(database.lastError().text()));
+        emit messageSignal(tr("INSERT TABLE `Containers` ERROR:%1").arg(db.lastError().text()));
     }
+    db.close();
 }

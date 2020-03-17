@@ -12,6 +12,7 @@
 #include <QStatusBar>
 #include <QCloseEvent>
 #include<QLabel>
+#include <QMetaType>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
@@ -132,6 +133,11 @@ private:
     QHash<int,QObject*> LogicalProcessingMap;
 
 private:
+
+    ///
+    /// \brief initOtherObject 初始化其他相关类
+    ///
+    void initOtherObject();
 
     ///
     /// \brief bindCamerObjects 绑定相机对象

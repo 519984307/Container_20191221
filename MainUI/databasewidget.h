@@ -8,6 +8,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlRecord>
+#include <QAbstractItemView>
 
 namespace Ui {
 class DataBaseWidget;
@@ -24,9 +25,9 @@ public:
 private:
 
     ///
-    /// \brief loadDataBaseToView 加载数据库到界面
+    /// \brief findDataToView 查找数据
     ///
-    void loadDataBaseToView();
+    void findDataToView();
 
     ///
     /// \brief rateDataBase 统计数据
@@ -34,9 +35,9 @@ private:
     void rateDataBase();
 
     ///
-    /// \brief init 初始化
+    /// \brief initDataBase 初始化数据库视图
     ///
-    void init();
+    void initDataBase();
 
 private slots:
 
@@ -82,7 +83,7 @@ private slots:
     void on_Numbers_checkBox_stateChanged(int arg1);
 
     ///
-    /// \brief on_IsoType_checkBox_stateChanged 箱型筛选
+    /// \brief on_IsoType_checkBox_stateChanged 箱型代码筛选
     /// \param arg1
     ///
     void on_IsoType_checkBox_stateChanged(int arg1);
@@ -92,6 +93,18 @@ private slots:
     /// \param arg1
     ///
     void on_Plate_checkBox_stateChanged(int arg1);
+
+    ///
+    /// \brief on_Check_checkBox_stateChanged 结果筛选
+    /// \param arg1
+    ///
+    void on_Check_checkBox_stateChanged(int arg1);
+
+    ///
+    /// \brief on_Type_checkBox_stateChanged 箱型筛选
+    /// \param arg1
+    ///
+    void on_Type_checkBox_stateChanged(int arg1);
 
     ///
     /// \brief on_tableView_clicked 选取数据
@@ -119,22 +132,15 @@ private slots:
     ///
     void on_After_pushButton_clicked();
 
-    void on_Check_checkBox_stateChanged(int arg1);
-
-
-
-    void on_Type_checkBox_stateChanged(int arg1);
-
 private:
     Ui::DataBaseWidget *ui;   
 
-    /* 数据库对象 */
-    QSqlDatabase database;
     QSqlTableModel *pModel;
 
     //--------------------------------------------------------------- 查询帅筛选条件
     bool channel,date,Isotype,plate,number,check,type;
 
+    //-------------------------------------------------------------- 字段枚举
     enum{
         ID=0,
         Timer=1,
@@ -147,15 +153,29 @@ private:
         CheckAfter=8,
         ISOAfter=9,
         ImgFront=10,
-        ImgLeftFront=11,
-        ImgRightFront=12,
-        ImgLeftAfter=13,
-        ImgRightAfter=14,
-        ImgAfter=15,
-        Plate=16,
-        PlateTimer=17,
-        PlateImg=18
+        ImgFrontNumber=11,
+        ImgLeftFront=12,
+        ImgLeftFrontNumber=13,
+        ImgRightFront=14,
+        ImgRightFrontNumber=15,
+        ImgLeftAfter=16,
+        ImgLeftAfterNumber=17,
+        ImgRightAfter=18,
+        ImgRightAfterNumber=19,
+        ImgAfter=20,
+        ImgAfterNumber=21,
+        Plate=22,
+        PlateTimer=23,
+        PlateImg=24
     };
+
+signals:
+
+    ///
+    /// \brief messageSignal 日志信息
+    /// \param msg 信息体
+    ///
+    void messageSignal(const QString &msg);
 };
 
 #endif // DATABASEWIDGET_H
