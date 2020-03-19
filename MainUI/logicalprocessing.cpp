@@ -54,6 +54,7 @@ void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
 
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
         name=timer.split('-').join("").split(':').join("").split(" ").join("");
+
         data["Timer"]=timer;
         data["Channel"]=QString::number(channel);/* 通道号 */
         data["Type"]=QString::number(2);
@@ -64,7 +65,7 @@ void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
         data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(5);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
         emit insertDataBaseSignal(data);
-        data.clear();
+        //data.clear();
 
         break;
     case 2:
@@ -83,7 +84,7 @@ void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
         data["ImgRightFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(3);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
         emit insertDataBaseSignal(data);
-        data.clear();
+        //data.clear();
 
         break;
     case 3:
@@ -109,7 +110,7 @@ void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
         data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(5);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
         emit insertDataBaseSignal(data);
-        data.clear();
+        //data.clear();
 
         break;
     }

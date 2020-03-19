@@ -4,4 +4,5 @@ SUBDIRS += \
     InfraredLogic\
     GetImages \
     CaptureImages\
-    MainUI
+    MainUI \
+    DataBaseLogic

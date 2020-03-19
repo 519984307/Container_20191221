@@ -20,16 +20,16 @@ MainWidget::MainWidget(QWidget *parent) :
     //initSysInfo();
 
     /* test */
-//    for(auto b:ImageProcessingMap.values()){
-//        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
-//            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//        }
-//    }
-//    for(auto a :LogicalProcessingMap.values()){
-//        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
-//            emit pLogicalProcessing->startSlaveSignal("com4","com5");
-//        }
-//    }
+    for(auto b:ImageProcessingMap.values()){
+        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
+            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+        }
+    }
+    for(auto a :LogicalProcessingMap.values()){
+        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
+            emit pLogicalProcessing->startSlaveSignal("com4","com5");
+        }
+    }
 //    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1])){
 //        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
 //    }
@@ -49,7 +49,7 @@ MainWidget::MainWidget(QWidget *parent) :
 
 void MainWidget::closeEvent(QCloseEvent *event)
 {
-    emit closeStreamSignal();
+    emit releaseResourcesSignal();
     emit exitWhileSignal(true);
 
 //    pGetSysInfo->quit();
@@ -326,7 +326,7 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     ImageProcessing* pImageProcessing=new ImageProcessing (nullptr);
     ImageProcessingMap.insert(num,pImageProcessing);
 
-    connect(this,&MainWidget::closeStreamSignal,pGetimagesInterface,&GetImagesInterface::closeStreamSlot,Qt::BlockingQueuedConnection);
+    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
 
     connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
     connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);

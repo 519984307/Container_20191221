@@ -58,7 +58,7 @@ void DataBaseCorrelation::initDataBase()
     }
     db.close();
 }
-
+#include<iostream>
 void DataBaseCorrelation::insertDataBaseSlot(QHash<QString, QString> dataHash)
 {
     QMutexLocker &locker();
@@ -91,11 +91,15 @@ void DataBaseCorrelation::insertDataBaseSlot(QHash<QString, QString> dataHash)
         model.insertRecord(0,record);
         model.submitAll();
         model.clear();
-
         dataHash.clear();
     }
     else {
         emit messageSignal(tr("INSERT TABLE `Containers` ERROR:%1").arg(db.lastError().text()));
     }
     db.close();
+
+    QHash<QString,QString>::iterator it;
+    for (it=dataHash.begin();it!=dataHash.end();++it) {
+        std::cout<<"|||"<<it.value().toStdString()<<std::endl;
+    }
 }

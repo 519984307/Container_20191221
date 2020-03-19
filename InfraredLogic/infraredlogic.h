@@ -14,11 +14,6 @@ public:
     explicit InfraredLogic(QObject *parent = nullptr);
     ~InfraredLogic() Q_DECL_OVERRIDE;
 
-    ///
-    /// \brief exit 退出循环状态
-    ///
-    bool exit;
-
 private:
 
     ///
@@ -26,26 +21,21 @@ private:
     ///
     int status[6];
 
-    int one;
-    int two;
+    /* 红外信号值 */
+    int valueOne,valueTwo;
 
     ///
     /// \brief tmpStatus 临时红外信号
     ///
     int tmpStatus[6];
 
-     /*箱型逻辑条件*/
-     bool _45G1;
-     bool _22G1;
-     bool _22G1_22G1;
-
-
-
+     /* 箱型逻辑条件 */
+     bool _45G1,_22G1,_22G1_22G1;
 
      ///
-     /// \brief model 红外模式(常开Flase|常闭True)
+     /// \brief exit 退出循环状态
      ///
-     bool model;
+     bool exit;
 
 private:
 
@@ -60,7 +50,6 @@ private:
      ///
      /// \brief serialLogicStatus 逻辑判断
      /// \param status 状态
-     /// \param model 红外模式
      ///
       void serialLogic(int *status);
 
@@ -72,6 +61,12 @@ public:
      /// \param portName2 串口2
      ///
      void startSlaveSlot(const QString &portName1, const QString &portName2) Q_DECL_OVERRIDE;
+
+     ///
+     /// \brief simulateTriggerSlot 模拟触发
+     /// \param type 逻辑类型
+     ///
+      void simulateTriggerSlot(const QString &type)Q_DECL_OVERRIDE;
 
      ///
      /// \brief setAlarmModeSlot 设置红外模式

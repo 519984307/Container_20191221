@@ -244,9 +244,9 @@ private slots:
 signals:
 
     ///
-    /// \brief closeStreamSignal 关闭视频流
+    /// \brief releaseResourcesSignal 释放动态库资源
     ///
-    void closeStreamSignal();
+    void releaseResourcesSignal();
 
     ///
     /// \brief exitWhileSignal 退出循环线程,系统资源使用状态,和串口逻辑循环.

@@ -17,7 +17,9 @@ public:
 
 private:
 
-    ///端口
+    ///
+    /// \brief port 端口
+    ///
     int port;
 
     ///地址,用户名,密码
@@ -26,11 +28,19 @@ private:
     ///登录用户ID,视频流ID
     LONG lUserID,streamID;
 
-    ///登录结果
+    ///
+    /// \brief dwResult 登录结果
+    ///
     DWORD dwResult;
 
+    ///
+    /// \brief pDLLHCNet 动态库对象
+    ///
     QLibrary *pDLLHCNet;
 
+    ///
+    /// \brief pThis 类指针
+    ///
     static CaptureImages* pThis;
 
 private:
@@ -177,27 +187,27 @@ public:
 
     ///
     /// \brief putCommandSlot 抓取图片
-    /// \param imgNumber 编号
+    /// \param imgNumber 图片编号
     /// \return
     ///
     bool putCommandSlot(const int &imgNumber) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief playStreamSlot 重写播放视频流函数
+    /// \brief playStreamSlot 播放视频流
     /// \param winID 窗口句柄
     /// \param play 播放状态
     ///
     void playStreamSlot(uint winID, bool play) Q_DECL_OVERRIDE;
 
     ///
+    /// \brief releaseResourcesSlot 关闭视频流
+    ///
+    void releaseResourcesSlot()Q_DECL_OVERRIDE;
+
+    ///
     /// \brief resizeEventSlot 通知动态库调整窗口
     ///
     void resizeEventSlot()Q_DECL_OVERRIDE;
-
-    ///
-    /// \brief closeStream 关闭视频流
-    ///
-    void closeStreamSlot()Q_DECL_OVERRIDE;
 };
 
 #endif // CAPTUREIMAGES_H

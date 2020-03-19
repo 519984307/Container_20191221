@@ -1,6 +1,8 @@
 #ifndef INFRAREDLOGIC_INTERFACE_H
 #define INFRAREDLOGIC_INTERFACE_H
 
+#define ZBY_LOG(type)  tr("ZBY_LOG_%1(Func[%2](Line[%3]))").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
+
 #include <QObject>
 
 class InfraredlogicInterface:public QObject
@@ -13,10 +15,11 @@ public:
 signals:
 
     ///
-    /// \brief message 日志
+    /// \brief messageSignal 日志信息
+    /// \param type 日志类型
     /// \param msg 信息体
     ///
-     void messageSignal(const QString &msg);
+    void messageSignal(const QString &type,const QString &msg);
 
      ///
      /// \brief logicStatus 红外信号状态
@@ -40,15 +43,21 @@ public slots://槽
    virtual void startSlaveSlot(const QString &portName1, const QString &portName2)=0;
 
    ///
+   /// \brief simulateTriggerSlot 模拟触发
+   /// \param type 逻辑类型
+   ///
+   virtual void simulateTriggerSlot(const QString &type)=0;
+
+   ///
    /// \brief setAlarmModeSlot 设置红外模式
    /// \param mode 模式(敞开|常闭)
    ///
    virtual void setAlarmModeSlot(bool model)=0;
 
-     ///
-     /// \brief exitWhile 退出循环
-     /// \param exit
-     ///
+   ///
+   /// \brief exitWhile 退出循环
+   /// \param exit
+   ///
    virtual void exitWhileSlot(bool exit)=0;
 };
 

@@ -59,7 +59,8 @@ HEADERS += \
     checkdatabasewidget.h \
     channelsettingwidget.h \
     databasecorrelation.h \
-    imagewidget.h
+    imagewidget.h \
+    databaselogicinterface.h
 
 FORMS += \
         mainwidget.ui \

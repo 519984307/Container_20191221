@@ -28,7 +28,6 @@ void GetImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QS
     this->camerIP=camerIP;
     this->camerPort=camerPort;
 
-
     startLinkCamer();
 }
 
@@ -40,7 +39,7 @@ void GetImages::startLinkCamer()
 
 void GetImages::connected()
 {
-    emit messageSignal(tr("%1 Camera link successful").arg(camerIP));
+    emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Camera link successful").arg(camerIP));
     emit camerStateSingal(camerIP,true);
 
     if(pTimerLinkCamer->isActive())//防止出现链接完成后,物理线路断开
@@ -57,7 +56,7 @@ void GetImages::disconnected()
     //emit message(tr("%1 Camera link disconnected").arg(id));
 }
 
-bool GetImages::putCommandSlot(const int &command)
+bool GetImages::putCommandSlot(const int &imgNumber)
 {
     if(tcpSocket->isValid()){
         const char * str_data="capture 01 ";
@@ -76,14 +75,14 @@ void GetImages::resizeEventSlot()
 
 }
 
-void GetImages::closeStreamSlot()
+void GetImages::releaseResourcesSlot()
 {
 
 }
 
 void GetImages::stateChanged(QAbstractSocket::SocketState socketState)
 {
-    emit messageSignal(tr("%1 Camera link state is %2").arg(camerIP).arg(socketState));
+    emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Camera link state is %2").arg(camerIP).arg(socketState));
 }
 
 void GetImages::readFortune()
@@ -104,7 +103,7 @@ void GetImages::readFortune()
         {
             jpgStream=jpgStream.mid(start,end-start+2);
 
-            emit messageSignal(tr("%1 Get camera image data").arg(camerIP));
+            emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Get camera image data").arg(camerIP));
             emit pictureStreamSignal(jpgStream,-1);
             QThread::msleep(10);
         }
@@ -121,7 +120,7 @@ void GetImages::readFortune()
 //链接错误槽
 void GetImages::displayError(QAbstractSocket::SocketError socketError)
 {
-    emit messageSignal(tr("%1 Camera link error is %2").arg(camerIP).arg(socketError));
+    emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1 Camera link error<errorCode=%2>").arg(camerIP).arg(socketError));
 
     if(pTimerLinkCamer->isActive())
     {

@@ -1,11 +1,5 @@
 #include "captureimages.h"
 
-#if defined(Q_OS_WIN32)
-    #define OS 0
-#elif defined(Q_OS_LINUX)
-    #define OS 1
-#endif
-
 CaptureImages* CaptureImages::pThis=nullptr;
 
 CaptureImages::CaptureImages(QObject *parent)
@@ -60,17 +54,18 @@ void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,cons
         loginCamer();
     }
     else {
-        emit pThis->messageSignal(tr("ERROR:Failed to load the dynamic pDLLHCNet"));
+        emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the dynamic DLLHCNet"));
     }
 }
-
 
 bool CaptureImages::getDeviceStatus(LONG lUserID)
 {
     if(NET_DVR_RemoteControl_L(lUserID,NET_DVR_CHECK_USER_STATUS,nullptr,4)){
+        emit camerStateSingal(ip,true);
         return true;
     }
     else {
+        emit camerStateSingal(ip,false);
         return false;
     }
 }
@@ -95,16 +90,18 @@ void CaptureImages::loginCamer()
 
     if(NET_DVR_Init_L()){
         NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,nullptr);
-        //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), true);
+        //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), false);
         NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
+
+        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP:%1 camera init sucess").arg(ip));
     }
-    emit pThis->messageSignal(tr("IP:%1,Camera login failed.").arg(ip));
+    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 camera init error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
 }
 
 void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
     //HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
-    emit pThis->messageSignal(tr("ID:%1,ERROR:%2,HANDLE:%3").arg(lUserID).arg(dwType).arg(lHandle));
+    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 camrea exception<errorCode=%2>").arg(pThis->ip).arg(dwType));
 }
 
 void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
@@ -112,7 +109,12 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     //HCNetSDK* pThis=static_cast<HCNetSDK*>(pUser);
     pThis->lUserID=lUserID;
     pThis->dwResult=dwResult;
-    emit pThis->messageSignal(tr("ID:%1,STATUS:%2").arg(lUserID).arg(dwResult));
+    if(dwResult==0){
+        emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 camera login error<errorCOde=%2>").arg(pThis->ip).arg(pThis->NET_DVR_GetLastError_L()));
+    }
+    if(dwResult==1){
+        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP:%1 camera loginsucess").arg(pThis->ip));
+    }
 }
 
 bool CaptureImages::putCommandSlot(const int &imgNumber)
@@ -127,7 +129,9 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
 
     if(dwResult){
         if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
-            emit messageSignal(tr("put command Error:%1").arg(NET_DVR_GetLastError_L()));
+
+            emit messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Put command error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+
             dataLen=nullptr;    delete  dataLen;
             free(buff);    buff=nullptr;    delete buff;
             return false;
@@ -138,9 +142,11 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
             //QByteArray bye(buff, charLen);
             emit pictureStreamSignal(arrayJpg,imgNumber);
             arrayJpg.clear();
-            //arrayJpg.resize(0);
+
+            emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Put command sucess").arg(ip));
         }
     }
+
     dataLen=nullptr; delete  dataLen;
     free(buff);  buff=nullptr; delete buff;
     return true;
@@ -155,17 +161,23 @@ void CaptureImages::playStreamSlot(uint winID,bool play)
             struPlayInfo.lChannel     = 1;       //预览通道号
             struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
             struPlayInfo.dwLinkMode   = 1;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP
-            struPlayInfo.bBlocked     = 1;       //0- 非阻塞取流，1- 阻塞取流
+            struPlayInfo.bBlocked     = 0;       //0- 非阻塞取流，1- 阻塞取流
 
             streamID =NET_DVR_RealPlay_V40_L(lUserID,&struPlayInfo,nullptr,nullptr);
 
             if(streamID==-1){
-                 emit messageSignal(tr("open stream Error:%1").arg(NET_DVR_GetLastError_L()));
+                 emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1 Open stream error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+            }
+            else {
+                emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Open stream sucess").arg(ip));
             }
         }
         else {
             if(!NET_DVR_StopRealPlay_L(streamID)){
-                emit messageSignal(tr("stop stream Error:%1").arg(NET_DVR_GetLastError_L()));
+                emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1 Stop stream error<errorCode=%1>").arg(ip).arg(NET_DVR_GetLastError_L()));
+            }
+            else {
+                emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Stop stream sucess").arg(ip));
             }
         }
     }
@@ -178,7 +190,7 @@ void CaptureImages::resizeEventSlot()
     }
 }
 
-void CaptureImages::closeStreamSlot()
+void CaptureImages::releaseResourcesSlot()
 {
     if(streamID!=-1||lUserID!=-1){
         NET_DVR_StopRealPlay_L(streamID);

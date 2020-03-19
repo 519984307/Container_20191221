@@ -80,24 +80,24 @@ private:
 public:
 
     ///
-    /// \brief initCamerSlot 重写相机初始化函数
-    /// \param camerIP
-    /// \param camerPort
-    /// \param user
-    /// \param pow
+    /// \brief initCamerSlot 初始化相机参数
+    /// \param camerIP 地址
+    /// \param camerPort 端口
+    /// \param CamerUser 用户名
+    /// \param CamerPow 密码
     ///
-    void initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &user,const QString &pow) Q_DECL_OVERRIDE;
+    void initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief putCommandSlot 重写抓拍函数
-    /// \param command
-    /// \return
+    /// \brief putCommandSlots 抓取图片
+    /// \param command 图片编号
     ///
-    bool putCommandSlot(const int &command) Q_DECL_OVERRIDE;
+    virtual bool putCommandSlot(const int &imgNumber)Q_DECL_OVERRIDE;
 
     ///
-    /// \brief playViedoStreamSlot 重写播放视频流函数
-    /// \param pUser
+    /// \brief playStreamSlot 播放视频流
+    /// \param winID 窗口ID
+    /// \param play 播放状态
     ///
     void playStreamSlot(uint winID, bool play) Q_DECL_OVERRIDE;
 
@@ -107,9 +107,9 @@ public:
     void resizeEventSlot()Q_DECL_OVERRIDE;
 
     ///
-    /// \brief closeStream 关闭视频流
+    /// \brief closeStream 释放动态库资源
     ///
-    void closeStreamSlot()Q_DECL_OVERRIDE;
+    void releaseResourcesSlot()Q_DECL_OVERRIDE;
 };
 
 #endif // GETIMAGES_H

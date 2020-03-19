@@ -3,6 +3,14 @@
 
 #include <QObject>
 
+#define ZBY_LOG(type)  tr("ZBY_LOG_%1(Func[%2](Line[%3]))").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
+
+#if defined(Q_OS_WIN32)
+    #define OS 0
+#elif defined(Q_OS_LINUX)
+    #define OS 1
+#endif
+
 class GetImagesInterface:public QObject
 {
     Q_OBJECT
@@ -22,15 +30,16 @@ signals:
     ///
     /// \brief pictureStreamSignals 图片流信号
     /// \param jpgStream 图片流
-    /// \param camerIP 相机地址
+    /// \param imgNumber 图片编号
     ///
-    void pictureStreamSignal(const QByteArray &jpgStream,const int &command);
+    void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
 
     ///
-    /// \brief message 日志信号
+    /// \brief messageSignal 日志信息
+    /// \param type 日志类型
     /// \param msg 信息体
     ///
-    void messageSignal(const QString &msg);
+    void messageSignal(const QString &type,const QString &msg);
 
 public slots:
 
@@ -38,31 +47,34 @@ public slots:
     /// \brief initCamerSlots 初始化相机
     /// \param camerIP 相机地址
     /// \param camerPort 相机端口
+    /// \param 用户名
+    /// \param 密码
     ///
     virtual void initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)=0;
 
     ///
-    /// \brief putCommandSlots 抓拍指令
-    /// \param command 抓拍命令
+    /// \brief putCommandSlots 抓取图片
+    /// \param command 图片编号
     ///
-    virtual bool putCommandSlot(const int &command=-1)=0;
+    virtual bool putCommandSlot(const int &imgNumber)=0;
 
     ///
     /// \brief playViedoStreamSlot 预览实时视频
     /// \param winID 窗口句柄
     /// \param play 播放状态
+    /// 多次实时预览,在LINUX下会出现内存不释放
     ///
     virtual void playStreamSlot(uint winID,bool play)=0;
 
     ///
-    /// \brief resizeEventSlot 调整窗口通知动态库
+    /// \brief resizeEventSlot 调整窗口通知动态库刷新窗口
     ///
     virtual void resizeEventSlot()=0;
 
     ///
-    /// \brief closeStream 关闭视频流
+    /// \brief releaseResourcesSlot 释放动态库资源
     ///
-    virtual void closeStreamSlot()=0;
+    virtual void releaseResourcesSlot()=0;
 };
 
 #define GetImagesInterfaceIID "ZBY.ContainerServer.GetImagesInterface/1.0"
