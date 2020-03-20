@@ -45,8 +45,13 @@ public slots://槽
    ///
    /// \brief simulateTriggerSlot 模拟触发
    /// \param type 逻辑类型
+   /// type=1 22G1
+   /// type=2 45G1
+   /// type=3 Double 22G1_F
+   /// type=4 Double 22G1_b
+   /// type=5 while
    ///
-   virtual void simulateTriggerSlot(const QString &type)=0;
+   virtual void simulateTriggerSlot(int type)=0;
 
    ///
    /// \brief setAlarmModeSlot 设置红外模式

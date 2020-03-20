@@ -21,21 +21,41 @@ private:
     ///
     int status[6];
 
-    /* 红外信号值 */
-    int valueOne,valueTwo;
-
     ///
     /// \brief tmpStatus 临时红外信号
     ///
     int tmpStatus[6];
 
+    /* 红外信号值 */
+    int valueOne,valueTwo;
+
      /* 箱型逻辑条件 */
      bool _45G1,_22G1,_22G1_22G1;
+
+     ///
+     /// \brief type 模拟抓拍类型
+     ///
+     int type;
 
      ///
      /// \brief exit 退出循环状态
      ///
      bool exit;
+
+     ///
+     /// \brief health 红外健康状态
+     ///
+     bool health;
+
+     ///
+     /// \brief pTimerFront 前循环抓拍定时器
+     ///
+     QTimer* pTimerFront;
+
+     ///
+     /// \brief pTimerAfter 后循环抓拍定时器
+     ///
+     QTimer* pTimerAfter;
 
 private:
 
@@ -53,6 +73,18 @@ private:
      ///
       void serialLogic(int *status);
 
+private slots:
+
+      ///
+      /// \brief delayAfterCaptureSlot 延时抓拍后3张图片.
+      ///
+      void delayAfterCaptureSlot();
+
+      ///
+      /// \brief DelayFrontCaptureSlot 延时抓拍前3张图片.
+      ///
+      void delayFrontCaptureSlot();
+
 public:
 
      ///
@@ -65,8 +97,13 @@ public:
      ///
      /// \brief simulateTriggerSlot 模拟触发
      /// \param type 逻辑类型
+     /// type=1 22G1
+     /// type=2 45G1
+     /// type=3 Double 22G1_F
+     /// type=4 Double 22G1_b
+     /// type=5 while
      ///
-      void simulateTriggerSlot(const QString &type)Q_DECL_OVERRIDE;
+      void simulateTriggerSlot(int type)Q_DECL_OVERRIDE;
 
      ///
      /// \brief setAlarmModeSlot 设置红外模式

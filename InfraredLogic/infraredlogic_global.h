@@ -2,6 +2,7 @@
 #define INFRAREDLOGIC_GLOBAL_H
 
 #include <QtCore/qglobal.h>
+#include <QTimer>
 #include <QThread>
 #include <QtSerialPort/QSerialPort>
 #include <QCoreApplication>

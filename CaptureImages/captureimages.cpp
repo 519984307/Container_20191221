@@ -93,15 +93,15 @@ void CaptureImages::loginCamer()
         //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), false);
         NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
 
-        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP:%1 camera init sucess").arg(ip));
+        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(ip));
     }
-    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 camera init error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera init error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
 }
 
 void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
     //HCNetSDK* pThis=reinterpret_cast<HCNetSDK*>(pUser);
-    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 camrea exception<errorCode=%2>").arg(pThis->ip).arg(dwType));
+    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camrea exception<errorCode=%2>").arg(pThis->ip).arg(dwType));
 }
 
 void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
@@ -110,10 +110,10 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     pThis->lUserID=lUserID;
     pThis->dwResult=dwResult;
     if(dwResult==0){
-        emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 camera login error<errorCOde=%2>").arg(pThis->ip).arg(pThis->NET_DVR_GetLastError_L()));
+        emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera login error<errorCOde=%2>").arg(pThis->ip).arg(pThis->NET_DVR_GetLastError_L()));
     }
     if(dwResult==1){
-        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP:%1 camera loginsucess").arg(pThis->ip));
+        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera loginsucess").arg(pThis->ip));
     }
 }
 
@@ -130,7 +130,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
     if(dwResult){
         if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
 
-            emit messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Put command error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+            emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
 
             dataLen=nullptr;    delete  dataLen;
             free(buff);    buff=nullptr;    delete buff;
@@ -143,7 +143,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
             emit pictureStreamSignal(arrayJpg,imgNumber);
             arrayJpg.clear();
 
-            emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Put command sucess").arg(ip));
+            emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(ip));
         }
     }
 
@@ -166,18 +166,18 @@ void CaptureImages::playStreamSlot(uint winID,bool play)
             streamID =NET_DVR_RealPlay_V40_L(lUserID,&struPlayInfo,nullptr,nullptr);
 
             if(streamID==-1){
-                 emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1 Open stream error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+                 emit messageSignal(ZBY_LOG("ERROR"), tr("IP=%1 Open stream error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
             }
             else {
-                emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Open stream sucess").arg(ip));
+                emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 Open stream sucess").arg(ip));
             }
         }
         else {
             if(!NET_DVR_StopRealPlay_L(streamID)){
-                emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1 Stop stream error<errorCode=%1>").arg(ip).arg(NET_DVR_GetLastError_L()));
+                emit messageSignal(ZBY_LOG("ERROR"), tr("IP=%1 Stop stream error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
             }
             else {
-                emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Stop stream sucess").arg(ip));
+                emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Stop stream sucess").arg(ip));
             }
         }
     }

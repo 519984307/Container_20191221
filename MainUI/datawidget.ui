@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -730,16 +730,30 @@
            <number>0</number>
           </property>
           <item row="1" column="0">
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="test_double_22_front_pushButton">
             <property name="text">
              <string>TEST DOUBLE 22G1 FEET FRONT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="while_cycle_capture_checkBox">
+            <property name="text">
+             <string>Simulation Cycle Captured</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="test_double_22_before_pushButton">
+            <property name="text">
+             <string>TEST DOUBLE 22G1 FEET BEFORE</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="test_22_pushButton">
               <property name="text">
                <string>TEST 22G1 FEET</string>
               </property>
@@ -747,24 +761,10 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="text">
-             <string>TEST DOUBLE 22G1 FEET BEFORE</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="test_45_pushButton">
             <property name="text">
              <string>TEST 45G1 FEET</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QCheckBox" name="checkBox_8">
-            <property name="text">
-             <string>Simulation Cycle Captured</string>
             </property>
            </widget>
           </item>

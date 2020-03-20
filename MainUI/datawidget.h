@@ -41,6 +41,15 @@ public slots:
 
 signals:
 
+    void simulateTriggerSignal(int type);
+
+private slots:
+
+    void on_test_22_pushButton_clicked();
+    void on_test_45_pushButton_clicked();
+    void on_test_double_22_front_pushButton_clicked();
+    void on_test_double_22_before_pushButton_clicked();
+    void on_while_cycle_capture_checkBox_stateChanged(int arg1);
 };
 
 #endif // DATAWIDGET_H

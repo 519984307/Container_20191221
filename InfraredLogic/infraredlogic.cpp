@@ -1,18 +1,32 @@
-#include "infraredlogic.h"
+﻿#include "infraredlogic.h"
 #include<QTime>
 
 InfraredLogic::InfraredLogic(QObject *parent)
 {
     this-> setParent(parent);
 
-    memset(status,0,sizeof (int));
-    memset(tmpStatus,0,sizeof (int));
+    pTimerFront=new QTimer (this) ;
+    pTimerFront->setSingleShot(true);/* 单次定时器 */
+    pTimerAfter=new QTimer (this);
+    pTimerAfter->setSingleShot(true);/* 单次定时器 */
 
+    connect(pTimerFront,SIGNAL(timeout()),this,SLOT(delayFrontCaptureSlot()));
+    connect(pTimerAfter,SIGNAL(timeout()),this,SLOT(delayAfterCaptureSlot()));
+
+    memset(status,0,sizeof (status));
+    memset(tmpStatus,0,sizeof (tmpStatus));
+
+    type=0;
     exit=false;
+    health=false;
 }
 
 InfraredLogic::~InfraredLogic()
 {   
+    pTimerFront->stop();
+    pTimerAfter->stop();
+    delete pTimerFront;
+    delete pTimerAfter;
     /*
      * free(status);
      * free(tmpStatus);
@@ -30,6 +44,8 @@ void InfraredLogic::setAlarmModeSlot(bool model)
 
 void InfraredLogic::exitWhileSlot(bool EXIT)
 {
+    pTimerFront->stop();
+    pTimerAfter->stop();
     this->exit=EXIT;
 }
 
@@ -59,93 +75,98 @@ void InfraredLogic::serialLogic(int *status)
                     if(status[4]==valueTwo)
                     {
                         emit logicPutImageSignal(-1);
+                        health=true;
                     }
                 }
             }
         }
 
-        /*
-         * 45G1
-        */
-        if(status[0]==valueOne){
-            if(status[1]==valueOne){
-                if(status[3]==valueOne){
-                    if(status[4]==valueOne){
-                        emit logicPutImageSignal(0);
-                        _22G1=false;
-                        _45G1=true;
-                    }
-                }
-            }
-        }
-        if(_45G1){
-            if(status[0]==valueTwo){
-                if(status[1]==valueTwo){
+        if(health){
+            /*
+             * 45G1
+            */
+            if(status[0]==valueOne){
+                if(status[1]==valueOne){
                     if(status[3]==valueOne){
                         if(status[4]==valueOne){
-                            emit logicPutImageSignal(1);
-                            _45G1=false;
-                        }
-                    }
-                }
-            }
-        }
-
-        /*
-         * 22G1
-        */
-        if(status[0]==valueOne){
-            if(status[1]==valueOne){
-                if(status[3]==valueOne){
-                    if(status[4]==valueTwo){
-                        _22G1=true;
-                    }
-                }
-            }
-        }
-        if(_22G1){
-            if(status[0]==valueTwo){
-                if(status[1]==valueTwo){
-                    if(status[3]==valueOne){
-                        if(status[4]==valueOne){
-                            emit logicPutImageSignal(2);
+                            emit logicPutImageSignal(0);
                             _22G1=false;
+                            _45G1=true;
                         }
                     }
                 }
             }
-        }
-
-        /*
-         * 22G1_22G1
-        */
-        if(status[0]==valueOne){
-            if(status[1]==valueTwo){
-                if(status[3]==valueOne){
-                    if(status[4]==valueOne){
-                        emit logicPutImageSignal(3);
-                        _22G1_22G1=true;
+            if(_45G1){
+                if(status[0]==valueTwo){
+                    if(status[1]==valueTwo){
+                        if(status[3]==valueOne){
+                            if(status[4]==valueOne){
+                                emit logicPutImageSignal(1);
+                                _45G1=false;
+                                health=false;
+                            }
+                        }
                     }
                 }
             }
-        }
-        if(_22G1_22G1){
-            if(status[0]==valueTwo){
+
+            /*
+             * 22G1
+            */
+            if(status[0]==valueOne){
+                if(status[1]==valueOne){
+                    if(status[3]==valueOne){
+                        if(status[4]==valueTwo){
+                            _22G1=true;
+                        }
+                    }
+                }
+            }
+            if(_22G1){
+                if(status[0]==valueTwo){
+                    if(status[1]==valueTwo){
+                        if(status[3]==valueOne){
+                            if(status[4]==valueOne){
+                                emit logicPutImageSignal(2);
+                                _22G1=false;
+                                health=false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            /*
+             * 22G1_22G1
+            */
+            if(status[0]==valueOne){
                 if(status[1]==valueTwo){
                     if(status[3]==valueOne){
                         if(status[4]==valueOne){
-                            emit logicPutImageSignal(4);
-                            _22G1_22G1=false;
+                            emit logicPutImageSignal(3);
+                            _22G1_22G1=true;
+                        }
+                    }
+                }
+            }
+            if(_22G1_22G1){
+                if(status[0]==valueTwo){
+                    if(status[1]==valueTwo){
+                        if(status[3]==valueOne){
+                            if(status[4]==valueOne){
+                                emit logicPutImageSignal(4);
+                                _22G1_22G1=false;
+                                health=false;
+                            }
                         }
                     }
                 }
             }
         }
     }
-
-    memcpy(tmpStatus,status,sizeof (tmpStatus));
+    //memcpy(tmpStatus,status,sizeof (tmpStatus));
 }
-
+#include <iostream>
 void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &portName2)
 {
         QSerialPort serial1,serial2;
@@ -221,7 +242,7 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
         while (!this->exit)
         {
             QCoreApplication::processEvents();
-            QThread::usleep(1);
+            QThread::msleep(1);
 
             if(com1){
                 /*A1*/
@@ -250,82 +271,58 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
         }
 }
 
-void InfraredLogic::simulateTriggerSlot(const QString &type)
+void InfraredLogic::simulateTriggerSlot(int type)
 {
-    while (1)
-    {
-        memcpy(tmpStatus,status,sizeof (status));
+    this->type=type;
 
-        QCoreApplication::processEvents();
-
-        if(this->exit){
-            break;
+    switch (type) {
+    case 1:/* 22G1 */
+        emit logicPutImageSignal(-1);
+        emit logicPutImageSignal(2);
+        break;
+    case 2:/* 45G1,后3张图片延时抓拍 */
+        emit logicPutImageSignal(-1);
+        emit logicPutImageSignal(0);
+        QTimer::singleShot(3000,this,SLOT(delayAfterCaptureSlot()));
+        break;
+    case 3:/* Double 22G1 Front */
+        emit logicPutImageSignal(-1);
+        emit logicPutImageSignal(3);
+        break;
+    case 4:/* Double 22G1 Before */
+        emit logicPutImageSignal(4);
+        break;
+    case 5:/* 循环抓拍45G1,后3张图片延时抓拍 */
+        if(pTimerFront->isActive()){
+            pTimerFront->stop();
         }
-
-        QCoreApplication::processEvents();
-
-        /*A1*/
-        status[0]= 1;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(1);
-
-        QCoreApplication::processEvents();
-
-        /* A2 */
-        status[1]= 1;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(1);
-
-        QCoreApplication::processEvents();
-
-        /*B1*/
-        status[3]=1;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(1);
-
-        QCoreApplication::processEvents();
-
-         /*B2*/
-        status[4]= 1;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(10);
-
-        QCoreApplication::processEvents();
-
-        /* A1*/
-        status[0]= 0;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(1);
-
-        QCoreApplication::processEvents();
-
-        /* A2 */
-        status[1]=0;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(1);
-
-        QCoreApplication::processEvents();
-
-        /*B1*/
-        status[3]= 0;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-        QThread::sleep(1);
-
-        QCoreApplication::processEvents();
-
-        /*B2*/
-        status[4]= 0;
-        serialLogic(status); /* 逻辑判断 */
-        emit logicStatusSignal(status);/* 传递状态 */
-
-        QThread::sleep(5);
-        //memcpy(tmpStatus,status,sizeof (status));
+        else {
+            if(!pTimerAfter->isActive()){
+                pTimerFront->start(5000);
+            }
+        }
+        if(pTimerAfter->isActive()){
+            pTimerAfter->stop();
+        }
+        break;
     }
+}
+
+void InfraredLogic::delayAfterCaptureSlot()
+{
+    emit logicPutImageSignal(1);
+    if(type==5){
+        pTimerFront->start(10000);
+    }
+}
+
+void InfraredLogic::delayFrontCaptureSlot()
+{
+    emit logicPutImageSignal(-1);
+    emit logicPutImageSignal(0);
+
+    if(pTimerAfter->isActive()){/* 延时抓拍后面图片 */
+        pTimerAfter->stop();
+    }
+    pTimerAfter->start(5000);
 }

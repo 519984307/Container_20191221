@@ -75,3 +75,28 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 //{
 
 //}
+
+void DataWidget::on_test_22_pushButton_clicked()
+{
+    emit simulateTriggerSignal(1);
+}
+
+void DataWidget::on_test_45_pushButton_clicked()
+{
+    emit simulateTriggerSignal(2);
+}
+
+void DataWidget::on_test_double_22_front_pushButton_clicked()
+{
+    emit simulateTriggerSignal(3);
+}
+
+void DataWidget::on_test_double_22_before_pushButton_clicked()
+{
+    emit simulateTriggerSignal(4);
+}
+
+void DataWidget::on_while_cycle_capture_checkBox_stateChanged(int arg1)
+{
+    emit simulateTriggerSignal(5);
+}

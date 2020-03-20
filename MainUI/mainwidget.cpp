@@ -355,6 +355,8 @@ void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterfac
     LogicalProcessing* pLogicalProcessing=new LogicalProcessing (nullptr);
     LogicalProcessingMap.insert(num,pLogicalProcessing);
 
+    connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
+
     /* 写数据到数据库 */
     connect(pLogicalProcessing,&LogicalProcessing::insertDataBaseSignal,pDataBaseCorrelation,&DataBaseCorrelation::insertDataBaseSlot);
 
