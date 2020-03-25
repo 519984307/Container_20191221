@@ -13,14 +13,13 @@ ChannelSettingWidget::ChannelSettingWidget(int number, QWidget *parent) :
 
     this->channelNumber=number;
 
-    /* 加载配置 */
-    if(!jsonRead()){
+    if(!jsonRead()){  /* 加载配置 */
         if(jsonWrite()){
             jsonRead();
         }
     }
-    else {/* 回写配置到UI */
-        jsonWritetoUI();
+    else {
+        jsonWritetoUI();/* 回写配置到UI */
     }
 }
 
@@ -38,7 +37,7 @@ bool ChannelSettingWidget::jsonWrite()
 
     QFile file(QDir::toNativeSeparators(tr("%1/CHANNEL%2.json").arg(mkPath.path()).arg(channelNumber)));
     if(!file.open(QIODevice::ReadWrite)){
-        emit messageSignal(tr("open CHANNEL%1.json error:%2").arg(channelNumber).arg(file.OpenError));
+        emit messageSignal(ZBY_LOG("ERROR"),tr("open CHANNEL%1.json error<errorCode=%2>").arg(channelNumber).arg(file.OpenError));
         return false;
     }
 
@@ -86,7 +85,7 @@ bool ChannelSettingWidget::jsonRead()
 {
     QFile file(QDir::toNativeSeparators(tr("%1/%2/CHANNEL%3.json").arg(QCoreApplication::applicationDirPath()).arg("Json").arg(channelNumber)));
     if(!file.open(QIODevice::ReadOnly)){
-        emit messageSignal(tr("Failed to load the CHANNEL%1 parameter, create the default parameter.error:%2").arg(channelNumber).arg(file.OpenError));
+        emit messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the CHANNEL%1 parameter, create the default parameter error<errorCOde=%2>").arg(channelNumber).arg(file.OpenError));
         return false;
     }
 
@@ -128,7 +127,7 @@ bool ChannelSettingWidget::jsonRead()
         }
     else {
         file.remove();
-        emit messageSignal(tr("load CHANNEL.json error:%1").arg(jsonError.errorString()));
+        emit messageSignal(ZBY_LOG("ERROR"),tr("load CHANNEL.json error<errorCode=%1>").arg(jsonError.errorString()));
     }
     file.close();
 
@@ -177,8 +176,8 @@ QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString 
             }
         }
     }
-    emit messageSignal(tr("load CHANNEL.json value error:%1-%2").arg(child).arg(key));
-    return  "NULL";
+    emit messageSignal(ZBY_LOG("ERROR"),tr("load CHANNEL.json value error:%1-%2").arg(child).arg(key));
+    return  QString("");
 }
 
 void ChannelSettingWidget::on_buttonBox_clicked(QAbstractButton *button)

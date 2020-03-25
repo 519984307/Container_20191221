@@ -5,12 +5,6 @@
 
 #define ZBY_LOG(type)  tr("ZBY_LOG_%1(Func[%2](Line[%3]))").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
 
-#if defined(Q_OS_WIN32)
-    #define OS 0
-#elif defined(Q_OS_LINUX)
-    #define OS 1
-#endif
-
 class GetImagesInterface:public QObject
 {
     Q_OBJECT

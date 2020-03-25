@@ -48,6 +48,11 @@ private:
      bool health;
 
      ///
+     /// \brief doubleFrontPut 双22G1箱前面抓拍状态
+     ///
+     bool doubleFrontPut;
+
+     ///
      /// \brief pTimerFront 前循环抓拍定时器
      ///
      QTimer* pTimerFront;

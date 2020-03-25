@@ -2,6 +2,8 @@
 #define DATAWIDGET_H
 
 #include <QWidget>
+#include <QMutex>
+#include <QMutexLocker>
 
 namespace Ui {
 class DataWidget;
@@ -17,20 +19,15 @@ public:
 
 private:
     Ui::DataWidget *ui;
+    QMutex mutex;
 
 public slots:
 
-    ///z
+    ///
     /// \brief logicStatusSlot 红外状态
     /// \param status 状态值
     ///
     void logicStatusSlot(int* status);
-
-//    ///
-//    /// \brief logicPutImageSlot 逻辑抓图
-//    /// \param putCommnd
-//    ///
-//    void logicPutImageSlot(const int &putCommnd);
 
     ///
     /// \brief pictureStreamSlot 图片流数据
@@ -50,6 +47,7 @@ private slots:
     void on_test_double_22_front_pushButton_clicked();
     void on_test_double_22_before_pushButton_clicked();
     void on_while_cycle_capture_checkBox_stateChanged(int arg1);
+    void on_clearn_image_pushButton_clicked();
 };
 
 #endif // DATAWIDGET_H

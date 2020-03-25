@@ -12,14 +12,14 @@
 #include <QStatusBar>
 #include <QCloseEvent>
 #include<QLabel>
+#include <QMap>
 #include <QMetaType>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
 #include "infraredlogicinterface.h"
-
-//------------------------------------------------------------------------------------------------------------Headers
-//#include "setting.h"
+#include "databaseinsertinterface.h"
+#include "databasereadinterface.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -31,9 +31,8 @@
 
 //------------------------------------------------------------------------------------------------------------Process
 #include "imageprocessing.h"
-#include "logicalprocessing.h"
-#include "getsysinfo.h"
-#include "databasecorrelation.h"
+#include "infraredprocessing.h"
+#include "databaseprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -49,31 +48,28 @@ public:
 
 private:
 
-    DataBaseCorrelation *pDataBaseCorrelation;
-
     ///
     /// \brief statusBar 系统状态栏
     ///
-    QStatusBar *statusBar;
+    QStatusBar *pStatusBar;
 
     ///
     /// \brief pStatusBarLabel 状态栏文本
     ///
     QLabel*pStatusBarLabel;
 
-
-private:
-    Ui::MainWidget *ui;
+    ///
+    /// \brief pDataBaseWidget 数据库窗口对象
+    ///
+    DataBaseWidget* pDataBaseWidget;
 
     ///
     /// \brief pSystemSettingWidget 系统设置窗口对象
     ///
     SystemSettingWidget* pSystemSettingWidget;
 
-    ///
-    /// \brief pGetSysInfo CPU,MEM状态
-    ///
-    GetSysInfo* pGetSysInfo;
+private:
+    Ui::MainWidget *ui;
 
     ///
     /// \brief CamerNameList 通道相机列表
@@ -98,19 +94,19 @@ private:
 private:
 
     ///
-    /// \brief CamerWidgetMap 相机窗口字典
+    /// \brief pictureWidgetMap 相机窗口字典
     ///
-    QHash<int,QObject*>CamerWidgetMap;
+    QMap<int,QObject*>PictureWidgetMap;
 
     ///
     /// \brief DataWidgetMap 数据窗口字典
     ///
-    QHash<int,QObject*>DataWidgetMap;
+    QMap<int,QObject*>DataWidgetMap;
 
     ///
     /// \brief ChannelSettingWidgetMap 通道设定窗口字典
     ///
-    QHash<int,QObject*>ChannelSettingWidgetMap;
+    QMap<int,QObject*>ChannelSettingWidgetMap;
 
     ///
     /// \brief channelCamerMultiMap 通道对应的相机.
@@ -120,34 +116,24 @@ private:
     /*
      * treeWidget判断显示窗口
      */
-    QHash<QTreeWidgetItem*,QObject*> ItemWidgetMap;
+    QMap<QTreeWidgetItem*,QObject*> ItemWidgetMap;
 
     ///
     /// \brief ImageProcessingMap 图片处理类
     ///
-    QHash<int,QObject*> ImageProcessingMap;
+    QMap<int,QObject*> ImageProcessingMap;
 
     ///
-    /// \brief LogicalProcessingMap 红外逻辑处理类
+    /// \brief infraredProcessingMap 红外逻辑处理类
     ///
-    QHash<int,QObject*> LogicalProcessingMap;
+    QMap<int,QObject*> InfraredProcessingMap;
+
+    ///
+    /// \brief DataBaseProcessingMap 数据库逻辑处理类
+    ///
+    QMap<int,QObject*> DataBaseProcessingMap;
 
 private:
-
-    ///
-    /// \brief initOtherObject 初始化其他相关类
-    ///
-    void initOtherObject();
-
-    ///
-    /// \brief bindCamerObjects 绑定相机对象
-    ///
-    void bindCamerObjects();
-
-    ///
-    /// \brief connetObject 初始化系统资源使用状态
-    ///
-    void initSysInfo();
 
     ///
     /// \brief closeEvent 重写窗口关闭事件
@@ -193,14 +179,29 @@ private:
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief camerPlugin 处理相机插件
     /// \param Camer 相机类
+    /// \param num 通道号
     ///
     void getImagePlugin(GetImagesInterface* pGetimagesInterface,int num);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
-    /// \brief serialportPlugin 处理串口插件
+    /// \brief infraredLogicPlugin 处理串口插件
     /// \param SerialPort 串口类
+    /// \param num 通道号
     ///
-    void serialportPlugin(InfraredlogicInterface* pInfraredlogicInterface,int num);
+    void infraredLogicPlugin(InfraredlogicInterface* pInfraredlogicInterface,int num);
+
+    ///
+    /// \brief dataBaseInsertPlugin 数据库插入插件
+    /// \param pDataBaseInsertInterface 插入接口类
+    /// \param num 通道号
+    ///
+    void dataBaseInsertPlugin(DataBaseInsertInterface* pDataBaseInsertInterface,int num);
+
+    ///
+    /// \brief dataBaseReadPlugin 数据库读取插件
+    /// \param pDataBaseReadInterface  接口类
+    ///
+    void dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterface);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
@@ -211,6 +212,11 @@ private:
     /// \brief setStatusBar 设置状态栏
     ///
     void setStatusBar();
+
+    ///
+    /// \brief publicConnect 链接公共部分信号和槽
+    ///
+    void publicConnect();
 
 private slots:
 

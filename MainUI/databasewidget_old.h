@@ -27,14 +27,19 @@ public:
 private:
 
     ///
-    /// \brief checkFilter 查找语句
+    /// \brief findDataToView 查找数据
     ///
-    QString checkFilter();
+    void findDataToView();
 
     ///
     /// \brief rateDataBase 统计数据
     ///
     void rateDataBase();
+
+    ///
+    /// \brief initDataBase 初始化数据库视图
+    ///
+    void initDataBase();
 
 private slots:
 
@@ -61,7 +66,6 @@ private slots:
     ///
     void on_buttonBox_clicked(QAbstractButton *button);
 
-    ///-----------------------------------------------------------------------------------------------------------筛选条件
     ///
     /// \brief on_Datatime_checkBox_stateChanged 时间筛选
     /// \param arg1
@@ -104,7 +108,6 @@ private slots:
     ///
     void on_Type_checkBox_stateChanged(int arg1);
 
-    ///-----------------------------------------------------------------------------------------------------------数据切换
     ///
     /// \brief on_tableView_clicked 选取数据
     /// \param index
@@ -139,7 +142,7 @@ private:
     ///
     QSqlTableModel *pModel;
 
-    //--------------------------------------------------------------- 查询条件
+    //--------------------------------------------------------------- 查询帅筛选条件
     bool channel,date,Isotype,plate,number,check,type;
 
     //-------------------------------------------------------------- 字段枚举
@@ -179,20 +182,6 @@ signals:
     /// \param msg 信息体
     ///
     void messageSignal(const QString &type,const QString &msg);
-
-    ///
-    /// \brief setDataBaseFilterSlot 设置数据库筛选条件
-    /// \param filter 筛选条件
-    ///
-    void setDataBaseFilterSignal(const QString &filter);
-
-public slots:
-
-    ///
-    /// \brief returnModelSlot 读取数据库
-    /// \param model 数据库模型
-    ///
-    void returnModelSlot(QSqlTableModel *model);
 };
 
 #endif // DATABASEWIDGET_H

@@ -1,11 +1,11 @@
-#include "logicalprocessing.h"
+#include "infraredprocessing.h"
 
-LogicalProcessing::LogicalProcessing(QObject *parent) : QObject(parent)
+InfraredProcessing::InfraredProcessing(QObject *parent) : QObject(parent)
 {
     this->setParent(parent);
 }
 
-void LogicalProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel)
+void InfraredProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel)
 {
     this->channel=channel;
     if(camerList.count()==4)
@@ -15,19 +15,15 @@ void LogicalProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel)
         pPictureWidgetAFTER=static_cast<PictureWidget*>(camerList[1]);
         pPictureWidgetLEFT=static_cast<PictureWidget*>(camerList[2]);
         pPictureWidgetRIGHT=static_cast<PictureWidget*>(camerList[3]);
-        connect(pPictureWidgetBEFORE,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
-        connect(pPictureWidgetAFTER,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
-        connect(pPictureWidgetLEFT,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
-        connect(pPictureWidgetRIGHT,&PictureWidget::pictureStreamSignal,this,&LogicalProcessing::pictureStreamSlot);
     }
 }
 
-//void LogicalProcessing::logicStatusSlot(int *status)
-//{
-//    ;
-//}
+void InfraredProcessing::logicStatusSlot(int *status)
+{
+    /* 后续写入日志 */
+}
 
-void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
+void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
 {
     /*
      * -1:来车
@@ -114,10 +110,4 @@ void LogicalProcessing::logicPutImageSlot(const int &putCommnd)
 
         break;
     }
-}
-
-void LogicalProcessing::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
-{
-    QMutexLocker &locker();
-    emit pictureStreamSignal(jpgStream,imgNumber);
 }

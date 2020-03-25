@@ -19,6 +19,7 @@ InfraredLogic::InfraredLogic(QObject *parent)
     type=0;
     exit=false;
     health=false;
+    doubleFrontPut=false;
 }
 
 InfraredLogic::~InfraredLogic()
@@ -166,7 +167,7 @@ void InfraredLogic::serialLogic(int *status)
     }
     //memcpy(tmpStatus,status,sizeof (tmpStatus));
 }
-#include <iostream>
+
 void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &portName2)
 {
         QSerialPort serial1,serial2;
@@ -242,7 +243,7 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
         while (!this->exit)
         {
             QCoreApplication::processEvents();
-            QThread::msleep(1);
+            QThread::msleep(10);
 
             if(com1){
                 /*A1*/
@@ -262,20 +263,26 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
                 status[5]= (serial2.pinoutSignals()&QSerialPort::DataCarrierDetectSignal)?1:0;
             }
 
-            /* 比对红外状态有没有变化 有变化才做相应处理 */
-            if(compareStatus(status,tmpStatus)){
-                serialLogic(status); /* 逻辑判断 */
-                emit logicStatusSignal(status);/* 传递状态 */
+            if(com1&&com2){
+                /* 比对红外状态有没有变化 有变化才做相应处理 */
+                if(compareStatus(status,tmpStatus)){
+                    serialLogic(status); /* 逻辑判断 */
+                    memcpy(tmpStatus,status,sizeof (status));
+                }
             }
-            memcpy(tmpStatus,status,sizeof (status));
+            /* 传递状态 */
+            emit logicStatusSignal(status);
         }
 }
 
 void InfraredLogic::simulateTriggerSlot(int type)
 {
-    this->type=type;
+    this->type=type;    
 
     switch (type) {
+    case 0:/* 清除图片 */
+        emit logicPutImageSignal(-1);
+        break;
     case 1:/* 22G1 */
         emit logicPutImageSignal(-1);
         emit logicPutImageSignal(2);
@@ -288,9 +295,13 @@ void InfraredLogic::simulateTriggerSlot(int type)
     case 3:/* Double 22G1 Front */
         emit logicPutImageSignal(-1);
         emit logicPutImageSignal(3);
+        doubleFrontPut=true;
         break;
     case 4:/* Double 22G1 Before */
-        emit logicPutImageSignal(4);
+        if(doubleFrontPut){
+            emit logicPutImageSignal(4);
+        }
+        doubleFrontPut=false;
         break;
     case 5:/* 循环抓拍45G1,后3张图片延时抓拍 */
         if(pTimerFront->isActive()){

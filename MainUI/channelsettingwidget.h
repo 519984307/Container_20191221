@@ -1,6 +1,8 @@
 #ifndef CAMERSETTING_H
 #define CAMERSETTING_H
 
+#include "defineobj.h"
+
 #include <QWidget>
 #include <QAbstractButton>
 #include <QDir>
@@ -145,12 +147,18 @@ private:
 signals:
 
     ///
-    /// \brief messageSignal 日志信息信号
-    /// \param msg 信息
+    /// \brief messageSignal 日志信号
+    /// ]param type 信息类型
+    /// \param msg 信息体
     ///
-    void messageSignal(const QString &msg);
+    void messageSignal(const QString &type,const QString &msg);
 
 private slots:
+
+    ///
+    /// \brief on_buttonBox_clicked 保存参数
+    /// \param button
+    ///
     void on_buttonBox_clicked(QAbstractButton *button);
 
 };

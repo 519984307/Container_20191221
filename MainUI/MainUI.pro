@@ -31,36 +31,33 @@ SOURCES += \
         mainwidget.cpp \
     picturewidget.cpp \
     datawidget.cpp \
-    setting.cpp \
     systemsettingwidget.cpp \
     servicewidget.cpp \
     databasewidget.cpp \
-    imageprocessing.cpp \
-    logicalprocessing.cpp \
-    getsysinfo.cpp \
-    checkdatabasewidget.cpp \
     channelsettingwidget.cpp \
-    databasecorrelation.cpp \
-    imagewidget.cpp
+    imagewidget.cpp \
+    imageprocessing.cpp \
+    databaseprocessing.cpp \
+    infraredprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
     picturewidget.h \
     datawidget.h \
-    setting.h \
     systemsettingwidget.h \
     servicewidget.h \
     databasewidget.h \
-    imageprocessing.h \
-    logicalprocessing.h \
-    getimagesinterface.h \
-    infraredlogicinterface.h \
-    getsysinfo.h \
-    checkdatabasewidget.h \
     channelsettingwidget.h \
-    databasecorrelation.h \
     imagewidget.h \
-    databaselogicinterface.h
+    imageprocessing.h \
+    databaseprocessing.h \
+    infraredprocessing.h \
+    getimagesinterface.h \
+    databaselogicinterface.h \
+    infraredlogicinterface.h \
+    databasereadinterface.h\
+    databaseinsertinterface.h \
+    defineobj.h
 
 FORMS += \
         mainwidget.ui \
@@ -69,7 +66,6 @@ FORMS += \
     systemsettingwidget.ui \
     servicewidget.ui \
     databasewidget.ui \
-    checkdatabasewidget.ui \
     channelsettingwidget.ui \
     imagewidget.ui
 

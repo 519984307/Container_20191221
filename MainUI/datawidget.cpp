@@ -28,12 +28,14 @@ void DataWidget::logicStatusSlot(int *status)
 }
 
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
-{
+{   
+    QMutexLocker locker(&mutex);
+
     QPixmap *labelPix = new QPixmap();
     if(jpgStream!=nullptr){
         labelPix->loadFromData(jpgStream);        
     }
-    else{
+    else{/* 清除图片 */
         ui->label_13->clear();
         ui->label_6->clear();
         ui->label_2->clear();
@@ -68,13 +70,8 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         break;
     }
 
-    delete labelPix;
+    delete labelPix;    
 }
-
-//void DataWidget::logicPutImageSlot(const int &putCommnd)
-//{
-
-//}
 
 void DataWidget::on_test_22_pushButton_clicked()
 {
@@ -96,7 +93,24 @@ void DataWidget::on_test_double_22_before_pushButton_clicked()
     emit simulateTriggerSignal(4);
 }
 
+void DataWidget::on_clearn_image_pushButton_clicked()
+{
+    emit simulateTriggerSignal(0);
+}
+
 void DataWidget::on_while_cycle_capture_checkBox_stateChanged(int arg1)
 {
+    if(arg1==Qt::Checked){
+        ui->test_22_pushButton->setEnabled(false);
+        ui->test_45_pushButton->setEnabled(false);
+        ui->test_double_22_front_pushButton->setEnabled(false);
+        ui->test_double_22_before_pushButton->setEnabled(false);
+    }
+    else {
+        ui->test_22_pushButton->setEnabled(true);
+        ui->test_45_pushButton->setEnabled(true);
+        ui->test_double_22_front_pushButton->setEnabled(true);
+        ui->test_double_22_before_pushButton->setEnabled(true);
+    }
     emit simulateTriggerSignal(5);
 }

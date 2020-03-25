@@ -18,138 +18,70 @@ DataBaseWidget::DataBaseWidget(QWidget *parent) :
     ui->DataTime_End_dateTimeEdit->setTime(QTime(23,59,59));
 
     pModel=nullptr;
+    date=true;    channel=false;    Isotype=false;    plate=false;    number=false;    check=false;    type=false;
 
-    initDataBase();
+
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    ui->tableView->resizeRowsToContents();
+    // ui->tableView->resizeColumnToContents(1);
+    //ui->tableView->resizeRowToContents(1);
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+
 }
 
 DataBaseWidget::~DataBaseWidget()
 {
+    pModel=nullptr;
     delete pModel;
-
-    for (auto obj:QSqlDatabase::database().connectionNames()) {
-        QSqlDatabase::removeDatabase(obj);
-    }
-
     delete ui;
 }
 
-void DataBaseWidget::initDataBase()
+QString DataBaseWidget::checkFilter()
 {
-    date=true;    channel=false;    Isotype=false;    plate=false;    number=false;    check=false;    type=false;
+    QStringList filterList;    
 
-    QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE","HISTORYREAD");
-    db.setDatabaseName("History.db");
-
-    if(db.open()){
-        pModel=new QSqlTableModel (this,db);
-        pModel->setTable(tr("Containers"));
-
-        pModel->setSort(ID,Qt::AscendingOrder);
-        //pModel->select();
-
-        ui->tableView->setModel(pModel);
-        ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-        ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-        ui->tableView->resizeRowsToContents();
-        // ui->tableView->resizeColumnToContents(1);
-        //ui->tableView->resizeRowToContents(1);
-        //ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-        ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-        ui->tableView->horizontalHeader()->setStretchLastSection(true);
-
-        ui->tableView->setColumnHidden(ID,true);
-        ui->tableView->setColumnHidden(ImgFront,true);
-        ui->tableView->setColumnHidden(ImgFrontNumber,true);
-        ui->tableView->setColumnHidden(ImgLeftFront,true);
-        ui->tableView->setColumnHidden(ImgLeftFrontNumber,true);
-        ui->tableView->setColumnHidden(ImgRightFront,true);
-        ui->tableView->setColumnHidden(ImgRightFrontNumber,true);
-        ui->tableView->setColumnHidden(ImgLeftAfter,true);
-        ui->tableView->setColumnHidden(ImgLeftAfterNumber,true);
-        ui->tableView->setColumnHidden(ImgRightAfter,true);
-        ui->tableView->setColumnHidden(ImgRightAfterNumber,true);
-        ui->tableView->setColumnHidden(ImgAfter,true);
-        ui->tableView->setColumnHidden(ImgAfterNumber,true);
-        ui->tableView->setColumnHidden(PlateImg,true);
+    if(channel){
+        filterList.append(tr("Channel='%1'").arg(ui->Channel_spinBox->value()));
     }
-    db.close();
-}
-#include<iostream>
-void DataBaseWidget::findDataToView()
-{
-    QStringList filterList;
-
-    QSqlDatabase db=QSqlDatabase::database("HISTORYREAD");
-
-    if(db.open()){
-        if(channel){
-            filterList.append(tr("Channel='%1'").arg(ui->Channel_spinBox->value()));
+    if(date){
+        filterList.append(tr("Timer>='%1' AND Timer<='%2'").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
+    }
+    if(number){
+        if(ui->Numbers_Front_lineEdit->text()!=""){
+            filterList.append(tr("ContainerFront='%1'").arg(ui->Numbers_Front_lineEdit->text()));
         }
-        if(date){
-            filterList.append(tr("Timer>='%1' AND Timer<='%2'").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
-        }
-        if(number){
-            if(ui->Numbers_Front_lineEdit->text()!=""){
-                filterList.append(tr("ContainerFront='%1'").arg(ui->Numbers_Front_lineEdit->text()));
-            }
-            if(ui->Numbers_End_lineEdit->text()!=""){
-                filterList.append(tr("ContainerAfter='%1'").arg(ui->Numbers_End_lineEdit->text()));
-            }
-        }
-        if(plate){
-            filterList.append(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
-        }
-        if(type){
-            filterList.append(tr("Type='%1'").arg(ui->Type_comboBox->currentIndex()));
-        }
-        if(check){
-            if(ui->Yes_radioButton->isChecked()){
-                filterList.append(tr("(CheckFront='%1' AND (CheckAfter='%1' OR CheckAfter!='%2'))").arg(1).arg(0));
-            }
-            if(ui->No_radioButton->isChecked()){
-                filterList.append(tr("CheckFront='%1' OR CheckAfter='%1'").arg(0));
-            }
-        }
-        if(Isotype){
-            filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Iso_Type_comboBox->currentText()));
-        }
-
-        QString filter="";
-        int num= filterList.count();
-
-        for (int i=0;i<num;i++) {
-            filter.append(filterList[i]);
-            if(i<num-1){
-                filter.append(" AND ");
-            }
-        }
-
-        pModel->setFilter(filter);
-        if(!pModel->select()){
-            emit messageSignal(tr("Filter data error:%1").arg(pModel->lastError().text()));
-            std::cout<<pModel->lastError().text().toStdString()<<std::endl;
-        }
-        while (pModel->canFetchMore()) {
-            pModel->fetchMore();
+        if(ui->Numbers_End_lineEdit->text()!=""){
+            filterList.append(tr("ContainerAfter='%1'").arg(ui->Numbers_End_lineEdit->text()));
         }
     }
-    else {
-        emit messageSignal(tr("Open DataBase error:%1").arg(pModel->lastError().text()));
+    if(plate){
+        filterList.append(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
+    }
+    if(type){
+        filterList.append(tr("Type='%1'").arg(ui->Type_comboBox->currentIndex()));
+    }
+    if(check){
+        if(ui->Yes_radioButton->isChecked()){
+            filterList.append(tr("(CheckFront='%1' AND (CheckAfter='%1' OR CheckAfter!='%2'))").arg(1).arg(0));
+        }
+        if(ui->No_radioButton->isChecked()){
+            filterList.append(tr("CheckFront='%1' OR CheckAfter='%1'").arg(0));
+        }
+    }
+    if(Isotype){
+        filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Iso_Type_comboBox->currentText()));
     }
 
-    db.close();
-
-    filterList.clear();
-    rateDataBase();
-
+    return  filterList.join(" AND ");
 }
 
 void DataBaseWidget::rateDataBase()
 {
-    emit on_tableView_clicked(pModel->index(0,0));
-
     double correct=0;    double error=0;
 
     QSqlRecord record;
@@ -167,6 +99,36 @@ void DataBaseWidget::rateDataBase()
     ui->correct_label->setText(QString::number(correct));
     ui->error_label->setText(QString::number(error));
     ui->rate_label->setText(tr("%1%").arg(QString::number(correct/pModel->rowCount()*100,'f',2)));
+
+    record.clear();
+}
+
+void DataBaseWidget::returnModelSlot(  QSqlTableModel *model)
+{
+    if(pModel!=nullptr){
+        pModel->clear();
+        pModel=nullptr;
+    }
+
+    pModel=model;
+    ui->tableView->setModel(pModel);
+
+    ui->tableView->setColumnHidden(ID,true);
+    ui->tableView->setColumnHidden(ImgFront,true);
+    ui->tableView->setColumnHidden(ImgFrontNumber,true);
+    ui->tableView->setColumnHidden(ImgLeftFront,true);
+    ui->tableView->setColumnHidden(ImgLeftFrontNumber,true);
+    ui->tableView->setColumnHidden(ImgRightFront,true);
+    ui->tableView->setColumnHidden(ImgRightFrontNumber,true);
+    ui->tableView->setColumnHidden(ImgLeftAfter,true);
+    ui->tableView->setColumnHidden(ImgLeftAfterNumber,true);
+    ui->tableView->setColumnHidden(ImgRightAfter,true);
+    ui->tableView->setColumnHidden(ImgRightAfterNumber,true);
+    ui->tableView->setColumnHidden(ImgAfter,true);
+    ui->tableView->setColumnHidden(ImgAfterNumber,true);
+    ui->tableView->setColumnHidden(PlateImg,true);
+
+    //rateDataBase();
 }
 
 void DataBaseWidget::on_checkBox_stateChanged(int arg1)
@@ -199,10 +161,13 @@ void DataBaseWidget::on_ImageOrData_PushButton_toggled(bool checked)
 void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
-        findDataToView();
+        setDataBaseFilterSignal(checkFilter());
     }
     else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
-        ;
+        if(pModel!=nullptr){
+            pModel->clear();
+            rateDataBase();
+        }
     }
     ui->stackedWidget->setCurrentIndex(0);
 }
@@ -311,7 +276,7 @@ void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
     }
 }
 
-
+///--------------------------------------------------------------------------------------------------------------------------------------------------------- 选取数据
 void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
 {
     QSqlRecord record=pModel->record(index.row());
@@ -322,55 +287,46 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     ui->checkAfter_label->setText(record.value("ISOAfter").toString());
     ui->Plate_label->setText(record.value("Plate").toString());
 
-/* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱]
-//    if(record.value("Type").toInt()>0){
-//        if(record.value("Type").toInt()==3){
-//            if(record.value("CheckAfter").toBool()){
-//                ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
-//            }
-//            else {
-//                ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-//            }
-//        }
-//        if(record.value("CheckFront").toBool()){
-//            ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
-//        }
-//        else {
-//            ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-//        }
-//    }
-*/
-    if(record.value("CheckAfter").toBool()){
-        ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+/* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
+    if(record.value("Type").toInt()>0){
+        if(record.value("Type").toInt()==3){
+            if(record.value("CheckAfter").toBool()){
+                ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+            }
+            else {
+                ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+            }
+        }
+        if(record.value("Type").toInt()<3){
+            if(record.value("CheckFront").toBool()){
+                ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+            }
+            else {
+                ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+            }
+            ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
+        }
     }
     else {
-        ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-    }
+        ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
+        ui->numberFront_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
 
-    if(record.value("CheckFront").toBool()){
-        ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
-    else {
-        ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-    }
-
-    /* 选取一条数据 */
-//    ui->tableView->setCurrentIndex(index);
-//    ui->tableView->setFocus();
+    record.clear();
 }
 
 void DataBaseWidget::on_Home_pushButton_clicked()
 {
     if(pModel){
         emit on_tableView_clicked(pModel->index(0,0));
-        ui->tableView->selectRow(0);
+        ui->tableView->selectRow(0);        
     }
 }
 
 void DataBaseWidget::on_End_pushButton_clicked()
 {
     if(pModel){
-        emit on_tableView_clicked(pModel->index(pModel->rowCount()-1,0));
+        //emit on_tableView_clicked(pModel->index(pModel->rowCount()-1,0));
         ui->tableView->selectRow(pModel->rowCount()-1);
     }
 }
@@ -379,8 +335,9 @@ void DataBaseWidget::on_Before_pushButton_clicked()
 {
     int row=ui->tableView->currentIndex().row();
     if(pModel&&row>0){
-        emit on_tableView_clicked(pModel->index(row-1,0));
         ui->tableView->selectRow(row-1);
+        //emit on_tableView_clicked(pModel->index(row-1,0));
+        on_tableView_clicked(ui->tableView->currentIndex());
     }
 }
 
@@ -388,7 +345,7 @@ void DataBaseWidget::on_After_pushButton_clicked()
 {
     int row=ui->tableView->currentIndex().row();
     if(pModel&&row<pModel->rowCount()-1){
-        emit on_tableView_clicked(pModel->index(row+1,0));
         ui->tableView->selectRow(row+1);
+        on_tableView_clicked(ui->tableView->currentIndex());
     }
 }

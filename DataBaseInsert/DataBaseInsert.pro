@@ -1,18 +1,19 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2020-03-17T21:32:41
+# Project created by QtCreator 2020-03-24T12:36:00
 #
 #-------------------------------------------------
 
+QT       += sql
+
 QT       -= gui
 
-QT       +=sql
 CONFIG += plugin
 
-TARGET = DataBaseLogic
+TARGET = DataBaseInsert_INSERT
 TEMPLATE = lib
 
-DEFINES += DATABASELOGIC_LIBRARY
+DEFINES += DATABASEINSERT_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -26,14 +27,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        databaselogic.cpp
+        databaseinsert.cpp
 
 HEADERS += \
-        databaselogic.h \
-        databaselogic_global.h \   
-    databaselogicinterface.h
+        databaseinsert.h \
+        databaseinsert_global.h \  
+    databaseinsertinterface.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+DESTDIR  += ../MainUI/Plugins

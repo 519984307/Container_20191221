@@ -5,4 +5,5 @@ SUBDIRS += \
     GetImages \
     CaptureImages\
     MainUI \
-    DataBaseLogic
+    DataBaseRead \
+    DataBaseInsert

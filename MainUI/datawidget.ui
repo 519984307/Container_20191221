@@ -596,7 +596,7 @@
              <string notr="true">color: rgb(85, 170, 0);</string>
             </property>
             <property name="text">
-             <string>WDFU1234567</string>
+             <string>***********</string>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -616,7 +616,7 @@
              <string notr="true">color: rgb(85, 170, 0);</string>
             </property>
             <property name="text">
-             <string>WDFU1234567</string>
+             <string>***********</string>
             </property>
             <property name="echoMode">
              <enum>QLineEdit::Normal</enum>
@@ -685,7 +685,7 @@
              <string notr="true">color: rgb(0, 85, 255);</string>
             </property>
             <property name="text">
-             <string>粤B050CS</string>
+             <string>*******</string>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -729,27 +729,6 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="test_double_22_front_pushButton">
-            <property name="text">
-             <string>TEST DOUBLE 22G1 FEET FRONT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QCheckBox" name="while_cycle_capture_checkBox">
-            <property name="text">
-             <string>Simulation Cycle Captured</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="test_double_22_before_pushButton">
-            <property name="text">
-             <string>TEST DOUBLE 22G1 FEET BEFORE</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
@@ -765,6 +744,34 @@
            <widget class="QPushButton" name="test_45_pushButton">
             <property name="text">
              <string>TEST 45G1 FEET</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="test_double_22_front_pushButton">
+            <property name="text">
+             <string>TEST DOUBLE 22G1 FEET FRONT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="test_double_22_before_pushButton">
+            <property name="text">
+             <string>TEST DOUBLE 22G1 FEET BEFORE</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="while_cycle_capture_checkBox">
+            <property name="text">
+             <string>Simulation Cycle Captured</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="clearn_image_pushButton">
+            <property name="text">
+             <string>CLEARN IMAGE</string>
             </property>
            </widget>
           </item>

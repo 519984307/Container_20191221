@@ -34,14 +34,9 @@ private:
     DWORD dwResult;
 
     ///
-    /// \brief pDLLHCNet 动态库对象
+    /// \brief DLL 加载动态库
     ///
-    QLibrary *pDLLHCNet;
-
-    ///
-    /// \brief pThis 类指针
-    ///
-    static CaptureImages* pThis;
+    QLibrary DLL;
 
 private:
 
@@ -142,7 +137,18 @@ private:
     ///
     NET_DVR_GetRealPlayerIndexFUN NET_DVR_GetRealPlayerIndex_L;
 
+    typedef  BOOL (*NET_DVR_SetConnectTimeFUN)( DWORD   dwWaitTime,DWORD   dwTryTimes);
+    ///
+    /// \brief NET_DVR_SetConnectTime_L 设置网络连接超时时间和连接尝试次数。
+    ///
+    NET_DVR_SetConnectTimeFUN NET_DVR_SetConnectTime_L;
+
 private:
+
+    ///
+    /// \brief loginCamer 登录相机
+    ///
+    void loginCamer();
 
     ///
     /// \brief getDeviceStatus 获取设备运行状态
@@ -150,11 +156,6 @@ private:
     /// \return
     ///
     bool getDeviceStatus(LONG lUserID);
-
-    ///
-    /// \brief loginCamer 登录相机
-    ///
-    void loginCamer();
 
     ///
     /// \brief exceptionCallBack_V30 接收异常、重连等消息的窗口句柄或回调函数。

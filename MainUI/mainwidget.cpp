@@ -7,7 +7,6 @@ MainWidget::MainWidget(QWidget *parent) :
 {
     ui->setupUi(this);   
 
-    initOtherObject();
     InitializeSystemSet();
     InitializeDataWindow();
     InitializeCamerWindow();
@@ -15,9 +14,8 @@ MainWidget::MainWidget(QWidget *parent) :
     InitializeChannelSet();
 
     loadPlugins();
-    bindCamerObjects();
     setStatusBar();
-    //initSysInfo();
+    publicConnect();
 
     /* test */
     for(auto b:ImageProcessingMap.values()){
@@ -25,35 +23,17 @@ MainWidget::MainWidget(QWidget *parent) :
             emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
         }
     }
-    for(auto a :LogicalProcessingMap.values()){
-        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(a)){
-            emit pLogicalProcessing->startSlaveSignal("com4","com5");
+    for(auto a :InfraredProcessingMap.values()){
+        if(InfraredProcessing* pInfraredProcessing=static_cast<InfraredProcessing*>(a)){
+            emit pInfraredProcessing->startSlaveSignal("com4","com5");
         }
     }
-//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[1])){
-//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//    }
-//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[2])){
-//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//    }
-//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[3])){
-//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//    }
-//    if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(ImageProcessingMap[4])){
-//        emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//    }
-//    if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[1])){
-//        emit pLogicalProcessing->startSlaveSignal("com4","com5");
-//    }
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
 {
     emit releaseResourcesSignal();
     emit exitWhileSignal(true);
-
-//    pGetSysInfo->quit();
-//    pGetSysInfo->wait();
 
     foreach (auto thread, ThreadList) {
         thread->quit();
@@ -66,10 +46,13 @@ MainWidget::~MainWidget()
     for(auto obj:ImageProcessingMap.values()){
         delete obj;
     }
-    for(auto obj:LogicalProcessingMap.values()){
+    for(auto obj:InfraredProcessingMap.values()){
         delete obj;
     }
-    for(auto obj:CamerWidgetMap.values()){
+    for(auto obj:DataBaseProcessingMap.values()){
+        delete obj;
+    }
+    for(auto obj:PictureWidgetMap.values()){
         delete obj;
     }
     for(auto obj:DataWidgetMap.values()){
@@ -80,26 +63,22 @@ MainWidget::~MainWidget()
     }
 
     ImageProcessingMap.clear();
-    LogicalProcessingMap.clear();
+    InfraredProcessingMap.clear();
+    DataBaseProcessingMap.clear();
     ThreadList.clear();
     ItemWidgetMap.clear();
     DataWidgetMap.clear();
-    CamerWidgetMap.clear();
+    PictureWidgetMap.clear();
     CamerNameList.clear();
     channelCamerMultiMap.clear();
     ChannelSettingWidgetMap.clear();
 
-//    delete  statusBar;
-//    delete pStatusBarLabel;
-    //delete pGetSysInfo;
+    delete pDataBaseWidget;
+    delete pSystemSettingWidget;
+    delete pStatusBar;
+    delete pStatusBarLabel;
 
     delete ui;
-}
-
-void MainWidget::initOtherObject()
-{
-    qRegisterMetaType<QHash<QString,QString>>("QHash<QString,QString");
-    pDataBaseCorrelation=new DataBaseCorrelation () ;
 }
 
 void MainWidget::InitializeSystemSet()
@@ -155,7 +134,7 @@ void MainWidget::InitializeCamerWindow()
 
                     /*  过滤车牌界面,车牌暂时不用海康SDK  */
                     if(name!="Plate"){
-                        CamerWidgetMap.insert(j,picutre);
+                        PictureWidgetMap.insert(j,picutre);
                         j++;
                     }
                     ItemWidgetMap.insert(sunItem,picutre);
@@ -196,7 +175,8 @@ void MainWidget::InitializeOtherWindow()
             /*  获取数据库根  */
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Data")));
             (*it)->addChild(childImte);
-            ItemWidgetMap.insert(childImte,new DataBaseWidget (this));
+            pDataBaseWidget=new DataBaseWidget (this);
+            ItemWidgetMap.insert(childImte,pDataBaseWidget);
         }
         ++it;
     }
@@ -237,7 +217,7 @@ void MainWidget::loadPlugins()
     QDir pluginsDir(QCoreApplication::applicationDirPath());
 
     /*  创建插件目录  */
-    const QString pluginPath="plugins";
+    const QString pluginPath="Plugins";
     if(!pluginsDir.cd(pluginPath)){
         pluginsDir.mkdir(pluginPath);
         pluginsDir.cd(pluginPath);
@@ -267,13 +247,26 @@ void MainWidget::loadPlugins()
                 }
             }
 
-            QString name=pluginName.split("_")[1];
-            int num=channelCounnt;
+            QStringList list=pluginName.split("_");
+            if(list.count()<2){
+                /*  返回上层目录  */
+                pluginsDir.cdUp();
+                continue;
+            }
+
+            QString name=list[1];
+            int num=1;
             if(name=="IMG"){
-                num=num*4;/* 每条道4个相机,车牌相机车外. */
+                num=channelCounnt*4;/* 每条道4个相机,车牌相机车外. */
             }
             else if (name=="GIC") {
-                ;/* 每条道2个串口共用一个插件.  */
+                num=channelCounnt;/* 每条道2个串口共用一个插件.  */
+            }
+            else if (name=="INSERT") {
+                num=channelCounnt;/* 每条通道单独更新数据库 */
+            }
+            else if (name=="CREAD") {
+                num=1;
             }
             else {
                 /* 暂时不处理其他插件 */
@@ -309,8 +302,14 @@ void MainWidget::processingPlugins(QDir path, int num)
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
                 getImagePlugin(pGetimagesInterface,num--);
             }
-            if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
-                serialportPlugin(pInfraredlogicInterface,num--);
+            else if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
+                infraredLogicPlugin(pInfraredlogicInterface,num--);
+            }
+            else if(DataBaseInsertInterface* pDataBaseInsertInterface=qobject_cast<DataBaseInsertInterface*>(plugin)){
+                dataBaseInsertPlugin(pDataBaseInsertInterface,num--);
+            }
+            else if (DataBaseReadInterface* pDataBaseReadInterface=qobject_cast<DataBaseReadInterface*>(plugin)) {
+                dataBaseReadPlugin(pDataBaseReadInterface);
             }
         }
         else {
@@ -321,26 +320,30 @@ void MainWidget::processingPlugins(QDir path, int num)
 
 void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
-    PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(CamerWidgetMap[num]);
-
+    PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num]);
     ImageProcessing* pImageProcessing=new ImageProcessing (nullptr);
     ImageProcessingMap.insert(num,pImageProcessing);
 
-    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
-
-    connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
-    connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
-    connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
-
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
-    //connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pImageProcessing,&ImageProcessing::pictureStreamSlot);
+    /* 日志信息 */
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
-    //connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
-
+    /* 释放动态库资源 */
+    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
+    /* 抓取图片 */
+    connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+    /* 调整窗口 */
+    connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
+    /* 播放视频流 */
+    connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
+    /* 接收图片流 */
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
+    /* 初始化相机 */
     connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
-    connect(pImageProcessing,&ImageProcessing::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+    /* 相机状态 */
+    connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
+    /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
+    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
 
-    /*  线程运行    */
+    /* 线程运行 */
     QThread* pThread=new QThread(this);
     pGetimagesInterface->moveToThread(pThread);
     pImageProcessing->moveToThread(pThread);
@@ -348,74 +351,116 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     pThread->start();
 }
 
-void MainWidget::serialportPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)
+void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)
 {
     DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num]);
+    InfraredProcessing* pInfraredProcessing=new InfraredProcessing (nullptr);
+    InfraredProcessingMap.insert(num,pInfraredProcessing);
 
-    LogicalProcessing* pLogicalProcessing=new LogicalProcessing (nullptr);
-    LogicalProcessingMap.insert(num,pLogicalProcessing);
-
-    connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
-
-    /* 写数据到数据库 */
-    connect(pLogicalProcessing,&LogicalProcessing::insertDataBaseSignal,pDataBaseCorrelation,&DataBaseCorrelation::insertDataBaseSlot);
-
-    connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
-
-    //connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pLogicalProcessing,&LogicalProcessing::logicStatusSlot);
+    /* 红外状态到界面 */
     connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pLogicalProcessing,&LogicalProcessing::logicPutImageSlot);
-    //connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pDataWidget,&DataWidget::logicPutImageSlot);
+    /* 开始逻辑检测 */
+    connect(pInfraredProcessing,&InfraredProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
+    /* 设置红外模式 */
+    connect(pInfraredProcessing,&InfraredProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
+    /* 退出逻辑检测循环 */
+    connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
+    /* 日志i信息 */
     connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::message);
-
-    connect(pLogicalProcessing,&LogicalProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
-    connect(pLogicalProcessing,&LogicalProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
-    connect(pLogicalProcessing,&LogicalProcessing::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot);
+    /* 模拟抓拍流程 */
+    connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
+    /* 逻辑抓取图片 */
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);
 
     /*  线程运行    */
     QThread* pThread=new QThread(this);
     pInfraredlogicInterface->moveToThread(pThread);
-    pLogicalProcessing->moveToThread(pThread);
+    pInfraredProcessing->moveToThread(pThread);
     ThreadList.append(pThread);
     pThread->start();
+
 }
 
-void MainWidget::bindCamerObjects()
+void MainWidget::dataBaseInsertPlugin(DataBaseInsertInterface* pDataBaseInsertInterface, int num)
+{       
+    DataBaseProcessing* pDataBaseProcessing=new DataBaseProcessing (nullptr);
+    DataBaseProcessingMap.insert(num,pDataBaseProcessing);
+
+    /* 日志信息 */
+    connect(pDataBaseInsertInterface,&DataBaseInsertInterface::messageSignal,this,&MainWidget::message);
+    /* 初始化数据库 */
+    connect(pDataBaseProcessing,&DataBaseProcessing::initDataBaseSignal,pDataBaseInsertInterface,&DataBaseInsertInterface::initDataBaseSlot);
+    /* 插入数据库 */
+    connect(pDataBaseProcessing,&DataBaseProcessing::insertDataBaseSignal,pDataBaseInsertInterface,&DataBaseInsertInterface::insertDataBaseSlot);
+    /* 更新数据库 */
+    connect(pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal,pDataBaseInsertInterface,&DataBaseInsertInterface::updateDataBaseSlot);
+
+    /* 移动到线程运行 */
+    QThread* pThread=new QThread(this);
+    pDataBaseInsertInterface->moveToThread(pThread);
+    pDataBaseProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
+
+    /* 初始化数据库(插入数据库插件) */
+    emit pDataBaseProcessing->initDataBaseSignal(QString::number(num),"admin","Zby123456","localhost");
+}
+
+void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterface)
 {
-    /* 获取通道编号 */
-    for(int channel:DataWidgetMap.keys()){
-        if(LogicalProcessing* pLogicalProcessing=static_cast<LogicalProcessing*>(LogicalProcessingMap[channel])){
-            /*  绑定相机组抓拍的图片到逻辑处理 */
-            pLogicalProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel),channel);
-            if(DataWidget* pDataWidget=static_cast<DataWidget*>(DataWidgetMap[channel])){
-                /* 抓拍图片流链接到数据界面 */
-                connect(pLogicalProcessing,&LogicalProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+    DataBaseProcessing* pDataBaseProcessing=new DataBaseProcessing (nullptr);
+    DataBaseProcessingMap.insert(channelCounnt+1,pDataBaseProcessing);/* 单独一条一个线程 */
+
+    /* 日志信息 */
+    connect(pDataBaseReadInterface,&DataBaseReadInterface::messageSignal,this,&MainWidget::message);
+    /* 初始化数据库 */
+    connect(pDataBaseProcessing,&DataBaseProcessing::initDataBaseSignal,pDataBaseReadInterface,&DataBaseReadInterface::initDataBaseSlot);
+    /* 查询数据 */
+    connect(pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal,pDataBaseReadInterface,&DataBaseReadInterface::setDataBaseFilterSlot);
+    /* 返回数据模型到数据库界面 */
+    connect(pDataBaseReadInterface,&DataBaseReadInterface::returnModelSingal,pDataBaseWidget,&DataBaseWidget::returnModelSlot);
+    /* 查询数据绑定到数据库处理逻辑(信号与信号绑定) */
+    connect(pDataBaseWidget,&DataBaseWidget::setDataBaseFilterSignal,pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal);
+
+    /* 移动到线程运行 */
+    QThread* pThread=new QThread(this);
+    pDataBaseReadInterface->moveToThread(pThread);
+    pDataBaseProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
+
+    /* 初始化数据库(读取数据库插件) */
+    emit pDataBaseProcessing->initDataBaseSignal("DataBaseRead","admin","Zby123456","localhost");
+}
+
+void MainWidget::publicConnect()
+{
+    /* 一条通道4台相机的数据流,绑定到一个数据界面 */
+    for (auto key:DataWidgetMap.keys()) {
+        if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
+            if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(InfraredProcessingMap[key])){
+                /*  绑定相机组抓拍的图片到逻辑处理 */
+                pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(key),key);
+                /* 清除界面图片 */
+                connect(pInfraredProcessing,&InfraredProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+
+                if(DataBaseProcessing* pDataBaseProcessing=qobject_cast<DataBaseProcessing*>(DataBaseProcessingMap[key])){
+                    /* 抓拍完成写入数据库 */
+                    connect(pInfraredProcessing,&InfraredProcessing::insertDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::insertDataBaseSignal);
+                    /*
+                      * 更新结果后续处理
+                      *
+                      */
+                }
             }
-//             /*  绑定相机组抓拍的图片到逻辑处理 */
-//            for(auto obj:channelCamerMultiMap.values(channel)){
-//                if(PictureWidget* pPictureWidget=static_cast<PictureWidget*>(obj)){
-//                    connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pLogicalProcessing,&LogicalProcessing::pictureStreamSlot);
-//                }
-//            }
+            for(auto obj:channelCamerMultiMap.values(key)){
+                if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
+                    /* 绑定4台相机抓拍图片流到数据界面 */
+                    connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+                }
+            }
         }
     }
-}
-
-void MainWidget::setStatusBar()
-{
-    statusBar=new QStatusBar(this);
-    pStatusBarLabel=new QLabel(this);
-
-    statusBar->setStyleSheet("background-color:rgb(39,39,40);color:red");
-    this->ui->gridLayout_2->addWidget(statusBar);
-}
-
-void MainWidget::initSysInfo()
-{
-    pGetSysInfo=new GetSysInfo ();
-    connect(this,&MainWidget::exitWhileSignal,pGetSysInfo,&GetSysInfo::exitWhileSlot);
-    connect(pGetSysInfo,&GetSysInfo::statusMsgSignal,this,&MainWidget::statusMsgSlot);
-    pGetSysInfo->start();/* 启动线程 */
 }
 
 void MainWidget::hideWindows()
@@ -441,12 +486,6 @@ void MainWidget::hideWindows()
              tmp->setVisible(false);
          }
     }
-}
-
-void MainWidget::statusMsgSlot(const QString &msg)
-{
-    pStatusBarLabel->setText(msg);
-    statusBar->addPermanentWidget(pStatusBarLabel );
 }
 
 void MainWidget::on_Navigation_itemActivated(QTreeWidgetItem *item)
@@ -510,9 +549,23 @@ void MainWidget::resizeEvent(QResizeEvent *size)
     }
 }
 
-void MainWidget::message(const QString &msg)
+void MainWidget::setStatusBar()
 {
-    this->statusBar->showMessage(msg.toLocal8Bit(),10000);
+    pStatusBar=new QStatusBar(this);
+    pStatusBarLabel=new QLabel(this);
+
+    pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color:red");
+    this->ui->gridLayout_2->addWidget(pStatusBar);
 }
 
+void MainWidget::statusMsgSlot(const QString &msg)
+{
+    pStatusBarLabel->setText(msg);
+    pStatusBar->addPermanentWidget(pStatusBarLabel );
+}
+
+void MainWidget::message(const QString &msg)
+{
+    this->pStatusBar->showMessage(msg.toLocal8Bit(),8000);
+}
 

@@ -25,14 +25,21 @@ signals:
     ///
     bool putCommandSignal(const int &command);
 
+    ///
+    /// \brief pictureStreamSignals 图片流信号
+    /// \param jpgStream 图片流
+    /// \param imgNumber 图片编号
+    ///
+    void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
+
 public slots:
 
-//    ///------------------------------------------------------------------------------------------------------------GetImgaes
-//    /// \brief camerIDstates 相机状态
-//    /// \param camerIP 相机地址
-//    /// \param state 相机状态
-//    ///
-//    void camerIDstatesSlot(const QString &camerIP,bool state);
+    ///------------------------------------------------------------------------------------------------------------GetImgaes
+    /// \brief camerIDstates 相机状态
+    /// \param camerIP 相机地址
+    /// \param state 相机状态
+    ///
+    void camerIDstatesSlot(const QString &camerIP,bool state);
 
 //    ///------------------------------------------------------------------------------------------------------------GetImgaes
 //    /// \brief pictureStream 接受图片流

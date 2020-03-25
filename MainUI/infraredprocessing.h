@@ -1,18 +1,18 @@
-#ifndef LOGICALPROCESSING_H
-#define LOGICALPROCESSING_H
+#ifndef INFRAREDPROCESSING_H
+#define INFRAREDPROCESSING_H
 
 #include "picturewidget.h"
 
 #include <QObject>
-#include <QMultiHash>
-#include <QMutexLocker>
 #include <QDateTime>
+#include <QMap>
 
-class LogicalProcessing : public QObject
+class InfraredProcessing : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit LogicalProcessing(QObject *parent = nullptr);
+    explicit InfraredProcessing(QObject *parent = nullptr);
 
     ///
     /// \brief CamerMultiMap 绑定相机到通道,前后左右4台相机.
@@ -25,7 +25,7 @@ private:
     ///
     /// \brief data  写入数据库数据
     ///
-    QHash<QString,QString> data;
+    QMap<QString,QString> data;
 
     ///
     /// \brief timer 时间戳
@@ -93,17 +93,17 @@ signals:
 
      ///
      /// \brief insertDataBaseSignal 写入记录到数据库
-     /// \param dataHash
+     /// \param data
      ///
-     void insertDataBaseSignal(QHash<QString,QString> dataHash);
+     void insertDataBaseSignal(QMap<QString,QString> data);
 
 public slots:
 
-//    ///
-//    /// \brief logicStatus 红外状态
-//    /// \param status 状态
-//    ///
-//    void logicStatusSlot(int* status);
+    ///
+    /// \brief logicStatus 红外状态
+    /// \param status 状态
+    ///
+    void logicStatusSlot(int* status);
 
     ///
     /// \brief setLogicPutImage 红外逻辑抓图
@@ -111,13 +111,6 @@ public slots:
     ///
     void logicPutImageSlot(const int &putCommnd);
 
-    ///
-    /// \brief pictureStreamSlot 图片流数据槽
-    /// \param jpgStream 图片流
-    /// \param command 编号
-    ///
-    void pictureStreamSlot(const QByteArray &jpgStream,const int &imgNumber);
-
 };
 
-#endif // LOGICALPROCESSING_H
+#endif // INFRAREDPROCESSING_H

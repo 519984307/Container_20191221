@@ -38,5 +38,5 @@ unix {
     INSTALLS += target
 }
 
-DESTDIR+=../MainUI/plugins
+DESTDIR+=../MainUI/Plugins
 

@@ -42,4 +42,4 @@ unix {
 }
 
 
-DESTDIR+=../MainUI/plugins
+DESTDIR+=../MainUI/Plugins

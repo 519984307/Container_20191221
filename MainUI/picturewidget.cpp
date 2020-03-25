@@ -50,10 +50,7 @@ void PictureWidget::on_pushButton_4_clicked()
 
 void PictureWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
-    if(imgNumber!=0){
-        emit pictureStreamSignal(jpgStream,imgNumber);
-    }
-    else {
+    if(imgNumber==0){
         if(jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);

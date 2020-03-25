@@ -1,71 +1,35 @@
-#include "databaselogic.h"
+#include "databaseinsert.h"
 
-DataBaseLogic::DataBaseLogic()
+
+DataBaseInsert::DataBaseInsert(QObject *parent)
 {
+    this->setParent(parent);
 }
 
-DataBaseLogic::~DataBaseLogic()
+DataBaseInsert::~DataBaseInsert()
 {
-    for (auto db:QSqlDatabase::database().connectionNames()) {
-        QSqlDatabase::removeDatabase(db);
-    }
+    //QSqlDatabase::removeDatabase(connectName);
 }
 
-void DataBaseLogic::initDataBaseSlot(const QString &user,const QString &pass,const QString &ip)
+void DataBaseInsert::initDataBaseSlot(const QString &connectName,const QString &user, const QString &pass, const QString &ip)
 {
-    QSqlDatabase db=QSqlDatabase::addDatabase("QSQLITE","HISTORY");
-    db.setDatabaseName("History.db");
+    this->connectName=QString("DataBaseInsert").append(connectName);
+
+    db=QSqlDatabase::addDatabase("QSQLITE",connectName);
+    db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2/%3").arg(QCoreApplication::applicationDirPath()).arg("Data").arg("History.db")));
     db.setUserName(user);
     db.setPassword(pass);
     db.setHostName(ip);
 
-    if(db.open()){
-        QSqlQuery query(db);
-        query.prepare(tr("CREATE TABLE `Containers` (\
-                      `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,\
-                      `Timer`	TEXT NOT NULL,\
-                      `Channel`	INTEGER NOT NULL,\
-                       'Type' INTEGER,\
-                      `ContainerFront`	TEXT,\
-                      `CheckFront`	INTEGER,\
-                      `ISOFront`	TEXT,\
-                      `ContainerAfter`	TEXT,\
-                      `CheckAfter`	INTEGER,\
-                      `ISOAfter`	TEXT,\
-                      `ImgFront`	TEXT,\
-                      `ImgFrontNumber`	TEXT,\
-                      `ImgLeftFront`	TEXT,\
-                      `ImgLeftFrontNumber`	TEXT,\
-                      `ImgRightFront`	TEXT,\
-                      `ImgRightFrontNumber`	TEXT,\
-                      `ImgLeftAfter`	TEXT,\
-                      `ImgLeftAfterNumber`	TEXT,\
-                      `ImgRightAfter`	TEXT,\
-                      `ImgRightAfterNumber`	TEXT,\
-                      `ImgAfter`	TEXT,\
-                      `ImgAfterNumber`	TEXT,\
-                      `Plate`	 TEXT,\
-                      `PlateTimer` 	TEXT,\
-                      `PlateImg`	TEXT\
-                  )"));
-        if(!query.exec()){
-                          emit messageSignal(ZBY_LOG("ERROR"),tr("Create table containers error<errorCode=%1>").arg(query.lastError().text()));
-                      }
-                      else {
-                          emit messageSignal(ZBY_LOG("INFO"),tr("ZBY_LOG_INFO(Create table Containers sucess"));
-                      }
-                      query.clear();
-    }
-    else {
+    if(!db.open()){
         emit messageSignal(ZBY_LOG("ERROR"),tr("Open databse  error<errorCode=%1>").arg(db.lastError().text()));
     }
     db.close();
 }
 
-void DataBaseLogic::insertDataBaseSlot(QMap<QString, QString> data)
+void DataBaseInsert::insertDataBaseSlot(QMap<QString, QString> data)
 {
-    QSqlDatabase db=QSqlDatabase::database("HISTORY");
-
+    //QMutexLocker locker(&mutex);
     if(db.open()){
         QSqlTableModel model(this,db);
         model.setTable(tr("Containers"));
@@ -98,9 +62,9 @@ void DataBaseLogic::insertDataBaseSlot(QMap<QString, QString> data)
         /*
          * 清除数据
          */
-        model.clear();
-        record.clear();
         data.clear();
+        record.clear();
+        model.clear();
     }
     else {
         emit messageSignal(ZBY_LOG("ERROR"),tr("Open databse  error<errorCode=%1>").arg(db.lastError().text()));
@@ -108,15 +72,9 @@ void DataBaseLogic::insertDataBaseSlot(QMap<QString, QString> data)
     db.close();
 }
 
-QSqlDatabase DataBaseLogic::readDataBaseSlot()
+void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
 {
-    return(QSqlDatabase::database("HISTORY"));
-}
-
-void DataBaseLogic::updateDataBaseSlot(QMap<QString, QString> data)
-{
-    QSqlDatabase db=QSqlDatabase::database("HISTORY");
-
+    //QMutexLocker locker(&mutex);
     if(db.open()){
         QSqlTableModel model(this,db);
         model.setTable(tr("Containers"));
@@ -138,6 +96,10 @@ void DataBaseLogic::updateDataBaseSlot(QMap<QString, QString> data)
             record.setValue("ImgAfterNumber",data.value("ImgAfterNumber"));
             model.setRecord(0,record);
             model.submitAll();
+
+            record.clear();
         }
+        model.clear();
     }
+    db.close();
 }

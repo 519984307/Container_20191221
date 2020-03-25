@@ -10,8 +10,9 @@
     <height>476</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>MainWidget</string>
+  <property name="windowIcon">
+   <iconset resource="ico.qrc">
+    <normaloff>:/new/prefix1/ICO.ico</normaloff>:/new/prefix1/ICO.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <property name="leftMargin">
