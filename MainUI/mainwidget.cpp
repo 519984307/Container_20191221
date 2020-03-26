@@ -5,7 +5,9 @@ MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainWidget)
 {
-    ui->setupUi(this);   
+    ui->setupUi(this);
+
+    setStatusBar();
 
     InitializeSystemSet();
     InitializeDataWindow();
@@ -14,17 +16,16 @@ MainWidget::MainWidget(QWidget *parent) :
     InitializeChannelSet();
 
     loadPlugins();
-    setStatusBar();
     publicConnect();
 
     /* test */
     for(auto b:ImageProcessingMap.values()){
-        if(ImageProcessing* pImageProcessing=static_cast<ImageProcessing*>(b)){
+        if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(b)){
             emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
         }
     }
     for(auto a :InfraredProcessingMap.values()){
-        if(InfraredProcessing* pInfraredProcessing=static_cast<InfraredProcessing*>(a)){
+        if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(a)){
             emit pInfraredProcessing->startSlaveSignal("com4","com5");
         }
     }
@@ -61,6 +62,9 @@ MainWidget::~MainWidget()
     for(auto obj:ChannelSettingWidgetMap.values()){
         delete obj;
     }
+    foreach (auto obj, ThreadList) {
+        delete obj;
+    }
 
     ImageProcessingMap.clear();
     InfraredProcessingMap.clear();
@@ -75,14 +79,17 @@ MainWidget::~MainWidget()
 
     delete pDataBaseWidget;
     delete pSystemSettingWidget;
-    delete pStatusBar;
     delete pStatusBarLabel;
+    delete pStatusBarLabelPermanet;
+    delete pStatusBar;
 
     delete ui;
 }
 
 void MainWidget::InitializeSystemSet()
 {
+    qRegisterMetaType<QMap<QString,QString>>("QMap<QString,QString>");
+
     pSystemSettingWidget=new SystemSettingWidget (this);
     channelCounnt=pSystemSettingWidget->ChannelNumber;
     CamerNameList<<"Before"<<"After"<<"Left"<<"Right";
@@ -255,11 +262,12 @@ void MainWidget::loadPlugins()
             }
 
             QString name=list[1];
-            int num=1;
+            int num=0;
+
             if(name=="IMG"){
                 num=channelCounnt*4;/* 每条道4个相机,车牌相机车外. */
             }
-            else if (name=="GIC") {
+           else if (name=="GIC") {
                 num=channelCounnt;/* 每条道2个串口共用一个插件.  */
             }
             else if (name=="INSERT") {
@@ -280,7 +288,9 @@ void MainWidget::loadPlugins()
                   QFile::copy(QDir::toNativeSeparators(tr("%1/%2").arg(path).arg(fileName)),QDir::toNativeSeparators(tr("%1/%2_%3").arg(pluginsDir.absolutePath()).arg(i).arg(fileName)));
             }
 
-            processingPlugins(pluginsDir,num);
+            if(num!=0){
+                processingPlugins(pluginsDir,num);
+            }
 
             /*  返回上层目录  */
             pluginsDir.cdUp();
@@ -325,7 +335,7 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     ImageProcessingMap.insert(num,pImageProcessing);
 
     /* 日志信息 */
-    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::message);
+    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 释放动态库资源 */
     connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
     /* 抓取图片 */
@@ -366,7 +376,7 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
     /* 退出逻辑检测循环 */
     connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
     /* 日志i信息 */
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::message);
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 模拟抓拍流程 */
     connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
     /* 逻辑抓取图片 */
@@ -378,7 +388,6 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
     pInfraredProcessing->moveToThread(pThread);
     ThreadList.append(pThread);
     pThread->start();
-
 }
 
 void MainWidget::dataBaseInsertPlugin(DataBaseInsertInterface* pDataBaseInsertInterface, int num)
@@ -387,7 +396,7 @@ void MainWidget::dataBaseInsertPlugin(DataBaseInsertInterface* pDataBaseInsertIn
     DataBaseProcessingMap.insert(num,pDataBaseProcessing);
 
     /* 日志信息 */
-    connect(pDataBaseInsertInterface,&DataBaseInsertInterface::messageSignal,this,&MainWidget::message);
+    connect(pDataBaseInsertInterface,&DataBaseInsertInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 初始化数据库 */
     connect(pDataBaseProcessing,&DataBaseProcessing::initDataBaseSignal,pDataBaseInsertInterface,&DataBaseInsertInterface::initDataBaseSlot);
     /* 插入数据库 */
@@ -395,15 +404,15 @@ void MainWidget::dataBaseInsertPlugin(DataBaseInsertInterface* pDataBaseInsertIn
     /* 更新数据库 */
     connect(pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal,pDataBaseInsertInterface,&DataBaseInsertInterface::updateDataBaseSlot);
 
+    /* 初始化数据库(插入数据库插件) */
+    emit pDataBaseProcessing->initDataBaseSignal(QString::number(num),"admin","Zby123456","localhost");
+
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);
     pDataBaseInsertInterface->moveToThread(pThread);
     pDataBaseProcessing->moveToThread(pThread);
     ThreadList.append(pThread);
     pThread->start();
-
-    /* 初始化数据库(插入数据库插件) */
-    emit pDataBaseProcessing->initDataBaseSignal(QString::number(num),"admin","Zby123456","localhost");
 }
 
 void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterface)
@@ -412,7 +421,7 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
     DataBaseProcessingMap.insert(channelCounnt+1,pDataBaseProcessing);/* 单独一条一个线程 */
 
     /* 日志信息 */
-    connect(pDataBaseReadInterface,&DataBaseReadInterface::messageSignal,this,&MainWidget::message);
+    connect(pDataBaseReadInterface,&DataBaseReadInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 初始化数据库 */
     connect(pDataBaseProcessing,&DataBaseProcessing::initDataBaseSignal,pDataBaseReadInterface,&DataBaseReadInterface::initDataBaseSlot);
     /* 查询数据 */
@@ -422,15 +431,15 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
     /* 查询数据绑定到数据库处理逻辑(信号与信号绑定) */
     connect(pDataBaseWidget,&DataBaseWidget::setDataBaseFilterSignal,pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal);
 
+    /* 初始化数据库(读取数据库插件) */
+    emit pDataBaseProcessing->initDataBaseSignal("DataBaseRead","admin","Zby123456","localhost");
+
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);
     pDataBaseReadInterface->moveToThread(pThread);
     pDataBaseProcessing->moveToThread(pThread);
     ThreadList.append(pThread);
     pThread->start();
-
-    /* 初始化数据库(读取数据库插件) */
-    emit pDataBaseProcessing->initDataBaseSignal("DataBaseRead","admin","Zby123456","localhost");
 }
 
 void MainWidget::publicConnect()
@@ -551,21 +560,26 @@ void MainWidget::resizeEvent(QResizeEvent *size)
 
 void MainWidget::setStatusBar()
 {
-    pStatusBar=new QStatusBar(this);
-    pStatusBarLabel=new QLabel(this);
+    pStatusBar=new QStatusBar(this);    
+    pStatusBarLabel=new QLabel (this);
+    pStatusBarLabelPermanet=new QLabel (tr("Program in place").toLocal8Bit(),this);
+    pStatusBarLabelPermanet->setStyleSheet("color: rgb(0, 85, 255);");
+    pStatusBar->addWidget(pStatusBarLabel);
+    pStatusBar->addPermanentWidget(pStatusBarLabelPermanet);
+    pStatusBar->setStyleSheet("background-color:rgb(39,39,40);");
 
-    pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color:red");
     this->ui->gridLayout_2->addWidget(pStatusBar);
 }
 
-void MainWidget::statusMsgSlot(const QString &msg)
+void MainWidget::messageSlot(const QString &type, const QString &msg)
 {
-    pStatusBarLabel->setText(msg);
-    pStatusBar->addPermanentWidget(pStatusBarLabel );
-}
-
-void MainWidget::message(const QString &msg)
-{
-    this->pStatusBar->showMessage(msg.toLocal8Bit(),8000);
+    QStringList list=type.split('(');
+    if(list.count()>1&&list[0]=="ZBY_LOG_INFO"){
+        pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: rgb(85, 255, 127);");
+    }
+    if(list.count()>1&& list[0]=="ZBY_LOG_ERROR"){
+        pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: red;");
+    }
+    this->pStatusBar->showMessage(msg.toLocal8Bit(),3000);
 }
 

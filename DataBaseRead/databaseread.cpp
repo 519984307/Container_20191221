@@ -28,6 +28,7 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
     this->connectName=connectName;
 
     db=QSqlDatabase::addDatabase("QSQLITE",connectName);
+    //db.setConnectOptions("QSQLITE_BUSY_TIMEOUT");
     db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2").arg(pluginsDir.path()).arg("History.db")));
     db.setUserName(user);
     db.setPassword(pass);
@@ -78,7 +79,8 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
 
 void DataBaseRead::setDataBaseFilterSlot(const QString &filter)
 {
-    //QMutexLocker locker(&mutex);
+    //locker.lockForRead();
+
     if(db.open()){
 
         if(model!=nullptr){
@@ -100,4 +102,6 @@ void DataBaseRead::setDataBaseFilterSlot(const QString &filter)
         emit messageSignal(ZBY_LOG("ERROR"),tr("Open databse  error<errorCode=%1>").arg(db.lastError().text()));
     }
     db.close();
+
+    //locker.unlock();
 }

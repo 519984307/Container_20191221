@@ -38,6 +38,6 @@ unix {
     INSTALLS += target
 }
 
-DESTDIR+=../MainUI/Plugins
+DESTDIR += ../MainUI/Plugins
 
-QMAKE_LFLAGS+="-Wl,-rpath=../MainUI/plugins/HCNetSDK/"
+#QMAKE_LFLAGS+="-Wl,-rpath=../MainUI/plugins/HCNetSDK/"

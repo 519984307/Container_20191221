@@ -5,9 +5,8 @@
 #include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QMutexLocker>
+#include <QReadWriteLock>
 #include <QSqlQuery>
-#include <QMutex>
 #include <QDir>
 #include <QCoreApplication>
 

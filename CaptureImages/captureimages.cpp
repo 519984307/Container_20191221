@@ -6,94 +6,99 @@ CaptureImages::CaptureImages(QObject *parent)
 
     /* 登录ID,登录状态,视频流状态 */
     lUserID=-1;dwResult=0;streamID=-1;
+
+    isLoad=false;
+
+    pDLL=new QLibrary (tr("./Plugins/HCNetSDK/libhcnetsdk"));
+
+    if(pDLL->load()){
+        NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(pDLL->resolve("NET_DVR_SetExceptionCallBack_V30"));
+        NET_DVR_SetSDKInitCfg_L=reinterpret_cast<NET_DVR_SetSDKInitCfgFUN>(pDLL->resolve("NET_DVR_SetSDKInitCfg"));
+        NET_DVR_Cleanup_L=reinterpret_cast<NET_DVR_CleanupFUN>(pDLL->resolve("NET_DVR_Cleanup"));
+        NET_DVR_Init_L=reinterpret_cast<NET_DVR_InitFUN>(pDLL->resolve("NET_DVR_Init"));
+        NET_DVR_Login_V40_L=reinterpret_cast<NET_DVR_Login_V40FUN>(pDLL->resolve("NET_DVR_Login_V40"));
+        NET_DVR_Logout_L=reinterpret_cast<NET_DVR_LogoutFUN>(pDLL->resolve("NET_DVR_Logout"));
+        NET_DVR_ChangeWndResolution_L=reinterpret_cast<NET_DVR_ChangeWndResolutionFUN>(pDLL->resolve("NET_DVR_ChangeWndResolution"));
+        NET_DVR_CaptureJPEGPicture_NEW_L=reinterpret_cast<NET_DVR_CaptureJPEGPicture_NEWFUN>(pDLL->resolve("NET_DVR_CaptureJPEGPicture_NEW"));
+        NET_DVR_RealPlay_V40_L=reinterpret_cast<NET_DVR_RealPlay_V40FUN>(pDLL->resolve("NET_DVR_RealPlay_V40"));
+        NET_DVR_GetLastError_L=reinterpret_cast<NET_DVR_GetLastErrorFUN>(pDLL->resolve("NET_DVR_GetLastError"));
+        NET_DVR_SetLogToFile_L=reinterpret_cast<NET_DVR_SetLogToFileFUN>(pDLL->resolve("NET_DVR_SetLogToFile"));
+        NET_DVR_GetLocalIP_L=reinterpret_cast<NET_DVR_GetLocalIPFUN>(pDLL->resolve("NET_DVR_GetLocalIP"));
+        NET_DVR_SetValidIP_L=reinterpret_cast<NET_DVR_SetValidIPFUN>(pDLL->resolve("NET_DVR_SetValidIP"));
+        NET_DVR_StopRealPlay_L=reinterpret_cast<NET_DVR_StopRealPlayFUN>(pDLL->resolve("NET_DVR_StopRealPlay"));
+        NET_DVR_RemoteControl_L=reinterpret_cast<NET_DVR_RemoteControlFUN>(pDLL->resolve("NET_DVR_RemoteControl"));
+        NET_DVR_GetRealPlayerIndex_L=reinterpret_cast<NET_DVR_GetRealPlayerIndexFUN>(pDLL->resolve("NET_DVR_GetRealPlayerIndex"));
+        NET_DVR_SetConnectTime_L=reinterpret_cast<NET_DVR_SetConnectTimeFUN>(pDLL->resolve("NET_DVR_SetConnectTime"));
+
+        isLoad=true;
+    }
+    else {
+        emit messageSignal(ZBY_LOG("ERROR"),tr("load the dynamic error<errorCode=%1>").arg(pDLL->errorString()));
+    }
 }
 
 CaptureImages::~CaptureImages()
 {
+    if(pDLL->isLoaded()){
+        pDLL->unload();
+    }
+    delete pDLL;
 }
 
 void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
 {
-    this->ip=camerIP;
-    this->port=camerPort;
-    this->name=CamerUser;
-    this->pow=CamerPow;
+    this->camerIp=camerIP;
+    this->camerPort=camerPort;
+    this->camerName=CamerUser;
+    this->camerPow=CamerPow;
 
-    DLL.setFileName("./Plugins/HCNetSDK/libhcnetsdk");
+    if(isLoad){
+        NET_DVR_LOCAL_SDK_PATH SDKPath={};
+        NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
+        QString path= QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK"));
+        strcpy(SDKPath.sPath,path.toLocal8Bit().data());
+        NET_DVR_SetSDKInitCfg_L(cfgType,&SDKPath);
 
-    if(DLL.load()){
-        NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(DLL.resolve("NET_DVR_SetExceptionCallBack_V30"));
-        NET_DVR_SetSDKInitCfg_L=reinterpret_cast<NET_DVR_SetSDKInitCfgFUN>(DLL.resolve("NET_DVR_SetSDKInitCfg"));
-        NET_DVR_Cleanup_L=reinterpret_cast<NET_DVR_CleanupFUN>(DLL.resolve("NET_DVR_Cleanup"));
-        NET_DVR_Init_L=reinterpret_cast<NET_DVR_InitFUN>(DLL.resolve("NET_DVR_Init"));
-        NET_DVR_Login_V40_L=reinterpret_cast<NET_DVR_Login_V40FUN>(DLL.resolve("NET_DVR_Login_V40"));
-        NET_DVR_Logout_L=reinterpret_cast<NET_DVR_LogoutFUN>(DLL.resolve("NET_DVR_Logout"));
-        NET_DVR_ChangeWndResolution_L=reinterpret_cast<NET_DVR_ChangeWndResolutionFUN>(DLL.resolve("NET_DVR_ChangeWndResolution"));
-        NET_DVR_CaptureJPEGPicture_NEW_L=reinterpret_cast<NET_DVR_CaptureJPEGPicture_NEWFUN>(DLL.resolve("NET_DVR_CaptureJPEGPicture_NEW"));
-        NET_DVR_RealPlay_V40_L=reinterpret_cast<NET_DVR_RealPlay_V40FUN>(DLL.resolve("NET_DVR_RealPlay_V40"));
-        NET_DVR_GetLastError_L=reinterpret_cast<NET_DVR_GetLastErrorFUN>(DLL.resolve("NET_DVR_GetLastError"));
-        NET_DVR_SetLogToFile_L=reinterpret_cast<NET_DVR_SetLogToFileFUN>(DLL.resolve("NET_DVR_SetLogToFile"));
-        NET_DVR_GetLocalIP_L=reinterpret_cast<NET_DVR_GetLocalIPFUN>(DLL.resolve("NET_DVR_GetLocalIP"));
-        NET_DVR_SetValidIP_L=reinterpret_cast<NET_DVR_SetValidIPFUN>(DLL.resolve("NET_DVR_SetValidIP"));
-        NET_DVR_StopRealPlay_L=reinterpret_cast<NET_DVR_StopRealPlayFUN>(DLL.resolve("NET_DVR_StopRealPlay"));
-        NET_DVR_RemoteControl_L=reinterpret_cast<NET_DVR_RemoteControlFUN>(DLL.resolve("NET_DVR_RemoteControl"));
-        NET_DVR_GetRealPlayerIndex_L=reinterpret_cast<NET_DVR_GetRealPlayerIndexFUN>(DLL.resolve("NET_DVR_GetRealPlayerIndex"));
-        NET_DVR_SetConnectTime_L=reinterpret_cast<NET_DVR_SetConnectTimeFUN>(DLL.resolve("NET_DVR_SetConnectTime"));
+        NET_DVR_USER_LOGIN_INFO LoginInfo={};
+        NET_DVR_DEVICEINFO_V40 DeviceInfo={};
+        strcpy(LoginInfo.sDeviceAddress,this->camerIp.toLatin1().data());
+        strcpy(LoginInfo.sUserName,this->camerName.toLatin1().data());
+        strcpy(LoginInfo.sPassword,this->camerPow.toLatin1().data());
+        LoginInfo.wPort=this->camerPort;
+        LoginInfo.bUseAsynLogin=1;
+        LoginInfo.cbLoginResult=CaptureImages::loginResultCallBack;
+        LoginInfo.pUser=this;
 
-        loginCamer();
-    }
-    else {
-        emit messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the dynamic DLL"));
+        if(NET_DVR_Init_L()){
+            NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
+            //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), false);
+            NET_DVR_SetConnectTime_L(20000,1);
+            NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
+
+            emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(camerIp));
+        }
+        else {
+            emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera init error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
+        }
     }
 }
 
 bool CaptureImages::getDeviceStatus(LONG lUserID)
 {   
-    if(NET_DVR_RemoteControl_L(lUserID,NET_DVR_CHECK_USER_STATUS,nullptr,4)){
-        emit camerStateSingal(ip,true);
+    if(isLoad && NET_DVR_RemoteControl_L(lUserID,NET_DVR_CHECK_USER_STATUS,nullptr,4)){
+        emit camerStateSingal(camerIp,true);
         return true;
     }
     else {
-        emit camerStateSingal(ip,false);
+        emit camerStateSingal(camerIp,false);
         return false;
-    }
-}
-
-void CaptureImages::loginCamer()
-{
-    NET_DVR_LOCAL_SDK_PATH SDKPath={};
-    NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
-    QString path= QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("plugins/HCNetSDK"));
-    strcpy(SDKPath.sPath,path.toLocal8Bit().data());
-    NET_DVR_SetSDKInitCfg_L(cfgType,&SDKPath);
-
-    NET_DVR_USER_LOGIN_INFO LoginInfo={};
-    NET_DVR_DEVICEINFO_V40 DeviceInfo={};
-    strcpy(LoginInfo.sDeviceAddress,this->ip.toLatin1().data());
-    strcpy(LoginInfo.sUserName,this->name.toLatin1().data());
-    strcpy(LoginInfo.sPassword,this->pow.toLatin1().data());
-    LoginInfo.wPort=static_cast<uint16_t>(this->port);
-    LoginInfo.bUseAsynLogin=1;
-    LoginInfo.cbLoginResult=CaptureImages::loginResultCallBack;
-    LoginInfo.pUser=this;
-
-    if(NET_DVR_Init_L()){
-        NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,nullptr);
-        //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), false);
-        NET_DVR_SetConnectTime_L(20000,10);
-        NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
-
-        emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(ip));
-    }
-    else {
-        emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera init error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
     }
 }
 
 void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
-    CaptureImages* pThis=reinterpret_cast<CaptureImages*>(pUser);
-    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camrea exception<errorCode=%2>").arg(pThis->ip).arg(dwType));
+    CaptureImages* pThis=static_cast<CaptureImages*>(pUser);
+    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camrea exception<errorCode=%2>").arg(pThis->camerIp).arg(dwType));
 }
 
 
@@ -102,12 +107,13 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     CaptureImages* pThis=static_cast<CaptureImages*>(pUser);
     pThis->lUserID=lUserID;
     pThis->dwResult=dwResult;
+
     if(dwResult==0){
-        pThis->loginCamer();/*第一次登录失败,重新登录*/
-        emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera login error<errorCOde=%2>").arg(pThis->ip).arg(pThis->NET_DVR_GetLastError_L()));
+        pThis->initCamerSlot(pThis->camerIp,pThis->camerPort,pThis->camerName,pThis->camerPow);/*第一次登录失败,重新登录*/
+        emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera login error<errorCOde=%2>").arg(pThis->camerIp).arg(pThis->NET_DVR_GetLastError_L()));
     }
     if(dwResult==1){
-        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera loginsucess").arg(pThis->ip));
+        emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera loginsucess").arg(pThis->camerIp));
     }
 }
 
@@ -124,7 +130,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
     if(dwResult){
         if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
 
-            emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+            emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
 
             dataLen=nullptr;    delete  dataLen;
             free(buff);    buff=nullptr;    delete buff;
@@ -135,7 +141,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
             emit pictureStreamSignal(arrayJpg,imgNumber);
             arrayJpg.clear();
 
-            emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(ip));
+            emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(camerIp));
         }
     }
 
@@ -158,18 +164,18 @@ void CaptureImages::playStreamSlot(uint winID,bool play)
             streamID =NET_DVR_RealPlay_V40_L(lUserID,&struPlayInfo,nullptr,nullptr);
 
             if(streamID==-1){
-                 emit messageSignal(ZBY_LOG("ERROR"), tr("IP=%1 Open stream error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+                 emit messageSignal(ZBY_LOG("ERROR"), tr("IP=%1 Open stream error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
             }
             else {
-                emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 Open stream sucess").arg(ip));
+                emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 Open stream sucess").arg(camerIp));
             }
         }
         else {
             if(!NET_DVR_StopRealPlay_L(streamID)){
-                emit messageSignal(ZBY_LOG("ERROR"), tr("IP=%1 Stop stream error<errorCode=%2>").arg(ip).arg(NET_DVR_GetLastError_L()));
+                emit messageSignal(ZBY_LOG("ERROR"), tr("IP=%1 Stop stream error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
             }
             else {
-                emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Stop stream sucess").arg(ip));
+                emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Stop stream sucess").arg(camerIp));
             }
         }
     }
@@ -184,15 +190,13 @@ void CaptureImages::resizeEventSlot()
 
 void CaptureImages::releaseResourcesSlot()
 {
-    if(lUserID!=-1){
-        if(streamID!=-1){
-            NET_DVR_StopRealPlay_L(streamID);
+    if(isLoad){
+        if(lUserID!=-1){
+            if(streamID!=-1){
+                NET_DVR_StopRealPlay_L(streamID);
+            }
+            NET_DVR_Logout_L(lUserID);
+            NET_DVR_Cleanup_L();
         }
-        NET_DVR_Logout_L(lUserID);
-        NET_DVR_Cleanup_L();
-    }
-
-    if(DLL.isLoaded()){
-         DLL.unload();
     }
 }

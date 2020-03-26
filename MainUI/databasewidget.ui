@@ -84,6 +84,9 @@
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
+             <attribute name="verticalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
             </widget>
            </item>
           </layout>

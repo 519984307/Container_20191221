@@ -11,10 +11,10 @@ void InfraredProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel
     if(camerList.count()==4)
     {
         /* 相机顺序 右,左,后,前 */
-        pPictureWidgetBEFORE=static_cast<PictureWidget*>(camerList[0]);
-        pPictureWidgetAFTER=static_cast<PictureWidget*>(camerList[1]);
-        pPictureWidgetLEFT=static_cast<PictureWidget*>(camerList[2]);
-        pPictureWidgetRIGHT=static_cast<PictureWidget*>(camerList[3]);
+        pPictureWidgetBEFORE=qobject_cast<PictureWidget*>(camerList[0]);
+        pPictureWidgetAFTER=qobject_cast<PictureWidget*>(camerList[1]);
+        pPictureWidgetLEFT=qobject_cast<PictureWidget*>(camerList[2]);
+        pPictureWidgetRIGHT=qobject_cast<PictureWidget*>(camerList[3]);
     }
 }
 
@@ -61,7 +61,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(5);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
         emit insertDataBaseSignal(data);
-        //data.clear();
+        data.clear();
 
         break;
     case 2:
@@ -80,7 +80,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["ImgRightFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(3);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
         emit insertDataBaseSignal(data);
-        //data.clear();
+        data.clear();
 
         break;
     case 3:
@@ -106,7 +106,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(5);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
         emit insertDataBaseSignal(data);
-        //data.clear();
+        data.clear();
 
         break;
     }

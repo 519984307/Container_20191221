@@ -1,9 +1,9 @@
 #ifndef GETIMAGESINTERFACE_H
 #define GETIMAGESINTERFACE_H
 
-#include <QObject>
-
 #define ZBY_LOG(type)  tr("ZBY_LOG_%1(Func[%2](Line[%3]))").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
+
+#include <QObject>
 
 class GetImagesInterface:public QObject
 {

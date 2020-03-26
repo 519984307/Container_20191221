@@ -160,14 +160,14 @@ void DataBaseWidget::on_ImageOrData_PushButton_toggled(bool checked)
 
 void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
+    if(pModel!=nullptr){
+        pModel->clear();
+    }
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
         setDataBaseFilterSignal(checkFilter());
     }
     else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
-        if(pModel!=nullptr){
-            pModel->clear();
-            rateDataBase();
-        }
+        rateDataBase();
     }
     ui->stackedWidget->setCurrentIndex(0);
 }
@@ -347,5 +347,5 @@ void DataBaseWidget::on_After_pushButton_clicked()
     if(pModel&&row<pModel->rowCount()-1){
         ui->tableView->selectRow(row+1);
         on_tableView_clicked(ui->tableView->currentIndex());
-    }
+    }  
 }

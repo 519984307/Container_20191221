@@ -29,7 +29,8 @@ void DataBaseInsert::initDataBaseSlot(const QString &connectName,const QString &
 
 void DataBaseInsert::insertDataBaseSlot(QMap<QString, QString> data)
 {
-    //QMutexLocker locker(&mutex);
+    //locker.lockForWrite();
+
     if(db.open()){
         QSqlTableModel model(this,db);
         model.setTable(tr("Containers"));
@@ -70,11 +71,14 @@ void DataBaseInsert::insertDataBaseSlot(QMap<QString, QString> data)
         emit messageSignal(ZBY_LOG("ERROR"),tr("Open databse  error<errorCode=%1>").arg(db.lastError().text()));
     }
     db.close();
+
+    //locker.unlock();
 }
 
 void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
 {
-    //QMutexLocker locker(&mutex);
+    //locker.lockForWrite();
+
     if(db.open()){
         QSqlTableModel model(this,db);
         model.setTable(tr("Containers"));
@@ -102,4 +106,6 @@ void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
         model.clear();
     }
     db.close();
+
+    //locker.unlock();
 }

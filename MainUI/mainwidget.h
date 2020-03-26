@@ -9,9 +9,9 @@
 #include <QThread>
 #include <QTreeWidgetItem>
 #include <QResizeEvent>
-#include <QStatusBar>
 #include <QCloseEvent>
-#include<QLabel>
+#include <QStatusBar>
+#include <QLabel>
 #include <QMap>
 #include <QMetaType>
 
@@ -54,9 +54,14 @@ private:
     QStatusBar *pStatusBar;
 
     ///
-    /// \brief pStatusBarLabel 状态栏文本
+    /// \brief pStatusBarLabel 状态栏临时文本框
     ///
-    QLabel*pStatusBarLabel;
+    QLabel* pStatusBarLabel;
+
+    ///
+    /// \brief pStatusBarLabelPermanet 状态栏永久文本框
+    ///
+    QLabel* pStatusBarLabelPermanet;
 
     ///
     /// \brief pDataBaseWidget 数据库窗口对象
@@ -221,10 +226,11 @@ private:
 private slots:
 
     ///------------------------------------------------------------------------------------------------------------MainUI
-    /// \brief message 日志
+    /// \brief message 日志信息
+    /// \param type 信息类型
     /// \param msg 信息体
     ///
-    void message(const QString &msg);
+    void messageSlot(const QString &type, const QString &msg);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief resizeEvent 重写窗口改变大小事件
@@ -238,14 +244,6 @@ private slots:
     /// \param column 列
     ///
     void on_Navigation_itemActivated(QTreeWidgetItem *item);
-
-    ///
-    /// \brief statusMsgSlot CPU,MEN状态
-    /// \param msg 信息体
-    ///
-    void statusMsgSlot(const QString &msg);
-
-
 
 signals:
 

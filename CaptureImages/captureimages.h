@@ -20,10 +20,12 @@ private:
     ///
     /// \brief port 端口
     ///
-    int port;
+    quint16 camerPort;
 
-    ///地址,用户名,密码
-    QString  ip,name ,pow;
+    ///
+    /// \brief camerIp  地址,用户名,密码
+    ///
+    QString  camerIp,camerName ,camerPow;
 
     ///登录用户ID,视频流ID
     LONG lUserID,streamID;
@@ -36,7 +38,12 @@ private:
     ///
     /// \brief DLL 加载动态库
     ///
-    QLibrary DLL;
+    QLibrary* pDLL;
+
+    ///
+    /// \brief isLoad 动态库加载状态
+    ///
+    bool isLoad;
 
 private:
 
@@ -144,11 +151,6 @@ private:
     NET_DVR_SetConnectTimeFUN NET_DVR_SetConnectTime_L;
 
 private:
-
-    ///
-    /// \brief loginCamer 登录相机
-    ///
-    void loginCamer();
 
     ///
     /// \brief getDeviceStatus 获取设备运行状态

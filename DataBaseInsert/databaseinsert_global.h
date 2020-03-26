@@ -7,8 +7,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QMutexLocker>
-#include <QMutex>
+#include <QReadWriteLock>
 #include <QMap>
 #include <QDir>
 #include <QCoreApplication>
