@@ -27,7 +27,9 @@ InfraredLogic::~InfraredLogic()
     pTimerFront->stop();
     pTimerAfter->stop();
     delete pTimerFront;
+    pTimerFront=nullptr;
     delete pTimerAfter;
+    pTimerAfter=nullptr;
     /*
      * free(status);
      * free(tmpStatus);

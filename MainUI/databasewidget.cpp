@@ -18,6 +18,7 @@ DataBaseWidget::DataBaseWidget(QWidget *parent) :
     ui->DataTime_End_dateTimeEdit->setTime(QTime(23,59,59));
 
     pModel=nullptr;
+
     date=true;    channel=false;    Isotype=false;    plate=false;    number=false;    check=false;    type=false;
 
 
@@ -36,8 +37,9 @@ DataBaseWidget::DataBaseWidget(QWidget *parent) :
 
 DataBaseWidget::~DataBaseWidget()
 {
-    pModel=nullptr;
     delete pModel;
+    pModel=nullptr;
+
     delete ui;
 }
 
@@ -80,38 +82,18 @@ QString DataBaseWidget::checkFilter()
     return  filterList.join(" AND ");
 }
 
-void DataBaseWidget::rateDataBase()
+void DataBaseWidget::statisticalDataSlot(int rows, double correct, double error, double statistical)
 {
-    double correct=0;    double error=0;
-
-    QSqlRecord record;
-
-    for(int i=0;i<pModel->rowCount();i++){
-        record=pModel->record(i);
-        if(record.value("CheckFront").toBool()||record.value("CheckAfter").toBool()){
-            correct++;
-        }
-        else {
-            error++;
-        }
-    }
-    ui->total_label->setText(QString::number(pModel->rowCount()));
+    ui->total_label->setText(QString::number(rows));
     ui->correct_label->setText(QString::number(correct));
     ui->error_label->setText(QString::number(error));
-    ui->rate_label->setText(tr("%1%").arg(QString::number(correct/pModel->rowCount()*100,'f',2)));
-
-    record.clear();
+    ui->rate_label->setText(tr("%1%").arg(QString::number(statistical,'f',2)));
 }
 
-void DataBaseWidget::returnModelSlot(  QSqlTableModel *model)
+void DataBaseWidget::returnModelSlot( QSqlTableModel *model)
 {
-    if(pModel!=nullptr){
-        pModel->clear();
-        pModel=nullptr;
-    }
-
     pModel=model;
-    ui->tableView->setModel(pModel);
+    ui->tableView->setModel(model);
 
     ui->tableView->setColumnHidden(ID,true);
     ui->tableView->setColumnHidden(ImgFront,true);
@@ -127,8 +109,6 @@ void DataBaseWidget::returnModelSlot(  QSqlTableModel *model)
     ui->tableView->setColumnHidden(ImgAfter,true);
     ui->tableView->setColumnHidden(ImgAfterNumber,true);
     ui->tableView->setColumnHidden(PlateImg,true);
-
-    //rateDataBase();
 }
 
 void DataBaseWidget::on_checkBox_stateChanged(int arg1)
@@ -162,12 +142,14 @@ void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(pModel!=nullptr){
         pModel->clear();
+        delete pModel;
+        pModel=nullptr;
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
         setDataBaseFilterSignal(checkFilter());
     }
-    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
-        rateDataBase();
+    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {        
+        statisticalDataSlot(0,0,0,0);
     }
     ui->stackedWidget->setCurrentIndex(0);
 }
@@ -279,26 +261,25 @@ void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
 ///--------------------------------------------------------------------------------------------------------------------------------------------------------- 选取数据
 void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
 {
-    QSqlRecord record=pModel->record(index.row());
+    ui->numberFront_label->setText(index.sibling(index.row(),4).data().toString());/* 前箱 */
+    ui->numberAfter_label->setText(index.sibling(index.row(),7).data().toString());/* 后箱 */
+    ui->checkFront_label->setText(index.sibling(index.row(),6).data().toString());/* 前箱型 */
+    ui->checkAfter_label->setText(index.sibling(index.row(),9).data().toString());/* 后箱型 */
+    ui->Plate_label->setText(index.sibling(index.row(),22).data().toString());/* 车牌 */
 
-    ui->numberFront_label->setText(record.value("ContainerFront").toString());
-    ui->numberAfter_label->setText(record.value("ContainerAfter").toString());
-    ui->checkFront_label->setText(record.value("ISOFront").toString());
-    ui->checkAfter_label->setText(record.value("ISOAfter").toString());
-    ui->Plate_label->setText(record.value("Plate").toString());
-
-/* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
-    if(record.value("Type").toInt()>0){
-        if(record.value("Type").toInt()==3){
-            if(record.value("CheckAfter").toBool()){
+    /* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
+    int TYPE=index.sibling(index.row(),3).data().toInt();
+    if(TYPE>0){
+        if(TYPE==3){
+            if(index.sibling(index.row(),5).data().toBool()){
                 ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             }
             else {
                 ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
             }
         }
-        if(record.value("Type").toInt()<3){
-            if(record.value("CheckFront").toBool()){
+        else if (TYPE<3) {
+            if(index.sibling(index.row(),8).data().toBool()){
                 ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             }
             else {
@@ -310,42 +291,80 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     else {
         ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
         ui->numberFront_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
-
     }
-    record.clear();
+
+    /* 使用Model */
+//    QSqlRecord record=pModel->record(index.row());
+//    ui->numberFront_label->setText(record.value("ContainerFront").toString());
+//    ui->numberAfter_label->setText(record.value("ContainerAfter").toString());
+//    ui->checkFront_label->setText(record.value("ISOFront").toString());
+//    ui->checkAfter_label->setText(record.value("ISOAfter").toString());
+//    ui->Plate_label->setText(record.value("Plate").toString());
+//    if(record.value("Type").toInt()>0){
+//        if(record.value("Type").toInt()==3){
+//            if(record.value("CheckAfter").toBool()){
+//                ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+//            }
+//            else {
+//                ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+//            }
+//        }
+//        if(record.value("Type").toInt()<3){
+//            if(record.value("CheckFront").toBool()){
+//                ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+//            }
+//            else {
+//                ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+//            }
+//            ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
+//        }
+//    }
+//    else {
+//        ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
+//        ui->numberFront_label->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);");
+//    }
+//    record.clear();
 }
 
 void DataBaseWidget::on_Home_pushButton_clicked()
 {
-    if(pModel){
-        emit on_tableView_clicked(pModel->index(0,0));
-        ui->tableView->selectRow(0);        
-    }
+//    if(pModel){
+//        emit on_tableView_clicked(pModel->index(0,0));
+//        ui->tableView->selectRow(0);
+//    }
+    ui->tableView->selectRow(0);
+    on_tableView_clicked(ui->tableView->currentIndex());
 }
 
 void DataBaseWidget::on_End_pushButton_clicked()
 {
-    if(pModel){
-        //emit on_tableView_clicked(pModel->index(pModel->rowCount()-1,0));
-        ui->tableView->selectRow(pModel->rowCount()-1);
-    }
+//    if(pModel){
+//        ui->tableView->selectRow(pModel->rowCount()-1);
+//        emit on_tableView_clicked(pModel->index(pModel->rowCount()-1,0));
+//    }
+    ui->tableView->selectRow(ui->tableView->model()->rowCount()-1);
+    on_tableView_clicked(ui->tableView->currentIndex());
 }
 
 void DataBaseWidget::on_Before_pushButton_clicked()
 {
-    int row=ui->tableView->currentIndex().row();
-    if(pModel&&row>0){
-        ui->tableView->selectRow(row-1);
-        //emit on_tableView_clicked(pModel->index(row-1,0));
-        on_tableView_clicked(ui->tableView->currentIndex());
-    }
+//    int row=ui->tableView->currentIndex().row();
+//    if(pModel&&row>0){
+//        ui->tableView->selectRow(row-1);
+//        //emit on_tableView_clicked(pModel->index(row-1,0));
+//        on_tableView_clicked(ui->tableView->currentIndex());
+//    }
+    ui->tableView->selectRow(ui->tableView->currentIndex().row()-1);
+    on_tableView_clicked(ui->tableView->currentIndex());
 }
 
 void DataBaseWidget::on_After_pushButton_clicked()
 {
-    int row=ui->tableView->currentIndex().row();
-    if(pModel&&row<pModel->rowCount()-1){
-        ui->tableView->selectRow(row+1);
-        on_tableView_clicked(ui->tableView->currentIndex());
-    }  
+//    int row=ui->tableView->currentIndex().row();
+//    if(pModel&&row<pModel->rowCount()-1){
+//        ui->tableView->selectRow(row+1);
+//        on_tableView_clicked(ui->tableView->currentIndex());
+//    }
+    ui->tableView->selectRow(ui->tableView->currentIndex().row()+1);
+    on_tableView_clicked(ui->tableView->currentIndex());
 }

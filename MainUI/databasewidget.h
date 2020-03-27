@@ -27,14 +27,9 @@ public:
 private:
 
     ///
-    /// \brief checkFilter 查找语句
+    /// \brief checkFilter 查找条件
     ///
     QString checkFilter();
-
-    ///
-    /// \brief rateDataBase 统计数据
-    ///
-    void rateDataBase();
 
 private slots:
 
@@ -135,7 +130,7 @@ private:
     Ui::DataBaseWidget *ui;   
 
     ///
-    /// \brief pModel 数据模型对象
+    /// \brief pModel 数据模型对象(作用于查询插件返回的model指针对象)
     ///
     QSqlTableModel *pModel;
 
@@ -193,6 +188,15 @@ public slots:
     /// \param model 数据库模型
     ///
     void returnModelSlot(QSqlTableModel *model);
+
+    ///
+    /// \brief statisticalDataSlot 统计数据
+    /// \param rows 总数
+    /// \param correct 正确
+    /// \param error 错误
+    /// \param statistical 统计
+    ///
+     void statisticalDataSlot(int rows,double correct,double error,double statistical);
 };
 
 #endif // DATABASEWIDGET_H

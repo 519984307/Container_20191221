@@ -44,6 +44,7 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->label_4->clear();
 
         delete labelPix;
+        labelPix=nullptr;
         return;
     }
 
@@ -71,6 +72,7 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     }
 
     delete labelPix;    
+    labelPix=nullptr;
 }
 
 void DataWidget::on_test_22_pushButton_clicked()

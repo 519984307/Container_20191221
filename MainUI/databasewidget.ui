@@ -84,6 +84,9 @@
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
              <attribute name="verticalHeaderCascadingSectionResizes">
               <bool>true</bool>
              </attribute>

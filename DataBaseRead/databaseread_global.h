@@ -7,6 +7,7 @@
 #include <QSqlError>
 #include <QReadWriteLock>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QDir>
 #include <QCoreApplication>
 

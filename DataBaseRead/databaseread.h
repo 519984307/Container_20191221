@@ -31,6 +31,13 @@ public:
     ///
     void setDataBaseFilterSlot(const QString &filter)Q_DECL_OVERRIDE;
 
+private:
+
+    ///
+    /// \brief statisticalData 统计数据
+    ///
+    void statisticalData(QSqlTableModel *model);
+
 
 private:
 
@@ -45,11 +52,6 @@ private:
     /// \brief db 数据库对象
     ///
     QSqlDatabase db;
-
-    ///
-    /// \brief model 数据模型
-    ///
-    QSqlTableModel* model;
 };
 
 #endif // DATABASEREAD_H

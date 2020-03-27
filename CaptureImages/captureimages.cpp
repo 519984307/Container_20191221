@@ -43,6 +43,7 @@ CaptureImages::~CaptureImages()
         pDLL->unload();
     }
     delete pDLL;
+    pDLL=nullptr;
 }
 
 void CaptureImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)
@@ -132,8 +133,8 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
 
             emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
 
-            dataLen=nullptr;    delete  dataLen;
-            free(buff);    buff=nullptr;    delete buff;
+            delete  dataLen;             dataLen=nullptr;
+            free(buff);                delete buff;            buff=nullptr;
             return false;
         }
         else {

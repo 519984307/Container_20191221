@@ -29,6 +29,15 @@ signals:
     ///
     void returnModelSingal( QSqlTableModel *model);
 
+    ///
+    /// \brief statisticalDataSignal
+    /// \param total 总计
+    /// \param correct 正确
+    /// \param error 错误
+    /// \param statistical 统计
+    ///
+    void statisticalDataSignal(int total,double correct,double error,double statistical);
+
 public slots:
 
     ///

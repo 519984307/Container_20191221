@@ -430,6 +430,8 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
     connect(pDataBaseReadInterface,&DataBaseReadInterface::returnModelSingal,pDataBaseWidget,&DataBaseWidget::returnModelSlot);
     /* 查询数据绑定到数据库处理逻辑(信号与信号绑定) */
     connect(pDataBaseWidget,&DataBaseWidget::setDataBaseFilterSignal,pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal);
+    /* 统计数据到界面 */
+    connect(pDataBaseReadInterface,&DataBaseReadInterface::statisticalDataSignal,pDataBaseWidget,&DataBaseWidget::statisticalDataSlot);
 
     /* 初始化数据库(读取数据库插件) */
     emit pDataBaseProcessing->initDataBaseSignal("DataBaseRead","admin","Zby123456","localhost");

@@ -3,15 +3,10 @@
 DataBaseRead::DataBaseRead(QObject *parent)
 {
     this->setParent(parent);
-    model=nullptr;
 }
 
 DataBaseRead::~DataBaseRead()
 {
-//    if(model!=nullptr){
-//         delete model;
-//    }
-
 //    QSqlDatabase::removeDatabase(connectName);
 }
 
@@ -28,13 +23,13 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
     this->connectName=connectName;
 
     db=QSqlDatabase::addDatabase("QSQLITE",connectName);
-    //db.setConnectOptions("QSQLITE_BUSY_TIMEOUT");
     db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2").arg(pluginsDir.path()).arg("History.db")));
     db.setUserName(user);
     db.setPassword(pass);
     db.setHostName(ip);
 
     if(db.open()){
+
         QSqlQuery query(db);
         query.prepare(tr("CREATE TABLE `Containers` (\
                       `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,\
@@ -83,19 +78,16 @@ void DataBaseRead::setDataBaseFilterSlot(const QString &filter)
 
     if(db.open()){
 
-        if(model!=nullptr){
-            model->clear();
-            model=nullptr;
-        }
-
-        model=new QSqlTableModel (this,db);
+        QSqlTableModel* model=new  QSqlTableModel(this,db);/* 在数据库界面已做删除 */
         model->setTable(tr("Containers"));
         model->setFilter(filter);
         model->select();
         while (model->canFetchMore()) {
             model->fetchMore();
         }
-
+\
+        /* 统计数据 */
+        statisticalData(model);
         emit returnModelSingal(model);
     }
     else {
@@ -104,4 +96,25 @@ void DataBaseRead::setDataBaseFilterSlot(const QString &filter)
     db.close();
 
     //locker.unlock();
+}
+
+void DataBaseRead::statisticalData(QSqlTableModel* model)
+{
+    QSqlRecord record;
+
+    double correct=0;    double error=0;
+    int rows= model->rowCount();
+
+    for(int i=0;i<rows;i++){
+        record=model->record(i);
+        if(record.value("CheckFront").toBool()||record.value("CheckAfter").toBool()){
+            correct++;
+        }
+        else {
+            error++;
+        }
+    }
+    record.clear();
+
+    emit statisticalDataSignal(rows,correct,error,correct/rows*100);
 }

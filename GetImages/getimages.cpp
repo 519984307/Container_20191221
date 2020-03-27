@@ -20,7 +20,9 @@ GetImages::~GetImages()
 {
     jpgStream.clear();
     delete tcpSocket;
+    tcpSocket=nullptr;
     delete pTimerLinkCamer;
+    pTimerLinkCamer=nullptr;
 }
 
 void GetImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &user,const QString &pow)

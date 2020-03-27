@@ -56,6 +56,7 @@ void PictureWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &im
             labelPix->loadFromData(jpgStream);
             ui->label->setPixmap(*labelPix);
             delete labelPix;
+            labelPix=nullptr;
         }
     }
 }
