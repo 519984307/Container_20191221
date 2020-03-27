@@ -10,7 +10,7 @@ QT       -= gui
 
 CONFIG += plugin
 
-TARGET = DataBaseRead_CREAD
+TARGET = DataBaseRead
 TEMPLATE = lib
 
 DEFINES += DATABASEREAD_LIBRARY

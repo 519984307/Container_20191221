@@ -231,14 +231,13 @@ void MainWidget::loadPlugins()
     }
 
     const QString path=pluginsDir.path();
-    const QStringList entryList=pluginsDir.entryList(QDir::Files);
 
-    for(const QString &fileName :entryList){
+    for(const QString &fileName :pluginsDir.entryList(QDir::Files)){
         QPluginLoader  pluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = pluginLoader.instance();
         if(plugin){
-            const QString pluginName=tr("%1").arg(fileName.split(".")[0]);
 
+            const QString pluginName=tr("%1").arg(fileName.split(".")[0]);
             /*  创建子插件目录 */
             if(!pluginsDir.cd(pluginName)){
                 pluginsDir.mkdir(pluginName);
@@ -246,41 +245,26 @@ void MainWidget::loadPlugins()
             }
             else {
                 /*  删除旧插件   */
-                const QFileInfoList fileList=pluginsDir.entryInfoList();
-                for(QFileInfo file :fileList){
+                for(QFileInfo file :pluginsDir.entryInfoList()){
                     if(file.isFile()){
                         file.dir().remove(file.fileName());
                     }
                 }
             }
 
-            QStringList list=pluginName.split("_");
-            if(list.count()<2){
-                /*  返回上层目录  */
-                pluginsDir.cdUp();
-                continue;
-            }
-
-            QString name=list[1];
             int num=0;
 
-            if(name=="IMG"){
-                num=channelCounnt*4;/* 每条道4个相机,车牌相机车外. */
+            if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
+                num=channelCounnt*4;
             }
-           else if (name=="GIC") {
-                num=channelCounnt;/* 每条道2个串口共用一个插件.  */
+            else if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
+                num=channelCounnt;
             }
-            else if (name=="INSERT") {
-                num=channelCounnt;/* 每条通道单独更新数据库 */
+            else if(DataBaseInsertInterface* pDataBaseInsertInterface=qobject_cast<DataBaseInsertInterface*>(plugin)){
+                num=channelCounnt;
             }
-            else if (name=="CREAD") {
+            else if (DataBaseReadInterface* pDataBaseReadInterface=qobject_cast<DataBaseReadInterface*>(plugin)) {
                 num=1;
-            }
-            else {
-                /* 暂时不处理其他插件 */
-                /*  返回上层目录  */
-                pluginsDir.cdUp();
-                continue;
             }
 
             /*  复制新插件   */
@@ -288,7 +272,7 @@ void MainWidget::loadPlugins()
                   QFile::copy(QDir::toNativeSeparators(tr("%1/%2").arg(path).arg(fileName)),QDir::toNativeSeparators(tr("%1/%2_%3").arg(pluginsDir.absolutePath()).arg(i).arg(fileName)));
             }
 
-            if(num!=0){
+            if(num!=0){/* 加载插件 */
                 processingPlugins(pluginsDir,num);
             }
 

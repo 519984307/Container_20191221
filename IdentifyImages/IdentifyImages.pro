@@ -1,17 +1,15 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2020-01-15T21:02:30
+# Project created by QtCreator 2020-03-27T11:45:56
 #
 #-------------------------------------------------
 
 QT       -= gui
 
-TARGET = CaptureImages
+TARGET = IdentifyImages
 TEMPLATE = lib
 
-CONFIG += plugin
-
-DEFINES += CAPTUREIMAGES_LIBRARY
+DEFINES += IDENTIFYIMAGES_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -25,19 +23,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    captureimages.cpp
+        identifyimages.cpp
 
 HEADERS += \
-    HCNetSDK.h \
-    getimagesinterface.h \
-    captureimages.h \
-    captureimages_global.h \
+        identifyimages.h \
+        identifyimages_global.h \ 
+    recognizerinterface.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
-
-DESTDIR += ../MainUI/Plugins
-
-#QMAKE_LFLAGS+="-Wl,-rpath=../MainUI/plugins/HCNetSDK/"

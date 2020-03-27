@@ -10,7 +10,7 @@ QT       -= gui
 
 CONFIG += plugin
 
-TARGET = DataBaseInsert_INSERT
+TARGET = DataBaseInsert
 TEMPLATE = lib
 
 DEFINES += DATABASEINSERT_LIBRARY

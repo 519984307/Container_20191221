@@ -57,7 +57,8 @@ HEADERS += \
     infraredlogicinterface.h \
     databasereadinterface.h\
     databaseinsertinterface.h \
-    defineobj.h
+    defineobj.h \
+    recognizerinterface.h
 
 FORMS += \
         mainwidget.ui \

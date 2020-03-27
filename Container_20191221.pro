@@ -2,8 +2,9 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     InfraredLogic\
-    GetImages \
+    #GetImages \
     CaptureImages\
     MainUI \
     DataBaseRead \
-    DataBaseInsert
+    DataBaseInsert \
+    IdentifyImages

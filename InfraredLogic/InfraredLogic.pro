@@ -8,7 +8,7 @@ QT       -= gui
 QT       += serialport
 
 
-TARGET = InfraredLogic_GIC
+TARGET = InfraredLogic
 
 TEMPLATE = lib
 

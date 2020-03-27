@@ -134,7 +134,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
             emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
 
             delete  dataLen;             dataLen=nullptr;
-            free(buff);                delete buff;            buff=nullptr;
+            free(buff);                buff=nullptr;
             return false;
         }
         else {
@@ -146,8 +146,8 @@ bool CaptureImages::putCommandSlot(const int &imgNumber)
         }
     }
 
-    dataLen=nullptr; delete  dataLen;
-    free(buff);  buff=nullptr; delete buff;
+    delete  dataLen;    dataLen=nullptr;
+    free(buff);        buff=nullptr;
     return true;
 }
 
