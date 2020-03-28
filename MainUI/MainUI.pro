@@ -38,7 +38,8 @@ SOURCES += \
     imagewidget.cpp \
     imageprocessing.cpp \
     databaseprocessing.cpp \
-    infraredprocessing.cpp
+    infraredprocessing.cpp \
+    recognizerprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -58,7 +59,8 @@ HEADERS += \
     databasereadinterface.h\
     databaseinsertinterface.h \
     defineobj.h \
-    recognizerinterface.h
+    recognizerinterface.h \
+    recognizerprocessing.h
 
 FORMS += \
         mainwidget.ui \

@@ -39,8 +39,8 @@ void PictureWidget::on_pushButton_3_clicked()
 void PictureWidget::on_pushButton_clicked()
 {
     ///先关闭流
-    emit on_pushButton_3_clicked();
-    emit putCommandSignal();
+    //emit on_pushButton_3_clicked();
+    emit putCommandSignal(0);/* 图片编号0为手动抓图,只在图片界面显示,不做其他处理 */
 }
 
 void PictureWidget::on_pushButton_4_clicked()

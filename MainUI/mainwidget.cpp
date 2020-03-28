@@ -62,6 +62,9 @@ MainWidget::~MainWidget()
     for(auto obj:ChannelSettingWidgetMap.values()){
         delete obj;
     }
+    for(auto obj:RecognizerProcessingMqp.values()){
+        delete obj;
+    }
     foreach (auto obj, ThreadList) {
         delete obj;
     }
@@ -76,6 +79,7 @@ MainWidget::~MainWidget()
     CamerNameList.clear();
     channelCamerMultiMap.clear();
     ChannelSettingWidgetMap.clear();
+    RecognizerProcessingMqp.clear();
 
     delete pDataBaseWidget;
     delete pSystemSettingWidget;
@@ -195,7 +199,7 @@ void MainWidget::InitializeChannelSet()
     while(*it){
         if((*it)->text(0)=="Data"){
             for (int i=1;i<=channelCounnt;i++) {
-                if(ChannelSettingWidget* pChannelSettingWidget=static_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
                     if(!pChannelSettingWidget->Alias.isEmpty()){
                         (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
 
@@ -206,7 +210,7 @@ void MainWidget::InitializeChannelSet()
         }
         if((*it)->text(0)=="Camera"){
             for (int i=1;i<=channelCounnt;i++) {
-                if(ChannelSettingWidget* pChannelSettingWidget=static_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
                     if(!pChannelSettingWidget->Alias.isEmpty()){
                         (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
 
@@ -231,12 +235,10 @@ void MainWidget::loadPlugins()
     }
 
     const QString path=pluginsDir.path();
-
     for(const QString &fileName :pluginsDir.entryList(QDir::Files)){
         QPluginLoader  pluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = pluginLoader.instance();
         if(plugin){
-
             const QString pluginName=tr("%1").arg(fileName.split(".")[0]);
             /*  创建子插件目录 */
             if(!pluginsDir.cd(pluginName)){
@@ -255,16 +257,27 @@ void MainWidget::loadPlugins()
             int num=0;
 
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
+                delete pGetimagesInterface;
                 num=channelCounnt*4;
             }
             else if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
+                delete pInfraredlogicInterface;
                 num=channelCounnt;
             }
             else if(DataBaseInsertInterface* pDataBaseInsertInterface=qobject_cast<DataBaseInsertInterface*>(plugin)){
+                delete pDataBaseInsertInterface;
                 num=channelCounnt;
             }
             else if (DataBaseReadInterface* pDataBaseReadInterface=qobject_cast<DataBaseReadInterface*>(plugin)) {
+                delete pDataBaseReadInterface;
                 num=1;
+            }
+            else if (RecognizerInterface* pRecognizerInterface=qobject_cast<RecognizerInterface*>(plugin)){
+                delete pRecognizerInterface;
+                num=channelCounnt;
+            }
+            else {
+                delete  plugin;
             }
 
             /*  复制新插件   */
@@ -279,7 +292,6 @@ void MainWidget::loadPlugins()
             /*  返回上层目录  */
             pluginsDir.cdUp();
         }
-        delete  plugin;
     }
 }
 
@@ -304,6 +316,9 @@ void MainWidget::processingPlugins(QDir path, int num)
             }
             else if (DataBaseReadInterface* pDataBaseReadInterface=qobject_cast<DataBaseReadInterface*>(plugin)) {
                 dataBaseReadPlugin(pDataBaseReadInterface);
+            }
+            else if (RecognizerInterface* pRecognizerInterface=qobject_cast<RecognizerInterface*>(plugin)) {
+                recognizerPlugin(pRecognizerInterface,num--);
             }
         }
         else {
@@ -428,6 +443,19 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
     pThread->start();
 }
 
+void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int num)
+{
+    RecognizerProcessing* pRecognizerProcessing=new RecognizerProcessing (nullptr);
+    RecognizerProcessingMqp.insert(num,pRecognizerProcessing);
+
+    /* 移动到线程运行 */
+    QThread* pThread=new QThread(this);
+    pRecognizerInterface->moveToThread(pThread);
+    pRecognizerProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
+}
+
 void MainWidget::publicConnect()
 {
     /* 一条通道4台相机的数据流,绑定到一个数据界面 */
@@ -452,6 +480,10 @@ void MainWidget::publicConnect()
                 if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
                     /* 绑定4台相机抓拍图片流到数据界面 */
                     connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+
+                    if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
+                        connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);
+                    }
                 }
             }
         }

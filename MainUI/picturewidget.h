@@ -73,16 +73,17 @@ signals:
     ///
     /// \brief putCommandSignal 抓取图片
     /// \param command 图片编号
+    /// \param imgName  图片时间戳
     /// \return
     ///
-    bool putCommandSignal(const int &imgNumber=0);
+    bool putCommandSignal(const int &imgNumber=0,const QString &imgTime="");
 
     ///
     /// \brief pictureStreamSignal
     /// \param jpgStream
     /// \param command
     ///
-    void pictureStreamSignal(const QByteArray &jpgStream, const int &imgNumber);
+    void pictureStreamSignal(const QByteArray &jpgStream, const int &imgNumber,const QString &imgTime="");
 };
 
 #endif // PICTUREWIDGET_H

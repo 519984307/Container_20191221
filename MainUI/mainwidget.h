@@ -20,6 +20,7 @@
 #include "infraredlogicinterface.h"
 #include "databaseinsertinterface.h"
 #include "databasereadinterface.h"
+#include "recognizerinterface.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -33,6 +34,7 @@
 #include "imageprocessing.h"
 #include "infraredprocessing.h"
 #include "databaseprocessing.h"
+#include "recognizerprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -119,7 +121,7 @@ private:
     QMultiHash<int,QObject*>channelCamerMultiMap;
 
     /*
-     * treeWidget判断显示窗口
+     * treeWidget根据item判断显示窗口
      */
     QMap<QTreeWidgetItem*,QObject*> ItemWidgetMap;
 
@@ -137,6 +139,11 @@ private:
     /// \brief DataBaseProcessingMap 数据库逻辑处理类
     ///
     QMap<int,QObject*> DataBaseProcessingMap;
+
+    ///
+    /// \brief RecognizerProcessingMqp 识别器处理类
+    ///
+    QMap<int,QObject*> RecognizerProcessingMqp;
 
 private:
 
@@ -208,6 +215,11 @@ private:
     ///
     void dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterface);
 
+    ///
+    /// \brief recognizerPlugin 识别器插件
+    /// \param pRecognizerInterface 接口类
+    ///
+    void recognizerPlugin(RecognizerInterface* pRecognizerInterface,int num);
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
     ///

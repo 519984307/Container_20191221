@@ -193,7 +193,7 @@ public:
     /// \param imgNumber 图片编号
     /// \return
     ///
-    bool putCommandSlot(const int &imgNumber) Q_DECL_OVERRIDE;
+    bool putCommandSlot(const int &imgNumber,const QString &imgTime) Q_DECL_OVERRIDE;
 
     ///
     /// \brief playStreamSlot 播放视频流

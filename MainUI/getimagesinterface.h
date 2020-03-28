@@ -25,8 +25,9 @@ signals:
     /// \brief pictureStreamSignals 图片流信号
     /// \param jpgStream 图片流
     /// \param imgNumber 图片编号
+    /// \param imgTime 图片时间戳
     ///
-    void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
+    void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber,const QString &imgTime="");
 
     ///
     /// \brief messageSignal 日志信息
@@ -50,7 +51,7 @@ public slots:
     /// \brief putCommandSlots 抓取图片
     /// \param command 图片编号
     ///
-    virtual bool putCommandSlot(const int &imgNumber)=0;
+    virtual bool putCommandSlot(const int &imgNumber,const QString &imgTime)=0;
 
     ///
     /// \brief playViedoStreamSlot 预览实时视频

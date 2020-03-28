@@ -6,6 +6,8 @@
 
 QT       -= gui
 
+CONFIG += plugin
+
 TARGET = IdentifyImages
 TEMPLATE = lib
 
@@ -34,3 +36,5 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+DESTDIR += ../MainUI/Plugins

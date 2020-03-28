@@ -30,7 +30,7 @@ private:
     ///
     /// \brief timer 时间戳
     ///
-    QString  timer;
+    QString timer;
 
     ///
     /// \brief name 图片中间名
@@ -95,7 +95,7 @@ signals:
      /// \brief insertDataBaseSignal 写入记录到数据库
      /// \param data
      ///
-     void insertDataBaseSignal(QMap<QString,QString> data);
+     void insertDataBaseSignal(QMap<QString,QString> data);    
 
 public slots:
 

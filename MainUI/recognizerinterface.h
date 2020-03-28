@@ -12,11 +12,33 @@ class RecognizerInterface : public QObject
 public:
     virtual ~RecognizerInterface() {}
 
+signals:
+
+    ///
+    /// \brief messageSignal 日志信息
+    /// \param type 日志类型
+    /// \param msg 信息体
+    ///
+    void messageSignal(const QString &type,const QString &msg);
+
 public slots:
 
-    virtual void pictureStreamSlot(const QByteArray &jpgStream,const QString &imgName)=0;
+    ///
+    /// \brief pictureNameSlot 传递图片名
+    /// \param name 图片名
+    /// \param imgNumber 图片编号
+    ///
+    virtual void pictureNameSlot(const QString &name,const int &imgNumber)=0;
+
+    ///
+    /// \brief pictureStreamSlot 图片流
+    /// \param jpgStream 图片流
+    /// \param imgNumber 图片编号
+    ///
+    virtual void pictureStreamSlot(const QByteArray &jpgStream,const int &imgNumber)=0;
 };
 
 #define RecognizerInterfaceIID "ZBY.ContainerServer.RecognizerInterface/1.0"
 Q_DECLARE_INTERFACE(RecognizerInterface,RecognizerInterfaceIID);
+
 #endif // RECOGNIZERINTERFACE_H
