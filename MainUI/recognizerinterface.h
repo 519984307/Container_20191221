@@ -24,13 +24,6 @@ signals:
 public slots:
 
     ///
-    /// \brief pictureNameSlot 传递图片名
-    /// \param name 图片名
-    /// \param imgNumber 图片编号
-    ///
-    virtual void pictureNameSlot(const QString &name,const int &imgNumber)=0;
-
-    ///
     /// \brief pictureStreamSlot 图片流
     /// \param jpgStream 图片流
     /// \param imgNumber 图片编号

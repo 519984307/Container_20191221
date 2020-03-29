@@ -93,7 +93,8 @@ void DataBaseWidget::statisticalDataSlot(int rows, double correct, double error,
 void DataBaseWidget::returnModelSlot( QSqlTableModel *model)
 {
     pModel=model;
-    ui->tableView->setModel(model);
+
+    ui->tableView->setModel(pModel);
 
     ui->tableView->setColumnHidden(ID,true);
     ui->tableView->setColumnHidden(ImgFront,true);

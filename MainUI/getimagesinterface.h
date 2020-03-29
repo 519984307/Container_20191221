@@ -45,11 +45,12 @@ public slots:
     /// \param 用户名
     /// \param 密码
     ///
-    virtual void initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow)=0;
+    virtual void initCamerSlot(const QString &camerIP,const int &camerPort,const QString &CamerUser,const QString &CamerPow)=0;
 
     ///
     /// \brief putCommandSlots 抓取图片
     /// \param command 图片编号
+    /// \param imgTime 时间戳
     ///
     virtual bool putCommandSlot(const int &imgNumber,const QString &imgTime)=0;
 

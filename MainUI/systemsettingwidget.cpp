@@ -7,6 +7,8 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    pSettingValues=new SettingValues () ;
+
     this->setParent(parent);
     this->setHidden(true);
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
@@ -20,11 +22,54 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
     else {/* 外部更改配置,回写配置到UI */
         jsonWritetoUI();
     }
+
+    if(pSettingValues->SaveImageOne){
+         initImgPathValues(pSettingValues->ImgPathOne);
+    }
+    if(pSettingValues->SaveImageTow){
+        initImgPathValues(pSettingValues->ImgPathTow);
+    }
 }
 
 SystemSettingWidget::~SystemSettingWidget()
 {
+    delete  pSettingValues;
     delete ui;
+}
+
+void SystemSettingWidget::initImgPathValues(const QString &path)
+{
+    if(pSettingValues->SaveImageOne){
+        QDir  dir(QDir::toNativeSeparators(pSettingValues->ImgPathOne));
+        for(int i=1;i<pSettingValues->ChannelNumber;i++){
+            switch (ui->ImageFormat_1->currentIndex()) {
+            case 0:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
+                break;
+            case 1:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
+                break;
+            case 2:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy"))));
+                break;
+            case 3:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(i)));
+                break;
+            case 4:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
+                break;
+            case 5:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
+                break;
+            case 6:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy"))));
+                break;
+            case 7:
+                dir.mkpath(QDir::toNativeSeparators(pSettingValues->ImgPathOne));
+                break;
+            }
+        }
+    }
 }
 
 bool SystemSettingWidget::jsonWrite()
@@ -50,6 +95,8 @@ bool SystemSettingWidget::jsonWrite()
     jsonObj.insert(tr("SaveImageTow"), int(ui->SaveImage_2->isChecked()));
     jsonObj.insert(tr("ImageFormatOne"),ui->ImageFormat_1->currentIndex());
     jsonObj.insert(tr("ImageFormatTow"),ui->ImageFormat_2->currentIndex());
+    jsonObj.insert(tr("ImgPathOne"),ui->ImgPathlineEdit_1->text().toLocal8Bit().data());
+    jsonObj.insert(tr("ImgPathTow"),ui->ImgPathlineEdit_2->text().toLocal8Bit().data());
     jsonChild.insert("Channel",QJsonValue(jsonObj));
 
     QJsonObject jsonObj1;
@@ -113,30 +160,34 @@ bool SystemSettingWidget::jsonRead()
 
                 /* 读取子目录 */
                 if(value.isObject()){
-                    CameraVersion= getJsonValue("Agreement","CameraVersion",value.toObject()).toInt();
-                    ProtocolVersion=getJsonValue("Agreement","ProtocolVersion",value.toObject()).toInt();
-                    ChannelNumber= getJsonValue("Channel","ChannelNumber",value.toObject()).toInt();
-                    ImageFormatOne= getJsonValue("Channel","ImageFormatOne",value.toObject()).toInt();
-                    ImageFormatTow= getJsonValue("Channel","ImageFormatTow",value.toObject()).toInt();
-                    SaveImageOne= getJsonValue("Channel","SaveImageOne",value.toObject()).toInt();
-                    SaveImageTow= getJsonValue("Channel","SaveImageTow",value.toObject()).toInt();
-                    FtpAddress= getJsonValue("FTP","FtpAddress",value.toObject()).toString();
-                    FtpLocalImgPath= getJsonValue("FTP","FtpLocalImgPath",value.toObject()).toString();
-                    FtpPassword= getJsonValue("FTP","FtpPassword",value.toObject()).toString();
-                    FtpPort= getJsonValue("FTP","FtpPort",value.toObject()).toString();
-                    FtpRemoteImgPath= getJsonValue("FTP","FtpRemoteImgPath",value.toObject()).toString();
-                    FtpUser= getJsonValue("FTP","FtpUser",value.toObject()).toString();
-                    Language= getJsonValue("Other","Language",value.toObject()).toInt();
-                    Minimization= getJsonValue("Other","Minimization",value.toObject()).toInt();
-                    SaveLog= getJsonValue("Other","SaveLog",value.toObject()).toInt();
-                    AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
-                    Client= getJsonValue("Recognizer","Client",value.toObject()).toInt();
-                    ClientIP= getJsonValue("Recognizer","ClientIP",value.toObject()).toString();
-                    ClientPort= getJsonValue("Recognizer","ClientPort",value.toObject()).toInt();
-                    Server= getJsonValue("Recognizer","Server",value.toObject()).toInt();
-                    ServerIP= getJsonValue("Recognizer","ServerIP",value.toObject()).toString();
-                    ServerPort= getJsonValue("Recognizer","ServerPort",value.toObject()).toInt();
-                    ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
+                    pSettingValues->CameraVersion= getJsonValue("Agreement","CameraVersion",value.toObject()).toInt();
+                    pSettingValues->ProtocolVersion=getJsonValue("Agreement","ProtocolVersion",value.toObject()).toInt();
+
+                    pSettingValues->ChannelNumber= getJsonValue("Channel","ChannelNumber",value.toObject()).toInt();
+                    pSettingValues->ImageFormatOne= getJsonValue("Channel","ImageFormatOne",value.toObject()).toInt();
+                    pSettingValues->ImageFormatTow= getJsonValue("Channel","ImageFormatTow",value.toObject()).toInt();
+                    pSettingValues->SaveImageOne= getJsonValue("Channel","SaveImageOne",value.toObject()).toInt();
+                    pSettingValues->SaveImageTow= getJsonValue("Channel","SaveImageTow",value.toObject()).toInt();
+                    pSettingValues->ImgPathOne= getJsonValue("Channel","ImgPathOne",value.toObject()).toString();
+                    pSettingValues->ImgPathTow= getJsonValue("Channel","ImgPathTow",value.toObject()).toString();
+
+                    pSettingValues->FtpAddress= getJsonValue("FTP","FtpAddress",value.toObject()).toString();
+                    pSettingValues->FtpLocalImgPath= getJsonValue("FTP","FtpLocalImgPath",value.toObject()).toString();
+                    pSettingValues->FtpPassword= getJsonValue("FTP","FtpPassword",value.toObject()).toString();
+                    pSettingValues->FtpPort= getJsonValue("FTP","FtpPort",value.toObject()).toString();
+                    pSettingValues->FtpRemoteImgPath= getJsonValue("FTP","FtpRemoteImgPath",value.toObject()).toString();
+                    pSettingValues->FtpUser= getJsonValue("FTP","FtpUser",value.toObject()).toString();
+                    pSettingValues->Language= getJsonValue("Other","Language",value.toObject()).toInt();
+                    pSettingValues->Minimization= getJsonValue("Other","Minimization",value.toObject()).toInt();
+                    pSettingValues->SaveLog= getJsonValue("Other","SaveLog",value.toObject()).toInt();
+                    pSettingValues->AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
+                    pSettingValues->Client= getJsonValue("Recognizer","Client",value.toObject()).toInt();
+                    pSettingValues->ClientIP= getJsonValue("Recognizer","ClientIP",value.toObject()).toString();
+                    pSettingValues->ClientPort= getJsonValue("Recognizer","ClientPort",value.toObject()).toInt();
+                    pSettingValues->Server= getJsonValue("Recognizer","Server",value.toObject()).toInt();
+                    pSettingValues->ServerIP= getJsonValue("Recognizer","ServerIP",value.toObject()).toString();
+                    pSettingValues->ServerPort= getJsonValue("Recognizer","ServerPort",value.toObject()).toInt();
+                    pSettingValues->ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
 
                     return true;
                     }
@@ -151,34 +202,36 @@ bool SystemSettingWidget::jsonRead()
 
 void SystemSettingWidget::jsonWritetoUI()
 {
-    ui->ChannelNumber->setValue(ChannelNumber);
-    ui->SaveImage_1->setChecked(SaveImageOne);
-    ui->SaveImage_2->setChecked(SaveImageTow);
-    ui->ImageFormat_1->setCurrentIndex(ImageFormatOne);
-    ui->ImageFormat_2->setCurrentIndex(ImageFormatTow);
+    ui->ChannelNumber->setValue(pSettingValues->ChannelNumber);
+    ui->SaveImage_1->setChecked(pSettingValues->SaveImageOne);
+    ui->SaveImage_2->setChecked(pSettingValues->SaveImageTow);
+    ui->ImageFormat_1->setCurrentIndex(pSettingValues->ImageFormatOne);
+    ui->ImageFormat_2->setCurrentIndex(pSettingValues->ImageFormatTow);
+    ui->ImgPathlineEdit_1->setText(pSettingValues->ImgPathOne);
+    ui->ImgPathlineEdit_2->setText(pSettingValues->ImgPathTow);
 
-    ui->ColorDisplay->setChecked(ColorDisplay);
-    ui->AutomaticCorrection->setChecked(AutomaticCorrection);
-    ui->Server->setChecked(Server);
-    ui->ServerIP->setText(ServerIP);
-    ui->ServerPort->setText(QString::number(ServerPort));
-    ui->Client->setChecked(Client);
-    ui->ClientIP->setText(ClientIP);
-    ui->ClientPort->setText(QString::number(ClientPort));
+    ui->ColorDisplay->setChecked(pSettingValues->ColorDisplay);
+    ui->AutomaticCorrection->setChecked(pSettingValues->AutomaticCorrection);
+    ui->Server->setChecked(pSettingValues->Server);
+    ui->ServerIP->setText(pSettingValues->ServerIP);
+    ui->ServerPort->setText(QString::number(pSettingValues->ServerPort));
+    ui->Client->setChecked(pSettingValues->Client);
+    ui->ClientIP->setText(pSettingValues->ClientIP);
+    ui->ClientPort->setText(QString::number(pSettingValues->ClientPort));
 
-    ui->ProtocolV->setCurrentIndex(ProtocolVersion);
-    ui->CameraV->setCurrentIndex(CameraVersion);
+    ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
+    ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
 
-    ui->FtpAddress->setText(FtpAddress);
-    ui->FtpPort->setText(FtpPort);
-    ui->FtpUser->setText(FtpUser);
-    ui->FtpPassword->setText(FtpPassword);
-    ui->FtpLocalImgPath->setText(FtpLocalImgPath);
-    ui->FtpRemoteImgPath->setText(FtpRemoteImgPath);
+    ui->FtpAddress->setText(pSettingValues->FtpAddress);
+    ui->FtpPort->setText(pSettingValues->FtpPort);
+    ui->FtpUser->setText(pSettingValues->FtpUser);
+    ui->FtpPassword->setText(pSettingValues->FtpPassword);
+    ui->FtpLocalImgPath->setText(pSettingValues->FtpLocalImgPath);
+    ui->FtpRemoteImgPath->setText(pSettingValues->FtpRemoteImgPath);
 
-    ui->Minimization->setChecked(Minimization);
+    ui->Minimization->setChecked(pSettingValues->Minimization);
     //ui->SaveLog->setChecked(SaveLog);
-    ui->Language->setCurrentIndex(Language);
+    ui->Language->setCurrentIndex(pSettingValues->Language);
 }
 
 QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)
@@ -212,4 +265,16 @@ void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
     if(button==ui->buttonBox->button(QDialogButtonBox::Discard)){
 
     }
+}
+
+void SystemSettingWidget::on_CheckPathPushButton_1_clicked()
+{
+    QString path=QFileDialog::getExistingDirectory(this);
+    ui->ImgPathlineEdit_1->setText(tr("%1").arg(path).toLocal8Bit());
+}
+
+void SystemSettingWidget::on_CheckPathPushButton_2_clicked()
+{
+    QString path=QFileDialog::getExistingDirectory(this);
+    ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
 }

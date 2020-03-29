@@ -15,19 +15,18 @@ public:
 
 private:
 
-    QMap<int,QString> imgNameData;
     QMutex mutex;
+
+    int channel;
 
 signals:
 
 public slots:
 
-//    ///
-//    /// \brief pictureNameSlot 传递图片名
-//    /// \param name 图片名
-//    /// \param imgNumber 图片编号
-//    ///
-//    void pictureNameSlot(const QString &name,const int &imgNumber);
+    ///
+    /// \brief settingValues 设定需求参数
+    ///
+    void settingValues(int channel);
 
     ///
     /// \brief pictureStreamSlot 图片流

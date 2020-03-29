@@ -15,12 +15,6 @@ public:
     ~IdentifyImages()Q_DECL_OVERRIDE;
 
 public:
-    ///
-    /// \brief pictureNameSlot 传递图片名
-    /// \param name 图片名
-    /// \param imgNumber 图片编号
-    ///
-    void pictureNameSlot(const QString &name,const int &imgNumber)Q_DECL_OVERRIDE;
 
     ///
     /// \brief pictureStreamSlot 图片流

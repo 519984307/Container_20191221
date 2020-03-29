@@ -244,8 +244,8 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
          */
         while (!this->exit)
         {
-            QCoreApplication::processEvents();
             QThread::msleep(10);
+            QCoreApplication::processEvents();
 
             if(com1){
                 /*A1*/

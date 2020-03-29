@@ -60,7 +60,8 @@ HEADERS += \
     databaseinsertinterface.h \
     defineobj.h \
     recognizerinterface.h \
-    recognizerprocessing.h
+    recognizerprocessing.h \
+    settingvalues.h
 
 FORMS += \
         mainwidget.ui \

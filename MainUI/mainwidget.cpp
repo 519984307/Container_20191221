@@ -95,7 +95,8 @@ void MainWidget::InitializeSystemSet()
     qRegisterMetaType<QMap<QString,QString>>("QMap<QString,QString>");
 
     pSystemSettingWidget=new SystemSettingWidget (this);
-    channelCounnt=pSystemSettingWidget->ChannelNumber;
+
+    channelCounnt=pSystemSettingWidget->pSettingValues->ChannelNumber;
     CamerNameList<<"Before"<<"After"<<"Left"<<"Right";
     //CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate";
 }
@@ -240,6 +241,7 @@ void MainWidget::loadPlugins()
         QObject *plugin = pluginLoader.instance();
         if(plugin){
             const QString pluginName=tr("%1").arg(fileName.split(".")[0]);
+
             /*  创建子插件目录 */
             if(!pluginsDir.cd(pluginName)){
                 pluginsDir.mkdir(pluginName);
@@ -302,7 +304,7 @@ void MainWidget::processingPlugins(QDir path, int num)
     for(const QString &fileName :entryList){
 
         QPluginLoader  pluginLoader(path.absoluteFilePath(fileName));
-        QObject *plugin = pluginLoader.instance();
+        QObject* plugin = pluginLoader.instance();
 
         if(plugin){
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
@@ -329,28 +331,29 @@ void MainWidget::processingPlugins(QDir path, int num)
 
 void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
-    PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num]);
     ImageProcessing* pImageProcessing=new ImageProcessing (nullptr);
     ImageProcessingMap.insert(num,pImageProcessing);
 
-    /* 日志信息 */
-    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
-    /* 释放动态库资源 */
-    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
-    /* 抓取图片 */
-    connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
-    /* 调整窗口 */
-    connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
-    /* 播放视频流 */
-    connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
-    /* 接收图片流 */
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
-    /* 初始化相机 */
-    connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
-    /* 相机状态 */
-    connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
-    /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
-    connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
+    if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
+        /* 日志信息 */
+        connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
+        /* 释放动态库资源 */
+        connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
+        /* 抓取图片 */
+        connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+        /* 调整窗口 */
+        connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
+        /* 播放视频流 */
+        connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
+        /* 接收图片流 */
+        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
+        /* 初始化相机 */
+        connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
+        /* 相机状态 */
+        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
+        /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
+        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
+    }
 
     /* 线程运行 */
     QThread* pThread=new QThread(this);
@@ -362,24 +365,29 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
 
 void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)
 {
-    DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num]);
     InfraredProcessing* pInfraredProcessing=new InfraredProcessing (nullptr);
     InfraredProcessingMap.insert(num,pInfraredProcessing);
 
-    /* 红外状态到界面 */
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
-    /* 开始逻辑检测 */
-    connect(pInfraredProcessing,&InfraredProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
-    /* 设置红外模式 */
-    connect(pInfraredProcessing,&InfraredProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
-    /* 退出逻辑检测循环 */
-    connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
-    /* 日志i信息 */
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::messageSlot);
-    /* 模拟抓拍流程 */
-    connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
-    /* 逻辑抓取图片 */
-    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);
+    if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num])){
+        /*  绑定相机组抓到逻辑处理 */
+        pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(num),num);
+        /* 清除界面图片 */
+        connect(pInfraredProcessing,&InfraredProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+        /* 红外状态到界面 */
+        connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
+        /* 开始逻辑检测 */
+        connect(pInfraredProcessing,&InfraredProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
+        /* 设置红外模式 */
+        connect(pInfraredProcessing,&InfraredProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
+        /* 退出逻辑检测循环 */
+        connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
+        /* 日志i信息 */
+        connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::messageSlot);
+        /* 模拟抓拍流程 */
+        connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
+        /* 逻辑抓取图片 */
+        connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);
+    }
 
     /*  线程运行    */
     QThread* pThread=new QThread(this);
@@ -448,6 +456,8 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     RecognizerProcessing* pRecognizerProcessing=new RecognizerProcessing (nullptr);
     RecognizerProcessingMqp.insert(num,pRecognizerProcessing);
 
+    pRecognizerProcessing->settingValues(num);
+
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);
     pRecognizerInterface->moveToThread(pThread);
@@ -460,29 +470,23 @@ void MainWidget::publicConnect()
 {
     /* 一条通道4台相机的数据流,绑定到一个数据界面 */
     for (auto key:DataWidgetMap.keys()) {
-        if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
-            if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(InfraredProcessingMap[key])){
-                /*  绑定相机组抓拍的图片到逻辑处理 */
-                pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(key),key);
-                /* 清除界面图片 */
-                connect(pInfraredProcessing,&InfraredProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
-
-                if(DataBaseProcessing* pDataBaseProcessing=qobject_cast<DataBaseProcessing*>(DataBaseProcessingMap[key])){
-                    /* 抓拍完成写入数据库 */
-                    connect(pInfraredProcessing,&InfraredProcessing::insertDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::insertDataBaseSignal);
-                    /*
-                      * 更新结果后续处理
-                      *
-                      */
-                }
+        if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(InfraredProcessingMap[key])){
+            if(DataBaseProcessing* pDataBaseProcessing=qobject_cast<DataBaseProcessing*>(DataBaseProcessingMap[key])){
+                /* 过车抓拍数据写入数据库(插入数据库) */
+                connect(pInfraredProcessing,&InfraredProcessing::insertDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::insertDataBaseSignal);
+                /*
+                  * 更新结果后续处理
+                  */
             }
             for(auto obj:channelCamerMultiMap.values(key)){
-                if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
-                    /* 绑定4台相机抓拍图片流到数据界面 */
-                    connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
-
-                    if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
-                        connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);
+                if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
+                    if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
+                        /* 绑定(前后左右)相机抓拍图片流到数据界面(显示图片) */
+                        connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+                        if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
+                            /* 相机图片流绑定到识别器处理流程(保存图片) */
+                            connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);
+                        }
                     }
                 }
             }

@@ -1,9 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    MainUI \
     InfraredLogic\
     CaptureImages\
-    MainUI \
     DataBaseRead \
     DataBaseInsert \
     IdentifyImages\

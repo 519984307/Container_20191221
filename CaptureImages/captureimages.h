@@ -20,12 +20,12 @@ private:
     ///
     /// \brief port 端口
     ///
-    quint16 camerPort;
+    int port;
 
     ///
     /// \brief camerIp  地址,用户名,密码
     ///
-    QString  camerIp,camerName ,camerPow;
+    QString  camerIp,camerName,camerPow;
 
     ///登录用户ID,视频流ID
     LONG lUserID,streamID;
@@ -39,11 +39,6 @@ private:
     /// \brief DLL 加载动态库
     ///
     QLibrary* pDLL;
-
-    ///
-    /// \brief isLoad 动态库加载状态
-    ///
-    bool isLoad;
 
 private:
 
@@ -186,7 +181,7 @@ public:
     /// \param user 用户名
     /// \param pow 密码
     ///
-    void initCamerSlot(const QString &camerIP, quint16 camerPort, const QString &CamerUser, const QString &CamerPow) Q_DECL_OVERRIDE;
+    void initCamerSlot(const QString &camerIP, const int & camerPort, const QString &CamerUser, const QString &CamerPow) Q_DECL_OVERRIDE;
 
     ///
     /// \brief putCommandSlot 抓取图片

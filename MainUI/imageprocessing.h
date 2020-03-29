@@ -16,7 +16,7 @@ signals:
     /// \param camerIP 相机地址
     /// \param camerPort 相机端口
     ///
-    void initCamerSignal(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow);
+    void initCamerSignal(const QString &camerIP, const int &camerPort,const QString &CamerUser,const QString &CamerPow);
 
     ///
     /// \brief putCommand 相机指令
