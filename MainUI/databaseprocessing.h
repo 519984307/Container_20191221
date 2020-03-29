@@ -38,6 +38,13 @@ signals:
     /// \param data 数据
     ///
     void updateDataBaseSignal(QMap<QString, QString> data);
+
+    ///
+    /// \brief seFindtImgPathSlgnal 设置图片查找路径和协议
+    /// \param path 图片路径
+    /// \param format 协议
+    ///
+    void seFindtImgPathSlgnal(const QString &path,const int &format);
 };
 
 #endif // DATABASEPROCESSING_H

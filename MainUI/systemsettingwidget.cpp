@@ -39,33 +39,35 @@ SystemSettingWidget::~SystemSettingWidget()
 
 void SystemSettingWidget::createImgPath(const QString &path,int currentindex)
 {
-    QDir  dir(QDir::toNativeSeparators(path));
-    for(int i=1;i<=pSettingValues->ChannelNumber;i++){
-        switch (currentindex) {
-        case 0:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
-            break;
-        case 1:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
-            break;
-        case 2:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy"))));
-            break;
-        case 3:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(i)));
-            break;
-        case 4:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
-            break;
-        case 5:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
-            break;
-        case 6:
-            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy"))));
-            break;
-        case 7:
-            dir.mkpath(QDir::toNativeSeparators(path));
-            break;
+    if(path!=""){
+        QDir  dir(QDir::toNativeSeparators(path));
+        for(int i=1;i<=pSettingValues->ChannelNumber;i++){
+            switch (currentindex) {
+            case 0:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
+                break;
+            case 1:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
+                break;
+            case 2:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy"))));
+                break;
+            case 3:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(i)));
+                break;
+            case 4:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
+                break;
+            case 5:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
+                break;
+            case 6:
+                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy"))));
+                break;
+            case 7:
+                dir.mkpath(QDir::toNativeSeparators(path));
+                break;
+            }
         }
     }
 }
@@ -275,11 +277,23 @@ void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
 void SystemSettingWidget::on_CheckPathPushButton_1_clicked()
 {
     QString path=QFileDialog::getExistingDirectory(this);
-    ui->ImgPathlineEdit_1->setText(tr("%1").arg(path).toLocal8Bit());
+    if(path=="")
+    {
+        ui->ImgPathlineEdit_2->setText("");
+    }
+    else {
+         ui->ImgPathlineEdit_1->setText(tr("%1").arg(path).toLocal8Bit());
+    }
 }
 
 void SystemSettingWidget::on_CheckPathPushButton_2_clicked()
 {
     QString path=QFileDialog::getExistingDirectory(this);
-    ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
+    if(path=="")
+    {
+        ui->ImgPathlineEdit_2->setText("");
+    }
+    else {
+         ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
+    }
 }

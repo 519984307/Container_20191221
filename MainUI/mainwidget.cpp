@@ -438,7 +438,11 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
     connect(pDataBaseWidget,&DataBaseWidget::setDataBaseFilterSignal,pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal);
     /* 统计数据到界面 */
     connect(pDataBaseReadInterface,&DataBaseReadInterface::statisticalDataSignal,pDataBaseWidget,&DataBaseWidget::statisticalDataSlot);
+    /* 设置数据库图片查询路径 */
+    connect(pDataBaseProcessing,&DataBaseProcessing::seFindtImgPathSlgnal,pDataBaseWidget,&DataBaseWidget::seFindtImgPathSlot);
 
+    /* 初始化数据库图片查询路径 */
+    emit pDataBaseProcessing->seFindtImgPathSlgnal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
     /* 初始化数据库(读取数据库插件) */
     emit pDataBaseProcessing->initDataBaseSignal("DataBaseRead","admin","Zby123456","localhost");
 

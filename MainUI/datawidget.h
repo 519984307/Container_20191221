@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QResizeEvent>
 
 namespace Ui {
 class DataWidget;
@@ -16,6 +17,12 @@ class DataWidget : public QWidget
 public:
     explicit DataWidget(QWidget *parent = nullptr);
     ~DataWidget()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief resizeEvent 重写窗口调整事件
+    /// \param size
+    ///
+    void resizeEvent(QResizeEvent* size)Q_DECL_OVERRIDE;
 
 private:
     Ui::DataWidget *ui;

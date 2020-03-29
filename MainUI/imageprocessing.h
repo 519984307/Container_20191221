@@ -40,13 +40,6 @@ public slots:
     /// \param state 相机状态
     ///
     void camerIDstatesSlot(const QString &camerIP,bool state);
-
-//    ///
-//    /// \brief pictureStream 接受图片流
-//    /// \param jpgStream 图片流
-//    /// \param camerIP 相机地址
-//    ///
-//    void pictureStreamSlot(const QByteArray &jpgStream,const int &command);
 };
 
 #endif // IMAGEPROCESSING_H

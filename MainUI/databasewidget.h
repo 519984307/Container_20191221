@@ -11,6 +11,7 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QAbstractItemView>
+#include <QDir>
 
 namespace Ui {
 class DataBaseWidget;
@@ -30,6 +31,12 @@ private:
     /// \brief checkFilter 查找条件
     ///
     QString checkFilter();
+
+    ///
+    /// \brief showImages 显示通道图片
+    /// \param index 选取项
+    ///
+    void  showImages(const QModelIndex &index);
 
 private slots:
 
@@ -134,6 +141,21 @@ private:
     ///
     QSqlTableModel *pModel;
 
+    ///
+    /// \brief imgPath 图片路径
+    ///
+    QString imgPath;
+
+    ///
+    /// \brief imgFormat 图片协议
+    ///
+    int imgFormat;
+
+    ///
+    /// \brief showImg 显示图片状态
+    ///
+    bool showImg;
+
     //--------------------------------------------------------------- 查询条件
     bool channel,date,Isotype,plate,number,check,type;
 
@@ -197,6 +219,13 @@ public slots:
     /// \param statistical 统计
     ///
      void statisticalDataSlot(int rows,double correct,double error,double statistical);
+
+     ///
+     /// \brief seFindtImgPathSlot 设置图片查找路径和协议
+     /// \param path 图片路径
+     /// \param format 协议
+     ///
+     void seFindtImgPathSlot(const QString &path,const int &format);
 };
 
 #endif // DATABASEWIDGET_H

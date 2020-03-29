@@ -19,6 +19,8 @@ DataBaseWidget::DataBaseWidget(QWidget *parent) :
 
     pModel=nullptr;
 
+    this->imgPath="";
+
     date=true;    channel=false;    Isotype=false;    plate=false;    number=false;    check=false;    type=false;
 
 
@@ -41,6 +43,12 @@ DataBaseWidget::~DataBaseWidget()
     pModel=nullptr;
 
     delete ui;
+}
+
+void DataBaseWidget::seFindtImgPathSlot(const QString &path, const int &format)
+{
+    this->imgPath=path;
+    this->imgFormat=format;
 }
 
 QString DataBaseWidget::checkFilter()
@@ -132,10 +140,22 @@ void DataBaseWidget::on_ImageOrData_PushButton_toggled(bool checked)
     if(checked){
         ui->stackedWidget_2->setCurrentIndex(1);
         ui->ImageOrData_PushButton->setText(tr("Data"));
+
+        showImg=true;/* 设置加载图片 */
+        on_tableView_clicked(ui->tableView->currentIndex());/* 重新处罚一次当前选择项 */
     }
     else {
         ui->stackedWidget_2->setCurrentIndex(0);
         ui->ImageOrData_PushButton->setText(tr("Image"));
+
+        showImg=false;
+        ui->Img_Front_label->clear();
+        ui->Img_LeftFront_label->clear();
+        ui->Img_RightFront_label->clear();
+        ui->Img_LeftAfter_label->clear();
+        ui->Img_RightAfter_label->clear();
+        ui->Img_After_label->clear();
+        ui->Img_plate_label->clear();
     }
 }
 
@@ -259,9 +279,123 @@ void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
     }
 }
 
-///--------------------------------------------------------------------------------------------------------------------------------------------------------- 选取数据
+///--------------------------------------------------------------------------------------------------------------------------------------------------------- 选中数据
+
+void DataBaseWidget::showImages(const QModelIndex &index)
+{
+    ui->Img_Front_label->clear();
+    ui->Img_LeftFront_label->clear();
+    ui->Img_RightFront_label->clear();
+    ui->Img_LeftAfter_label->clear();
+    ui->Img_RightAfter_label->clear();
+    ui->Img_After_label->clear();
+    ui->Img_plate_label->clear();
+
+    if(imgPath!=""){
+        QDir dir(imgPath);
+        QString suffixPath="";
+        bool isRoot=false;/* 如果是保存在根目录就不用CD */
+        QStringList date=index.sibling(index.row(),1).data().toString().split(" ");
+        int land=index.sibling(index.row(),2).data().toInt();
+
+        if(date.count()==2){
+            QStringList tmpList=date[0].split("-");
+            switch (imgFormat) {
+            case 0:
+                suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(QString::number(land)).arg(tmpList.join("/")));
+                break;
+            case 1:
+                suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(QString::number(land)).arg(tmpList[0].append("/").append(tmpList[1])));
+                break;
+            case 2:
+                suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(QString::number(land)).arg(tmpList[0]));
+                break;
+            case 3:
+                suffixPath=QDir::toNativeSeparators(tr("%1").arg(land));
+                break;
+            case 4:
+                suffixPath=QDir::toNativeSeparators(tr("%1").arg(tmpList.join("/")));
+                break;
+            case 5:
+                suffixPath=QDir::toNativeSeparators(tr("%1").arg(tmpList[0].append("/").append(tmpList[1])));
+                break;
+            case 6:
+                suffixPath=QDir::toNativeSeparators(tr("%1").arg(tmpList[0]));
+                break;
+            case 7:
+                isRoot=true;
+                break;
+            }
+        }
+        if(!isRoot){
+            dir.cd(suffixPath);
+        }
+
+        QPixmap *labelPix = new QPixmap();
+        /* 防止图片发生偏移 */
+        QPixmap  labelPixFit;
+
+        QString imgTmp=index.sibling(index.row(),10).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_Front_label->setPixmap(labelPixFit);
+            }
+        }
+        imgTmp=index.sibling(index.row(),12).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_LeftFront_label->setPixmap(labelPixFit);
+            }
+        }
+        imgTmp=index.sibling(index.row(),14).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_RightFront_label->setPixmap(labelPixFit);
+            }
+        }
+        imgTmp=index.sibling(index.row(),16).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_LeftAfter_label->setPixmap(labelPixFit);
+            }
+        }
+        imgTmp=index.sibling(index.row(),18).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_RightAfter_label->setPixmap(labelPixFit);
+            }
+        }
+        imgTmp=index.sibling(index.row(),20).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_After_label->setPixmap(labelPixFit);
+            }
+        }
+        imgTmp=index.sibling(index.row(),24).data().toString();
+        if(imgTmp!=""){
+            if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
+                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                ui->Img_plate_label->setPixmap(labelPixFit);
+            }
+        }
+
+        date.clear();
+        delete labelPix;
+        labelPix=nullptr;
+    }
+}
+
 void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
 {
+    if(showImg){
+        showImages(index);
+    }
     ui->numberFront_label->setText(index.sibling(index.row(),4).data().toString());/* 前箱 */
     ui->numberAfter_label->setText(index.sibling(index.row(),7).data().toString());/* 后箱 */
     ui->checkFront_label->setText(index.sibling(index.row(),6).data().toString());/* 前箱型 */

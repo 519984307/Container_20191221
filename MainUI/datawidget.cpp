@@ -17,6 +17,11 @@ DataWidget::~DataWidget()
     delete ui;
 }
 
+void DataWidget::resizeEvent(QResizeEvent *size)
+{
+
+}
+
 void DataWidget::logicStatusSlot(int *status)
 {
     /* A1.A2.D1.B1.B2.D2 */
@@ -30,18 +35,17 @@ void DataWidget::logicStatusSlot(int *status)
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {   
     QMutexLocker locker(&mutex);
-
     QPixmap *labelPix = new QPixmap();
     if(jpgStream!=nullptr){
-        labelPix->loadFromData(jpgStream);        
+        labelPix->loadFromData(jpgStream);
     }
     else{/* 清除图片 */
-        ui->label_13->clear();
-        ui->label_6->clear();
-        ui->label_2->clear();
-        ui->label_5->clear();
-        ui->label->clear();
-        ui->label_4->clear();
+        ui->Img_Front_label->clear();
+        ui->Img_LeftFront_label->clear();
+        ui->Img_RightFront_label->clear();
+        ui->Img_LeftAfter_label->clear();
+        ui->Img_RightAfter_label->clear();
+        ui->Img_After_label->clear();
 
         delete labelPix;
         labelPix=nullptr;
@@ -49,29 +53,29 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     }
 
     /* 防止图片发生偏移 */
-    QPixmap  labelPixFit=labelPix->scaled(ui->label->size().width()-4,ui->label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    QPixmap  labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     switch (imgNumber) {
     case 1:
-            ui->label_13->setPixmap(labelPixFit);
+            ui->Img_Front_label->setPixmap(labelPixFit);
         break;
     case 2:
-            ui->label_6->setPixmap(labelPixFit);
+            ui->Img_LeftFront_label->setPixmap(labelPixFit);
         break;
     case 3:
-            ui->label_2->setPixmap(labelPixFit);
+            ui->Img_RightFront_label->setPixmap(labelPixFit);
         break;
     case 4:
-        ui->label_5->setPixmap(labelPixFit);
+        ui->Img_LeftAfter_label->setPixmap(labelPixFit);
         break;
     case 5:
-            ui->label->setPixmap(labelPixFit);
+            ui->Img_RightAfter_label->setPixmap(labelPixFit);
         break;
     case 6:
-            ui->label_4->setPixmap(labelPixFit);
+            ui->Img_After_label->setPixmap(labelPixFit);
         break;
     }
 
-    delete labelPix;    
+    delete labelPix;
     labelPix=nullptr;
 }
 

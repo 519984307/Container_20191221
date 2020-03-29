@@ -15,7 +15,7 @@ void RecognizerProcessing::setSaveImgFormatOneSlot(const QString &path, int form
 {
     this->imgPath1=path;
     this->format1=format;
-    dir.setPath(QDir::toNativeSeparators(path));
+    dir.setPath(QDir::toNativeSeparators(path));   
 }
 
 //void RecognizerProcessing::setSaveImgFormatTowSlot(const QString &path, int format)
@@ -28,7 +28,8 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
 {
     QMutexLocker locket(&mutex);
     if(imgPath1!=""){/* 保存路径不存在,图片不保存,不识别 */
-        QString suffixPath="";
+        QString suffixPath="";        
+        bool isRoot=false;/* 如果是保存在根目录就不用CD */
         switch (format1) {
         case 0:
             suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd")));
@@ -39,6 +40,9 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         case 2:
             suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy")));
             break;
+        case 3:
+            suffixPath=QDir::toNativeSeparators(tr("%1").arg(channel));
+            break;
         case 4:
             suffixPath=QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd")));
             break;
@@ -48,9 +52,14 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         case 6:
             suffixPath=QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy")));
             break;
+        case 7:
+            isRoot=true;
+            break;
         }
-        dir.mkpath(suffixPath);
-        dir.cd(suffixPath);
+        if(!isRoot){
+            dir.mkpath(suffixPath);
+            dir.cd(suffixPath);
+        }
 
         if(imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
