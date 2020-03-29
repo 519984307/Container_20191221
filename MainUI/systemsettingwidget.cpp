@@ -24,10 +24,10 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
     }
 
     if(pSettingValues->SaveImageOne){
-         initImgPathValues(pSettingValues->ImgPathOne);
+        createImgPath(pSettingValues->ImgPathOne,pSettingValues->ImageFormatOne);
     }
     if(pSettingValues->SaveImageTow){
-        initImgPathValues(pSettingValues->ImgPathTow);
+        createImgPath(pSettingValues->ImgPathTow,pSettingValues->ImageFormatTow);
     }
 }
 
@@ -37,37 +37,35 @@ SystemSettingWidget::~SystemSettingWidget()
     delete ui;
 }
 
-void SystemSettingWidget::initImgPathValues(const QString &path)
+void SystemSettingWidget::createImgPath(const QString &path,int currentindex)
 {
-    if(pSettingValues->SaveImageOne){
-        QDir  dir(QDir::toNativeSeparators(pSettingValues->ImgPathOne));
-        for(int i=1;i<pSettingValues->ChannelNumber;i++){
-            switch (ui->ImageFormat_1->currentIndex()) {
-            case 0:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
-                break;
-            case 1:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
-                break;
-            case 2:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy"))));
-                break;
-            case 3:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(i)));
-                break;
-            case 4:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
-                break;
-            case 5:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
-                break;
-            case 6:
-                dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy"))));
-                break;
-            case 7:
-                dir.mkpath(QDir::toNativeSeparators(pSettingValues->ImgPathOne));
-                break;
-            }
+    QDir  dir(QDir::toNativeSeparators(path));
+    for(int i=1;i<=pSettingValues->ChannelNumber;i++){
+        switch (currentindex) {
+        case 0:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
+            break;
+        case 1:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
+            break;
+        case 2:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1/%2").arg(i).arg(QDateTime::currentDateTime().toString("yyyy"))));
+            break;
+        case 3:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(i)));
+            break;
+        case 4:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd"))));
+            break;
+        case 5:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM"))));
+            break;
+        case 6:
+            dir.mkpath(QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy"))));
+            break;
+        case 7:
+            dir.mkpath(QDir::toNativeSeparators(path));
+            break;
         }
     }
 }
@@ -82,7 +80,7 @@ bool SystemSettingWidget::jsonWrite()
     QFile file(QDir::toNativeSeparators(tr("%1/%2").arg(mkPath.path()).arg("SYSTEM.json")));
 
     if(!file.open(QIODevice::ReadWrite)){
-        emit messageSignal(tr("Failed to load the parameter, create the default parameter. error:%1").arg(file.OpenError));
+        emit messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the parameter, create the default parameter error<errorCode=%1>").arg(file.OpenError));
         return false;
     }
 
@@ -104,15 +102,15 @@ bool SystemSettingWidget::jsonWrite()
     jsonObj1.insert(tr("AutomaticCorrection"),int(ui->AutomaticCorrection->isChecked()));
     jsonObj1.insert(tr("Server"),int(ui->Server->isChecked()));
     jsonObj1.insert(tr("ServerIP"),ui->ServerIP->text());
-    jsonObj1.insert(tr("ServerPort"),ui->ServerPort->text().toInt());
+    jsonObj1.insert(tr("ServerPort"),ui->ServerPort->text());
     jsonObj1.insert(tr("Client"),int(ui->Client->isChecked()));
     jsonObj1.insert(tr("ClientIP"),ui->ClientIP->text());
     jsonObj1.insert(tr("ClientPort"),ui->ClientPort->text().toInt());
     jsonChild.insert("Recognizer",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
-    jsonObj2.insert(tr("ProtocolVersion"),int(ui->ProtocolV->currentIndex()));
-    jsonObj2.insert(tr("CameraVersion"),int(ui->CameraV->currentIndex()));
+    jsonObj2.insert(tr("ProtocolVersion"),ui->ProtocolV->currentIndex());
+    jsonObj2.insert(tr("CameraVersion"),ui->CameraV->currentIndex());
     jsonChild.insert("Agreement",QJsonValue(jsonObj2));
 
     QJsonObject jsonObj3;
@@ -142,7 +140,7 @@ bool SystemSettingWidget::jsonRead()
 {
     QFile file(QDir::toNativeSeparators(tr("%1/%2/SYSTEM.json").arg(QCoreApplication::applicationDirPath()).arg("Json")));
     if(!file.open(QIODevice::ReadOnly)){
-        emit messageSignal(tr("Failed to load the parameter, create the default parameter. error:%1").arg(file.OpenError));
+        emit messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the parameter, create the default parameter error<errorCode=%1>").arg(file.OpenError));
         return false;
     }
 
@@ -177,9 +175,11 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->FtpPort= getJsonValue("FTP","FtpPort",value.toObject()).toString();
                     pSettingValues->FtpRemoteImgPath= getJsonValue("FTP","FtpRemoteImgPath",value.toObject()).toString();
                     pSettingValues->FtpUser= getJsonValue("FTP","FtpUser",value.toObject()).toString();
+
                     pSettingValues->Language= getJsonValue("Other","Language",value.toObject()).toInt();
                     pSettingValues->Minimization= getJsonValue("Other","Minimization",value.toObject()).toInt();
                     pSettingValues->SaveLog= getJsonValue("Other","SaveLog",value.toObject()).toInt();
+
                     pSettingValues->AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
                     pSettingValues->Client= getJsonValue("Recognizer","Client",value.toObject()).toInt();
                     pSettingValues->ClientIP= getJsonValue("Recognizer","ClientIP",value.toObject()).toString();
@@ -195,7 +195,7 @@ bool SystemSettingWidget::jsonRead()
             }
         }
     else {
-        emit messageSignal(tr("load SYSTEM.json error:%1").arg(jsonError.errorString()));
+        emit messageSignal(ZBY_LOG("ERROR"),tr("load SYSTEM.json error<errorCode=%1>").arg(jsonError.errorString()));
     }
     return false;
 }
@@ -237,7 +237,7 @@ void SystemSettingWidget::jsonWritetoUI()
 QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)
 {
     if(obj.contains(child)){
-        QJsonValue jsonValue=obj.value(child);
+        QJsonValue jsonValue=obj.value(child);       
         /* 读取配置子项 */
         if(jsonValue.isObject()){
             obj=jsonValue.toObject();
@@ -253,17 +253,22 @@ QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &
             }
         }
     }
-    emit messageSignal(tr("load SYSTEM.json value error:%1-%2").arg(child).arg(key));
+    emit messageSignal(ZBY_LOG("ERROR"),tr("load SYSTEM.json value error:%1-%2").arg(child).arg(key));
     return  "NULL";
 }
 
 void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(button==ui->buttonBox->button(QDialogButtonBox::Save)){
-        jsonWrite();
+        if(jsonWrite()){
+            emit messageSignal(ZBY_LOG("INFO"),tr("Save System Json sucess"));
+        }
+        else {
+            emit messageSignal(ZBY_LOG("ERROR"),tr("Save System Json error"));
+        }
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Discard)){
-
+        emit messageSignal(ZBY_LOG("INFO"),tr("Not Save System Json"));
     }
 }
 

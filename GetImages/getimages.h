@@ -2,13 +2,13 @@
 #define GETIMAGES_H
 
 #include "getimages_global.h"
-#include "getimagesinterface.h"
+#include "underlyinggetimagesinterface.h"
 
-class GETIMAGESSHARED_EXPORT GetImages: public GetImagesInterface
+class GETIMAGESSHARED_EXPORT GetImages: public UnderlyingGetimagesInterface
 {
     Q_OBJECT
-    Q_INTERFACES(GetImagesInterface)
-    Q_PLUGIN_METADATA(IID  GetImagesInterfaceIID)
+    Q_INTERFACES(UnderlyingGetimagesInterface)
+    Q_PLUGIN_METADATA(IID  UnderlyingGetimagesInterfaceIID)
 
 public:
     GetImages(QObject *parent = nullptr);
@@ -86,13 +86,13 @@ public:
     /// \param CamerUser 用户名
     /// \param CamerPow 密码
     ///
-    void initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &CamerUser,const QString &CamerPow) Q_DECL_OVERRIDE;
+    void initCamerSlot(const QString &camerIP,const int &camerPort,const QString &CamerUser,const QString &CamerPow) Q_DECL_OVERRIDE;
 
     ///
     /// \brief putCommandSlots 抓取图片
     /// \param command 图片编号
     ///
-    virtual bool putCommandSlot(const int &imgNumber)Q_DECL_OVERRIDE;
+    virtual bool putCommandSlot(const int &imgNumber,const QString &imgTime)Q_DECL_OVERRIDE;
 
     ///
     /// \brief playStreamSlot 播放视频流

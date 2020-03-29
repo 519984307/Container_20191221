@@ -95,10 +95,11 @@ void MainWidget::InitializeSystemSet()
     qRegisterMetaType<QMap<QString,QString>>("QMap<QString,QString>");
 
     pSystemSettingWidget=new SystemSettingWidget (this);
+    connect(pSystemSettingWidget,&SystemSettingWidget::messageSignal,this,&MainWidget::messageSlot);
 
     channelCounnt=pSystemSettingWidget->pSettingValues->ChannelNumber;
     CamerNameList<<"Before"<<"After"<<"Left"<<"Right";
-    //CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate";
+    //CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate";    
 }
 
 void MainWidget::InitializeDataWindow()
@@ -230,10 +231,8 @@ void MainWidget::loadPlugins()
 
     /*  创建插件目录  */
     const QString pluginPath="Plugins";
-    if(!pluginsDir.cd(pluginPath)){
-        pluginsDir.mkdir(pluginPath);
-        pluginsDir.cd(pluginPath);
-    }
+    pluginsDir.mkdir(pluginPath);
+    pluginsDir.cd(pluginPath);
 
     const QString path=pluginsDir.path();
     for(const QString &fileName :pluginsDir.entryList(QDir::Files)){
@@ -456,7 +455,17 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     RecognizerProcessing* pRecognizerProcessing=new RecognizerProcessing (nullptr);
     RecognizerProcessingMqp.insert(num,pRecognizerProcessing);
 
-    pRecognizerProcessing->settingValues(num);
+    /* 设置图片保存路径1 */
+    connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatOneSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatOneSlot);
+    /* 设置图片保存路径2 */
+    //connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
+
+    pRecognizerProcessing->setChannelSlot(num);
+    /* 设置图片路径和保存协议1 */
+    emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
+    /* 设置图片路径和保存协议2 */
+    //emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);
+
 
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);

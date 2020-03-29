@@ -31,7 +31,7 @@ SOURCES += \
 HEADERS += \
         getimages.h \
     getimages_global.h \
-    getimagesinterface.h
+    underlyinggetimagesinterface.h
 
 unix {
     target.path = /usr/lib

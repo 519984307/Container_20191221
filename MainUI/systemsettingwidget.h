@@ -2,6 +2,7 @@
 #define SYSTEMSETTING_H
 
 #include "settingvalues.h"
+#include "defineobj.h"
 
 #include <QWidget>
 #include <QAbstractButton>
@@ -31,7 +32,7 @@ public:
 public:
 
     ///
-    /// \brief pSettingValues 配置参数
+    /// \brief pSettingValues 配置参数表
     ///
     SettingValues* pSettingValues;
 
@@ -64,9 +65,11 @@ private:
     void jsonWritetoUI();
 
     ///
-    /// \brief initImgPathValues 初始化参数设定
+    /// \brief createImgPath 创建图片保存路径
+    /// \param path 图片路径
+    /// \param currentindex 保存格式
     ///
-    void initImgPathValues(const QString &path);
+    void createImgPath(const QString &path, int currentindex);
 
 private slots:
 
@@ -89,10 +92,25 @@ private slots:
 signals:
 
     ///
-    /// \brief messageSignal 日志信息信号
-    /// \param msg 信息
+    /// \brief messageSignal 日志信息
+    /// \param type 日志类型
+    /// \param msg 信息体
     ///
-    void messageSignal(const QString &msg);
+    void messageSignal(const QString &type,const QString &msg);
+
+    ///
+    /// \brief setSaveImgFormatOneSignal 设置图片保存路径1
+    /// \param path 图片路径
+    /// \param format 保存协议
+    ///
+    void setSaveImgFormatOneSignal(const QString &path,int format);
+
+    ///
+    /// \brief setSaveImgFormatTowSignal 设置图片保存路径2
+    /// \param path 图片路径
+    /// \param format 保存协议
+    ///
+    void setSaveImgFormatTowSignal(const QString &path,int format);
 };
 
 #endif // SYSTEMSETTING_H

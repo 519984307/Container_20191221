@@ -21,6 +21,7 @@
 #include "databaseinsertinterface.h"
 #include "databasereadinterface.h"
 #include "recognizerinterface.h"
+#include "underlyinggetimagesinterface.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"

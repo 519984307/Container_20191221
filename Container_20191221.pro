@@ -7,4 +7,4 @@ SUBDIRS += \
     DataBaseRead \
     DataBaseInsert \
     IdentifyImages\
-    #GetImages \
+    GetImages \

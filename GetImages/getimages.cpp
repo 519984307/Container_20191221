@@ -25,7 +25,7 @@ GetImages::~GetImages()
     pTimerLinkCamer=nullptr;
 }
 
-void GetImages::initCamerSlot(const QString &camerIP, quint16 camerPort,const QString &user,const QString &pow)
+void GetImages::initCamerSlot(const QString &camerIP, const int &camerPort,const QString &user,const QString &pow)
 {
     this->camerIP=camerIP;
     this->camerPort=camerPort;
@@ -58,7 +58,7 @@ void GetImages::disconnected()
     //emit message(tr("%1 Camera link disconnected").arg(id));
 }
 
-bool GetImages::putCommandSlot(const int &imgNumber)
+bool GetImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
 {
     if(tcpSocket->isValid()){
         const char * str_data="capture 01 ";
