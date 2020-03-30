@@ -30,7 +30,7 @@ void PictureWidget::on_pushButton_2_clicked()
 }
 
 void PictureWidget::on_pushButton_3_clicked()
-{
+{    
     emit playStreamSignal(static_cast<uint>(ui->label->winId()) ,false);
     ui->pushButton_2->setEnabled(true);
     ui->pushButton_3->setEnabled(false);
