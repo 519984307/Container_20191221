@@ -23,6 +23,12 @@ public:
     ///
     void pictureStreamSlot(const QByteArray &jpgStream,const int &imgNumber)Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief identifyResults 识别图片
+    /// \param image  图片名
+    ///
+    void identifyResults(const QString &image)Q_DECL_OVERRIDE;
+
 };
 
 #endif // IDENTIFYIMAGES_H

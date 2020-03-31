@@ -63,7 +63,7 @@ private:
     ///
     /// \brief camerPort 相机端口
     ///
-    quint16 camerPort;
+    int camerPort;
 
     ///
     /// \brief jpgStream 图片流
@@ -92,7 +92,7 @@ public:
     /// \brief putCommandSlots 抓取图片
     /// \param command 图片编号
     ///
-    virtual bool putCommandSlot(const int &imgNumber,const QString &imgTime)Q_DECL_OVERRIDE;
+    bool putCommandSlot(const int &imgNumber,const QString &imgTime)Q_DECL_OVERRIDE;
 
     ///
     /// \brief playStreamSlot 播放视频流

@@ -387,6 +387,8 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
         /* 逻辑抓取图片 */
         connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);
     }
+    /* 设置红外模式 */
+    pInfraredProcessing->setAlarmModeSignal(true);
 
     /*  线程运行    */
     QThread* pThread=new QThread(this);

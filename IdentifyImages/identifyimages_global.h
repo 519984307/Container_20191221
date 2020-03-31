@@ -2,7 +2,7 @@
 #define IDENTIFYIMAGES_GLOBAL_H
 
 #include <QtCore/qglobal.h>
-//#include <QPixmap>
+#include <QProcess>
 
 #if defined(IDENTIFYIMAGES_LIBRARY)
 #  define IDENTIFYIMAGESSHARED_EXPORT Q_DECL_EXPORT

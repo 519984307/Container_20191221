@@ -12,5 +12,10 @@ IdentifyImages::~IdentifyImages()
 
 void IdentifyImages::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {
+    /* Subsequent processing */
+}
+
+void IdentifyImages::identifyResults(const QString &image)
+{
 
 }

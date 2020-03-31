@@ -7,7 +7,7 @@
 #include  <QTimer>
 #include  <QtNetwork/QSctpSocket>
 
-#if defined(GETIMAGE_LIBRARY)
+#if defined(GETIMAGES_LIBRARY)
 #  define GETIMAGESSHARED_EXPORT Q_DECL_EXPORT
 #else
 #  define GETIMAGESSHARED_EXPORT Q_DECL_IMPORT
