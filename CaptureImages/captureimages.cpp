@@ -7,6 +7,7 @@ CaptureImages::CaptureImages(QObject *parent)
     /* 登录ID,登录状态,视频流状态 */
     lUserID=-1;dwResult=0;streamID=-1;
     /* windows下不支持设置动态库路径 */
+    //pDLL=new QLibrary("HCNetSDK.dll");
     pDLL=new QLibrary (QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
 
     if(pDLL->load()){
