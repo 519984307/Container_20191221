@@ -465,7 +465,10 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatOneSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatOneSlot);
     /* 设置图片保存路径2 */
     //connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
-    connect(pRecognizerProcessing,&RecognizerProcessing::recognizerImageSignal,pRecognizerInterface,&RecognizerInterface::recognitionResultSlot);
+    /* 识别图片 */
+    connect(pRecognizerProcessing,&RecognizerProcessing::identifyImagesSignal,pRecognizerInterface,&RecognizerInterface::identifyImagesSlot);
+    /* 日志信息 */
+    connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 设置图片路径和保存协议1 */
     emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
     /* 设置图片路径和保存协议2 */
@@ -617,6 +620,6 @@ void MainWidget::messageSlot(const QString &type, const QString &msg)
     if(list.count()>1&& list[0]=="ZBY_LOG_ERROR"){
         pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: red;");
     }
-    this->pStatusBar->showMessage(msg.toLocal8Bit(),3000);
+    this->pStatusBar->showMessage(msg.toLocal8Bit().data(),3000);
 }
 

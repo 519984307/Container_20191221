@@ -12,7 +12,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="ico.qrc">
-    <normaloff>:/new/prefix1/ICO.ico</normaloff>:/new/prefix1/ICO.ico</iconset>
+    <normaloff>:/new/prefix1/ICO.bmp</normaloff>:/new/prefix1/ICO.bmp</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <property name="leftMargin">

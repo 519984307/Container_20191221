@@ -47,10 +47,10 @@ private:
 signals:
 
     ///
-    /// \brief recognizerImageSignal 识别图片
+    /// \brief identifyImagesSignal 识别图片
     /// \param image  图片名
     ///
-    void recognizerImageSignal(const QString &image);
+    void identifyImagesSignal(const QString &image);
 
 public slots:
 

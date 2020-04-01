@@ -70,7 +70,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             delete labelPix;
             labelPix=nullptr;
 
-            emit recognizerImageSignal(image);/* 识别图片 */
+            emit identifyImagesSignal(image);/* 识别图片 */
         }
     }
 }

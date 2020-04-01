@@ -31,15 +31,7 @@ public:
     /// \brief identifyResults 识别图片
     /// \param image  图片名
     ///
-    void identifyResults(const QString &image)Q_DECL_OVERRIDE;
-
-public slots:
-    ///
-    /// \brief recognitionResultSlot 识别结果
-    /// \param result
-    ///
-    void recognitionResultSlot(const QString &result)Q_DECL_OVERRIDE;
-
+    void identifyImagesSlot(const QString &image)Q_DECL_OVERRIDE;
 };
 
 #endif // IDENTIFYIMAGES_H

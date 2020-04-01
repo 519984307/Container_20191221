@@ -21,6 +21,12 @@ signals:
     ///
     void messageSignal(const QString &type,const QString &msg);
 
+    ///
+    /// \brief recognitionResultSlot 识别结果
+    /// \param result
+    ///
+    void recognitionResultSignal(const QString &result);
+
 public slots:
 
     ///
@@ -34,13 +40,7 @@ public slots:
     /// \brief identifyResults 识别图片
     /// \param image  图片名
     ///
-    virtual void identifyResults(const QString &image)=0;
-
-    ///
-    /// \brief recognitionResultSlot 识别结果
-    /// \param result
-    ///
-    virtual void recognitionResultSlot(const QString &result)=0;
+    virtual void identifyImagesSlot(const QString &image)=0;
 };
 
 #define RecognizerInterfaceIID "ZBY.ContainerServer.RecognizerInterface/1.0"
