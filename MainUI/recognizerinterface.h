@@ -35,6 +35,12 @@ public slots:
     /// \param image  图片名
     ///
     virtual void identifyResults(const QString &image)=0;
+
+    ///
+    /// \brief recognitionResultSlot 识别结果
+    /// \param result
+    ///
+    virtual void recognitionResultSlot(const QString &result)=0;
 };
 
 #define RecognizerInterfaceIID "ZBY.ContainerServer.RecognizerInterface/1.0"

@@ -17,9 +17,7 @@ public:
 
 private:
 
-    QDir  dir;
-
-    QMutex mutex;    
+    QMutex mutex;
 
     ///
     /// \brief channel 通道号
@@ -47,6 +45,12 @@ private:
 //    int format2;
 
 signals:
+
+    ///
+    /// \brief recognizerImageSignal 识别图片
+    /// \param image  图片名
+    ///
+    void recognizerImageSignal(const QString &image);
 
 public slots:
 

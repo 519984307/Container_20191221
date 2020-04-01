@@ -465,13 +465,13 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatOneSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatOneSlot);
     /* 设置图片保存路径2 */
     //connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
-
-    pRecognizerProcessing->setChannelSlot(num);
+    connect(pRecognizerProcessing,&RecognizerProcessing::recognizerImageSignal,pRecognizerInterface,&RecognizerInterface::recognitionResultSlot);
     /* 设置图片路径和保存协议1 */
     emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
     /* 设置图片路径和保存协议2 */
-    //emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);
-
+    //emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);    
+    /* 设置通道号 */
+    pRecognizerProcessing->setChannelSlot(num);
 
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);

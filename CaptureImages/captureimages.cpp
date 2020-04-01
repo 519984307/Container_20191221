@@ -6,7 +6,7 @@ CaptureImages::CaptureImages(QObject *parent)
 
     /* 登录ID,登录状态,视频流状态 */
     lUserID=-1;dwResult=0;streamID=-1;
-
+    /* windows下不支持设置动态库路径 */
     pDLL=new QLibrary (QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
 
     if(pDLL->load()){
@@ -147,7 +147,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
     uint32_t charLen=300000;
     LPDWORD dataLen=nullptr;
     char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
-    pJpegFile.wPicSize=0xff;
+    pJpegFile.wPicSize=184;
     pJpegFile.wPicQuality=0;
 
     if(dwResult){

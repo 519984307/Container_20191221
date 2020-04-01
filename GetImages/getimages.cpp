@@ -44,7 +44,8 @@ void GetImages::connected()
     emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Camera link successful").arg(camerIP));
     emit camerStateSingal(camerIP,true);
 
-    if(pTimerLinkCamer->isActive())//防止出现链接完成后,物理线路断开
+    /* 防止出现链接完成后,物理线路断开 */
+    if(pTimerLinkCamer->isActive())
     {
         pTimerLinkCamer->stop();
     }
@@ -97,10 +98,12 @@ void GetImages::readFortune()
         jpgStream.append(tmpStream);
     }
 
-    int end=jpgStream.lastIndexOf("\xFF\xD9");//找到结尾标记
+    /* 找到结尾标记 */
+    int end=jpgStream.lastIndexOf("\xFF\xD9");
     if(end!=-1)
     {
-        int start=jpgStream.indexOf("\xFF\xD8");//找到开头标记
+        /* 找到开头标记 */
+        int start=jpgStream.indexOf("\xFF\xD8");
         if(start!=-1)
         {
             jpgStream=jpgStream.mid(start,end-start+2);
@@ -119,7 +122,6 @@ void GetImages::readFortune()
     pTimerLinkCamer->start(20000);
 }
 
-//链接错误槽
 void GetImages::displayError(QAbstractSocket::SocketError socketError)
 {
     emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1 Camera link error<errorCode=%2>").arg(camerIP).arg(socketError));

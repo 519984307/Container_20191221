@@ -3,6 +3,7 @@
 
 #include "identifyimages_global.h"
 #include "recognizerinterface.h"
+#include "recognition.h"
 
 class IDENTIFYIMAGESSHARED_EXPORT IdentifyImages:public RecognizerInterface
 {
@@ -13,6 +14,9 @@ class IDENTIFYIMAGESSHARED_EXPORT IdentifyImages:public RecognizerInterface
 public:
     IdentifyImages(QObject* parent=nullptr);
     ~IdentifyImages()Q_DECL_OVERRIDE;
+
+private:
+    QThreadPool* pPool;
 
 public:
 
@@ -28,6 +32,13 @@ public:
     /// \param image  图片名
     ///
     void identifyResults(const QString &image)Q_DECL_OVERRIDE;
+
+public slots:
+    ///
+    /// \brief recognitionResultSlot 识别结果
+    /// \param result
+    ///
+    void recognitionResultSlot(const QString &result)Q_DECL_OVERRIDE;
 
 };
 
