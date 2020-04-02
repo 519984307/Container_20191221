@@ -62,10 +62,10 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         }
 
         if(imgTime!="" && jpgStream!=nullptr){
-            QPixmap *labelPix = new QPixmap(QSize(576,768));
+            QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);
 
-            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(channel).arg(imgTime.split('-').join("").split(':').join("").split(" ").join("")).arg(imgNumber));
+            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(imgTime.split('-').join("").split(':').join("").split(" ").join("")).arg(imgNumber).arg(channel));
             labelPix->save(image);
             delete labelPix;
             labelPix=nullptr;
@@ -73,4 +73,14 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             emit identifyImagesSignal(image);/* 识别图片 */
         }
     }
+}
+
+void RecognizerProcessing::infraredCompleteSlot(const int &containerType)
+{
+
+}
+
+void RecognizerProcessing::recognitionResultSlot(const QString &result, const QString &image)
+{
+
 }

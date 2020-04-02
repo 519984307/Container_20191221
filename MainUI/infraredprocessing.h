@@ -97,6 +97,12 @@ signals:
      ///
      void insertDataBaseSignal(QMap<QString,QString> data);    
 
+     ///
+     /// \brief infraredCompleteSignal 逻辑抓拍完成信号
+     /// \param containerType
+     ///
+     void infraredCompleteSignal(const int &containerType);
+
 public slots:
 
     ///

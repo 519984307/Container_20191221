@@ -30,9 +30,10 @@ signals:
 
     ///
     /// \brief recognitionResult 识别结果
-    /// \param result
+    /// \param result 识别结果
+    /// \param image 图片名
     ///
-    void recognitionResultSignal(const QString &result);
+    void recognitionResultSignal(const QString &result,const QString &image);
 
     ///
     /// \brief messageSignal 日志信息

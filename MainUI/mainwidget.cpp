@@ -467,6 +467,8 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     //connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
     /* 识别图片 */
     connect(pRecognizerProcessing,&RecognizerProcessing::identifyImagesSignal,pRecognizerInterface,&RecognizerInterface::identifyImagesSlot);
+    /* 识别结果 */
+    connect(pRecognizerInterface,&RecognizerInterface::recognitionResultSignal,pRecognizerProcessing,&RecognizerProcessing::recognitionResultSlot);
     /* 日志信息 */
     connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 设置图片路径和保存协议1 */
@@ -496,8 +498,12 @@ void MainWidget::publicConnect()
                   * 更新结果后续处理
                   */
             }
-            for(auto obj:channelCamerMultiMap.values(key)){
-                if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
+            if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
+                /* 逻辑抓拍完成 */
+                connect(pInfraredProcessing,&InfraredProcessing::infraredCompleteSignal,pRecognizerProcessing,&RecognizerProcessing::infraredCompleteSlot);
+            }
+            if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
+                for(auto obj:channelCamerMultiMap.values(key)){
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
                         /* 绑定(前后左右)相机抓拍图片流到数据界面(显示图片) */
                         connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);

@@ -22,10 +22,11 @@ signals:
     void messageSignal(const QString &type,const QString &msg);
 
     ///
-    /// \brief recognitionResultSlot 识别结果
-    /// \param result
+    /// \brief recognitionResult 识别结果
+    /// \param result 识别结果
+    /// \param image 图片名
     ///
-    void recognitionResultSignal(const QString &result);
+    void recognitionResultSignal(const QString &result,const QString &image);
 
 public slots:
 

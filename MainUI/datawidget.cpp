@@ -19,7 +19,7 @@ DataWidget::~DataWidget()
 
 void DataWidget::resizeEvent(QResizeEvent *size)
 {
-
+    ui->Img_After_label->setMinimumWidth(ui->Img_Front_label->size().width());
 }
 
 void DataWidget::logicStatusSlot(int *status)
@@ -53,7 +53,9 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     }
 
     /* 防止图片发生偏移 */
-    QPixmap  labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    QSize size=ui->Img_Front_label->size();
+    QPixmap  labelPixFit=labelPix->scaled(size.width()-4,size.height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+
     switch (imgNumber) {
     case 1:
             ui->Img_Front_label->setPixmap(labelPixFit);

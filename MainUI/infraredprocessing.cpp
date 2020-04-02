@@ -55,13 +55,14 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["Channel"]=QString::number(channel);/* 通道号 */
         data["Type"]=QString::number(2);
 
-        data["ImgFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(1);
-        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(2);
-        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(3);
-        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(4);
-        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(5);
-        data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
+        data["ImgFront"]=tr("%1%2%3.jpg").arg(name).arg(1).arg(channel);
+        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
+        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
+        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(name).arg(4).arg(channel);
+        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(name).arg(5).arg(channel);
+        data["ImgAfter"]=tr("%1%2%3.jpg").arg(name).arg(6).arg(channel);
 
+        emit infraredCompleteSignal(2);
         emit insertDataBaseSignal(data);
         data.clear();
 
@@ -79,11 +80,12 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["Timer"]=timer;
         data["Type"]=QString::number(1);
 
-        data["ImgFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(1);
-        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(2);
-        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(3);
-        data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
+        data["ImgFront"]=tr("%1%2%3.jpg").arg(name).arg(1).arg(channel);
+        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
+        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
+        data["ImgAfter"]=tr("%1%2%3.jpg").arg(name).arg(6).arg(channel);
 
+        emit infraredCompleteSignal(1);
         emit insertDataBaseSignal(data);
         data.clear();
 
@@ -107,13 +109,14 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["Timer"]=timer;
         data["Type"]=QString::number(3);
 
-        data["ImgFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(1);
-        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(2);
-        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(3);
-        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(4);
-        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(5);
-        data["ImgAfter"]=tr("%1%2%3.jpg").arg(channel).arg(name).arg(6);
+        data["ImgFront"]=tr("%1%2%3.jpg").arg(name).arg(1).arg(channel);
+        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
+        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
+        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(name).arg(4).arg(channel);
+        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(name).arg(5).arg(channel);
+        data["ImgAfter"]=tr("%1%2%3.jpg").arg(name).arg(6).arg(channel);
 
+        emit infraredCompleteSignal(3);
         emit insertDataBaseSignal(data);
         data.clear();
 

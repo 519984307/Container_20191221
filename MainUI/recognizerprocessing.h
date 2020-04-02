@@ -78,6 +78,19 @@ public slots:
     /// \param imgNumber 图片编号
     ///
     void pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber,const QString &imgTime);
+
+    ///
+    /// \brief infraredCompleteSlot 逻辑抓拍完成
+    /// \param containerType
+    ///
+    void infraredCompleteSlot(const int &containerType);
+
+    ///
+    /// \brief recognitionResultSlot 识别结果
+    /// \param result 识别结果
+    /// \param image 图片名
+    ///
+    void recognitionResultSlot(const QString &result,const QString &image);
 };
 
 #endif // RECOGNIZERPROCESSING_H
