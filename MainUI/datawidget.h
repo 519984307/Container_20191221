@@ -25,8 +25,12 @@ public:
     void resizeEvent(QResizeEvent* size)Q_DECL_OVERRIDE;
 
 private:
+
     Ui::DataWidget *ui;
+
     QMutex mutex;
+
+    bool init;
 
 public slots:
 

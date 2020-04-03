@@ -175,7 +175,7 @@ void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
     ui->stackedWidget->setCurrentIndex(0);
 }
 
-//------------------------------------------------------------------------------------------------------------- 选择状态切换
+/* 选择状态切换 */
 void DataBaseWidget::on_Datatime_checkBox_stateChanged(int arg1)
 {
     if(arg1==Qt::Checked){
@@ -279,7 +279,7 @@ void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
     }
 }
 
-///--------------------------------------------------------------------------------------------------------------------------------------------------------- 选中数据
+/* 选中数据 */
 
 void DataBaseWidget::showImages(const QModelIndex &index)
 {

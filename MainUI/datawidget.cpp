@@ -7,6 +7,8 @@ DataWidget::DataWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    init=true;
+
     this->setParent(parent);
     this->setHidden(true);
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);    
@@ -18,8 +20,11 @@ DataWidget::~DataWidget()
 }
 
 void DataWidget::resizeEvent(QResizeEvent *size)
-{
-    ui->Img_After_label->setMinimumWidth(ui->Img_Front_label->size().width());
+{   
+    if(!init){
+        ui->Img_After_label->setMinimumWidth(ui->Img_Front_label->size().width());
+    }
+    init=false;
 }
 
 void DataWidget::logicStatusSlot(int *status)
