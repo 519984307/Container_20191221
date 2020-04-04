@@ -30,8 +30,6 @@ private:
 
     QMutex mutex;
 
-    bool init;
-
 public slots:
 
     ///
@@ -46,6 +44,15 @@ public slots:
     /// \param imgNumber 编号
     ///
     void pictureStreamSlot(const QByteArray &jpgStream,const int &imgNumber);
+
+    ///
+    /// \brief containerSlot 箱号结果
+    /// \param result1 前箱
+    /// \param iso1 箱型
+    /// \param result2 后箱
+    /// \param iso2 箱型
+    ///
+    void containerSlot(const QString &result1,const QString &iso1,const QString &result2,const QString &iso2);
 
 signals:
 

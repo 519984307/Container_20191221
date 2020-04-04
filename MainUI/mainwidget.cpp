@@ -461,6 +461,11 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     RecognizerProcessing* pRecognizerProcessing=new RecognizerProcessing (nullptr);
     RecognizerProcessingMqp.insert(num,pRecognizerProcessing);
 
+    if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num])){
+        /* 识别结果 */
+        connect(pRecognizerProcessing,&RecognizerProcessing::containerSignal,pDataWidget,&DataWidget::containerSlot);
+    }
+
     /* 设置图片保存路径1 */
     connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatOneSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatOneSlot);
     /* 设置图片保存路径2 */

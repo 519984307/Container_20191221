@@ -4,6 +4,14 @@ RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 {
     this->imgPath1="";
     //this->imgPath2="";
+    containerNum=0;
+    containertType=0;
+}
+
+RecognizerProcessing::~RecognizerProcessing()
+{
+    resulList.clear();
+    queue.clear();
 }
 
 void RecognizerProcessing::setChannelSlot(int channel)
@@ -75,12 +83,89 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
     }
 }
 
-void RecognizerProcessing::infraredCompleteSlot(const int &containerType)
+void RecognizerProcessing::infraredCompleteSlot(const int &type)
 {
-
+    /* 1:45G1 */
+    /* 2:22G1 */
+    /* 3:双22G1 */
+    queue.enqueue(type);
 }
 
 void RecognizerProcessing::recognitionResultSlot(const QString &result, const QString &image)
 {
+    resulList<<result;
 
+    if(containerNum==0&&queue.count()!=0){
+        containertType=queue.dequeue();
+        switch (containertType) {
+        case 1:
+            containerNum=4;
+            break;
+        case 2:
+            containerNum=6;
+            break;
+        case 3:
+            containerNum=6;
+            break;
+        }
+    }
+
+    if(resulList.count()==containerNum){
+        for(int i=0;i<containerNum;i++){
+            chanResulList.append(resulList[0]);
+            resulList.removeAt(0);
+        }
+        resultsOfAnalysis(chanResulList,containertType);
+        containerNum=0;
+        containertType=0;
+    }
+}
+
+void RecognizerProcessing::resultsOfAnalysis(QStringList list,int type)
+{
+    /* 双箱，分前3个结果和后3个结果独立处理 */
+    QStringList conTemp,isoTemp;/* 箱号,箱型 */
+    QList<uint32_t> probabilityTemp;/* 置信度 */
+
+    for (auto var:list) {
+        QStringList tmp=var.split(":")[1].split("|");
+        conTemp.append(tmp[0]);
+        isoTemp.append(tmp[1]);
+        probabilityTemp.append(tmp[2].toUInt());
+    }
+
+    if(type==3){
+
+        int index1=0;
+        int index2=0;
+        uint32_t probability=0;
+
+        for (int var = 0; var < 3; ++var) {
+            if(probabilityTemp[var]>probability){
+                probability=probabilityTemp[var];
+                index1=var;
+            }
+        }
+        probability=0;
+        for (int var = 3; var < 6; ++var) {
+            if(probabilityTemp[var]>probability){
+                probability=probabilityTemp[var];
+                index2=var;
+            }
+        }
+        emit containerSignal(conTemp[index1],isoTemp[1],conTemp[index2],isoTemp[index2]);
+    }
+    else {
+        uint32_t probability=0;
+        int index1=0;
+
+        for (int var = 0; var < probabilityTemp.count(); ++var) {
+            if(probabilityTemp[var]>probability){
+                probability=probabilityTemp[var];
+                index1=var;
+            }
+        }
+        emit containerSignal(conTemp[index1],isoTemp[1],"","");
+    }
+    list.clear();
 }

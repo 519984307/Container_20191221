@@ -8,16 +8,55 @@
 #include <QMutex>
 #include <QDir>
 #include <QDateTime>
+#include <QQueue>
 
 class RecognizerProcessing : public QObject
 {
     Q_OBJECT
 public:
     explicit RecognizerProcessing(QObject *parent = nullptr);
+    ~RecognizerProcessing();
 
 private:
 
+    ///
+    /// \brief resultsOfAnalysis 箱号分析
+    /// \param list
+    /// \param type 箱型
+    ///
+     void resultsOfAnalysis(QStringList list,int type);
+
+private:
+
+    ///
+    /// \brief mutex 锁
+    ///
     QMutex mutex;
+
+    ///
+    /// \brief queue 箱型队列
+    ///
+    QQueue<int> queue;
+
+    ///
+    /// \brief resulList 所以识别结果列表
+    ///
+    QStringList resulList;
+
+    ///
+    /// \brief chanResulList 单次逻辑识别结果列表
+    ///
+    QStringList chanResulList;
+
+    ///
+    /// \brief containerNum 识别集装箱数量
+    ///
+    int containerNum;
+
+    ///
+    /// \brief containertType 箱型
+    ///
+    int containertType;
 
     ///
     /// \brief channel 通道号
@@ -52,6 +91,12 @@ signals:
     ///
     void identifyImagesSignal(const QString &image);
 
+    ///
+    /// \brief containerSignal 箱号结果
+    /// \param result 箱号
+    ///
+    void containerSignal(const QString &result1,const QString &iso1,const QString &result2,const QString &iso2);
+
 public slots:
 
     ///
@@ -81,9 +126,9 @@ public slots:
 
     ///
     /// \brief infraredCompleteSlot 逻辑抓拍完成
-    /// \param containerType
+    /// \param type 逻辑类型
     ///
-    void infraredCompleteSlot(const int &containerType);
+    void infraredCompleteSlot(const int &type);
 
     ///
     /// \brief recognitionResultSlot 识别结果

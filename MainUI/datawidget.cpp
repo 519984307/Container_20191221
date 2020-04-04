@@ -7,8 +7,6 @@ DataWidget::DataWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    init=true;
-
     this->setParent(parent);
     this->setHidden(true);
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);    
@@ -21,10 +19,7 @@ DataWidget::~DataWidget()
 
 void DataWidget::resizeEvent(QResizeEvent *size)
 {   
-    if(!init){
-        ui->Img_After_label->setMinimumWidth(ui->Img_Front_label->size().width());
-    }
-    init=false;
+    ui->Img_After_label->setMinimumWidth((ui->tab->width()-4)/3);
 }
 
 void DataWidget::logicStatusSlot(int *status)
@@ -44,7 +39,8 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     if(jpgStream!=nullptr){
         labelPix->loadFromData(jpgStream);
     }
-    else{/* 清除图片 */
+    else{
+        /* 清除图片 */
         ui->Img_Front_label->clear();
         ui->Img_LeftFront_label->clear();
         ui->Img_RightFront_label->clear();
@@ -52,14 +48,19 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->Img_RightAfter_label->clear();
         ui->Img_After_label->clear();
 
+        /* 清除箱号结果 */
+        ui->lineEdit->clear();
+        ui->lineEdit_2->clear();
+        ui->lineEdit_3->clear();
+        ui->lineEdit_4->clear();
+
         delete labelPix;
         labelPix=nullptr;
         return;
     }
 
     /* 防止图片发生偏移 */
-    QSize size=ui->Img_Front_label->size();
-    QPixmap  labelPixFit=labelPix->scaled(size.width()-4,size.height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+    QPixmap  labelPixFit=labelPix->scaled((ui->tab->width()-4)/3-4,(ui->tab->height()-36)/2-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
     switch (imgNumber) {
     case 1:
@@ -84,6 +85,14 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 
     delete labelPix;
     labelPix=nullptr;
+}
+
+void DataWidget::containerSlot(const QString &result1, const QString &iso1, const QString &result2, const QString &iso2)
+{
+    ui->lineEdit->setText(result1);
+    ui->lineEdit_2->setText(iso1);
+    ui->lineEdit_3->setText(result2);
+    ui->lineEdit_4->setText(iso2);
 }
 
 void DataWidget::on_test_22_pushButton_clicked()
