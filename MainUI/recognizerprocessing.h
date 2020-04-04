@@ -24,7 +24,7 @@ private:
     /// \param list
     /// \param type 箱型
     ///
-     void resultsOfAnalysis(QStringList list,int type);
+     void resultsOfAnalysis(int type);
 
 private:
 

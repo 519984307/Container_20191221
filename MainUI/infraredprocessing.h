@@ -85,11 +85,11 @@ signals:
     void exitWhileSignal(bool exit);
 
     ///
-    /// \brief pictureStreamSignal 图片流数据信号
+    /// \brief clearnPictureSignal 图片流数据信号
     /// \param jpgStream 图片流
     /// \param command 编号
     ///
-     void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
+     void clearnPictureSignal(const QByteArray &jpgStream,const int &imgNumber);
 
      ///
      /// \brief insertDataBaseSignal 写入记录到数据库

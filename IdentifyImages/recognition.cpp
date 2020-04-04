@@ -22,6 +22,7 @@ void Recognition::run()
         /* 等待识别结果 */
         if(Process.waitForFinished()){
             QByteArray result= Process.readAll();
+
             emit recognitionResultSignal(result.data(),image);
             emit messageSignal(ZBY_LOG("INFO"),tr("Identify the results:%1").arg(result.data()));
             //QList<QByteArray> list= result.split('|');

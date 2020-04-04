@@ -33,6 +33,9 @@ void RecognizerProcessing::setSaveImgFormatOneSlot(const QString &path, int form
 
 void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber, const QString &imgTime)
 {
+    if(imgNumber==0){
+        return;
+    }
     QMutexLocker locket(&mutex);
     if(imgPath1!=""){/* 保存路径不存在,图片不保存,不识别 */
         QDir dir(imgPath1);
@@ -69,24 +72,30 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             dir.cd(suffixPath);
         }
 
+        QString image="";
         if(imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);
+            /* 缩放图片 */
+            QPixmap labelPixFit=  labelPix->scaled(1280,960, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(imgTime.split('-').join("").split(':').join("").split(" ").join("")).arg(imgNumber).arg(channel));
-            labelPix->save(image);
+            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(imgTime.split('-').join("").split(':').join("").split(" ").join("")).arg(imgNumber).arg(channel));
+
+            labelPixFit.save(image);
+            //labelPix->save(image);
             delete labelPix;
             labelPix=nullptr;
 
-            emit identifyImagesSignal(image);/* 识别图片 */
+            //emit identifyImagesSignal(image);/* 识别图片 */
         }
+        emit identifyImagesSignal(image);/* 识别图片 */
     }
 }
 
 void RecognizerProcessing::infraredCompleteSlot(const int &type)
 {
-    /* 1:45G1 */
-    /* 2:22G1 */
+    /* 1:22G1 */
+    /* 2:45G1 */
     /* 3:双22G1 */
     queue.enqueue(type);
 }
@@ -115,23 +124,30 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             chanResulList.append(resulList[0]);
             resulList.removeAt(0);
         }
-        resultsOfAnalysis(chanResulList,containertType);
+        resultsOfAnalysis(containertType);
         containerNum=0;
         containertType=0;
     }
 }
 
-void RecognizerProcessing::resultsOfAnalysis(QStringList list,int type)
+void RecognizerProcessing::resultsOfAnalysis(int type)
 {
     /* 双箱，分前3个结果和后3个结果独立处理 */
     QStringList conTemp,isoTemp;/* 箱号,箱型 */
     QList<uint32_t> probabilityTemp;/* 置信度 */
 
-    for (auto var:list) {
-        QStringList tmp=var.split(":")[1].split("|");
-        conTemp.append(tmp[0]);
-        isoTemp.append(tmp[1]);
-        probabilityTemp.append(tmp[2].toUInt());
+    for (auto var:chanResulList) {
+        if(var.split(":")[1].indexOf("|")==-1){/* 没有识别到结果 */
+            conTemp.append("");
+            isoTemp.append("");
+            probabilityTemp.append(0);
+        }
+        else {
+            QStringList tmp=var.split(":")[1].split("|");
+            conTemp.append(tmp[0]);
+            isoTemp.append(tmp[1]);
+            probabilityTemp.append(tmp[2].toUInt());
+        }
     }
 
     if(type==3){
@@ -167,5 +183,9 @@ void RecognizerProcessing::resultsOfAnalysis(QStringList list,int type)
         }
         emit containerSignal(conTemp[index1],isoTemp[1],"","");
     }
-    list.clear();
+
+    chanResulList.clear();
+    conTemp.clear();
+    isoTemp.clear();
+    probabilityTemp.clear();
 }

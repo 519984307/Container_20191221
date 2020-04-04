@@ -19,16 +19,16 @@ MainWidget::MainWidget(QWidget *parent) :
     publicConnect();
 
     /* test */
-    for(auto b:ImageProcessingMap.values()){
-        if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(b)){
-            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-        }
-    }
-    for(auto a :InfraredProcessingMap.values()){
-        if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(a)){
-            emit pInfraredProcessing->startSlaveSignal("com4","com5");
-        }
-    }
+//    for(auto b:ImageProcessingMap.values()){
+//        if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(b)){
+//            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+//        }
+//    }
+//    for(auto a :InfraredProcessingMap.values()){
+//        if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(a)){
+//            emit pInfraredProcessing->startSlaveSignal("com4","com5");
+//        }
+//    }
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
@@ -371,7 +371,7 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
         /*  绑定相机组抓到逻辑处理 */
         pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(num),num);
         /* 清除界面图片 */
-        connect(pInfraredProcessing,&InfraredProcessing::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+        connect(pInfraredProcessing,&InfraredProcessing::clearnPictureSignal,pDataWidget,&DataWidget::pictureStreamSlot);
         /* 红外状态到界面 */
         connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
         /* 开始逻辑检测 */

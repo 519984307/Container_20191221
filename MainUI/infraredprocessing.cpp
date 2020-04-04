@@ -25,17 +25,21 @@ void InfraredProcessing::logicStatusSlot(int *status)
 
 void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
 {
-    /*
+    /* putCommnd
      * -1:来车
      *0:45G1前面
      *1:45G1后面
      *2:22G1
      *3:双22G1前面
-     *4:双22G1后面
-    */
+     *4:双22G1后面*/
+    /* Type
+      * 0没有箱
+      * 1:22G1
+      * 2:45G1
+      * 3:双22G1*/
     switch (putCommnd) {
     case -1:
-        emit pictureStreamSignal(nullptr,-1);/* 通知来车,清除数据界面图片 */
+        emit clearnPictureSignal(nullptr,-1);/* 通知来车,清除数据界面图片 */
         break;
     case 0:
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */

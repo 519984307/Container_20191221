@@ -164,10 +164,13 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
                 QByteArray arrayJpg(buff,300000);
                 emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
 
-
                 emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(camerIp));
             }
         }
+    }
+    else {
+        /* 保证识别流程完成(识别流程需要完整图片编号) */
+        emit pictureStreamSignal(nullptr,imgNumber,imgTime);
     }
 
     delete  dataLen;    dataLen=nullptr;

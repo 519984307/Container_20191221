@@ -9,7 +9,7 @@ DataWidget::DataWidget(QWidget *parent) :
 
     this->setParent(parent);
     this->setHidden(true);
-    this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);    
+    this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 }
 
 DataWidget::~DataWidget()
@@ -18,8 +18,9 @@ DataWidget::~DataWidget()
 }
 
 void DataWidget::resizeEvent(QResizeEvent *size)
-{   
-    ui->Img_After_label->setMinimumWidth((ui->tab->width()-4)/3);
+{       
+    ui->Img_After_label->setMinimumWidth(size->size().width()/3-4);
+    ui->Img_After_label->setMinimumHeight(size->size().height()/2-36);
 }
 
 void DataWidget::logicStatusSlot(int *status)
@@ -34,12 +35,25 @@ void DataWidget::logicStatusSlot(int *status)
 
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
 {   
+    if(imgNumber==0){
+        return;
+    }
     QMutexLocker locker(&mutex);
     QPixmap *labelPix = new QPixmap();
+    QPixmap  labelPixFit;
     if(jpgStream!=nullptr){
         labelPix->loadFromData(jpgStream);
+        /* 防止图片发生偏移 */
+        //labelPixFit=labelPix->scaled((ui->tab->width()-4)/3-4,(ui->tab->height()-36)/2-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+        labelPixFit=labelPix->scaled(ui->Img_Front_label->width()-4,ui->Img_Front_label->height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     }
     else{
+        delete labelPix;
+        labelPix=nullptr;
+    }
+
+    switch (imgNumber) {
+    case -1:
         /* 清除图片 */
         ui->Img_Front_label->clear();
         ui->Img_LeftFront_label->clear();
@@ -53,38 +67,43 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->lineEdit_2->clear();
         ui->lineEdit_3->clear();
         ui->lineEdit_4->clear();
-
-        delete labelPix;
-        labelPix=nullptr;
-        return;
-    }
-
-    /* 防止图片发生偏移 */
-    QPixmap  labelPixFit=labelPix->scaled((ui->tab->width()-4)/3-4,(ui->tab->height()-36)/2-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-
-    switch (imgNumber) {
+        break;
     case 1:
+        if(labelPix!=nullptr){
             ui->Img_Front_label->setPixmap(labelPixFit);
+        }
         break;
     case 2:
+        if(labelPix!=nullptr){
             ui->Img_LeftFront_label->setPixmap(labelPixFit);
+        }
         break;
     case 3:
+        if(labelPix!=nullptr){
             ui->Img_RightFront_label->setPixmap(labelPixFit);
+        }
         break;
     case 4:
-        ui->Img_LeftAfter_label->setPixmap(labelPixFit);
+        if(labelPix!=nullptr){
+            ui->Img_LeftAfter_label->setPixmap(labelPixFit);
+        }
         break;
     case 5:
+        if(labelPix!=nullptr){
             ui->Img_RightAfter_label->setPixmap(labelPixFit);
+        }
         break;
     case 6:
+        if(labelPix!=nullptr){
             ui->Img_After_label->setPixmap(labelPixFit);
+        }
         break;
     }
 
-    delete labelPix;
-    labelPix=nullptr;
+    if(labelPix!=nullptr){
+        delete labelPix;
+        labelPix=nullptr;
+    }
 }
 
 void DataWidget::containerSlot(const QString &result1, const QString &iso1, const QString &result2, const QString &iso2)
