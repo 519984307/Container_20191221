@@ -25,7 +25,6 @@ void Recognition::run()
 
             emit recognitionResultSignal(result.data(),image);
             emit messageSignal(ZBY_LOG("INFO"),tr("Identify the results:%1").arg(result.data()));
-            //QList<QByteArray> list= result.split('|');
         }
         else {
             emit messageSignal(ZBY_LOG("ERROR"),tr("Identify the mistakes error<errorCode=%1>").arg(Process.errorString().toLocal8Bit().data()));

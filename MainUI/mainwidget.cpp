@@ -19,16 +19,16 @@ MainWidget::MainWidget(QWidget *parent) :
     publicConnect();
 
     /* test */
-//    for(auto b:ImageProcessingMap.values()){
-//        if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(b)){
-//            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
-//        }
-//    }
-//    for(auto a :InfraredProcessingMap.values()){
-//        if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(a)){
-//            emit pInfraredProcessing->startSlaveSignal("com4","com5");
-//        }
-//    }
+    for(auto b:ImageProcessingMap.values()){
+        if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(b)){
+            emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
+        }
+    }
+    for(auto a :InfraredProcessingMap.values()){
+        if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(a)){
+            emit pInfraredProcessing->startSlaveSignal("com4","com5");
+        }
+    }
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
@@ -503,10 +503,17 @@ void MainWidget::publicConnect()
                   * 更新结果后续处理
                   */
             }
+
             if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
                 /* 逻辑抓拍完成 */
                 connect(pInfraredProcessing,&InfraredProcessing::infraredCompleteSignal,pRecognizerProcessing,&RecognizerProcessing::infraredCompleteSlot);
+
+                if(DataBaseProcessing* pDataBaseProcessing=qobject_cast<DataBaseProcessing*>(DataBaseProcessingMap[key])){
+                    /* 保存数据 */
+                    connect(pRecognizerProcessing,&RecognizerProcessing::updateDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal);
+                }
             }
+
             if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
                 for(auto obj:channelCamerMultiMap.values(key)){
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){

@@ -6,6 +6,25 @@ CaptureImages::CaptureImages(QObject *parent)
 
     /* 登录ID,登录状态,视频流状态 */
     lUserID=-1;dwResult=0;streamID=-1;
+
+    NET_DVR_SetExceptionCallBack_V30_L=nullptr;
+    NET_DVR_SetSDKInitCfg_L=nullptr;
+    NET_DVR_Cleanup_L=nullptr;
+    NET_DVR_Init_L=nullptr;
+    NET_DVR_Login_V40_L=nullptr;
+    NET_DVR_Logout_L=nullptr;
+    NET_DVR_ChangeWndResolution_L=nullptr;
+    NET_DVR_CaptureJPEGPicture_NEW_L=nullptr;
+    NET_DVR_RealPlay_V40_L=nullptr;
+    NET_DVR_GetLastError_L=nullptr;
+    NET_DVR_SetLogToFile_L=nullptr;
+    NET_DVR_GetLocalIP_L=nullptr;
+    NET_DVR_SetValidIP_L=nullptr;
+    NET_DVR_StopRealPlay_L=nullptr;
+    NET_DVR_RemoteControl_L=nullptr;
+    NET_DVR_GetRealPlayerIndex_L=nullptr;
+    NET_DVR_SetConnectTime_L=nullptr;
+
     /* windows下不支持设置动态库路径 */
     //pDLL=new QLibrary("HCNetSDK.dll");
     pDLL=new QLibrary (QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
@@ -31,23 +50,6 @@ CaptureImages::CaptureImages(QObject *parent)
     }
     else {
         emit messageSignal(ZBY_LOG("ERROR"),tr("load the dynamic error<errorCode=%1>").arg(pDLL->errorString()));
-        NET_DVR_SetExceptionCallBack_V30_L=nullptr;
-        NET_DVR_SetSDKInitCfg_L=nullptr;
-        NET_DVR_Cleanup_L=nullptr;
-        NET_DVR_Init_L=nullptr;
-        NET_DVR_Login_V40_L=nullptr;
-        NET_DVR_Logout_L=nullptr;
-        NET_DVR_ChangeWndResolution_L=nullptr;
-        NET_DVR_CaptureJPEGPicture_NEW_L=nullptr;
-        NET_DVR_RealPlay_V40_L=nullptr;
-        NET_DVR_GetLastError_L=nullptr;
-        NET_DVR_SetLogToFile_L=nullptr;
-        NET_DVR_GetLocalIP_L=nullptr;
-        NET_DVR_SetValidIP_L=nullptr;
-        NET_DVR_StopRealPlay_L=nullptr;
-        NET_DVR_RemoteControl_L=nullptr;
-        NET_DVR_GetRealPlayerIndex_L=nullptr;
-        NET_DVR_SetConnectTime_L=nullptr;
     }
 }
 

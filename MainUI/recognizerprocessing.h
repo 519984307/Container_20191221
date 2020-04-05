@@ -26,7 +26,24 @@ private:
     ///
      void resultsOfAnalysis(int type);
 
+     ///
+     /// \brief updateDataBase 更新数据库
+     /// \param index1 箱号列表1ID
+     /// \param index2 箱号列表2ID
+     ///
+     void updateDataBase(int index1,int index2);
+
 private:
+
+     ///
+     /// \brief imageName 图片名
+     ///
+     QString imageName;
+
+     ///
+     /// \brief dateTime 时间戳
+     ///
+     QString dateTime;
 
     ///
     /// \brief mutex 锁
@@ -39,7 +56,7 @@ private:
     QQueue<int> queue;
 
     ///
-    /// \brief resulList 所以识别结果列表
+    /// \brief resulList 所有识别结果列表
     ///
     QStringList resulList;
 
@@ -47,6 +64,16 @@ private:
     /// \brief chanResulList 单次逻辑识别结果列表
     ///
     QStringList chanResulList;
+
+    ///
+    /// \brief conTemp 箱号列表
+    ///
+    QStringList conTemp;
+
+    ///
+    /// \brief isoTemp 箱型列表
+    ///
+    QStringList isoTemp;
 
     ///
     /// \brief containerNum 识别集装箱数量
@@ -96,6 +123,12 @@ signals:
     /// \param result 箱号
     ///
     void containerSignal(const QString &result1,const QString &iso1,const QString &result2,const QString &iso2);
+
+    ///
+    /// \brief updateDataBaseSignal 更新箱号数据
+    /// \param data 数据字典
+    ///
+    void updateDataBaseSignal(QMap<QString, QString> data);
 
 public slots:
 

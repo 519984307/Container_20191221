@@ -77,7 +77,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);
             /* 缩放图片 */
-            QPixmap labelPixFit=  labelPix->scaled(1280,960, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
             image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(imgTime.split('-').join("").split(':').join("").split(" ").join("")).arg(imgNumber).arg(channel));
 
@@ -133,7 +133,6 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
 void RecognizerProcessing::resultsOfAnalysis(int type)
 {
     /* 双箱，分前3个结果和后3个结果独立处理 */
-    QStringList conTemp,isoTemp;/* 箱号,箱型 */
     QList<uint32_t> probabilityTemp;/* 置信度 */
 
     for (auto var:chanResulList) {
@@ -170,6 +169,7 @@ void RecognizerProcessing::resultsOfAnalysis(int type)
             }
         }
         emit containerSignal(conTemp[index1],isoTemp[1],conTemp[index2],isoTemp[index2]);
+        updateDataBase(index1,index2);
     }
     else {
         uint32_t probability=0;
@@ -182,10 +182,57 @@ void RecognizerProcessing::resultsOfAnalysis(int type)
             }
         }
         emit containerSignal(conTemp[index1],isoTemp[1],"","");
+        updateDataBase(index1,-1);
     }
 
     chanResulList.clear();
     conTemp.clear();
     isoTemp.clear();
     probabilityTemp.clear();
+}
+
+void RecognizerProcessing::updateDataBase(int index1,int index2)
+{
+    QStringList tmp;
+    if(imageName.indexOf("/")!=-1){/* 时间戳 */
+        tmp =imageName.split("/");
+    }
+    else if (imageName.indexOf("\\")!=-1) {
+        tmp=imageName.split("\\");
+    }
+    imageName="";
+
+    dateTime=QDateTime::fromString(tmp[tmp.count()-1].split(".")[0].mid(0,14),"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+
+
+    QMap<QString,QString> data;
+
+    data.insert("Timer",dateTime);
+    data.insert("Channel",QString::number(channel));
+
+    data["ContainerFront"]=conTemp[index1];
+    data["ISOFront"]=isoTemp[index1];
+
+    if(index2!=-1){
+        data["ContainerAfter"]=conTemp[index2];
+        data["ISOAfter"]=isoTemp[index2];
+    }
+
+    if(conTemp.count()==4){
+        data["ImgFrontNumber"]=conTemp[0];
+        data["ImgLeftFrontNumber"]=conTemp[1];
+        data["ImgRightFrontNumber"]=conTemp[2];
+        data["ImgAfterNumber"]=conTemp[3];
+    }
+    else if (conTemp.count()==4) {
+        data["ImgFrontNumber"]=conTemp[0];
+        data["ImgLeftFrontNumber"]=conTemp[1];
+        data["ImgRightFrontNumber"]=conTemp[2];
+        data["ImgLeftAfterNumber"]=conTemp[3];
+        data["ImgRightAfterNumber"]=conTemp[4];
+        data["ImgAfterNumber"]=conTemp[5];
+    }
+    emit updateDataBaseSignal(data);
+    data.clear();
+    tmp.clear();
 }
