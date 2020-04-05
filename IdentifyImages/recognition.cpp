@@ -11,8 +11,9 @@ void Recognition::run()
 {
     QProcess Process;
     QString program="QRecognition.exe";
-    Process.setWorkingDirectory(QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg(program.split(".")[0])));
-    Process.start(program,QStringList()<<image<<"QRecog.dll");
+    QString path=QDir::toNativeSeparators(tr("%1/%2/").arg(QCoreApplication::applicationDirPath()).arg(program.split(".")[0]));
+    Process.setWorkingDirectory(path);
+    Process.start(path.append(program),QStringList()<<image<<"QRecog.dll");
     if(!Process.waitForStarted()){
         emit messageSignal(ZBY_LOG("ERROR"),tr("Recognizer startup error<errorCode=%1>").arg(Process.errorString().toLocal8Bit().data()));
     }

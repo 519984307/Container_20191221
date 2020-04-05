@@ -39,4 +39,4 @@ unix {
 }
 
 DESTDIR+=../MainUI/Plugins
-
+#DESTDIR += ../MainUI/debug/Plugins
