@@ -8,3 +8,4 @@ SUBDIRS += \
     DataBaseInsert \
     IdentifyImages\
     GetImages \
+    ResultsAnalysis

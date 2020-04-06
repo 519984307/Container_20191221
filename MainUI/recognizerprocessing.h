@@ -33,6 +33,12 @@ private:
      ///
      void updateDataBase(int index1,int index2);
 
+     ///
+     /// \brief resultstheCheck 箱号结果校验
+     /// \param number
+     ///
+     void resultstheCheck(QString number);
+
 private:
 
 //     ///
@@ -114,6 +120,11 @@ private:
 //    /// \brief format2 保存协议2
 //    ///
 //    int format2;
+
+    ///
+    /// \brief checkMap 校验列表
+    ///
+    QMap<QString,int> checkMap;
 
 signals:
 

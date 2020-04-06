@@ -62,7 +62,8 @@ HEADERS += \
     recognizerinterface.h \
     recognizerprocessing.h \
     settingvalues.h \
-    underlyinggetimagesinterface.h
+    underlyinggetimagesinterface.h \
+    resultsanalysisinterface.h
 
 FORMS += \
         mainwidget.ui \

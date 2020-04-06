@@ -144,7 +144,7 @@ void RecognizerProcessing::resultsOfAnalysis(int type)
         }
         else {
             QStringList tmp=var.split(":")[1].split("|");
-            conTemp.append(tmp[0]);
+            conTemp.append(tmp[0].trimmed());
             isoTemp.append(tmp[1]);
             probabilityTemp.append(tmp[2].toUInt());
         }
@@ -235,4 +235,9 @@ void RecognizerProcessing::updateDataBase(int index1,int index2)
     emit updateDataBaseSignal(data);
     data.clear();
     tmp.clear();
+}
+
+void RecognizerProcessing::resultstheCheck(QString number)
+{
+
 }
