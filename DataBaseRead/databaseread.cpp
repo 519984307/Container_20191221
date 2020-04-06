@@ -13,17 +13,17 @@ DataBaseRead::~DataBaseRead()
 void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &user,const QString &pass,const QString &ip)
 {
     /*  创建插件目录  */
-    QDir pluginsDir(QCoreApplication::applicationDirPath());
+    QDir dir(QCoreApplication::applicationDirPath());
     const QString pluginPath="Data";
-    if(!pluginsDir.cd(pluginPath)){
-        pluginsDir.mkdir(pluginPath);
-        pluginsDir.cd(pluginPath);
+    if(!dir.cd(pluginPath)){
+        dir.mkdir(pluginPath);
+        dir.cd(pluginPath);
     }
 
     this->connectName=connectName;
 
     db=QSqlDatabase::addDatabase("QSQLITE",connectName);
-    db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2").arg(pluginsDir.path()).arg("History.db")));
+    db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg("History.db")));
     db.setUserName(user);
     db.setPassword(pass);
     db.setHostName(ip);

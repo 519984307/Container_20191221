@@ -35,6 +35,11 @@ private:
 
 private:
 
+//     ///
+//     /// \brief probabilityTemp 置信度
+//     ///
+//    QList<uint32_t> probabilityTemp;
+
      ///
      /// \brief imageName 图片名
      ///

@@ -20,7 +20,7 @@ void IdentifyImages::pictureStreamSlot(const QByteArray &jpgStream, const int &i
 
 void IdentifyImages::identifyImagesSlot(const QString &image)
 {
-    Recognition* pRecognition=new Recognition(this,image);
+    Recognition* pRecognition=new Recognition(nullptr,image);
     connect(pRecognition,&Recognition::recognitionResultSignal,this,&IdentifyImages::recognitionResultSignal);
     connect(pRecognition,&Recognition::messageSignal,this,&IdentifyImages::messageSignal);
     pPool->start(pRecognition);

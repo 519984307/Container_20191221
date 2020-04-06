@@ -92,10 +92,16 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>18</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>20</height>
+             <height>18</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -141,10 +147,16 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>18</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>20</height>
+             <height>18</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -276,10 +288,10 @@
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>2</number>
+            <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>0</number>
+            <number>5</number>
            </property>
            <item>
             <widget class="QLabel" name="label_9">
@@ -289,10 +301,16 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>18</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>20</height>
+               <height>18</height>
               </size>
              </property>
              <property name="styleSheet">
@@ -311,6 +329,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>18</height>
+              </size>
              </property>
              <property name="maximumSize">
               <size>
@@ -359,10 +383,16 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>18</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>20</height>
+             <height>18</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -408,10 +438,16 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>18</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>20</height>
+             <height>18</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -457,10 +493,16 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>18</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>20</height>
+             <height>18</height>
             </size>
            </property>
            <property name="styleSheet">

@@ -117,6 +117,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             containerNum=6;
             break;
         }
+        imageName=image;
     }
 
     if(resulList.count()==containerNum){
@@ -150,7 +151,6 @@ void RecognizerProcessing::resultsOfAnalysis(int type)
     }
 
     if(type==3){
-
         int index1=0;
         int index2=0;
         uint32_t probability=0;
@@ -200,10 +200,10 @@ void RecognizerProcessing::updateDataBase(int index1,int index2)
     else if (imageName.indexOf("\\")!=-1) {
         tmp=imageName.split("\\");
     }
-    imageName="";
 
-    dateTime=QDateTime::fromString(tmp[tmp.count()-1].split(".")[0].mid(0,14),"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
-
+    if(tmp.count()>0){
+        dateTime=QDateTime::fromString(tmp[tmp.count()-1].split(".")[0].mid(0,14),"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+    }
 
     QMap<QString,QString> data;
 
@@ -224,7 +224,7 @@ void RecognizerProcessing::updateDataBase(int index1,int index2)
         data["ImgRightFrontNumber"]=conTemp[2];
         data["ImgAfterNumber"]=conTemp[3];
     }
-    else if (conTemp.count()==4) {
+    else if (conTemp.count()==6) {
         data["ImgFrontNumber"]=conTemp[0];
         data["ImgLeftFrontNumber"]=conTemp[1];
         data["ImgRightFrontNumber"]=conTemp[2];

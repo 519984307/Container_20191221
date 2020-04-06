@@ -77,12 +77,12 @@ void DataBaseInsert::insertDataBaseSlot(QMap<QString, QString> data)
 
 void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
 {
-    //locker.lockForWrite();
+    locker.lockForWrite();
 
     if(db.open()){
         QSqlTableModel model(this,db);
         model.setTable(tr("Containers"));
-        model.setFilter(tr("Timer=%1 AND Channel=%2").arg(data.value("Timer")).arg(data.value("Channel")));
+        model.setFilter(tr("Timer='%1' AND Channel='%2'").arg(data.value("Timer")).arg(data.value("Channel")));
         model.select();
         if(model.rowCount()==1){
             QSqlRecord record=model.record(0);
@@ -107,5 +107,5 @@ void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
     }
     db.close();
 
-    //locker.unlock();
+    locker.unlock();
 }

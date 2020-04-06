@@ -519,6 +519,7 @@ void MainWidget::publicConnect()
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
                         /* 绑定(前后左右)相机抓拍图片流到数据界面(显示图片) */
                         connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+
                         if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
                             /* 相机图片流绑定到识别器处理流程(保存图片) */
                             connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);
@@ -624,7 +625,7 @@ void MainWidget::setStatusBar()
     pStatusBarLabelPermanet->setStyleSheet("color: rgb(0, 85, 255);");
     pStatusBar->addWidget(pStatusBarLabel);
     pStatusBar->addPermanentWidget(pStatusBarLabelPermanet);
-    pStatusBar->setStyleSheet("background-color:rgb(39,39,40);");
+    pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: red;");
 
     this->ui->gridLayout_2->addWidget(pStatusBar);
 }
