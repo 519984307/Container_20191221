@@ -18,17 +18,35 @@ public:
 public:
 
     ///
-    /// \brief numberCheck 集装箱号码校验
-    /// \param number 集装箱号码
-    /// \param correct 是否矫正
-    /// \return  校验结果
+    /// \brief resultsOfAnalysisSlot 分析箱号
+    /// \param resultList 识别结果集
+    /// \param type 逻辑类型
+    /// \param imgTime 箱号时间戳
     ///
-    bool numberCheck(QString &number,bool correct)Q_DECL_OVERRIDE;
+    void resultsOfAnalysisSlot(QStringList resultList, int type,const QString& imgTime)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief setCheckTheResultsSlot 是否校验识别结果
+    /// \param correct 校验标示
+    ///
+    void setCheckTheResultsSlot(bool correct=false)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief setChannelSlot 设定通道号
+    ///
+    void setChannelSlot(int channel)Q_DECL_OVERRIDE;
 
 private:
 
     ///
-    /// \brief initCheckMap 初始化列表
+    /// \brief updateDataBase 更新数据库
+    /// \param index1 箱号下标1
+    /// \param index2 箱号下标2
+    ///
+    void updateDataBase(int index1, int index2);
+
+    ///
+    /// \brief initCheckMap 初始化校验列表
     ///
     void initCheckMap();
 
@@ -39,12 +57,44 @@ private:
     ///
     int computeQuadraticPower(int variable);
 
+    ///
+    /// \brief numberCheck 集装箱号码校验
+    /// \param number 集装箱号码
+    /// \return  校验结果
+    ///
+    bool numberCheck(QString &number);
+
 private:
 
     ///
     /// \brief checkMap 校验列表
     ///
     QMap<QChar,int> checkMap;
+
+    ///
+    /// \brief conTemp 箱号列表
+    ///
+    QStringList conTemp;
+
+    ///
+    /// \brief isoTemp 箱型列表
+    ///
+    QStringList isoTemp;
+
+    ///
+    /// \brief correct 校验标志
+    ///
+    bool correct;
+
+    ///
+    /// \brief imgTime 箱号时间戳
+    ///
+    QString imgTime;
+
+    ///
+    /// \brief channel 通道号
+    ///
+    int channel;
 };
 
 #endif // RESULTSANALYSIS_H

@@ -3,7 +3,7 @@
 RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 {
     this->imgPath1="";
-    //this->imgPath2="";
+    this->imgPath2="";
     containerNum=0;
     containertType=0;
 }
@@ -25,22 +25,22 @@ void RecognizerProcessing::setSaveImgFormatOneSlot(const QString &path, int form
     this->format1=format;  
 }
 
-//void RecognizerProcessing::setSaveImgFormatTowSlot(const QString &path, int format)
-//{
-//    this->imgPath2=path;
-//    this->format2=format;
-//}
+void RecognizerProcessing::setSaveImgFormatTowSlot(const QString &path, int format)
+{
+    this->imgPath2=path;
+    this->format2=format;
+}
 
 void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber, const QString &imgTime)
 {
-    if(imgNumber==0){
+    if(imgNumber==0){/* 测试抓图,不保存,不识别 */
         return;
     }
     QMutexLocker locket(&mutex);
     if(imgPath1!=""){/* 保存路径不存在,图片不保存,不识别 */
         QDir dir(imgPath1);
-        QString suffixPath="";        
         bool isRoot=false;/* 如果是保存在根目录就不用CD */
+        QString suffixPath="";
         switch (format1) {
         case 0:
             suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd")));
@@ -79,7 +79,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             /* 缩放图片 */
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(imgTime.split('-').join("").split(':').join("").split(" ").join("")).arg(imgNumber).arg(channel));
+            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime).toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
 
             labelPixFit.save(image);
             //labelPix->save(image);
@@ -125,119 +125,12 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             chanResulList.append(resulList[0]);
             resulList.removeAt(0);
         }
-        resultsOfAnalysis(containertType);
+
+        emit resultsOfAnalysisSignal(resulList,containertType,imageName);/* 分析结果 */
+
         containerNum=0;
         containertType=0;
+        chanResulList.clear();
+        imageName="";
     }
-}
-
-void RecognizerProcessing::resultsOfAnalysis(int type)
-{
-    /* 双箱，分前3个结果和后3个结果独立处理 */
-    QList<uint32_t> probabilityTemp;/* 置信度 */
-
-    for (auto var:chanResulList) {
-        if(var.split(":")[1].indexOf("|")==-1){/* 没有识别到结果 */
-            conTemp.append("");
-            isoTemp.append("");
-            probabilityTemp.append(0);
-        }
-        else {
-            QStringList tmp=var.split(":")[1].split("|");
-            conTemp.append(tmp[0].trimmed());
-            isoTemp.append(tmp[1]);
-            probabilityTemp.append(tmp[2].toUInt());
-        }
-    }
-
-    if(type==3){
-        int index1=0;
-        int index2=0;
-        uint32_t probability=0;
-
-        for (int var = 0; var < 3; ++var) {
-            if(probabilityTemp[var]>probability){
-                probability=probabilityTemp[var];
-                index1=var;
-            }
-        }
-        probability=0;
-        for (int var = 3; var < 6; ++var) {
-            if(probabilityTemp[var]>probability){
-                probability=probabilityTemp[var];
-                index2=var;
-            }
-        }
-        emit containerSignal(conTemp[index1],isoTemp[1],conTemp[index2],isoTemp[index2]);
-        updateDataBase(index1,index2);
-    }
-    else {
-        uint32_t probability=0;
-        int index1=0;
-
-        for (int var = 0; var < probabilityTemp.count(); ++var) {
-            if(probabilityTemp[var]>probability){
-                probability=probabilityTemp[var];
-                index1=var;
-            }
-        }
-        emit containerSignal(conTemp[index1],isoTemp[1],"","");
-        updateDataBase(index1,-1);
-    }
-
-    chanResulList.clear();
-    conTemp.clear();
-    isoTemp.clear();
-    probabilityTemp.clear();
-}
-
-void RecognizerProcessing::updateDataBase(int index1,int index2)
-{
-    QStringList tmp;
-    if(imageName.indexOf("/")!=-1){/* 时间戳 */
-        tmp =imageName.split("/");
-    }
-    else if (imageName.indexOf("\\")!=-1) {
-        tmp=imageName.split("\\");
-    }
-
-    if(tmp.count()>0){
-        dateTime=QDateTime::fromString(tmp[tmp.count()-1].split(".")[0].mid(0,14),"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
-    }
-
-    QMap<QString,QString> data;
-
-    data.insert("Timer",dateTime);
-    data.insert("Channel",QString::number(channel));
-
-    data["ContainerFront"]=conTemp[index1];
-    data["ISOFront"]=isoTemp[index1];
-
-    if(index2!=-1){
-        data["ContainerAfter"]=conTemp[index2];
-        data["ISOAfter"]=isoTemp[index2];
-    }
-
-    if(conTemp.count()==4){
-        data["ImgFrontNumber"]=conTemp[0];
-        data["ImgLeftFrontNumber"]=conTemp[1];
-        data["ImgRightFrontNumber"]=conTemp[2];
-        data["ImgAfterNumber"]=conTemp[3];
-    }
-    else if (conTemp.count()==6) {
-        data["ImgFrontNumber"]=conTemp[0];
-        data["ImgLeftFrontNumber"]=conTemp[1];
-        data["ImgRightFrontNumber"]=conTemp[2];
-        data["ImgLeftAfterNumber"]=conTemp[3];
-        data["ImgRightAfterNumber"]=conTemp[4];
-        data["ImgAfterNumber"]=conTemp[5];
-    }
-    emit updateDataBaseSignal(data);
-    data.clear();
-    tmp.clear();
-}
-
-void RecognizerProcessing::resultstheCheck(QString number)
-{
-
 }

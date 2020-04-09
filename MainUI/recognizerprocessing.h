@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QQueue>
+#include <QDebug>
 
 class RecognizerProcessing : public QObject
 {
@@ -19,42 +20,10 @@ public:
 
 private:
 
-    ///
-    /// \brief resultsOfAnalysis 箱号分析
-    /// \param list
-    /// \param type 箱型
-    ///
-     void resultsOfAnalysis(int type);
-
-     ///
-     /// \brief updateDataBase 更新数据库
-     /// \param index1 箱号列表1ID
-     /// \param index2 箱号列表2ID
-     ///
-     void updateDataBase(int index1,int index2);
-
-     ///
-     /// \brief resultstheCheck 箱号结果校验
-     /// \param number
-     ///
-     void resultstheCheck(QString number);
-
-private:
-
-//     ///
-//     /// \brief probabilityTemp 置信度
-//     ///
-//    QList<uint32_t> probabilityTemp;
-
      ///
      /// \brief imageName 图片名
      ///
      QString imageName;
-
-     ///
-     /// \brief dateTime 时间戳
-     ///
-     QString dateTime;
 
     ///
     /// \brief mutex 锁
@@ -77,16 +46,6 @@ private:
     QStringList chanResulList;
 
     ///
-    /// \brief conTemp 箱号列表
-    ///
-    QStringList conTemp;
-
-    ///
-    /// \brief isoTemp 箱型列表
-    ///
-    QStringList isoTemp;
-
-    ///
     /// \brief containerNum 识别集装箱数量
     ///
     int containerNum;
@@ -106,25 +65,20 @@ private:
     ///
     QString imgPath1;
 
-//    ///
-//    /// \brief imgPath2 图片路径2
-//    ///
-//    QString imgPath2;
+    ///
+    /// \brief imgPath2 图片路径2
+    ///
+    QString imgPath2;
 
     ///
     /// \brief format1 保存协议1
     ///
     int format1;
 
-//    ///
-//    /// \brief format2 保存协议2
-//    ///
-//    int format2;
-
     ///
-    /// \brief checkMap 校验列表
+    /// \brief format2 保存协议2
     ///
-    QMap<QString,int> checkMap;
+    int format2;
 
 signals:
 
@@ -135,16 +89,13 @@ signals:
     void identifyImagesSignal(const QString &image);
 
     ///
-    /// \brief containerSignal 箱号结果
-    /// \param result 箱号
+    /// \brief resultsOfAnalysisSignal 分析箱号
+    /// \param resultList 识别结果集
+    /// \param type 逻辑类型
+    /// \param imgTime 箱号时间戳
     ///
-    void containerSignal(const QString &result1,const QString &iso1,const QString &result2,const QString &iso2);
+    void resultsOfAnalysisSignal(QStringList resultList, int type,const QString& imgTime);
 
-    ///
-    /// \brief updateDataBaseSignal 更新箱号数据
-    /// \param data 数据字典
-    ///
-    void updateDataBaseSignal(QMap<QString, QString> data);
 
 public slots:
 
@@ -160,12 +111,12 @@ public slots:
     ///
     void setSaveImgFormatOneSlot(const QString &path,int format);
 
-//    ///
-//    /// \brief setSaveImgFormatTowSlot 设置图片保存路径2
-//    /// \param path
-//    /// \param format
-//    ///
-//    void setSaveImgFormatTowSlot(const QString &path,int format);
+    ///
+    /// \brief setSaveImgFormatTowSlot 设置图片保存路径2
+    /// \param path
+    /// \param format
+    ///
+    void setSaveImgFormatTowSlot(const QString &path,int format);
     ///
     /// \brief pictureStreamSlot 图片流
     /// \param jpgStream 图片流

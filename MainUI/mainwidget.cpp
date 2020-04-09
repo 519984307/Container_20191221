@@ -18,7 +18,6 @@ MainWidget::MainWidget(QWidget *parent) :
     loadPlugins();
     publicConnect();
 
-    /* test */
     for(auto b:ImageProcessingMap.values()){
         if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(b)){
             emit pImageProcessing->initCamerSignal("192.168.1.100",8000,"admin","Zby123456");
@@ -65,6 +64,9 @@ MainWidget::~MainWidget()
     for(auto obj:RecognizerProcessingMqp.values()){
         delete obj;
     }
+    for(auto obj:ResultsAnalysisProcessingMap.values()){
+        delete obj;
+    }
     foreach (auto obj, ThreadList) {
         delete obj;
     }
@@ -80,6 +82,7 @@ MainWidget::~MainWidget()
     channelCamerMultiMap.clear();
     ChannelSettingWidgetMap.clear();
     RecognizerProcessingMqp.clear();
+    ResultsAnalysisProcessingMap.clear();
 
     delete pDataBaseWidget;
     delete pSystemSettingWidget;
@@ -255,7 +258,7 @@ void MainWidget::loadPlugins()
                 }
             }
 
-            int num=0;
+            int num=0;/* 通道数量 */
 
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
                 delete pGetimagesInterface;
@@ -277,8 +280,12 @@ void MainWidget::loadPlugins()
                 delete pRecognizerInterface;
                 num=channelCounnt;
             }
+            else if (ResultsAnalysisInterface* pResultsAnalysisInterface=qobject_cast<ResultsAnalysisInterface*>(plugin)) {
+                delete pResultsAnalysisInterface;
+                num=channelCounnt;
+            }
             else {
-                delete  plugin;
+                delete  plugin;/* 暂不处理其他插件 */
             }
 
             /*  复制新插件   */
@@ -320,6 +327,9 @@ void MainWidget::processingPlugins(QDir path, int num)
             }
             else if (RecognizerInterface* pRecognizerInterface=qobject_cast<RecognizerInterface*>(plugin)) {
                 recognizerPlugin(pRecognizerInterface,num--);
+            }
+            else if (ResultsAnalysisInterface* pRecognizerInterface=qobject_cast<ResultsAnalysisInterface*>(plugin)) {
+                resultsAnalysisPlugin(pRecognizerInterface,num--);
             }
         }
         else {
@@ -368,8 +378,6 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
     InfraredProcessingMap.insert(num,pInfraredProcessing);
 
     if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num])){
-        /*  绑定相机组抓到逻辑处理 */
-        pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(num),num);
         /* 清除界面图片 */
         connect(pInfraredProcessing,&InfraredProcessing::clearnPictureSignal,pDataWidget,&DataWidget::pictureStreamSlot);
         /* 红外状态到界面 */
@@ -385,8 +393,11 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
         /* 模拟抓拍流程 */
         connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
         /* 逻辑抓取图片 */
-        connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);
+        connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);       
     }
+
+    /*  绑定相机组抓到逻辑处理 */
+    pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(num),num);
     /* 设置红外模式 */
     pInfraredProcessing->setAlarmModeSignal(true);
 
@@ -428,20 +439,22 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
     DataBaseProcessing* pDataBaseProcessing=new DataBaseProcessing (nullptr);
     DataBaseProcessingMap.insert(channelCounnt+1,pDataBaseProcessing);/* 单独一条一个线程 */
 
-    /* 日志信息 */
-    connect(pDataBaseReadInterface,&DataBaseReadInterface::messageSignal,this,&MainWidget::messageSlot);
-    /* 初始化数据库 */
-    connect(pDataBaseProcessing,&DataBaseProcessing::initDataBaseSignal,pDataBaseReadInterface,&DataBaseReadInterface::initDataBaseSlot);
-    /* 查询数据 */
-    connect(pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal,pDataBaseReadInterface,&DataBaseReadInterface::setDataBaseFilterSlot);
-    /* 返回数据模型到数据库界面 */
-    connect(pDataBaseReadInterface,&DataBaseReadInterface::returnModelSingal,pDataBaseWidget,&DataBaseWidget::returnModelSlot);
-    /* 查询数据绑定到数据库处理逻辑(信号与信号绑定) */
-    connect(pDataBaseWidget,&DataBaseWidget::setDataBaseFilterSignal,pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal);
-    /* 统计数据到界面 */
-    connect(pDataBaseReadInterface,&DataBaseReadInterface::statisticalDataSignal,pDataBaseWidget,&DataBaseWidget::statisticalDataSlot);
-    /* 设置数据库图片查询路径 */
-    connect(pDataBaseProcessing,&DataBaseProcessing::seFindtImgPathSlgnal,pDataBaseWidget,&DataBaseWidget::seFindtImgPathSlot);
+    if(pDataBaseWidget!=nullptr){
+        /* 日志信息 */
+        connect(pDataBaseReadInterface,&DataBaseReadInterface::messageSignal,this,&MainWidget::messageSlot);
+        /* 初始化数据库 */
+        connect(pDataBaseProcessing,&DataBaseProcessing::initDataBaseSignal,pDataBaseReadInterface,&DataBaseReadInterface::initDataBaseSlot);
+        /* 查询数据 */
+        connect(pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal,pDataBaseReadInterface,&DataBaseReadInterface::setDataBaseFilterSlot);
+        /* 返回数据模型到数据库界面 */
+        connect(pDataBaseReadInterface,&DataBaseReadInterface::returnModelSingal,pDataBaseWidget,&DataBaseWidget::returnModelSlot);
+        /* 查询数据绑定到数据库处理逻辑(信号与信号绑定) */
+        connect(pDataBaseWidget,&DataBaseWidget::setDataBaseFilterSignal,pDataBaseProcessing,&DataBaseProcessing::setDataBaseFilterSignal);
+        /* 统计数据到界面 */
+        connect(pDataBaseReadInterface,&DataBaseReadInterface::statisticalDataSignal,pDataBaseWidget,&DataBaseWidget::statisticalDataSlot);
+        /* 设置数据库图片查询路径 */
+        connect(pDataBaseProcessing,&DataBaseProcessing::seFindtImgPathSlgnal,pDataBaseWidget,&DataBaseWidget::seFindtImgPathSlot);
+    }
 
     /* 初始化数据库图片查询路径 */
     emit pDataBaseProcessing->seFindtImgPathSlgnal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
@@ -461,25 +474,23 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     RecognizerProcessing* pRecognizerProcessing=new RecognizerProcessing (nullptr);
     RecognizerProcessingMqp.insert(num,pRecognizerProcessing);
 
-    if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num])){
+    if(pSystemSettingWidget!=nullptr){
+        /* 设置图片保存路径1 */
+        connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatOneSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatOneSlot);
+        /* 设置图片保存路径2 */
+        connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
+        /* 识别图片 */
+        connect(pRecognizerProcessing,&RecognizerProcessing::identifyImagesSignal,pRecognizerInterface,&RecognizerInterface::identifyImagesSlot);
         /* 识别结果 */
-        connect(pRecognizerProcessing,&RecognizerProcessing::containerSignal,pDataWidget,&DataWidget::containerSlot);
+        connect(pRecognizerInterface,&RecognizerInterface::recognitionResultSignal,pRecognizerProcessing,&RecognizerProcessing::recognitionResultSlot);
+        /* 日志信息 */
+        connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
     }
 
-    /* 设置图片保存路径1 */
-    connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatOneSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatOneSlot);
-    /* 设置图片保存路径2 */
-    //connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
-    /* 识别图片 */
-    connect(pRecognizerProcessing,&RecognizerProcessing::identifyImagesSignal,pRecognizerInterface,&RecognizerInterface::identifyImagesSlot);
-    /* 识别结果 */
-    connect(pRecognizerInterface,&RecognizerInterface::recognitionResultSignal,pRecognizerProcessing,&RecognizerProcessing::recognitionResultSlot);
-    /* 日志信息 */
-    connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 设置图片路径和保存协议1 */
     emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
     /* 设置图片路径和保存协议2 */
-    //emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);    
+    emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);
     /* 设置通道号 */
     pRecognizerProcessing->setChannelSlot(num);
 
@@ -487,6 +498,32 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     QThread* pThread=new QThread(this);
     pRecognizerInterface->moveToThread(pThread);
     pRecognizerProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
+}
+
+void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysisInterface, int num)
+{
+    ResultsAnalysisProcessing*  pResultsAnalysisProcessing=new ResultsAnalysisProcessing (nullptr);
+    ResultsAnalysisProcessingMap.insert(num,pResultsAnalysisProcessing);
+
+    /* 保存数据(信号与信号绑定) */
+    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::updateDataBaseSignal,pResultsAnalysisProcessing,&ResultsAnalysisProcessing::updateDataBaseSignal);
+    /* 识别结果(信号与信号绑定) */
+    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::containerSignal,pResultsAnalysisProcessing,&ResultsAnalysisProcessing::containerSignal);
+    /* 分析识别结果 */
+    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::resultsOfAnalysisSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsOfAnalysisSlot);
+    /* 日志信息 */
+    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::messageSignal,this,&MainWidget::messageSlot);
+
+    /* 设置通道号 */
+    pResultsAnalysisInterface->setChannelSlot(num);
+    /* 是否校验结果 */
+    pResultsAnalysisInterface->setCheckTheResultsSlot(false);
+
+    /* 移动到线程运行 */
+    QThread* pThread=new QThread(this);
+    pResultsAnalysisInterface->moveToThread(pThread);
     ThreadList.append(pThread);
     pThread->start();
 }
@@ -499,27 +536,28 @@ void MainWidget::publicConnect()
             if(DataBaseProcessing* pDataBaseProcessing=qobject_cast<DataBaseProcessing*>(DataBaseProcessingMap[key])){
                 /* 过车抓拍数据写入数据库(插入数据库) */
                 connect(pInfraredProcessing,&InfraredProcessing::insertDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::insertDataBaseSignal);
-                /*
-                  * 更新结果后续处理
-                  */
+                if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
+                    /* 保存数据(信号与信号绑定) */
+                    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::updateDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal);
+                }
             }
-
             if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
                 /* 逻辑抓拍完成 */
                 connect(pInfraredProcessing,&InfraredProcessing::infraredCompleteSignal,pRecognizerProcessing,&RecognizerProcessing::infraredCompleteSlot);
-
-                if(DataBaseProcessing* pDataBaseProcessing=qobject_cast<DataBaseProcessing*>(DataBaseProcessingMap[key])){
-                    /* 保存数据 */
-                    connect(pRecognizerProcessing,&RecognizerProcessing::updateDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal);
+                if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
+                    /* 分析识别结果(信号与信号绑定) */
+                    connect(pRecognizerProcessing,&RecognizerProcessing::resultsOfAnalysisSignal,pResultsAnalysisProcessing,&ResultsAnalysisProcessing::resultsOfAnalysisSignal);
                 }
             }
-
             if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
+                if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
+                    /* 识别结果 */
+                    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::containerSignal,pDataWidget,&DataWidget::containerSlot);
+                }
                 for(auto obj:channelCamerMultiMap.values(key)){
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
                         /* 绑定(前后左右)相机抓拍图片流到数据界面(显示图片) */
                         connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
-
                         if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
                             /* 相机图片流绑定到识别器处理流程(保存图片) */
                             connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);

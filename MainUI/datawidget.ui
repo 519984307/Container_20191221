@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>792</width>
-    <height>594</height>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -581,7 +581,7 @@
              <bool>true</bool>
             </property>
             <property name="placeholderText">
-             <string>Before the case number</string>
+             <string>Front the case number</string>
             </property>
            </widget>
           </item>
@@ -670,7 +670,7 @@
              <bool>true</bool>
             </property>
             <property name="placeholderText">
-             <string>Infrared logic result</string>
+             <string>License plate number</string>
             </property>
            </widget>
           </item>
@@ -688,7 +688,7 @@
              <bool>true</bool>
             </property>
             <property name="placeholderText">
-             <string>License plate number</string>
+             <string>Infrared logic result</string>
             </property>
            </widget>
           </item>

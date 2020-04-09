@@ -3,6 +3,8 @@
 
 #include <QtCore/qglobal.h>
 #include <QMap>
+#include <QDir>
+#include <QDateTime>
 
 #if defined(RESULTSANALYSIS_LIBRARY)
 #  define RESULTSANALYSISSHARED_EXPORT Q_DECL_EXPORT

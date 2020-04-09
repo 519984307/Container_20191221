@@ -39,7 +39,8 @@ SOURCES += \
     imageprocessing.cpp \
     databaseprocessing.cpp \
     infraredprocessing.cpp \
-    recognizerprocessing.cpp
+    recognizerprocessing.cpp \
+    resultsanalysisprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -63,7 +64,8 @@ HEADERS += \
     recognizerprocessing.h \
     settingvalues.h \
     underlyinggetimagesinterface.h \
-    resultsanalysisinterface.h
+    resultsanalysisinterface.h \
+    resultsanalysisprocessing.h
 
 FORMS += \
         mainwidget.ui \

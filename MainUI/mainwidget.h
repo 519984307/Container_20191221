@@ -22,7 +22,7 @@
 #include "databasereadinterface.h"
 #include "recognizerinterface.h"
 #include "underlyinggetimagesinterface.h"
-
+#include "resultsanalysisinterface.h"
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
 #include "datawidget.h"
@@ -36,6 +36,7 @@
 #include "infraredprocessing.h"
 #include "databaseprocessing.h"
 #include "recognizerprocessing.h"
+#include "resultsanalysisprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -146,6 +147,10 @@ private:
     ///
     QMap<int,QObject*> RecognizerProcessingMqp;
 
+    ///
+    /// \brief ResultsAnalysisProcessingMap 识别结果分析类
+    ///
+    QMap<int,QObject*> ResultsAnalysisProcessingMap;
 private:
 
     ///
@@ -221,6 +226,13 @@ private:
     /// \param pRecognizerInterface 接口类
     ///
     void recognizerPlugin(RecognizerInterface* pRecognizerInterface,int num);
+
+    ///
+    /// \brief resultsAnalysisPlugin 识别结果分析插件
+    /// \param pResultsAnalysisInterface 分析结果口
+    /// \param num 通道号
+    ///
+    void resultsAnalysisPlugin(ResultsAnalysisInterface* pResultsAnalysisInterface,int num);
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
     ///
