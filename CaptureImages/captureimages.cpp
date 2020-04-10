@@ -146,7 +146,7 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
 bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
 {
     NET_DVR_JPEGPARA   pJpegFile={};
-    uint32_t charLen=300000;
+    uint32_t charLen=400000;
     LPDWORD dataLen=nullptr;
     char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
     pJpegFile.wPicSize=0xff;
@@ -163,7 +163,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
                 return false;
             }
             else {
-                QByteArray arrayJpg(buff,300000);
+                QByteArray arrayJpg(buff,400000);
                 emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
 
                 emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(camerIp));

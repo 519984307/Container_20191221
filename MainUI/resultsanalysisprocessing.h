@@ -16,7 +16,7 @@ signals:
     /// \brief containerSignal 箱号结果
     /// \param result 箱号
     ///
-    void containerSignal(const QString &result1,const QString &iso1,const QString &result2="",const QString &iso2="");
+    void containerSignal(const int& type,const QString &result1,const int& resultCheck1,const QString &iso1,const QString &result2="",const int& resultCheck2=0,const QString &iso2="");
 
     ///
     /// \brief updateDataBaseSignal 更新箱号数据

@@ -14,6 +14,7 @@
 #include <QLabel>
 #include <QMap>
 #include <QMetaType>
+#include <QDebug>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"

@@ -106,18 +106,24 @@ void DataBaseWidget::returnModelSlot( QSqlTableModel *model)
 
     ui->tableView->setColumnHidden(ID,true);
     ui->tableView->setColumnHidden(ImgFront,true);
+    ui->tableView->setColumnHidden(ImgFrontCheck,true);
     ui->tableView->setColumnHidden(ImgFrontNumber,true);
     ui->tableView->setColumnHidden(ImgLeftFront,true);
+    ui->tableView->setColumnHidden(ImgLeftFrontCheck,true);
     ui->tableView->setColumnHidden(ImgLeftFrontNumber,true);
     ui->tableView->setColumnHidden(ImgRightFront,true);
+    ui->tableView->setColumnHidden(ImgRightFrontCheck,true);
     ui->tableView->setColumnHidden(ImgRightFrontNumber,true);
     ui->tableView->setColumnHidden(ImgLeftAfter,true);
+    ui->tableView->setColumnHidden(ImgLeftAfterCheck,true);
     ui->tableView->setColumnHidden(ImgLeftAfterNumber,true);
     ui->tableView->setColumnHidden(ImgRightAfter,true);
+    ui->tableView->setColumnHidden(ImgRightAfterCheck,true);
     ui->tableView->setColumnHidden(ImgRightAfterNumber,true);
     ui->tableView->setColumnHidden(ImgAfter,true);
+    ui->tableView->setColumnHidden(ImgAfterCheck,true);
     ui->tableView->setColumnHidden(ImgAfterNumber,true);
-    ui->tableView->setColumnHidden(PlateImg,true);
+    ui->tableView->setColumnHidden(PlateImg,true);   
 }
 
 void DataBaseWidget::on_checkBox_stateChanged(int arg1)
@@ -335,49 +341,49 @@ void DataBaseWidget::showImages(const QModelIndex &index)
         /* 防止图片发生偏移 */
         QPixmap  labelPixFit;
 
-        QString imgTmp=index.sibling(index.row(),10).data().toString();
+        QString imgTmp=index.sibling(index.row(),ImgFront).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_Front_label->setPixmap(labelPixFit);
             }
         }
-        imgTmp=index.sibling(index.row(),12).data().toString();
+        imgTmp=index.sibling(index.row(),ImgLeftFront).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_LeftFront_label->setPixmap(labelPixFit);
             }
         }
-        imgTmp=index.sibling(index.row(),14).data().toString();
+        imgTmp=index.sibling(index.row(),ImgRightFront).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_RightFront_label->setPixmap(labelPixFit);
             }
         }
-        imgTmp=index.sibling(index.row(),16).data().toString();
+        imgTmp=index.sibling(index.row(),ImgLeftAfter).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_LeftAfter_label->setPixmap(labelPixFit);
             }
         }
-        imgTmp=index.sibling(index.row(),18).data().toString();
+        imgTmp=index.sibling(index.row(),ImgRightAfter).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_RightAfter_label->setPixmap(labelPixFit);
             }
         }
-        imgTmp=index.sibling(index.row(),20).data().toString();
+        imgTmp=index.sibling(index.row(),ImgAfter).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_After_label->setPixmap(labelPixFit);
             }
         }
-        imgTmp=index.sibling(index.row(),24).data().toString();
+        imgTmp=index.sibling(index.row(),PlateImg).data().toString();
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
                 labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
@@ -396,17 +402,23 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     if(showImg){
         showImages(index);
     }
-    ui->numberFront_label->setText(index.sibling(index.row(),4).data().toString());/* 前箱 */
-    ui->numberAfter_label->setText(index.sibling(index.row(),7).data().toString());/* 后箱 */
-    ui->checkFront_label->setText(index.sibling(index.row(),6).data().toString());/* 前箱型 */
-    ui->checkAfter_label->setText(index.sibling(index.row(),9).data().toString());/* 后箱型 */
-    ui->Plate_label->setText(index.sibling(index.row(),22).data().toString());/* 车牌 */
+    ui->numberFront_label->setText(index.sibling(index.row(),ContainerFront).data().toString());/* 前箱 */
+    ui->numberAfter_label->setText(index.sibling(index.row(),ContainerAfter).data().toString());/* 后箱 */
+    ui->checkFront_label->setText(index.sibling(index.row(),ISOFront).data().toString());/* 前箱型 */
+    ui->checkAfter_label->setText(index.sibling(index.row(),ISOAfter).data().toString());/* 后箱型 */
+    ui->Plate_label->setText(index.sibling(index.row(),Plate).data().toString());/* 车牌 */
 
     /* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
-    int TYPE=index.sibling(index.row(),3).data().toInt();
+    int TYPE=index.sibling(index.row(),Type).data().toInt();
     if(TYPE>0){
         if(TYPE==3){
-            if(index.sibling(index.row(),5).data().toBool()){
+            if(index.sibling(index.row(),CheckFront).data().toBool()){
+                ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+            }
+            else {
+                ui->numberFront_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+            }
+            if(index.sibling(index.row(),CheckAfter).data().toBool()){
                 ui->numberAfter_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             }
             else {
@@ -414,7 +426,7 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
             }
         }
         else if (TYPE<3) {
-            if(index.sibling(index.row(),8).data().toBool()){
+            if(index.sibling(index.row(),CheckFront).data().toBool()){
                 ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             }
             else {

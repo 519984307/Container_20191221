@@ -106,12 +106,27 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     }
 }
 
-void DataWidget::containerSlot(const QString &result1, const QString &iso1, const QString &result2, const QString &iso2)
+void DataWidget::containerSlot(const int& type,const QString &result1,const int& resultCheck1,const QString &iso1,const QString &result2,const int& resultCheck2,const QString &iso2)
 {
     ui->lineEdit->setText(result1);
     ui->lineEdit_2->setText(iso1);
     ui->lineEdit_3->setText(result2);
     ui->lineEdit_4->setText(iso2);
+
+    if(resultCheck1){
+        ui->lineEdit->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->lineEdit->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+    if(type==3){
+        if(resultCheck2){
+            ui->lineEdit_3->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+        }
+        else {
+            ui->lineEdit_3->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+        }
+    }
 }
 
 void DataWidget::on_test_22_pushButton_clicked()

@@ -82,6 +82,11 @@ private:
     QStringList isoTemp;
 
     ///
+    /// \brief checkConList 箱号校验列表
+    ///
+    QList<int> checkConList;
+
+    ///
     /// \brief correct 校验标志
     ///
     bool correct;

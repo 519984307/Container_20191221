@@ -22,10 +22,15 @@ signals:
     void messageSignal(const QString &type,const QString &msg);
 
     ///
-    /// \brief containerSignal 箱号结果
-    /// \param result 箱号
+    /// \brief containerSignal 箱号分析结果
+    /// \param result1 前箱
+    /// \param resultCheck1 校验
+    /// \param iso1 箱型
+    /// \param result2 后箱
+    /// \param resultCheck2 校验
+    /// \param iso2 箱型
     ///
-    void containerSignal(const QString &result1,const QString &iso1,const QString &result2="",const QString &iso2="");
+    void containerSignal(const int& type,const QString &result1,const int& resultCheck1,const QString &iso1,const QString &result2="",const int& resultCheck2=0,const QString &iso2="");
 
     ///
     /// \brief updateDataBaseSignal 更新箱号数据

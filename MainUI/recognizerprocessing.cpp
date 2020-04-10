@@ -78,9 +78,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             labelPix->loadFromData(jpgStream);
             /* 缩放图片 */
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime).toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
-
+            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
             labelPixFit.save(image);
             //labelPix->save(image);
             delete labelPix;
@@ -123,10 +121,10 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
     if(resulList.count()==containerNum){
         for(int i=0;i<containerNum;i++){
             chanResulList.append(resulList[0]);
+            qDebug()<<resulList[0];
             resulList.removeAt(0);
         }
-
-        emit resultsOfAnalysisSignal(resulList,containertType,imageName);/* 分析结果 */
+        emit resultsOfAnalysisSignal(chanResulList,containertType,imageName);/* 分析结果 */
 
         containerNum=0;
         containertType=0;

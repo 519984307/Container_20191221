@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QCoreApplication>
 #include <QDir>
+#include <QDebug>
 
 class Recognition : public QObject,public QRunnable
 {

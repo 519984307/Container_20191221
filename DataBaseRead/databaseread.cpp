@@ -43,16 +43,22 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
                       `CheckAfter`	INTEGER,\
                       `ISOAfter`	TEXT,\
                       `ImgFront`	TEXT,\
+                      'ImgFrontCheck'  INTEGER,\
                       `ImgFrontNumber`	TEXT,\
                       `ImgLeftFront`	TEXT,\
+                      'ImgLeftFrontCheck'  INTEGER,\
                       `ImgLeftFrontNumber`	TEXT,\
                       `ImgRightFront`	TEXT,\
+                      'ImgRightFrontCheck'  INTEGER,\
                       `ImgRightFrontNumber`	TEXT,\
                       `ImgLeftAfter`	TEXT,\
+                      'ImgLeftAfterCheck'  INTEGER,\
                       `ImgLeftAfterNumber`	TEXT,\
                       `ImgRightAfter`	TEXT,\
+                      'ImgRightAfterCheck'  INTEGER,\
                       `ImgRightAfterNumber`	TEXT,\
                       `ImgAfter`	TEXT,\
+                      'ImgAfterCheck'  INTEGER,\
                       `ImgAfterNumber`	TEXT,\
                       `Plate`	 TEXT,\
                       `PlateTimer` 	TEXT,\

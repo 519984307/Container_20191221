@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QDir>
 #include <QDateTime>
+#include <QDebug>
 
 #if defined(RESULTSANALYSIS_LIBRARY)
 #  define RESULTSANALYSISSHARED_EXPORT Q_DECL_EXPORT

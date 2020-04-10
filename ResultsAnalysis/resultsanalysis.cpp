@@ -5,6 +5,7 @@ ResultsAnalysis::ResultsAnalysis(QObject *parent)
     this->setParent(parent);
     this->correct=false;
     this->channel=-1;
+    initCheckMap();
 }
 
 ResultsAnalysis::~ResultsAnalysis()
@@ -81,6 +82,7 @@ bool ResultsAnalysis::numberCheck(QString &number)
     }
 
     int die=sum % 11;
+
     if(number.count()==10){
         if(correct){
             number=number.append(QString::number(die));
@@ -88,14 +90,12 @@ bool ResultsAnalysis::numberCheck(QString &number)
         }
         return false;
     }
-    if (die!=number[10].toLatin1()-'0'&&number.count()==11)
+    if (number.count()==11 && die!=number[10].toLatin1()-'0')
     {
-        if(0<=die && die <=9)
+        if(0<=die && die <=9 && correct)
         {
-            if(correct){/* 矫正结果 */
-                number[10]=die+'0';
-                return true;
-            }
+            number[10]=die+'0';/* 矫正结果 */
+            return true;
         }
         return false;
     }
@@ -104,22 +104,28 @@ bool ResultsAnalysis::numberCheck(QString &number)
 
 void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, const QString &imgTime)
 {
+    /* 1:22G1 */
+    /* 2:45G1 */
+    /* 3:双22G1 */
     this->imgTime=imgTime;
 
     QList<uint32_t> probabilityTemp;/* 置信度 */
 
     for(auto var:resultList){
-        QString con="";        QString iso="";        uint32_t probability=0;
+        QString con="";        QString iso="";        uint32_t probability=0;        int check=0;
         if(var.startsWith("RESULT")){
             QStringList tmp=var.split(":")[1].split("|");
             if(tmp.count()>=3){
-                con=tmp[0].trimmed();
+                QString conT=tmp[0].trimmed();
+                check=numberCheck(conT);
+                con=conT;
                 iso=tmp[1];
                 probability=tmp[2].toUInt();
             }
         }
         conTemp.append(con);
         isoTemp.append(iso);
+        checkConList.append(check);
         probabilityTemp.append(probability);
     }
 
@@ -139,7 +145,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
                 index2=var;
             }
         }
-        emit containerSignal(conTemp[index1],isoTemp[1],conTemp[index2],isoTemp[index2]);
+        emit containerSignal(type,conTemp[index1],checkConList[index1],isoTemp[index1],conTemp[index2],checkConList[index2],isoTemp[index2]);
     }
     else {
         for (int var = 0; var < probabilityTemp.count(); ++var) {
@@ -148,12 +154,13 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
                 index1=var;
             }
         }
-        emit containerSignal(conTemp[index1],isoTemp[1]);
+        emit containerSignal(type,conTemp[index1],checkConList[index1],isoTemp[index1]);
     }
     updateDataBase(index1,index2);
 
     conTemp.clear();
     isoTemp.clear();
+    checkConList.clear();
     probabilityTemp.clear();
 }
 
@@ -174,25 +181,37 @@ void ResultsAnalysis::updateDataBase(int index1,int index2)
 
     data["ContainerFront"]=conTemp[index1];
     data["ISOFront"]=isoTemp[index1];
+    data["CheckFront"]=QString::number(checkConList[index1]);
 
     if(index2!=-1){
         data["ContainerAfter"]=conTemp[index2];
         data["ISOAfter"]=isoTemp[index2];
+        data["CheckAfter"]=QString::number(checkConList[index2]);
     }
 
     if(conTemp.count()==4){
         data["ImgFrontNumber"]=conTemp[0];
+        data["ImgFrontCheck"]=QString::number(checkConList[0]);
         data["ImgLeftFrontNumber"]=conTemp[1];
+        data["ImgLeftFrontCheck"]=QString::number(checkConList[1]);
         data["ImgRightFrontNumber"]=conTemp[2];
+        data["ImgRightFrontCheck"]=QString::number(checkConList[2]);
         data["ImgAfterNumber"]=conTemp[3];
+        data["ImgAfterCheck"]=QString::number(checkConList[3]);
     }
     else if (conTemp.count()==6) {
         data["ImgFrontNumber"]=conTemp[0];
+        data["ImgFrontCheck"]=QString::number(checkConList[0]);
         data["ImgLeftFrontNumber"]=conTemp[1];
+        data["ImgLeftFrontCheck"]=QString::number(checkConList[1]);
         data["ImgRightFrontNumber"]=conTemp[2];
+        data["ImgRightFrontCheck"]=QString::number(checkConList[2]);
         data["ImgLeftAfterNumber"]=conTemp[3];
+        data["ImgLeftAfterCheck"]=QString::number(checkConList[3]);
         data["ImgRightAfterNumber"]=conTemp[4];
+        data["ImgRightAfterCheck"]=QString::number(checkConList[4]);
         data["ImgAfterNumber"]=conTemp[5];
+        data["ImgAfterCheck"]=QString::number(checkConList[5]);
     }
     emit updateDataBaseSignal(data);
     data.clear();

@@ -52,7 +52,7 @@ public slots:
     /// \param result2 后箱
     /// \param iso2 箱型
     ///
-    void containerSlot(const QString &result1,const QString &iso1,const QString &result2,const QString &iso2);
+    void containerSlot(const int& type,const QString &result1, const int &resultCheck1, const QString &iso1, const QString &result2, const int &resultCheck2, const QString &iso2);
 
 signals:
 
