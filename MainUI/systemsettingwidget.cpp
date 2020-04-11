@@ -11,6 +11,8 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
     connect(ui->Eliminate_pushButton,SIGNAL(clicked()),this,SLOT(conditionsOfButton_clicked()));
     connect(ui->CheckPathPushButton_1,SIGNAL(clicked()),this,SLOT(checkPathPushButton_clicked()));
     connect(ui->CheckPathPushButton_2,SIGNAL(clicked()),this,SLOT(checkPathPushButton_clicked()));
+    connect(ui->ServerModel,SIGNAL(clicked(bool)),this,SLOT(socketModel_clicked(bool)));
+    connect(ui->ClientModel,SIGNAL(clicked(bool)),this,SLOT(socketModel_clicked(bool)));
 
     pSettingValues=new SettingValues () ;
 
@@ -107,12 +109,6 @@ bool SystemSettingWidget::jsonWrite()
     QJsonObject jsonObj1;
     jsonObj1.insert(tr("ColorDisplay"),int(ui->ColorDisplay->isChecked()));
     jsonObj1.insert(tr("AutomaticCorrection"),int(ui->AutomaticCorrection->isChecked()));
-//    jsonObj1.insert(tr("Server"),int(ui->Server->isChecked()));
-//    jsonObj1.insert(tr("ServerIP"),ui->ServerIP->text());
-//    jsonObj1.insert(tr("ServerPort"),ui->ServerPort->text());
-//    jsonObj1.insert(tr("Client"),int(ui->Client->isChecked()));
-//    jsonObj1.insert(tr("ClientIP"),ui->ClientIP->text());
-//    jsonObj1.insert(tr("ClientPort"),ui->ClientPort->text().toInt());
     jsonChild.insert("Recognizer",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
@@ -122,6 +118,7 @@ bool SystemSettingWidget::jsonWrite()
     jsonChild.insert("Agreement",QJsonValue(jsonObj2));
 
     QJsonObject jsonObj3;
+    jsonObj3.insert(tr("FTP"),int(ui->FTP->isChecked()));
     jsonObj3.insert(tr("FtpAddress"),ui->FtpAddress->text());
     jsonObj3.insert(tr("FtpPort"),ui->FtpPort->text());
     jsonObj3.insert(tr("FtpUser"), ui->FtpUser->text());
@@ -133,6 +130,7 @@ bool SystemSettingWidget::jsonWrite()
     QJsonObject jsonObj4;
     jsonObj4.insert(tr("Minimization"),int(ui->Minimization->isChecked()));
     jsonObj4.insert(tr("Language"), ui->Language->currentIndex());
+    jsonObj4.insert(tr("Automatic"),int(ui->Automatic->isChecked()));
     jsonChild.insert("Other",QJsonValue(jsonObj4));
 
     QJsonObject jsonObj5;
@@ -152,6 +150,13 @@ bool SystemSettingWidget::jsonWrite()
     jsonObj6.insert(tr("ErrorLog"),int(ui->ErrorLog->isChecked()));
     jsonObj6.insert(tr("WarningLog"),int(ui->WarningLog->isChecked()));
     jsonChild.insert("Log",QJsonValue(jsonObj6));
+
+    QJsonObject jsonObj7;
+    jsonObj7.insert(tr("ServerModel"),int(ui->ServerModel->isChecked()));
+    jsonObj7.insert(tr("ServerIP"),ui->ServerIP->toPlainText());
+    jsonObj7.insert(tr("ClientModel"),int(ui->ClientModel->isChecked()));
+    jsonObj7.insert(tr("ClientIP"),ui->ClientIP->toPlainText());
+    jsonChild.insert("Server",QJsonValue(jsonObj7));
 
     jsonObjRoot.insert("MAIN",QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
@@ -195,6 +200,7 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->ImgPathOne= getJsonValue("Channel","ImgPathOne",value.toObject()).toString();
                     pSettingValues->ImgPathTow= getJsonValue("Channel","ImgPathTow",value.toObject()).toString();
 
+                    pSettingValues->FTP=getJsonValue("FTP","FTP",value.toObject()).toInt();
                     pSettingValues->FtpAddress= getJsonValue("FTP","FtpAddress",value.toObject()).toString();
                     pSettingValues->FtpLocalImgPath= getJsonValue("FTP","FtpLocalImgPath",value.toObject()).toString();
                     pSettingValues->FtpPassword= getJsonValue("FTP","FtpPassword",value.toObject()).toString();
@@ -204,6 +210,7 @@ bool SystemSettingWidget::jsonRead()
 
                     pSettingValues->Language= getJsonValue("Other","Language",value.toObject()).toInt();
                     pSettingValues->Minimization= getJsonValue("Other","Minimization",value.toObject()).toInt();
+                    pSettingValues->Automatic=getJsonValue("Other","Automatic",value.toObject()).toInt();
 
                     pSettingValues->SaveLog= getJsonValue("Log","SaveLog",value.toObject()).toInt();
                     pSettingValues->SaveLogVersion= getJsonValue("Log","SaveLogVersion",value.toObject()).toInt();
@@ -212,13 +219,12 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->WarningLog= getJsonValue("Log","WarningLog",value.toObject()).toInt();
 
                     pSettingValues->AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
-                    pSettingValues->Client= getJsonValue("Recognizer","Client",value.toObject()).toInt();
-                    pSettingValues->ClientIP= getJsonValue("Recognizer","ClientIP",value.toObject()).toString();
-                    pSettingValues->ClientPort= getJsonValue("Recognizer","ClientPort",value.toObject()).toInt();
-                    pSettingValues->Server= getJsonValue("Recognizer","Server",value.toObject()).toInt();
-                    pSettingValues->ServerIP= getJsonValue("Recognizer","ServerIP",value.toObject()).toString();
-                    pSettingValues->ServerPort= getJsonValue("Recognizer","ServerPort",value.toObject()).toInt();
                     pSettingValues->ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
+
+                    pSettingValues->ClientModel= getJsonValue("Server","ClientModel",value.toObject()).toInt();
+                    pSettingValues->ClientIP= getJsonValue("Server","ClientIP",value.toObject()).toString();
+                    pSettingValues->ServerModel= getJsonValue("Server","ServerModel",value.toObject()).toInt();
+                    pSettingValues->ServerIP= getJsonValue("Server","ServerIP",value.toObject()).toString();
 
                     pSettingValues->DataBaseVersion=getJsonValue("DataBase","DataBaseVersion",value.toObject()).toInt();
                     pSettingValues->DataBaseUser=getJsonValue("DataBase","DataBaseUser",value.toObject()).toString();
@@ -251,17 +257,17 @@ void SystemSettingWidget::jsonWritetoUI()
 
     ui->ColorDisplay->setChecked(pSettingValues->ColorDisplay);
     ui->AutomaticCorrection->setChecked(pSettingValues->AutomaticCorrection);
-//    ui->Server->setChecked(pSettingValues->Server);
-//    ui->ServerIP->setText(pSettingValues->ServerIP);
-//    ui->ServerPort->setText(QString::number(pSettingValues->ServerPort));
-//    ui->Client->setChecked(pSettingValues->Client);
-//    ui->ClientIP->setText(pSettingValues->ClientIP);
-//    ui->ClientPort->setText(QString::number(pSettingValues->ClientPort));
+
+    ui->ServerModel->setChecked(pSettingValues->ServerModel);
+    ui->ServerIP->setPlainText(pSettingValues->ServerIP);
+    ui->ClientModel->setChecked(pSettingValues->ClientModel);
+    ui->ClientIP->setPlainText(pSettingValues->ClientIP);
 
     ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
     ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
     ui->HcSDK_Path_lineEdit->setText(pSettingValues->HcSDKPath);
 
+    ui->FTP->setChecked(pSettingValues->FTP);
     ui->FtpAddress->setText(pSettingValues->FtpAddress);
     ui->FtpPort->setText(pSettingValues->FtpPort);
     ui->FtpUser->setText(pSettingValues->FtpUser);
@@ -271,6 +277,7 @@ void SystemSettingWidget::jsonWritetoUI()
 
     ui->Minimization->setChecked(pSettingValues->Minimization);
     ui->Language->setCurrentIndex(pSettingValues->Language);
+    ui->Automatic->setChecked(pSettingValues->Automatic);
 
     ui->SaveLog->setChecked(pSettingValues->SaveLog);
     ui->SaveLogV->setCurrentIndex(pSettingValues->SaveLogVersion);
@@ -341,6 +348,27 @@ void SystemSettingWidget::checkPathPushButton_clicked()
             ui->ImgPathlineEdit_2->setText("");
         }
         ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
+    }
+}
+
+void SystemSettingWidget::socketModel_clicked(bool checked)
+{
+    QGroupBox* pGb=qobject_cast<QGroupBox*>(sender());
+    if(pGb==ui->ServerModel){
+        if(checked){
+            ui->ClientModel->setChecked(false);
+        }
+        else {
+            ui->ClientModel->setChecked(true);
+        }
+    }
+    else if (pGb==ui->ClientModel) {
+        if(checked){
+            ui->ServerModel->setChecked(false);
+        }
+        else {
+            ui->ServerModel->setChecked(true);
+        }
     }
 }
 

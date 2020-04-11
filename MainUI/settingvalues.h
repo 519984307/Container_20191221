@@ -44,6 +44,11 @@ public:
     int SaveImageTow;
 
     ///
+    /// \brief FTP 是否启动上传图片
+    ///
+    int FTP;
+
+    ///
     /// \brief FtpAddress FTP地址
     ///
     QString FtpAddress;
@@ -84,6 +89,11 @@ public:
     int Minimization;
 
     ///
+    /// \brief Automatic 开机自动启动
+    ///
+    int Automatic;
+
+    ///
     /// \brief SaveLog 保持日志状态
     ///
     int SaveLog;
@@ -114,34 +124,24 @@ public:
     int AutomaticCorrection;
 
     ///
-    /// \brief Client SOCKET服务状态
+    /// \brief ClientModel 客户端模式
     ///
-    int Client;
+    int ClientModel;
 
     ///
-    /// \brief ClientIP SOCKET客户地址
+    /// \brief ServerModel 服务器模式
+    ///
+    int ServerModel;
+
+    ///
+    /// \brief ClientIP 客户端地址
     ///
     QString ClientIP;
 
     ///
-    /// \brief ClientPort SOCKET客户端口
-    ///
-    int ClientPort;
-
-    ///
-    /// \brief Server SOCKET服务状态
-    ///
-    int Server;
-
-    ///
-    /// \brief ServerIP SOCKET服务地址
+    /// \brief ServerIP 服务器地址
     ///
     QString ServerIP;
-
-    ///
-    /// \brief ServerPort SOCKET服务端口
-    ///
-    int ServerPort;
 
     ///
     /// \brief ColorDisplay 颜色显示识别结果
