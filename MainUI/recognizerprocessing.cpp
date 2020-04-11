@@ -4,6 +4,7 @@ RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 {
     this->imgPath1="";
     this->imgPath2="";
+    this->channel=-1;
     containerNum=0;
     containertType=0;
 }
@@ -11,6 +12,7 @@ RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 RecognizerProcessing::~RecognizerProcessing()
 {
     resulList.clear();
+    chanResulList.clear();
     queue.clear();
 }
 
@@ -37,10 +39,8 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         return;
     }
     QMutexLocker locket(&mutex);
-    if(imgPath1!=""){/* 保存路径不存在,图片不保存,不识别 */
-        QDir dir(imgPath1);
-        bool isRoot=false;/* 如果是保存在根目录就不用CD */
-        QString suffixPath="";
+    if(imgPath1!=""){/* 保存路径不存在,图片不保存,不识别 */       
+        QString suffixPath="";        
         switch (format1) {
         case 0:
             suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd")));
@@ -64,29 +64,80 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             suffixPath=QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy")));
             break;
         case 7:
-            isRoot=true;
+            suffixPath=QDir::toNativeSeparators("./");
             break;
         }
-        if(!isRoot){
-            dir.mkpath(suffixPath);
-            dir.cd(suffixPath);
-        }
+
+        QDir dir(imgPath1);
+        dir.mkpath(suffixPath);
+        dir.cd(suffixPath);
 
         QString image="";
         if(imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
-            labelPix->loadFromData(jpgStream);
-            /* 缩放图片 */
-            QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            labelPix->loadFromData(jpgStream);            
+            QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
             image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
             labelPixFit.save(image);
             //labelPix->save(image);
             delete labelPix;
             labelPix=nullptr;
-
             //emit identifyImagesSignal(image);/* 识别图片 */
         }
         emit identifyImagesSignal(image);/* 识别图片 */
+    }
+}
+
+void RecognizerProcessing::saveImageTowSlot(const QByteArray &jpgStream, const int &imgNumber, const QString &imgTime)
+{
+    if(imgNumber==0){/* 测试抓图,不保存,不识别 */
+        return;
+    }
+    QMutexLocker locket(&mutex);
+    if(imgPath2!=""){/* 保存路径不存在,图片不保存 */
+        QString suffixPath="";
+        switch (format2) {
+        case 0:
+            suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy/MM/dd")));
+            break;
+        case 1:
+            suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy/MM")));
+            break;
+        case 2:
+            suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(channel).arg(QDateTime::currentDateTime().toString("yyyy")));
+            break;
+        case 3:
+            suffixPath=QDir::toNativeSeparators(tr("%1").arg(channel));
+            break;
+        case 4:
+            suffixPath=QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM/dd")));
+            break;
+        case 5:
+            suffixPath=QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy/MM")));
+            break;
+        case 6:
+            suffixPath=QDir::toNativeSeparators(tr("%1").arg(QDateTime::currentDateTime().toString("yyyy")));
+            break;
+        case 7:
+            suffixPath=QDir::toNativeSeparators("./");
+            break;
+        }
+
+        QDir dir(imgPath2);
+        dir.mkpath(suffixPath);
+        dir.cd(suffixPath);
+
+        QString image="";
+        if(imgTime!="" && jpgStream!=nullptr){
+            QPixmap *labelPix = new QPixmap();
+            labelPix->loadFromData(jpgStream);
+            //QPixmap labelPixFit=  labelPix->scaled(1920,1080, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
+            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
+            //labelPixFit.save(image);
+            labelPix->save(image);
+            delete labelPix;
+            labelPix=nullptr;
+        }
     }
 }
 

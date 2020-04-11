@@ -7,6 +7,11 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->Contains_pushButton,SIGNAL(clicked()),this,SLOT(conditionsOfButton_clicked()));
+    connect(ui->Eliminate_pushButton,SIGNAL(clicked()),this,SLOT(conditionsOfButton_clicked()));
+    connect(ui->CheckPathPushButton_1,SIGNAL(clicked()),this,SLOT(checkPathPushButton_clicked()));
+    connect(ui->CheckPathPushButton_2,SIGNAL(clicked()),this,SLOT(checkPathPushButton_clicked()));
+
     pSettingValues=new SettingValues () ;
 
     this->setParent(parent);
@@ -102,17 +107,18 @@ bool SystemSettingWidget::jsonWrite()
     QJsonObject jsonObj1;
     jsonObj1.insert(tr("ColorDisplay"),int(ui->ColorDisplay->isChecked()));
     jsonObj1.insert(tr("AutomaticCorrection"),int(ui->AutomaticCorrection->isChecked()));
-    jsonObj1.insert(tr("Server"),int(ui->Server->isChecked()));
-    jsonObj1.insert(tr("ServerIP"),ui->ServerIP->text());
-    jsonObj1.insert(tr("ServerPort"),ui->ServerPort->text());
-    jsonObj1.insert(tr("Client"),int(ui->Client->isChecked()));
-    jsonObj1.insert(tr("ClientIP"),ui->ClientIP->text());
-    jsonObj1.insert(tr("ClientPort"),ui->ClientPort->text().toInt());
+//    jsonObj1.insert(tr("Server"),int(ui->Server->isChecked()));
+//    jsonObj1.insert(tr("ServerIP"),ui->ServerIP->text());
+//    jsonObj1.insert(tr("ServerPort"),ui->ServerPort->text());
+//    jsonObj1.insert(tr("Client"),int(ui->Client->isChecked()));
+//    jsonObj1.insert(tr("ClientIP"),ui->ClientIP->text());
+//    jsonObj1.insert(tr("ClientPort"),ui->ClientPort->text().toInt());
     jsonChild.insert("Recognizer",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
     jsonObj2.insert(tr("ProtocolVersion"),ui->ProtocolV->currentIndex());
     jsonObj2.insert(tr("CameraVersion"),ui->CameraV->currentIndex());
+    jsonObj2.insert(tr("HcSDKPath"),ui->HcSDK_Path_lineEdit->text());
     jsonChild.insert("Agreement",QJsonValue(jsonObj2));
 
     QJsonObject jsonObj3;
@@ -126,9 +132,26 @@ bool SystemSettingWidget::jsonWrite()
 
     QJsonObject jsonObj4;
     jsonObj4.insert(tr("Minimization"),int(ui->Minimization->isChecked()));
-    //jsonObj4.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
     jsonObj4.insert(tr("Language"), ui->Language->currentIndex());
     jsonChild.insert("Other",QJsonValue(jsonObj4));
+
+    QJsonObject jsonObj5;
+    jsonObj5.insert(tr("DataBaseVersion"), ui->DataBaseTypeV->currentIndex());
+    jsonObj5.insert(tr("DataBaseUser"),ui->DataBaseUser->text());
+    jsonObj5.insert(tr("DataBasePwd"),ui->DataBasePassword->text());
+    jsonObj5.insert(tr("DataBaseAddr"),ui->DataBaseAddress->text());
+    jsonObj5.insert(tr("DataBasePort"),ui->DataBasePort->text().toInt());
+    jsonObj5.insert(tr("TextFormat"),int(ui->TextFormat->isChecked()));
+    jsonObj5.insert(tr("TextFormatVersion"),ui->TextForamtV->currentIndex());
+    jsonChild.insert("DataBase",QJsonValue(jsonObj5));
+
+    QJsonObject jsonObj6;
+    jsonObj6.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
+    jsonObj6.insert(tr("SaveLogVersion"), ui->SaveLogV->currentIndex());
+    jsonObj6.insert(tr("InfoLog"),int(ui->InfoLog->isChecked()));
+    jsonObj6.insert(tr("ErrorLog"),int(ui->ErrorLog->isChecked()));
+    jsonObj6.insert(tr("WarningLog"),int(ui->WarningLog->isChecked()));
+    jsonChild.insert("Log",QJsonValue(jsonObj6));
 
     jsonObjRoot.insert("MAIN",QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
@@ -162,6 +185,7 @@ bool SystemSettingWidget::jsonRead()
                 if(value.isObject()){
                     pSettingValues->CameraVersion= getJsonValue("Agreement","CameraVersion",value.toObject()).toInt();
                     pSettingValues->ProtocolVersion=getJsonValue("Agreement","ProtocolVersion",value.toObject()).toInt();
+                    pSettingValues->HcSDKPath=getJsonValue("Agreement","HcSDKPath",value.toObject()).toString();
 
                     pSettingValues->ChannelNumber= getJsonValue("Channel","ChannelNumber",value.toObject()).toInt();
                     pSettingValues->ImageFormatOne= getJsonValue("Channel","ImageFormatOne",value.toObject()).toInt();
@@ -180,7 +204,12 @@ bool SystemSettingWidget::jsonRead()
 
                     pSettingValues->Language= getJsonValue("Other","Language",value.toObject()).toInt();
                     pSettingValues->Minimization= getJsonValue("Other","Minimization",value.toObject()).toInt();
-                    pSettingValues->SaveLog= getJsonValue("Other","SaveLog",value.toObject()).toInt();
+
+                    pSettingValues->SaveLog= getJsonValue("Log","SaveLog",value.toObject()).toInt();
+                    pSettingValues->SaveLogVersion= getJsonValue("Log","SaveLogVersion",value.toObject()).toInt();
+                    pSettingValues->InfoLog= getJsonValue("Log","InfoLog",value.toObject()).toInt();
+                    pSettingValues->ErrorLog= getJsonValue("Log","ErrorLog",value.toObject()).toInt();
+                    pSettingValues->WarningLog= getJsonValue("Log","WarningLog",value.toObject()).toInt();
 
                     pSettingValues->AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
                     pSettingValues->Client= getJsonValue("Recognizer","Client",value.toObject()).toInt();
@@ -190,6 +219,14 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->ServerIP= getJsonValue("Recognizer","ServerIP",value.toObject()).toString();
                     pSettingValues->ServerPort= getJsonValue("Recognizer","ServerPort",value.toObject()).toInt();
                     pSettingValues->ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
+
+                    pSettingValues->DataBaseVersion=getJsonValue("DataBase","DataBaseVersion",value.toObject()).toInt();
+                    pSettingValues->DataBaseUser=getJsonValue("DataBase","DataBaseUser",value.toObject()).toString();
+                    pSettingValues->DataBasePwd=getJsonValue("DataBase","DataBasePwd",value.toObject()).toString();
+                    pSettingValues->DataBaseAddr=getJsonValue("DataBase","DataBaseAddr",value.toObject()).toString();
+                    pSettingValues->DataBasePort=getJsonValue("DataBase","DataBasePort",value.toObject()).toInt();
+                    pSettingValues->TextFormat=getJsonValue("DataBase","TextFormat",value.toObject()).toInt();
+                    pSettingValues->TextFormatVersion=getJsonValue("DataBase","TextFormatVersion",value.toObject()).toInt();
 
                     return true;
                     }
@@ -214,15 +251,16 @@ void SystemSettingWidget::jsonWritetoUI()
 
     ui->ColorDisplay->setChecked(pSettingValues->ColorDisplay);
     ui->AutomaticCorrection->setChecked(pSettingValues->AutomaticCorrection);
-    ui->Server->setChecked(pSettingValues->Server);
-    ui->ServerIP->setText(pSettingValues->ServerIP);
-    ui->ServerPort->setText(QString::number(pSettingValues->ServerPort));
-    ui->Client->setChecked(pSettingValues->Client);
-    ui->ClientIP->setText(pSettingValues->ClientIP);
-    ui->ClientPort->setText(QString::number(pSettingValues->ClientPort));
+//    ui->Server->setChecked(pSettingValues->Server);
+//    ui->ServerIP->setText(pSettingValues->ServerIP);
+//    ui->ServerPort->setText(QString::number(pSettingValues->ServerPort));
+//    ui->Client->setChecked(pSettingValues->Client);
+//    ui->ClientIP->setText(pSettingValues->ClientIP);
+//    ui->ClientPort->setText(QString::number(pSettingValues->ClientPort));
 
     ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
     ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
+    ui->HcSDK_Path_lineEdit->setText(pSettingValues->HcSDKPath);
 
     ui->FtpAddress->setText(pSettingValues->FtpAddress);
     ui->FtpPort->setText(pSettingValues->FtpPort);
@@ -232,8 +270,21 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->FtpRemoteImgPath->setText(pSettingValues->FtpRemoteImgPath);
 
     ui->Minimization->setChecked(pSettingValues->Minimization);
-    //ui->SaveLog->setChecked(SaveLog);
     ui->Language->setCurrentIndex(pSettingValues->Language);
+
+    ui->SaveLog->setChecked(pSettingValues->SaveLog);
+    ui->SaveLogV->setCurrentIndex(pSettingValues->SaveLogVersion);
+    ui->InfoLog->setChecked(pSettingValues->InfoLog);
+    ui->ErrorLog->setChecked(pSettingValues->ErrorLog);
+    ui->WarningLog->setChecked(pSettingValues->WarningLog);
+
+    ui->DataBaseTypeV->setCurrentIndex(pSettingValues->DataBaseVersion);
+    ui->DataBaseUser->setText(pSettingValues->DataBaseUser);
+    ui->DataBasePassword->setText(pSettingValues->DataBasePwd);
+    ui->DataBaseAddress->setText(pSettingValues->DataBaseAddr);
+    ui->DataBasePort->setText(QString::number(pSettingValues->DataBasePort));
+    ui->TextFormat->setChecked(pSettingValues->TextFormat);
+    ui->TextForamtV->setCurrentIndex(pSettingValues->TextFormatVersion);
 }
 
 QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)
@@ -256,7 +307,7 @@ QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &
         }
     }
     emit messageSignal(ZBY_LOG("ERROR"),tr("load SYSTEM.json value error:%1-%2").arg(child).arg(key));
-    return  "NULL";
+    return  "";
 }
 
 void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
@@ -274,26 +325,74 @@ void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
     }
 }
 
-void SystemSettingWidget::on_CheckPathPushButton_1_clicked()
+void SystemSettingWidget::checkPathPushButton_clicked()
 {
     QString path=QFileDialog::getExistingDirectory(this);
-    if(path=="")
-    {
-        ui->ImgPathlineEdit_2->setText("");
-    }
-    else {
+
+    QPushButton* pPb=qobject_cast<QPushButton*>(sender());
+    if(pPb==ui->CheckPathPushButton_1){
+        if(path==""){
+            ui->ImgPathlineEdit_1->setText("");
+        }
          ui->ImgPathlineEdit_1->setText(tr("%1").arg(path).toLocal8Bit());
+    }
+    else if (pPb==ui->CheckPathPushButton_2) {
+        if(path==""){
+            ui->ImgPathlineEdit_2->setText("");
+        }
+        ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
     }
 }
 
-void SystemSettingWidget::on_CheckPathPushButton_2_clicked()
+void SystemSettingWidget::conditionsOfButton_clicked()
 {
-    QString path=QFileDialog::getExistingDirectory(this);
-    if(path=="")
-    {
-        ui->ImgPathlineEdit_2->setText("");
+    QString fileName="";
+    QString check="";
+    QPushButton* pPb=qobject_cast<QPushButton*>(sender());
+    if(pPb==ui->Contains_pushButton){
+        fileName="XXXX.dat";
+        check=ui->Contains_lineEdit->text().trimmed().toUpper();
     }
-    else {
-         ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
+    else if (pPb==ui->Eliminate_pushButton) {
+        fileName="ZZZZ.dat";
+        check=ui->Eliminate_lineEdit->text().trimmed().toUpper();
+    }
+
+    int index=-1;
+    QFile file(QDir::toNativeSeparators(tr("%1/%2/%3").arg(QCoreApplication::applicationDirPath()).arg("QRecognition").arg(fileName)));
+
+    if(check!=""){
+        if(file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            QTextStream stream(&file);
+            QStringList strList=stream.readAll().split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+            for (int var = 0; var < strList.count(); ++var) {
+                if(strList[var]==check){
+                    index=var;
+                    break;
+                }
+            }
+            file.close();
+
+            if(index!=-1){/* 添加项 */
+                QMessageBox::StandardButton bt= QMessageBox::warning(this,check,tr("Whether to delete the record=%1").arg(check),QMessageBox::Yes|QMessageBox::No);
+                if(bt==QMessageBox::Yes){
+                    if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
+                        strList.removeAt(index);
+                        stream<<strList.join("\n");
+                        file.close();
+                    }
+                }
+            }
+            else {/* 删除项 */
+                QMessageBox::StandardButton bt= QMessageBox::warning(this,check,tr("Whether to add the record=%1").arg(check),QMessageBox::Yes|QMessageBox::No);
+                if(bt==QMessageBox::Yes){
+                    if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
+                        strList.append(tr("%1").arg(check));
+                        stream<<strList.join("\n");
+                        file.close();
+                    }
+                }
+            }
+        }
     }
 }

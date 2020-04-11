@@ -125,6 +125,14 @@ public slots:
     void pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber,const QString &imgTime);
 
     ///
+    /// \brief saveImageTowSlot 保存图片2
+    /// \param jpgStream 图片流
+    /// \param imgNumber 图片编号
+    /// \param imgTime 时间戳
+    ///
+    void saveImageTowSlot(const QByteArray &jpgStream, const int &imgNumber,const QString &imgTime);
+
+    ///
     /// \brief infraredCompleteSlot 逻辑抓拍完成
     /// \param type 逻辑类型
     ///

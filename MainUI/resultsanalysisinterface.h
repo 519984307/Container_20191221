@@ -51,7 +51,7 @@ public slots:
 
     ///
     /// \brief setCheckTheResultsSlot 是否校验识别结果
-    /// \param correct 校验标示
+    /// \param correct 校验标志
     ///
     virtual void setCheckTheResultsSlot(bool correct=false)=0;
 

@@ -32,6 +32,11 @@ signals:
     ///
     void resultsOfAnalysisSignal(QStringList resultList, int type,const QString& imgTime);
 
+    ///
+    /// \brief setChannelSlot 设定通道号
+    ///
+    void setChannelSignal(int channel);
+
 public slots:
 };
 

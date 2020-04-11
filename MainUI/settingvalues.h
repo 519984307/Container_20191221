@@ -89,6 +89,26 @@ public:
     int SaveLog;
 
     ///
+    /// \brief SaveLogVersion 日志版本
+    ///
+    int SaveLogVersion;
+
+    ///
+    /// \brief InfoLog 运行日志
+    ///
+    int InfoLog;
+
+    ///
+    /// \brief ErrorLog 错误日志
+    ///
+    int ErrorLog;
+
+    ///
+    /// \brief WarningLog 警告日志
+    ///
+    int WarningLog;
+
+    ///
     /// \brief AutomaticCorrection 自动校验结果
     ///
     int AutomaticCorrection;
@@ -137,6 +157,46 @@ public:
     /// \brief ImgPathTow 图片路径2
     ///
     QString ImgPathTow;
+
+    ///
+    /// \brief HcSDKPath 海康SDK路径
+    ///
+    QString HcSDKPath;
+
+    ///
+    /// \brief DataBaseVersion 数据库版本
+    ///
+    int DataBaseVersion;
+
+    ///
+    /// \brief DataBaseUser 数据库用户名
+    ///
+    QString DataBaseUser;
+
+    ///
+    /// \brief DataBasePassword 数据库密码
+    ///
+    QString DataBasePwd;
+
+    ///
+    /// \brief DataBaseAddr 数据库地址
+    ///
+    QString DataBaseAddr;
+
+    ///
+    /// \brief DataBasePort 数据库端口
+    ///
+    int DataBasePort;
+
+    ///
+    /// \brief TextFormat 数据保存文本
+    ///
+    int TextFormat;
+
+    ///
+    /// \brief TextFormatVersion 数据保存文本版本
+    ///
+    int TextFormatVersion;
 };
 
 #endif // SETTINGVALUES_H

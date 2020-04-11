@@ -16,6 +16,9 @@
 #include <QJsonValue>
 #include <QFileDialog>
 #include <QDateTime>
+#include <QMessageBox>
+#include <QTextStream>
+#include <QtDebug>
 
 namespace Ui {
 class SystemSettingWidget;
@@ -80,14 +83,14 @@ private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 
     ///
-    /// \brief on_CheckPathPushButton_1_clicked 设置图片路定1
+    /// \brief conditionsOfButton_clicked 字头条件按钮
     ///
-    void on_CheckPathPushButton_1_clicked();
+    void conditionsOfButton_clicked();
 
     ///
-    /// \brief on_CheckPathPushButton_2_clicked 设置图片路定2
+    /// \brief checkPathPushButton_clicked 图片路径设置按钮
     ///
-    void on_CheckPathPushButton_2_clicked();
+    void checkPathPushButton_clicked();
 
 signals:
 
@@ -111,6 +114,12 @@ signals:
     /// \param format 保存协议
     ///
     void setSaveImgFormatTowSignal(const QString &path,int format);
+
+    ///
+    /// \brief setCheckTheResultsSlot 是否校验识别结果
+    /// \param correct 校验标志
+    ///
+    void setCheckTheResultsSignal(bool correct=false);
 };
 
 #endif // SYSTEMSETTING_H

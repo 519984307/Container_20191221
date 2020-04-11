@@ -29,7 +29,7 @@ public:
     /// \brief setCheckTheResultsSlot 是否校验识别结果
     /// \param correct 校验标示
     ///
-    void setCheckTheResultsSlot(bool correct=false)Q_DECL_OVERRIDE;
+    void setCheckTheResultsSlot(bool correct)Q_DECL_OVERRIDE;
 
     ///
     /// \brief setChannelSlot 设定通道号

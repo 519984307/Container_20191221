@@ -485,12 +485,17 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
         connect(pRecognizerInterface,&RecognizerInterface::recognitionResultSignal,pRecognizerProcessing,&RecognizerProcessing::recognitionResultSlot);
         /* 日志信息 */
         connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
+
+        if(pSystemSettingWidget->pSettingValues->SaveImageOne){
+            /* 设置图片路径和保存协议1 */
+            emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
+        }
+        if(pSystemSettingWidget->pSettingValues->SaveImageTow){
+            /* 设置图片路径和保存协议2 */
+            emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);
+        }
     }
 
-    /* 设置图片路径和保存协议1 */
-    emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
-    /* 设置图片路径和保存协议2 */
-    emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);
     /* 设置通道号 */
     pRecognizerProcessing->setChannelSlot(num);
 
@@ -515,11 +520,18 @@ void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysi
     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::resultsOfAnalysisSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsOfAnalysisSlot);
     /* 日志信息 */
     connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 设置通道号 */
+    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setChannelSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setChannelSlot);
+
+    if(pSystemSettingWidget!=nullptr){
+        /* 结果校验模式 */
+        connect(pSystemSettingWidget,&SystemSettingWidget::setCheckTheResultsSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setCheckTheResultsSlot);
+        /* 是否校验结果  */
+        pSystemSettingWidget->setCheckTheResultsSignal(pSystemSettingWidget->pSettingValues->AutomaticCorrection);
+    }
 
     /* 设置通道号 */
-    pResultsAnalysisInterface->setChannelSlot(num);
-    /* 是否校验结果 */
-    pResultsAnalysisInterface->setCheckTheResultsSlot(false);
+    pResultsAnalysisProcessing->setChannelSignal(num);
 
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);
@@ -561,6 +573,8 @@ void MainWidget::publicConnect()
                         if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
                             /* 相机图片流绑定到识别器处理流程(保存图片) */
                             connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);
+                            /* 保存two图片地址 */
+                            connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::saveImageTowSlot);
                         }
                     }
                 }
