@@ -110,7 +110,7 @@
           <item row="0" column="0">
            <widget class="QLineEdit" name="ImgPathlineEdit_1">
             <property name="placeholderText">
-             <string>Image path One</string>
+             <string>/home/cc/</string>
             </property>
            </widget>
           </item>
@@ -171,7 +171,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Image format</string>
+             <string>Path Format</string>
             </property>
            </widget>
           </item>
@@ -193,7 +193,7 @@
           <item row="0" column="0">
            <widget class="QLineEdit" name="ImgPathlineEdit_2">
             <property name="placeholderText">
-             <string>Image path Two</string>
+             <string>/home/cc/</string>
             </property>
            </widget>
           </item>
@@ -254,7 +254,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Image format</string>
+             <string>Path Format</string>
             </property>
            </widget>
           </item>
@@ -342,7 +342,7 @@
             <item>
              <widget class="QLineEdit" name="Contains_lineEdit">
               <property name="placeholderText">
-               <string>Include identifier</string>
+               <string>WDFU</string>
               </property>
              </widget>
             </item>
@@ -360,7 +360,7 @@
             <item>
              <widget class="QLineEdit" name="Eliminate_lineEdit">
               <property name="placeholderText">
-               <string>Exclusion identifier</string>
+               <string>CCAU</string>
               </property>
              </widget>
             </item>
@@ -482,7 +482,11 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_22">
           <item row="0" column="0">
-           <widget class="QLineEdit" name="HcSDK_Path_lineEdit"/>
+           <widget class="QLineEdit" name="HcSDK_Path_lineEdit">
+            <property name="placeholderText">
+             <string>/home/cc/HCSDK</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -518,7 +522,71 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
-          <item row="0" column="0">
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLineEdit" name="DataBaseUser">
+              <property name="placeholderText">
+               <string>admin</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="DataBasePassword">
+              <property name="placeholderText">
+               <string>abc123456</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="DataBaseAddress">
+              <property name="placeholderText">
+               <string>192.168.1.100</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="DataBasePort">
+              <property name="placeholderText">
+               <string>3000</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>User</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Password</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Address</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Port</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0" colspan="2">
            <widget class="QComboBox" name="DataBaseTypeV">
             <item>
              <property name="text">
@@ -551,78 +619,6 @@
              </property>
             </item>
            </widget>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLineEdit" name="DataBaseUser">
-              <property name="placeholderText">
-               <string>Database user name</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>User          </string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QLineEdit" name="DataBasePassword">
-              <property name="placeholderText">
-               <string>DataBase Password</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>Password </string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="3" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLineEdit" name="DataBaseAddress">
-              <property name="placeholderText">
-               <string>DataBase Address</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Address    </string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="QLineEdit" name="DataBasePort">
-              <property name="placeholderText">
-               <string>DataBase Port</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>Port           </string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </widget>
@@ -819,22 +815,46 @@
           <item row="0" column="0">
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <widget class="QLineEdit" name="FtpAddress"/>
+             <widget class="QLineEdit" name="FtpAddress">
+              <property name="placeholderText">
+               <string>192.168.1.100</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="FtpPort"/>
+             <widget class="QLineEdit" name="FtpPort">
+              <property name="placeholderText">
+               <string>21</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="FtpUser"/>
+             <widget class="QLineEdit" name="FtpUser">
+              <property name="placeholderText">
+               <string>admin</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="FtpPassword"/>
+             <widget class="QLineEdit" name="FtpPassword">
+              <property name="placeholderText">
+               <string>abc123456</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="FtpLocalImgPath"/>
+             <widget class="QLineEdit" name="FtpLocalImgPath">
+              <property name="placeholderText">
+               <string>/home/cc/</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="FtpRemoteImgPath"/>
+             <widget class="QLineEdit" name="FtpRemoteImgPath">
+              <property name="placeholderText">
+               <string>/home/cc/</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

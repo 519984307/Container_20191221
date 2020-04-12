@@ -128,7 +128,7 @@
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QLineEdit" name="BeforeCamer">
+          <widget class="QLineEdit" name="FrontCamer">
            <property name="placeholderText">
             <string>192.168.1.100;admin;123456;</string>
            </property>
@@ -352,7 +352,14 @@
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QSpinBox" name="SerialPortTow"/>
+               <widget class="QSpinBox" name="SerialPortTow">
+                <property name="maximum">
+                 <number>199</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+               </widget>
               </item>
               <item row="1" column="0">
                <widget class="QPushButton" name="pushButton">
@@ -375,7 +382,11 @@
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="QSpinBox" name="SerialPortOne"/>
+               <widget class="QSpinBox" name="SerialPortOne">
+                <property name="maximum">
+                 <number>199</number>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -423,18 +434,33 @@
               <item row="0" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_7">
                 <item>
-                 <widget class="QLineEdit" name="SerialAddrOne"/>
+                 <widget class="QLineEdit" name="SerialAddrOne">
+                  <property name="placeholderText">
+                   <string>192.168.1.100</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="PortOne"/>
+                 <widget class="QSpinBox" name="PortOne">
+                  <property name="maximum">
+                   <number>199</number>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="SerialAddrTow"/>
+                 <widget class="QLineEdit" name="SerialAddrTow">
+                  <property name="placeholderText">
+                   <string>192.168.0.100</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QSpinBox" name="PortTow">
                   <property name="minimum">
-                   <number>1</number>
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>199</number>
                   </property>
                   <property name="value">
                    <number>1</number>
@@ -550,7 +576,11 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_27">
           <item row="0" column="0">
-           <widget class="QLineEdit" name="Alias"/>
+           <widget class="QLineEdit" name="Alias">
+            <property name="placeholderText">
+             <string>进口1</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

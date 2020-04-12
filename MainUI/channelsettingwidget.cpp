@@ -45,7 +45,7 @@ bool ChannelSettingWidget::jsonWrite()
     QJsonObject  jsonChild, jsonObjRoot;
 
     QJsonObject jsonObj;
-    jsonObj.insert(tr("BeforeCamer"),ui->BeforeCamer->text());
+    jsonObj.insert(tr("FrontCamer"),ui->FrontCamer->text());
     jsonObj.insert(tr("AfterCamer"),ui->AfterCamer->text());
     jsonObj.insert(tr("LeftCamer"),ui->LeftCamer->text());
     jsonObj.insert(tr("RgihtCamer"),ui->RgihtCamer->text());
@@ -106,7 +106,7 @@ bool ChannelSettingWidget::jsonRead()
                     Alias= getJsonValue("Other","Alias",value.toObject()).toString().toLocal8Bit();
                     LicensePlate=getJsonValue("Plate","LicensePlate",value.toObject()).toInt();
                     AfterCamer= getJsonValue("Camer","AfterCamer",value.toObject()).toString();
-                    BeforeCamer= getJsonValue("Camer","BeforeCamer",value.toObject()).toString();
+                    FrontCamer= getJsonValue("Camer","FrontCamer",value.toObject()).toString();
                     LeftCamer= getJsonValue("Camer","LeftCamer",value.toObject()).toString();
                     RgihtCamer= getJsonValue("Camer","RgihtCamer",value.toObject()).toString();
                     PlateCamer= getJsonValue("Camer","PlateCamer",value.toObject()).toString();
@@ -136,7 +136,7 @@ bool ChannelSettingWidget::jsonRead()
 
 void ChannelSettingWidget::jsonWritetoUI()
 {
-    ui->BeforeCamer->setText(BeforeCamer);
+    ui->FrontCamer->setText(FrontCamer);
     ui->AfterCamer->setText(AfterCamer);
     ui->LeftCamer->setText(LeftCamer);
     ui->RgihtCamer->setText(RgihtCamer);

@@ -493,7 +493,7 @@ void DataBaseWidget::on_End_pushButton_clicked()
     on_tableView_clicked(ui->tableView->currentIndex());
 }
 
-void DataBaseWidget::on_Before_pushButton_clicked()
+void DataBaseWidget::on_Front_pushButton_clicked()
 {
 //    int row=ui->tableView->currentIndex().row();
 //    if(pModel&&row>0){

@@ -679,9 +679,9 @@ color: rgb(255, 255, 255);</string>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="Before_pushButton">
+             <widget class="QPushButton" name="Front_pushButton">
               <property name="text">
-               <string>Before</string>
+               <string>Front</string>
               </property>
              </widget>
             </item>

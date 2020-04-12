@@ -124,9 +124,9 @@ private slots:
     void on_End_pushButton_clicked();
 
     ///
-    /// \brief on_Before_pushButton_clicked 前一页
+    /// \brief on_Front_pushButton_clicked 前一页
     ///
-    void on_Before_pushButton_clicked();
+    void on_Front_pushButton_clicked();
 
     ///
     /// \brief on_After_pushButton_clicked 后一页

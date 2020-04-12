@@ -101,8 +101,8 @@ void MainWidget::InitializeSystemSet()
     connect(pSystemSettingWidget,&SystemSettingWidget::messageSignal,this,&MainWidget::messageSlot);
 
     channelCounnt=pSystemSettingWidget->pSettingValues->ChannelNumber;
-    CamerNameList<<"Before"<<"After"<<"Left"<<"Right";
-    //CamerNameList<<"Before"<<"After"<<"Left"<<"Right"<<"Plate";    
+    CamerNameList<<"Front"<<"After"<<"Left"<<"Right";
+    //CamerNameList<<"Front"<<"After"<<"Left"<<"Right"<<"Plate";
 }
 
 void MainWidget::InitializeDataWindow()

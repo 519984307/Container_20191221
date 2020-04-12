@@ -88,7 +88,7 @@ bool SystemSettingWidget::jsonWrite()
 
     QFile file(QDir::toNativeSeparators(tr("%1/%2").arg(mkPath.path()).arg("SYSTEM.json")));
 
-    if(!file.open(QIODevice::ReadWrite)){
+    if(!file.open(QIODevice::WriteOnly)){
         emit messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the parameter, create the default parameter error<errorCode=%1>").arg(file.OpenError));
         return false;
     }
@@ -160,7 +160,9 @@ bool SystemSettingWidget::jsonWrite()
 
     jsonObjRoot.insert("MAIN",QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
-    file.write(jsonDoc.toJson());
+    QByteArray arr=jsonDoc.toJson();
+    file.write(arr);
+    file.waitForBytesWritten(1000);
     file.close();
 
     return true;

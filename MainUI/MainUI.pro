@@ -92,6 +92,7 @@ OBJECTS_DIR=tmp/obj
 RESOURCES += \
     ico.qrc
 
+TRANSLATIONS = zh_hans.ts
 #DISTFILES += \
 #    libAudioRender.so \
 #    libSuperRender.so \

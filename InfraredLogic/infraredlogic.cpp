@@ -299,7 +299,7 @@ void InfraredLogic::simulateTriggerSlot(int type)
         emit logicPutImageSignal(3);
         doubleFrontPut=true;
         break;
-    case 4:/* Double 22G1 Before */
+    case 4:/* Double 22G1 Front */
         if(doubleFrontPut){
             emit logicPutImageSignal(4);
         }

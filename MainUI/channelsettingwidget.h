@@ -46,9 +46,9 @@ public:
     QString AfterCamer;
 
     ///
-    /// \brief BeforeCamer 前相机
+    /// \brief FrontCamer 前相机
     ///
-    QString BeforeCamer;
+    QString FrontCamer;
 
     ///
     /// \brief LeftCamer 左相机

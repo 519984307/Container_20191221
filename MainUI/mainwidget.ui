@@ -40,7 +40,7 @@
      </property>
      <column>
       <property name="text">
-       <string>Navigation </string>
+       <string>Navigation</string>
       </property>
       <property name="textAlignment">
        <set>AlignCenter</set>

@@ -73,6 +73,8 @@ private:
     ///
     DataBaseWidget* pDataBaseWidget;
 
+public:
+
     ///
     /// \brief pSystemSettingWidget 系统设置窗口对象
     ///
