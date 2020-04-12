@@ -778,7 +778,7 @@
     <message>
         <location filename="imagewidget.ui" line="333"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">关闭</translation>
     </message>
 </context>
 <context>
@@ -809,33 +809,40 @@
     <message>
         <location filename="mainwidget.ui" line="43"/>
         <source>Navigation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">导航</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="51"/>
+        <location filename="mainwidget.cpp" line="112"/>
         <location filename="mainwidget.cpp" line="192"/>
+        <location filename="mainwidget.cpp" line="205"/>
         <source>Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数据</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="56"/>
+        <location filename="mainwidget.cpp" line="137"/>
+        <location filename="mainwidget.cpp" line="216"/>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">相机</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="61"/>
+        <location filename="mainwidget.cpp" line="184"/>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">服务</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="66"/>
+        <location filename="mainwidget.cpp" line="190"/>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">记录</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="71"/>
+        <location filename="mainwidget.cpp" line="168"/>
         <source>Setting</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">设置</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="552"/>
@@ -857,7 +864,7 @@
     <message>
         <location filename="mainwidget.cpp" line="170"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">系统设定</translation>
     </message>
     <message>
         <location filename="mainwidget.cpp" line="186"/>

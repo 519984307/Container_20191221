@@ -73,12 +73,15 @@ private:
     ///
     DataBaseWidget* pDataBaseWidget;
 
-public:
-
     ///
     /// \brief pSystemSettingWidget 系统设置窗口对象
     ///
     SystemSettingWidget* pSystemSettingWidget;
+
+    ///
+    /// \brief pServiceWidget f服务窗口对象
+    ///
+    ServiceWidget* pServiceWidget;
 
 private:
     Ui::MainWidget *ui;
@@ -285,6 +288,13 @@ signals:
     /// \param status 标志位
     ///
     void exitWhileSignal(bool status);
+
+    ///
+    /// \brief messageSignal 日志信息
+    /// \param type 日志类型
+    /// \param msg 信息体
+    ///
+    void messageSignal(const QString &type,const QString &msg);
 
 };
 

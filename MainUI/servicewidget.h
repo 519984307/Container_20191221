@@ -17,6 +17,15 @@ public:
 
 private:
     Ui::ServiceWidget *ui;
+
+public slots:
+
+    ///
+    /// \brief messageSlot 日志信息
+    /// \param type 信息类型
+    /// \param msg 信息体
+    ///
+    void messageSlot(const QString &type, const QString &msg);
 };
 
 #endif // SERVICEWIDGET_H

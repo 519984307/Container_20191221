@@ -109,7 +109,7 @@ void MainWidget::InitializeDataWindow()
 {
     QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){
-        if((*it)->text(0)=="Data"){
+        if((*it)->text(0)==tr("Data")){
             /*  获取数据根   */
             for(int i=1;i<=channelCounnt;i++){
                 auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
@@ -134,7 +134,7 @@ void MainWidget::InitializeCamerWindow()
 {
     QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){
-        if((*it)->text(0)=="Camera"){
+        if((*it)->text(0)==tr("Camera")){
             /*  获取相机根   */
             int j=1;
             for(int i=1;i<=channelCounnt;i++){
@@ -165,7 +165,7 @@ void MainWidget::InitializeOtherWindow()
 {
     QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){        
-        if((*it)->text(0)=="Setting"){
+        if((*it)->text(0)==tr("Setting")){
             /*  获取设置根   */
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
             (*it)->addChild(childImte);
@@ -181,13 +181,14 @@ void MainWidget::InitializeOtherWindow()
                 ItemWidgetMap.insert(sunItem,pChannelSettingWidget);
             }
         }
-        if((*it)->text(0)=="Service"){
+        if((*it)->text(0)==tr("Service")){
             /*  获取服务根   */
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Log")));
             (*it)->addChild(childImte);
-            ItemWidgetMap.insert(childImte,new ServiceWidget (this));
+            pServiceWidget=new ServiceWidget (this);
+            ItemWidgetMap.insert(childImte,pServiceWidget);
         }
-        if((*it)->text(0)=="Database"){
+        if((*it)->text(0)==tr("Database")){
             /*  获取数据库根  */
             auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Data")));
             (*it)->addChild(childImte);
@@ -199,10 +200,10 @@ void MainWidget::InitializeOtherWindow()
 }
 
 void MainWidget::InitializeChannelSet()
-{
+{/* 设置通道别名 */
     QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){
-        if((*it)->text(0)=="Data"){
+        if((*it)->text(0)==tr("Data")){
             for (int i=1;i<=channelCounnt;i++) {
                 if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
                     if(!pChannelSettingWidget->Alias.isEmpty()){
@@ -213,7 +214,7 @@ void MainWidget::InitializeChannelSet()
             }
             //break;
         }
-        if((*it)->text(0)=="Camera"){
+        if((*it)->text(0)==tr("Camera")){
             for (int i=1;i<=channelCounnt;i++) {
                 if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
                     if(!pChannelSettingWidget->Alias.isEmpty()){
@@ -587,6 +588,9 @@ void MainWidget::publicConnect()
             connect(pChannelSettingWidget,&ChannelSettingWidget::messageSignal,this,&MainWidget::messageSlot);
         }
     }
+
+    /* 绑定日志信息到服务窗口 */
+    connect(this,&MainWidget::messageSignal,pServiceWidget,&ServiceWidget::messageSlot);
 }
 
 void MainWidget::hideWindows()
@@ -690,6 +694,8 @@ void MainWidget::setStatusBar()
 
 void MainWidget::messageSlot(const QString &type, const QString &msg)
 {
+    emit messageSignal(type,msg);
+
     QStringList list=type.split('(');
     if(list.count()>1&&list[0]=="ZBY_LOG_INFO"){
         pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: rgb(85, 255, 127);");
