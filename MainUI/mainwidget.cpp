@@ -581,6 +581,12 @@ void MainWidget::publicConnect()
             }
         }
     }
+    foreach (auto obj, ChannelSettingWidgetMap.values()) {
+        if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(obj)){
+            /* 绑定通道设定日志 */
+            connect(pChannelSettingWidget,&ChannelSettingWidget::messageSignal,this,&MainWidget::messageSlot);
+        }
+    }
 }
 
 void MainWidget::hideWindows()

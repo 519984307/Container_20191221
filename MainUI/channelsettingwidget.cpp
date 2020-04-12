@@ -36,7 +36,7 @@ bool ChannelSettingWidget::jsonWrite()
     mkPath.cd("Json");
 
     QFile file(QDir::toNativeSeparators(tr("%1/CHANNEL%2.json").arg(mkPath.path()).arg(channelNumber)));
-    if(!file.open(QIODevice::ReadWrite)){
+    if(!file.open(QIODevice::WriteOnly)){
         emit messageSignal(ZBY_LOG("ERROR"),tr("open CHANNEL%1.json error<errorCode=%2>").arg(channelNumber).arg(file.OpenError));
         return false;
     }
@@ -50,11 +50,11 @@ bool ChannelSettingWidget::jsonWrite()
     jsonObj.insert(tr("LeftCamer"),ui->LeftCamer->text());
     jsonObj.insert(tr("RgihtCamer"),ui->RgihtCamer->text());
     jsonObj.insert(tr("PlateCamer"),ui->PlateCamer->text());
-    jsonChild.insert(tr("Camer"),QJsonValue(jsonObj));
+    jsonChild.insert("Camer",QJsonValue(jsonObj));
 
     QJsonObject jsonObj1;
     jsonObj1.insert(tr("LicensePlate"),ui->LicensePlate->currentIndex());
-    jsonChild.insert(tr("Plate"),QJsonValue(jsonObj1));
+    jsonChild.insert("Plate",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
     jsonObj2.insert(tr("SerialPortMode"),ui->SerialPortMode->currentIndex());
@@ -66,16 +66,18 @@ bool ChannelSettingWidget::jsonWrite()
     jsonObj2.insert(tr("PortTow"),ui->PortTow->value());
     jsonObj2.insert(tr("SerialPortOpenState"),int(ui->SerialPortOpenState->isChecked()));
     jsonObj2.insert(tr("SerialPortCloseState"),int(ui->SerialPortCloseState->isChecked()));
-    jsonChild.insert(tr("SerialPort"),QJsonValue(jsonObj2));
+    jsonChild.insert("SerialPort",QJsonValue(jsonObj2));
 
     QJsonObject jsonObj3;
     jsonObj3.insert(tr("Alias"),ui->Alias->text());
-    jsonChild.insert(tr("Other"),QJsonValue(jsonObj3));
+    jsonChild.insert("Other",QJsonValue(jsonObj3));
 
     jsonObjRoot.insert(tr("Channel%1").arg(channelNumber),QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
 
-    file.write(jsonDoc.toJson());
+    QByteArray arr=jsonDoc.toJson();
+    file.write(arr);
+    file.waitForBytesWritten(1000);
     file.close();
 
     return true;
@@ -181,11 +183,16 @@ QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString 
 }
 
 void ChannelSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
-{
+{   
     if(button==ui->buttonBox->button(QDialogButtonBox::Save)){
-        jsonWrite();
+        if(jsonWrite()){
+            emit messageSignal(ZBY_LOG("INFO"),tr("Save Channel Json sucess"));
+        }
+        else {
+            emit messageSignal(ZBY_LOG("ERROR"),tr("Save Channel Json error"));
+        }
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Discard)){
-        jsonRead();
+        emit messageSignal(ZBY_LOG("INFO"),tr("Not Save Channel Json"));
     }
 }
