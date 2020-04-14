@@ -109,19 +109,19 @@ public:
     int InfoLog;
 
     ///
-    /// \brief ErrorLog 错误日志
+    /// \brief DebugLog 警告日志
     ///
-    int ErrorLog;
-
-    ///
-    /// \brief WarningLog 警告日志
-    ///
-    int WarningLog;
+    int DebugLog;
 
     ///
     /// \brief AutomaticCorrection 自动校验结果
     ///
     int AutomaticCorrection;
+
+    ///
+    /// \brief ColorDisplay 颜色显示识别结果
+    ///
+    int ColorDisplay;
 
     ///
     /// \brief ClientModel 客户端模式
@@ -134,19 +134,24 @@ public:
     int ServerModel;
 
     ///
-    /// \brief ClientIP 客户端地址
+    /// \brief ClientSIP 客户端地址
     ///
-    QString ClientIP;
+    QString ClientSIP;
 
     ///
-    /// \brief ServerIP 服务器地址
+    /// \brief ServerSIP 服务器地址
     ///
-    QString ServerIP;
+    QString ServerSIP;
 
     ///
-    /// \brief ColorDisplay 颜色显示识别结果
+    /// \brief OneToOne 一对一模式
     ///
-    int ColorDisplay;
+    int OneToOne;
+
+    ///
+    /// \brief OneToMany 一对多模式
+    ///
+    int OneToMany;
 
     ///
     /// \brief ImgPathOne 图片路径1

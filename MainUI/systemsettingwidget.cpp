@@ -147,8 +147,7 @@ bool SystemSettingWidget::jsonWrite()
     jsonObj6.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
     jsonObj6.insert(tr("SaveLogVersion"), ui->SaveLogV->currentIndex());
     jsonObj6.insert(tr("InfoLog"),int(ui->InfoLog->isChecked()));
-    jsonObj6.insert(tr("ErrorLog"),int(ui->ErrorLog->isChecked()));
-    jsonObj6.insert(tr("WarningLog"),int(ui->WarningLog->isChecked()));
+    jsonObj6.insert(tr("DebugLog"),int(ui->DebugLog->isChecked()));
     jsonChild.insert("Log",QJsonValue(jsonObj6));
 
     QJsonObject jsonObj7;
@@ -156,7 +155,9 @@ bool SystemSettingWidget::jsonWrite()
     jsonObj7.insert(tr("ServerIP"),ui->ServerIP->toPlainText());
     jsonObj7.insert(tr("ClientModel"),int(ui->ClientModel->isChecked()));
     jsonObj7.insert(tr("ClientIP"),ui->ClientIP->toPlainText());
-    jsonChild.insert("Server",QJsonValue(jsonObj7));
+    jsonObj7.insert(tr("OneToOne"),int(ui->OneToOne->isChecked()));
+    jsonObj7.insert(tr("OneToMany"),int(ui->OneToMany->isChecked()));
+    jsonChild.insert("Service",QJsonValue(jsonObj7));
 
     jsonObjRoot.insert("MAIN",QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
@@ -217,16 +218,17 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->SaveLog= getJsonValue("Log","SaveLog",value.toObject()).toInt();
                     pSettingValues->SaveLogVersion= getJsonValue("Log","SaveLogVersion",value.toObject()).toInt();
                     pSettingValues->InfoLog= getJsonValue("Log","InfoLog",value.toObject()).toInt();
-                    pSettingValues->ErrorLog= getJsonValue("Log","ErrorLog",value.toObject()).toInt();
-                    pSettingValues->WarningLog= getJsonValue("Log","WarningLog",value.toObject()).toInt();
+                    pSettingValues->DebugLog= getJsonValue("Log","DebugLog",value.toObject()).toInt();
 
                     pSettingValues->AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
                     pSettingValues->ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
 
-                    pSettingValues->ClientModel= getJsonValue("Server","ClientModel",value.toObject()).toInt();
-                    pSettingValues->ClientIP= getJsonValue("Server","ClientIP",value.toObject()).toString();
-                    pSettingValues->ServerModel= getJsonValue("Server","ServerModel",value.toObject()).toInt();
-                    pSettingValues->ServerIP= getJsonValue("Server","ServerIP",value.toObject()).toString();
+                    pSettingValues->ClientModel= getJsonValue("Service","ClientModel",value.toObject()).toInt();
+                    pSettingValues->ClientSIP= getJsonValue("Service","ClientSIP",value.toObject()).toString();
+                    pSettingValues->ServerModel= getJsonValue("Service","ServerModel",value.toObject()).toInt();
+                    pSettingValues->ServerSIP= getJsonValue("Service","ServerSIP",value.toObject()).toString();
+                    pSettingValues->OneToOne=getJsonValue("Service","OneToOne",value.toObject()).toInt();
+                    pSettingValues->OneToMany=getJsonValue("Service","OneToMany",value.toObject()).toInt();
 
                     pSettingValues->DataBaseVersion=getJsonValue("DataBase","DataBaseVersion",value.toObject()).toInt();
                     pSettingValues->DataBaseUser=getJsonValue("DataBase","DataBaseUser",value.toObject()).toString();
@@ -261,9 +263,11 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->AutomaticCorrection->setChecked(pSettingValues->AutomaticCorrection);
 
     ui->ServerModel->setChecked(pSettingValues->ServerModel);
-    ui->ServerIP->setPlainText(pSettingValues->ServerIP);
+    ui->ServerIP->setPlainText(pSettingValues->ServerSIP);
     ui->ClientModel->setChecked(pSettingValues->ClientModel);
-    ui->ClientIP->setPlainText(pSettingValues->ClientIP);
+    ui->ClientIP->setPlainText(pSettingValues->ClientSIP);
+    ui->OneToOne->setChecked(pSettingValues->OneToOne);
+    ui->OneToMany->setChecked(pSettingValues->OneToMany);
 
     ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
     ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
@@ -284,8 +288,7 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->SaveLog->setChecked(pSettingValues->SaveLog);
     ui->SaveLogV->setCurrentIndex(pSettingValues->SaveLogVersion);
     ui->InfoLog->setChecked(pSettingValues->InfoLog);
-    ui->ErrorLog->setChecked(pSettingValues->ErrorLog);
-    ui->WarningLog->setChecked(pSettingValues->WarningLog);
+    ui->DebugLog->setChecked(pSettingValues->DebugLog);
 
     ui->DataBaseTypeV->setCurrentIndex(pSettingValues->DataBaseVersion);
     ui->DataBaseUser->setText(pSettingValues->DataBaseUser);

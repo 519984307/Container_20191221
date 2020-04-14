@@ -539,7 +539,7 @@
     <message>
         <location filename="databasewidget.cpp" line="148"/>
         <source>Data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数据</translation>
     </message>
     <message>
         <location filename="databasewidget.cpp" line="311"/>
@@ -814,8 +814,7 @@
     <message>
         <location filename="mainwidget.ui" line="51"/>
         <location filename="mainwidget.cpp" line="112"/>
-        <location filename="mainwidget.cpp" line="192"/>
-        <location filename="mainwidget.cpp" line="205"/>
+        <location filename="mainwidget.cpp" line="207"/>
         <source>Data</source>
         <translation type="unfinished">数据</translation>
     </message>
@@ -834,9 +833,9 @@
     </message>
     <message>
         <location filename="mainwidget.ui" line="66"/>
-        <location filename="mainwidget.cpp" line="190"/>
+        <location filename="mainwidget.cpp" line="191"/>
         <source>Database</source>
-        <translation type="unfinished">记录</translation>
+        <translation type="unfinished">数据库</translation>
     </message>
     <message>
         <location filename="mainwidget.ui" line="71"/>
@@ -855,6 +854,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="mainwidget.cpp" line="104"/>
+        <source>Front</source>
+        <translation type="unfinished">前相机</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="104"/>
+        <source>After</source>
+        <translation type="unfinished">后相机</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="104"/>
+        <source>Left</source>
+        <translation type="unfinished">左相机</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="104"/>
+        <source>Right</source>
+        <translation type="unfinished">右相机</translation>
+    </message>
+    <message>
         <location filename="mainwidget.cpp" line="115"/>
         <location filename="mainwidget.cpp" line="141"/>
         <location filename="mainwidget.cpp" line="176"/>
@@ -863,6 +882,7 @@
     </message>
     <message>
         <location filename="mainwidget.cpp" line="170"/>
+        <location filename="mainwidget.cpp" line="226"/>
         <source>System</source>
         <translation type="unfinished">系统设定</translation>
     </message>
@@ -872,24 +892,29 @@
         <translation type="unfinished">日志</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="245"/>
+        <location filename="mainwidget.cpp" line="193"/>
+        <source>History</source>
+        <translation type="unfinished">历史记录</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="254"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="293"/>
+        <location filename="mainwidget.cpp" line="302"/>
         <source>%1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="293"/>
+        <location filename="mainwidget.cpp" line="302"/>
         <source>%1/%2_%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="682"/>
+        <location filename="mainwidget.cpp" line="694"/>
         <source>Program in place</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">系统就绪</translation>
     </message>
 </context>
 <context>
@@ -972,17 +997,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="52"/>
+        <location filename="systemsettingwidget.ui" line="39"/>
         <source>Channel</source>
         <translation type="unfinished">通道</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="73"/>
+        <location filename="systemsettingwidget.ui" line="60"/>
         <source>The Channel Number</source>
         <translation type="unfinished">通道数量</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="101"/>
+        <location filename="systemsettingwidget.ui" line="88"/>
         <source>Save Image One</source>
         <translation type="unfinished">保存图片1</translation>
     </message>
@@ -991,67 +1016,67 @@
         <translation type="obsolete">图片路径1</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="120"/>
-        <location filename="systemsettingwidget.ui" line="203"/>
+        <location filename="systemsettingwidget.ui" line="107"/>
+        <location filename="systemsettingwidget.ui" line="190"/>
         <source>Check Path</source>
         <translation type="unfinished">选择路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="131"/>
-        <location filename="systemsettingwidget.ui" line="214"/>
+        <location filename="systemsettingwidget.ui" line="118"/>
+        <location filename="systemsettingwidget.ui" line="201"/>
         <source>CHANNEL/YYYY/MM/DD/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="136"/>
-        <location filename="systemsettingwidget.ui" line="219"/>
+        <location filename="systemsettingwidget.ui" line="123"/>
+        <location filename="systemsettingwidget.ui" line="206"/>
         <source>CHANNEL/YYYY/MM/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="141"/>
-        <location filename="systemsettingwidget.ui" line="224"/>
+        <location filename="systemsettingwidget.ui" line="128"/>
+        <location filename="systemsettingwidget.ui" line="211"/>
         <source>CHANNEL/YYYY/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="146"/>
-        <location filename="systemsettingwidget.ui" line="229"/>
+        <location filename="systemsettingwidget.ui" line="133"/>
+        <location filename="systemsettingwidget.ui" line="216"/>
         <source>CHANNEL/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="151"/>
-        <location filename="systemsettingwidget.ui" line="234"/>
+        <location filename="systemsettingwidget.ui" line="138"/>
+        <location filename="systemsettingwidget.ui" line="221"/>
         <source>YYYY/MM/DD/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="156"/>
-        <location filename="systemsettingwidget.ui" line="239"/>
+        <location filename="systemsettingwidget.ui" line="143"/>
+        <location filename="systemsettingwidget.ui" line="226"/>
         <source>YYYY/MM/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="148"/>
+        <location filename="systemsettingwidget.ui" line="231"/>
+        <source>YYYY/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="153"/>
+        <location filename="systemsettingwidget.ui" line="236"/>
+        <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemsettingwidget.ui" line="161"/>
         <location filename="systemsettingwidget.ui" line="244"/>
-        <source>YYYY/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="166"/>
-        <location filename="systemsettingwidget.ui" line="249"/>
-        <source>/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="174"/>
-        <location filename="systemsettingwidget.ui" line="257"/>
         <source>Path Format</source>
         <translation type="unfinished">路径格式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="184"/>
+        <location filename="systemsettingwidget.ui" line="171"/>
         <source>Save Image Two</source>
         <translation type="unfinished">保持图片2</translation>
     </message>
@@ -1060,27 +1085,27 @@
         <translation type="obsolete">图片路径2</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="281"/>
+        <location filename="systemsettingwidget.ui" line="268"/>
         <source>Recognizer</source>
         <translation type="unfinished">识别</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="308"/>
+        <location filename="systemsettingwidget.ui" line="295"/>
         <source>Check pattern</source>
         <translation type="unfinished">校验规则</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="317"/>
+        <location filename="systemsettingwidget.ui" line="304"/>
         <source>Color display</source>
         <translation type="unfinished">颜色显示</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="327"/>
+        <location filename="systemsettingwidget.ui" line="314"/>
         <source>Automatic correction</source>
         <translation type="unfinished">自动改正</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="337"/>
+        <location filename="systemsettingwidget.ui" line="324"/>
         <source>Identify screening</source>
         <translation type="unfinished">识别规则</translation>
     </message>
@@ -1089,7 +1114,7 @@
         <translation type="obsolete">包含规则</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="352"/>
+        <location filename="systemsettingwidget.ui" line="339"/>
         <source>Contains</source>
         <translation type="unfinished">包含</translation>
     </message>
@@ -1098,301 +1123,320 @@
         <translation type="obsolete">剔除规则</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="370"/>
+        <location filename="systemsettingwidget.ui" line="357"/>
         <source>Eliminate</source>
         <translation type="unfinished">剔除</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="396"/>
+        <location filename="systemsettingwidget.ui" line="383"/>
         <source>Agreement</source>
         <translation type="unfinished">协议</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="430"/>
+        <location filename="systemsettingwidget.ui" line="417"/>
         <source>Camera version</source>
         <translation type="unfinished">相机协议</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="437"/>
+        <location filename="systemsettingwidget.ui" line="424"/>
         <source>HCSDK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="442"/>
+        <location filename="systemsettingwidget.ui" line="429"/>
         <source>TCP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="453"/>
+        <location filename="systemsettingwidget.ui" line="440"/>
         <source>Protocol version</source>
         <translation type="unfinished">数据协议</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="460"/>
+        <location filename="systemsettingwidget.ui" line="447"/>
         <source>[Number]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="465"/>
+        <location filename="systemsettingwidget.ui" line="452"/>
         <source>[Number|ISO]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="470"/>
+        <location filename="systemsettingwidget.ui" line="457"/>
         <source>[Number|ISO|Plate]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="481"/>
+        <location filename="systemsettingwidget.ui" line="468"/>
         <source>HCSDK Path</source>
         <translation type="unfinished">海康动态库路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="498"/>
-        <location filename="systemsettingwidget.ui" line="721"/>
+        <location filename="systemsettingwidget.ui" line="485"/>
+        <location filename="systemsettingwidget.ui" line="708"/>
         <source>DataBase</source>
         <translation type="unfinished">数据库</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="519"/>
+        <location filename="systemsettingwidget.ui" line="506"/>
         <source>Database Type</source>
         <translation type="unfinished">数据库类型</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="113"/>
-        <location filename="systemsettingwidget.ui" line="196"/>
-        <location filename="systemsettingwidget.ui" line="848"/>
-        <location filename="systemsettingwidget.ui" line="855"/>
+        <location filename="systemsettingwidget.ui" line="100"/>
+        <location filename="systemsettingwidget.ui" line="183"/>
+        <location filename="systemsettingwidget.ui" line="825"/>
+        <location filename="systemsettingwidget.ui" line="832"/>
         <source>/home/cc/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="345"/>
+        <location filename="systemsettingwidget.ui" line="332"/>
         <source>WDFU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="363"/>
+        <location filename="systemsettingwidget.ui" line="350"/>
         <source>CCAU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="487"/>
+        <location filename="systemsettingwidget.ui" line="474"/>
         <source>/home/cc/HCSDK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="530"/>
-        <location filename="systemsettingwidget.ui" line="834"/>
+        <location filename="systemsettingwidget.ui" line="517"/>
+        <location filename="systemsettingwidget.ui" line="811"/>
         <source>admin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="537"/>
-        <location filename="systemsettingwidget.ui" line="841"/>
+        <location filename="systemsettingwidget.ui" line="524"/>
+        <location filename="systemsettingwidget.ui" line="818"/>
         <source>abc123456</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="544"/>
-        <location filename="systemsettingwidget.ui" line="820"/>
+        <location filename="systemsettingwidget.ui" line="531"/>
+        <location filename="systemsettingwidget.ui" line="797"/>
         <source>192.168.1.100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="551"/>
+        <location filename="systemsettingwidget.ui" line="538"/>
         <source>3000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="562"/>
-        <location filename="systemsettingwidget.ui" line="880"/>
+        <location filename="systemsettingwidget.ui" line="549"/>
+        <location filename="systemsettingwidget.ui" line="857"/>
         <source>User</source>
         <translation type="unfinished">用户名</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="569"/>
+        <location filename="systemsettingwidget.ui" line="556"/>
         <source>Password</source>
         <translation type="unfinished">密码</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="576"/>
-        <location filename="systemsettingwidget.ui" line="866"/>
+        <location filename="systemsettingwidget.ui" line="563"/>
+        <location filename="systemsettingwidget.ui" line="843"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="583"/>
-        <location filename="systemsettingwidget.ui" line="873"/>
+        <location filename="systemsettingwidget.ui" line="570"/>
+        <location filename="systemsettingwidget.ui" line="850"/>
         <source>Port</source>
         <translation type="unfinished">端口</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="593"/>
+        <location filename="systemsettingwidget.ui" line="580"/>
         <source>SQLITE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="598"/>
+        <location filename="systemsettingwidget.ui" line="585"/>
         <source>SQL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="603"/>
+        <location filename="systemsettingwidget.ui" line="590"/>
         <source>MYSQL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="608"/>
+        <location filename="systemsettingwidget.ui" line="595"/>
         <source>ODBC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="613"/>
+        <location filename="systemsettingwidget.ui" line="600"/>
         <source>PostgreSQL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="618"/>
+        <location filename="systemsettingwidget.ui" line="605"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="629"/>
+        <location filename="systemsettingwidget.ui" line="616"/>
         <source>Text Format</source>
         <translation type="unfinished">文本格式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="642"/>
+        <location filename="systemsettingwidget.ui" line="629"/>
         <source>CSV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="647"/>
+        <location filename="systemsettingwidget.ui" line="634"/>
         <source>XML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="652"/>
+        <location filename="systemsettingwidget.ui" line="639"/>
         <source>JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="657"/>
-        <location filename="systemsettingwidget.ui" line="716"/>
+        <location filename="systemsettingwidget.ui" line="644"/>
+        <location filename="systemsettingwidget.ui" line="703"/>
         <source>TXT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="682"/>
+        <location filename="systemsettingwidget.ui" line="669"/>
         <source>Log</source>
         <translation type="unfinished">日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="703"/>
+        <location filename="systemsettingwidget.ui" line="690"/>
         <source>Save Log</source>
         <translation type="unfinished">保存日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="732"/>
+        <location filename="systemsettingwidget.ui" line="719"/>
         <source>The level of logging</source>
         <translation type="unfinished">日志等级</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="738"/>
+        <location filename="systemsettingwidget.ui" line="725"/>
         <source>The info log</source>
         <translation type="unfinished">运行日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="748"/>
-        <source>The error log</source>
-        <translation type="unfinished">错误日志</translation>
+        <location filename="systemsettingwidget.ui" line="735"/>
+        <source>the debug log</source>
+        <oldsource>The error log</oldsource>
+        <translation type="unfinished">调试日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="758"/>
         <source>the warning log</source>
-        <translation type="unfinished">警告日志</translation>
+        <translation type="obsolete">警告日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="785"/>
-        <location filename="systemsettingwidget.ui" line="806"/>
+        <location filename="systemsettingwidget.ui" line="762"/>
+        <location filename="systemsettingwidget.ui" line="783"/>
         <location filename="systemsettingwidget.cpp" line="121"/>
         <source>FTP</source>
         <translation type="unfinished">上传图片</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="827"/>
+        <location filename="systemsettingwidget.ui" line="804"/>
         <source>21</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="887"/>
+        <location filename="systemsettingwidget.ui" line="864"/>
         <source>Pasword</source>
         <translation type="unfinished">密码</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="894"/>
+        <location filename="systemsettingwidget.ui" line="871"/>
         <source>Local image path</source>
         <translation type="unfinished">本地图片路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="901"/>
+        <location filename="systemsettingwidget.ui" line="878"/>
         <source>Remote image path</source>
         <translation type="unfinished">远端图片路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="927"/>
-        <source>Server</source>
+        <location filename="systemsettingwidget.ui" line="904"/>
+        <source>Service</source>
         <translation type="unfinished">服务</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="948"/>
+        <location filename="systemsettingwidget.ui" line="925"/>
+        <source>conditions</source>
+        <translation type="unfinished">服务规则</translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="931"/>
+        <source>One to one</source>
+        <translation type="unfinished">一对一</translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="941"/>
+        <source>One to many</source>
+        <translation type="unfinished">一对多</translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="963"/>
+        <location filename="systemsettingwidget.ui" line="985"/>
+        <source>If one-to-one, only one address and port is read. If one-to-many, all addresses and ports are read, and the channels must correspond.Each channel corresponds to an address and port 192.168.1.100:1000,192.168.1.101:1000,</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server</source>
+        <translation type="obsolete">服务</translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="954"/>
         <source>Client Model</source>
         <translation type="unfinished">客户端模式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="957"/>
-        <location filename="systemsettingwidget.ui" line="994"/>
-        <source>Each channel corresponds to an address and port 192.168.1.100:1000,192.168.1.101:1000,</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="967"/>
+        <location filename="systemsettingwidget.ui" line="973"/>
         <source>Server Model</source>
         <translation type="unfinished">服务器模式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1005"/>
+        <location filename="systemsettingwidget.ui" line="1009"/>
         <source>Other</source>
         <translation type="unfinished">其他</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1026"/>
+        <location filename="systemsettingwidget.ui" line="1030"/>
         <source>The other options</source>
         <translation type="unfinished">启动设置</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1032"/>
+        <location filename="systemsettingwidget.ui" line="1036"/>
         <source>Startup minimization</source>
         <translation type="unfinished">启动最小化</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1039"/>
+        <location filename="systemsettingwidget.ui" line="1043"/>
         <source>Automatic startup</source>
         <translation type="unfinished">开机自动运行</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1049"/>
+        <location filename="systemsettingwidget.ui" line="1053"/>
         <source>Select the language</source>
         <translation type="unfinished">选择语言</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1056"/>
+        <location filename="systemsettingwidget.ui" line="1060"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1061"/>
+        <location filename="systemsettingwidget.ui" line="1065"/>
         <source>Chinese</source>
         <translation type="unfinished">中文</translation>
     </message>
@@ -1409,15 +1453,15 @@
         <location filename="systemsettingwidget.cpp" line="66"/>
         <location filename="systemsettingwidget.cpp" line="69"/>
         <location filename="systemsettingwidget.cpp" line="72"/>
-        <location filename="systemsettingwidget.cpp" line="346"/>
-        <location filename="systemsettingwidget.cpp" line="352"/>
-        <location filename="systemsettingwidget.cpp" line="420"/>
+        <location filename="systemsettingwidget.cpp" line="349"/>
+        <location filename="systemsettingwidget.cpp" line="355"/>
+        <location filename="systemsettingwidget.cpp" line="423"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemsettingwidget.cpp" line="92"/>
-        <location filename="systemsettingwidget.cpp" line="175"/>
+        <location filename="systemsettingwidget.cpp" line="176"/>
         <source>Failed to load the parameter, create the default parameter error&lt;errorCode=%1&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1578,82 +1622,88 @@
     </message>
     <message>
         <location filename="systemsettingwidget.cpp" line="150"/>
-        <source>ErrorLog</source>
+        <source>DebugLog</source>
+        <oldsource>ErrorLog</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="151"/>
-        <source>WarningLog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="155"/>
+        <location filename="systemsettingwidget.cpp" line="154"/>
         <source>ServerModel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="156"/>
+        <location filename="systemsettingwidget.cpp" line="155"/>
         <source>ServerIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="157"/>
+        <location filename="systemsettingwidget.cpp" line="156"/>
         <source>ClientModel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="158"/>
+        <location filename="systemsettingwidget.cpp" line="157"/>
         <source>ClientIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="173"/>
+        <location filename="systemsettingwidget.cpp" line="158"/>
+        <source>OneToOne</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.cpp" line="159"/>
+        <source>OneToMany</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.cpp" line="174"/>
         <source>%1/%2/SYSTEM.json</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="188"/>
         <location filename="systemsettingwidget.cpp" line="189"/>
+        <location filename="systemsettingwidget.cpp" line="190"/>
         <source>MAIN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="245"/>
+        <location filename="systemsettingwidget.cpp" line="247"/>
         <source>load SYSTEM.json error&lt;errorCode=%1&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="318"/>
+        <location filename="systemsettingwidget.cpp" line="321"/>
         <source>load SYSTEM.json value error:%1-%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="326"/>
+        <location filename="systemsettingwidget.cpp" line="329"/>
         <source>Save System Json sucess</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="329"/>
+        <location filename="systemsettingwidget.cpp" line="332"/>
         <source>Save System Json error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="333"/>
+        <location filename="systemsettingwidget.cpp" line="336"/>
         <source>Not Save System Json</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="392"/>
+        <location filename="systemsettingwidget.cpp" line="395"/>
         <source>%1/%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="407"/>
+        <location filename="systemsettingwidget.cpp" line="410"/>
         <source>Whether to delete the record=%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="417"/>
+        <location filename="systemsettingwidget.cpp" line="420"/>
         <source>Whether to add the record=%1</source>
         <translation type="unfinished"></translation>
     </message>

@@ -15,7 +15,6 @@ ResultsAnalysis::~ResultsAnalysis()
 
 void ResultsAnalysis::setCheckTheResultsSlot(bool correct)
 {
-    qDebug()<< correct;
     this->correct=correct;
 }
 

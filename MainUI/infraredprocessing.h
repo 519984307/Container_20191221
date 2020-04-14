@@ -103,6 +103,11 @@ signals:
      ///
      void infraredCompleteSignal(const int &containerType);
 
+     ///
+     /// \brief InfraredLogicStartSignal 逻辑抓拍开始信号
+     ///
+     void InfraredLogicStartSignal();
+
 public slots:
 
     ///

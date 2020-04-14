@@ -141,6 +141,11 @@ void RecognizerProcessing::saveImageTowSlot(const QByteArray &jpgStream, const i
     }
 }
 
+void RecognizerProcessing::InfraredLogicStartSlot()
+{
+    resulList.clear();
+}
+
 void RecognizerProcessing::infraredCompleteSlot(const int &type)
 {
     /* 1:22G1 */
@@ -172,7 +177,6 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
     if(resulList.count()==containerNum){
         for(int i=0;i<containerNum;i++){
             chanResulList.append(resulList[0]);
-            qDebug()<<resulList[0];
             resulList.removeAt(0);
         }
         emit resultsOfAnalysisSignal(chanResulList,containertType,imageName);/* 分析结果 */

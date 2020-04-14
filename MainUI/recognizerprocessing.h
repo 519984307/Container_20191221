@@ -139,6 +139,11 @@ public slots:
     void infraredCompleteSlot(const int &type);
 
     ///
+    /// \brief InfraredLogicStartSlot 逻辑抓拍开始
+    ///
+    void InfraredLogicStartSlot();
+
+    ///
     /// \brief recognitionResultSlot 识别结果
     /// \param result 识别结果
     /// \param image 图片名

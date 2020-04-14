@@ -39,6 +39,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
       * 3:双22G1*/
     switch (putCommnd) {
     case -1:
+        emit InfraredLogicStartSignal();/* 通知识别器来车,清除遗留图片数据 */
         emit clearnPictureSignal(nullptr,-1);/* 通知来车,清除数据界面图片 */
         break;
     case 0:

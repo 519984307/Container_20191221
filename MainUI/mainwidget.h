@@ -171,7 +171,7 @@ private:
     void InitializeSystemSet();
 
     ///------------------------------------------------------------------------------------------------------------MainUI
-    /// \brief InitializeChannelSet 初始化通道设定
+    /// \brief InitializeChannelSet 初始化通道设定,设置通道别名
     ///
     void InitializeChannelSet();
 

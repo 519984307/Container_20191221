@@ -101,7 +101,7 @@ void MainWidget::InitializeSystemSet()
     connect(pSystemSettingWidget,&SystemSettingWidget::messageSignal,this,&MainWidget::messageSlot);
 
     channelCounnt=pSystemSettingWidget->pSettingValues->ChannelNumber;
-    CamerNameList<<"Front"<<"After"<<"Left"<<"Right";
+    CamerNameList<<tr("Front")<<tr("After")<<tr("Left")<<tr("Right");
     //CamerNameList<<"Front"<<"After"<<"Left"<<"Right"<<"Plate";
 }
 
@@ -190,7 +190,7 @@ void MainWidget::InitializeOtherWindow()
         }
         if((*it)->text(0)==tr("Database")){
             /*  获取数据库根  */
-            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Data")));
+            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("History")));
             (*it)->addChild(childImte);
             pDataBaseWidget=new DataBaseWidget (this);
             ItemWidgetMap.insert(childImte,pDataBaseWidget);
@@ -200,30 +200,36 @@ void MainWidget::InitializeOtherWindow()
 }
 
 void MainWidget::InitializeChannelSet()
-{/* 设置通道别名 */
+{
+    /* 设置通道别名 */
     QTreeWidgetItemIterator it(ui->Navigation);
     while(*it){
-        if((*it)->text(0)==tr("Data")){
+        if((*it)->text(0)==tr("Data") && (*it)->childCount()==channelCounnt){
             for (int i=1;i<=channelCounnt;i++) {
                 if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
                     if(!pChannelSettingWidget->Alias.isEmpty()){
                         (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
-
                     }
                 }
             }
-            //break;
         }
-        if((*it)->text(0)==tr("Camera")){
+        if((*it)->text(0)==tr("Camera") && (*it)->childCount()==channelCounnt){
             for (int i=1;i<=channelCounnt;i++) {
                 if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
                     if(!pChannelSettingWidget->Alias.isEmpty()){
                         (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
-
                     }
                 }
             }
-            break;
+        }
+        if((*it)->text(0)==tr("System") && (*it)->childCount()==channelCounnt){
+            for (int i=1;i<=channelCounnt;i++) {
+                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+                    if(!pChannelSettingWidget->Alias.isEmpty()){
+                        (*it)->child(i-1) ->setText(0,pChannelSettingWidget->Alias);
+                    }
+                }
+            }
         }
         ++it;
     }
@@ -557,6 +563,8 @@ void MainWidget::publicConnect()
             if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
                 /* 逻辑抓拍完成 */
                 connect(pInfraredProcessing,&InfraredProcessing::infraredCompleteSignal,pRecognizerProcessing,&RecognizerProcessing::infraredCompleteSlot);
+                /* 逻辑抓拍开始 */
+                connect(pInfraredProcessing,&InfraredProcessing::InfraredLogicStartSignal,pRecognizerProcessing,&RecognizerProcessing::InfraredLogicStartSlot);
                 if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
                     /* 分析识别结果(信号与信号绑定) */
                     connect(pRecognizerProcessing,&RecognizerProcessing::resultsOfAnalysisSignal,pResultsAnalysisProcessing,&ResultsAnalysisProcessing::resultsOfAnalysisSignal);
