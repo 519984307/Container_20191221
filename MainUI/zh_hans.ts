@@ -1433,7 +1433,7 @@
     <message>
         <location filename="systemsettingwidget.ui" line="1060"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">英语</translation>
     </message>
     <message>
         <location filename="systemsettingwidget.ui" line="1065"/>
