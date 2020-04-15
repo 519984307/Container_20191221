@@ -19,8 +19,5 @@ ServiceWidget::~ServiceWidget()
 
 void ServiceWidget::messageSlot(const QString &type, const QString &msg)
 {
-//    if(ui->plainTextEdit->blockCount()>300){
-//        ui->plainTextEdit->clear();
-//    }
     ui->plainTextEdit->appendPlainText(msg);
 }

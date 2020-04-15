@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QDateTime>
 #include <QMap>
+#include <QDir>
+#include <QCoreApplication>
 
 class InfraredProcessing : public QObject
 {
@@ -21,6 +23,11 @@ public:
     void setCamerMultiMap(QList<QObject*> camerList, int channel);
 
 private:
+
+    ///
+    /// \brief logPath 日志文件路径
+    ///
+    QString logPath;
 
     ///
     /// \brief data  写入数据库数据
@@ -107,6 +114,12 @@ signals:
      /// \brief InfraredLogicStartSignal 逻辑抓拍开始信号
      ///
      void InfraredLogicStartSignal();
+
+     ///
+     /// \brief putCommantStateSignal 抓拍信息写入日志
+     /// \param msg 信息体
+     ///
+     void putCommantStateSignal(const int& channel, const QString& msg);
 
 public slots:
 

@@ -45,6 +45,12 @@ DataBaseWidget::~DataBaseWidget()
     delete ui;
 }
 
+void DataBaseWidget::resizeEvent(QResizeEvent *size)
+{
+    ui->Img_After_label->setMinimumWidth(size->size().width()/3-4);
+    ui->Img_After_label->setMinimumHeight(size->size().height()/2-36);
+}
+
 void DataBaseWidget::seFindtImgPathSlot(const QString &path, const int &format)
 {
     this->imgPath=path;
@@ -168,17 +174,20 @@ void DataBaseWidget::on_ImageOrData_PushButton_toggled(bool checked)
 void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(pModel!=nullptr){
+        qDebug()<<"nullptr";
         pModel->clear();
         delete pModel;
         pModel=nullptr;
+
+        ui->tableView->clearSpans();
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
         setDataBaseFilterSignal(checkFilter());
     }
-    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {        
+    else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
         statisticalDataSlot(0,0,0,0);
     }
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(0);/* 切换到显示页 */
 }
 
 /* 选择状态切换 */

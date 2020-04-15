@@ -81,7 +81,7 @@ void SystemSettingWidget::createImgPath(const QString &path,int currentindex)
 
 bool SystemSettingWidget::jsonWrite()
 {
-    /* 创建通道配置文件夹 */
+    /* 创建系统配置文件夹 */
     QDir mkPath(QCoreApplication::applicationDirPath());
     mkPath.mkdir("Json");
     mkPath.cd("Json");

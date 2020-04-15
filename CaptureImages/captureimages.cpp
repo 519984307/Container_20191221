@@ -155,7 +155,6 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
     if(dwResult){
         if(NET_DVR_CaptureJPEGPicture_NEW_L){
             if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
-
                 emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
 
                 delete  dataLen;             dataLen=nullptr;
@@ -165,7 +164,6 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
             else {
                 QByteArray arrayJpg(buff,400000);
                 emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
-
                 emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(camerIp));
             }
         }

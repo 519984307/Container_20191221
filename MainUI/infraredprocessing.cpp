@@ -3,6 +3,12 @@
 InfraredProcessing::InfraredProcessing(QObject *parent) : QObject(parent)
 {
     this->setParent(parent);
+
+    /* 创建日志文件夹 */
+    QDir mkPath(QCoreApplication::applicationDirPath());
+    mkPath.mkdir("Log");
+    mkPath.cd("Log");
+    logPath=mkPath.path();
 }
 
 void InfraredProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel)
@@ -18,9 +24,18 @@ void InfraredProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel
     }
 }
 
-void InfraredProcessing::logicStatusSlot(int *status)
+void InfraredProcessing::logicStatusSlot(int* status)
 {
-    /* 后续写入日志 */
+    /* 红外状态写入日志 */
+    QFile file(QDir::toNativeSeparators(tr("%1/%2_%3_Logic_log.txt").arg(logPath).arg(QDateTime::currentDateTime().toString("yyyyMMdd")).arg(channel)));
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Append)){
+        return;
+    }
+    QTextStream stream(&file);
+    stream<<tr("[%1]").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz"));
+    stream<<tr("A1(%1)  A2(%2)  B1(%3)  B2(%4)  D1(%5)  D2(%6)").arg(status[0]).arg(status[1]).arg(status[3]).arg(status[4]).arg(status[2]).arg(status[5]);
+    stream<<QDir::toNativeSeparators("\n");
+    file.close();
 }
 
 void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
@@ -49,6 +64,8 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
+
+        emit putCommantStateSignal(channel,"1,2,3,4,5,6");/* 抓拍信息写入日志 */
 
         break;
     case 1:
@@ -94,6 +111,8 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         emit insertDataBaseSignal(data);
         data.clear();
 
+        emit putCommantStateSignal(channel,"1,2,3,6");/* 抓拍信息写入日志 */
+
         break;
     case 3:
 
@@ -103,6 +122,8 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
+
+        emit putCommantStateSignal(channel,"1,2,3,4,5,6");/* 抓拍信息写入日志 */
 
         break;
     case 4:

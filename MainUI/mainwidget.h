@@ -106,6 +106,11 @@ private:
     ///
     int channelCounnt;
 
+    ///
+    /// \brief logPath 日志文件夹路径
+    ///
+    QString logPath;
+
 private:
 
     ///
@@ -157,6 +162,7 @@ private:
     /// \brief ResultsAnalysisProcessingMap 识别结果分析类
     ///
     QMap<int,QObject*> ResultsAnalysisProcessingMap;
+
 private:
 
     ///
@@ -276,7 +282,19 @@ private slots:
     ///
     void on_Navigation_itemActivated(QTreeWidgetItem *item);
 
+    ///
+    /// \brief putCommantStateSlot 抓拍信息写入日志
+    /// \param msg 信息体
+    ///
+    void putCommantStateSlot(const int &channel, const QString& msg);
+
 signals:
+
+    ///
+    /// \brief InitializationParameterSignal 初始化参数
+    /// \param channel
+    ///
+    void InitializationParameterSignal(int channel);
 
     ///
     /// \brief releaseResourcesSignal 释放动态库资源

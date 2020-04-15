@@ -270,10 +270,11 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
                 if(compareStatus(status,tmpStatus)){
                     serialLogic(status); /* 逻辑判断 */
                     memcpy(tmpStatus,status,sizeof (status));
+
+                    /* 传递状态 */
+                    emit logicStatusSignal(status);
                 }
             }
-            /* 传递状态 */
-            emit logicStatusSignal(status);
         }
 }
 

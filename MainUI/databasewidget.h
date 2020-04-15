@@ -12,6 +12,8 @@
 #include <QSqlRecord>
 #include <QAbstractItemView>
 #include <QDir>
+#include <QResizeEvent>
+#include <QDebug>
 
 namespace Ui {
 class DataBaseWidget;
@@ -23,7 +25,9 @@ class DataBaseWidget : public QWidget
 
 public:
     explicit DataBaseWidget(QWidget *parent = nullptr);
-    ~DataBaseWidget();
+    ~DataBaseWidget()Q_DECL_OVERRIDE;
+
+    void resizeEvent(QResizeEvent *size)Q_DECL_OVERRIDE;
 
 private:
 

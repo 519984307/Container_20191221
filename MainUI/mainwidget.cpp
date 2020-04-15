@@ -95,6 +95,12 @@ MainWidget::~MainWidget()
 
 void MainWidget::InitializeSystemSet()
 {
+    /* 创建日志文件夹 */
+    QDir mkPath(QCoreApplication::applicationDirPath());
+    mkPath.mkdir("Log");
+    mkPath.cd("Log");
+    logPath=mkPath.path();
+
     qRegisterMetaType<QMap<QString,QString>>("QMap<QString,QString>");
 
     pSystemSettingWidget=new SystemSettingWidget (this);
@@ -389,24 +395,35 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
         connect(pInfraredProcessing,&InfraredProcessing::clearnPictureSignal,pDataWidget,&DataWidget::pictureStreamSlot);
         /* 红外状态到界面 */
         connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
-        /* 开始逻辑检测 */
-        connect(pInfraredProcessing,&InfraredProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
-        /* 设置红外模式 */
-        connect(pInfraredProcessing,&InfraredProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
-        /* 退出逻辑检测循环 */
-        connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
-        /* 日志i信息 */
-        connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::messageSlot);
         /* 模拟抓拍流程 */
         connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
-        /* 逻辑抓取图片 */
-        connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);       
+        /* 初始化参数 */
+        connect(this,&MainWidget::InitializationParameterSignal,pDataWidget,&DataWidget::InitializationParameterSlot);
+        /* 抓拍状态写入日志 */
+        connect(pDataWidget,&DataWidget::putCommantStateSignal,this,&MainWidget::putCommantStateSlot);
     }
 
+    /* 红外状态到日志 */
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pInfraredProcessing,&InfraredProcessing::logicStatusSlot);
+    /* 开始逻辑检测 */
+    connect(pInfraredProcessing,&InfraredProcessing::startSlaveSignal,pInfraredlogicInterface,&InfraredlogicInterface::startSlaveSlot);
+    /* 设置红外模式 */
+    connect(pInfraredProcessing,&InfraredProcessing::setAlarmModeSignal,pInfraredlogicInterface,&InfraredlogicInterface::setAlarmModeSlot);
+    /* 退出逻辑检测循环 */
+    connect(this,&MainWidget::exitWhileSignal,pInfraredlogicInterface,&InfraredlogicInterface::exitWhileSlot,Qt::BlockingQueuedConnection);
+    /* 日志i信息 */
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 逻辑抓取图片 */
+    connect(pInfraredlogicInterface,&InfraredlogicInterface::logicPutImageSignal,pInfraredProcessing,&InfraredProcessing::logicPutImageSlot);
+    /* 抓拍状态写入日志 */
+    connect(pInfraredProcessing,&InfraredProcessing::putCommantStateSignal,this,&MainWidget::putCommantStateSlot);
+
+    /* 初始化通道参数 */
+    emit InitializationParameterSignal(num);
     /*  绑定相机组抓到逻辑处理 */
     pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(num),num);
     /* 设置红外模式 */
-    pInfraredProcessing->setAlarmModeSignal(true);
+    emit pInfraredProcessing->setAlarmModeSignal(true);
 
     /*  线程运行    */
     QThread* pThread=new QThread(this);
@@ -702,15 +719,31 @@ void MainWidget::setStatusBar()
 
 void MainWidget::messageSlot(const QString &type, const QString &msg)
 {
-    emit messageSignal(type,msg);
+    emit messageSignal(type,msg);/* 服务窗口显示日志 */
 
-    QStringList list=type.split('(');
-    if(list.count()>1&&list[0]=="ZBY_LOG_INFO"){
-        pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: rgb(85, 255, 127);");
+    QFile file(QDir::toNativeSeparators(tr("%1/%2_debug_log.txt").arg(logPath).arg(QDateTime::currentDateTime().toString("yyyyMMdd"))));
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Append)){
+        return;
     }
-    if(list.count()>1&& list[0]=="ZBY_LOG_ERROR"){
-        pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: red;");
-    }
-    this->pStatusBar->showMessage(msg.toLocal8Bit().data(),3000);
+    QTextStream stream(&file);
+    stream<<tr("[%1]%2%3%4").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(type).arg(msg).arg(QDir::toNativeSeparators("\n"));
+    file.close();
+//    if(type.indexOf("INFO")){
+//        pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: rgb(85, 255, 127);");
+//    }
+//    if(type.indexOf("ERROR")){
+//        pStatusBar->setStyleSheet("background-color:rgb(39,39,40);color: red;");
+//    }
+   // this->pStatusBar->showMessage(msg.toLocal8Bit().data(),3000);
 }
 
+void MainWidget::putCommantStateSlot(const int& channel, const QString &msg)
+{
+    QFile file(QDir::toNativeSeparators(tr("%1/%2_%3_Capture_log.txt").arg(logPath).arg(QDateTime::currentDateTime().toString("yyyyMMdd")).arg(channel)));
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Append)){
+        return;
+    }
+    QTextStream stream(&file);
+    stream<<tr("[%1]%2%3").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(msg).arg(QDir::toNativeSeparators("\n"));
+    file.close();
+}
