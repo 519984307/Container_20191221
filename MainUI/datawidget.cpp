@@ -23,10 +23,10 @@ void DataWidget::resizeEvent(QResizeEvent *size)
     ui->Img_After_label->setMinimumHeight(size->size().height()/2-36);
 }
 
-void DataWidget::InitializationParameterSlot(int channel)
-{
-    this->channel=channel;
-}
+//void DataWidget::InitializationParameterSlot(int channel)
+//{
+//    this->channel=channel;
+//}
 
 void DataWidget::logicStatusSlot(int *status)
 {
@@ -108,8 +108,6 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     if(labelPix!=nullptr){
         delete labelPix;
         labelPix=nullptr;
-
-        emit putCommantStateSignal(channel,QString::number(imgNumber));
     }
 }
 

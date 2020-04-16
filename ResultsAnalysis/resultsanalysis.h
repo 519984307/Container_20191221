@@ -40,10 +40,11 @@ private:
 
     ///
     /// \brief updateDataBase 更新数据库
+    /// \param type 逻辑箱型
     /// \param index1 箱号下标1
     /// \param index2 箱号下标2
     ///
-    void updateDataBase(int index1, int index2);
+    void updateDataBase(int type,int index1, int index2);
 
     ///
     /// \brief initCheckMap 初始化校验列表

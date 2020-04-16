@@ -38,6 +38,11 @@ signals:
     ///
     void updateDataBaseSignal(QMap<QString, QString> data);
 
+    ///
+    /// \brief resultsAnalysisStateSignal 抓拍信息写入日志
+    /// \param msg 信息体
+    ///
+    void resultsAnalysisStateSignal(const int& channel, const QString& msg);
 
 public slots:
 

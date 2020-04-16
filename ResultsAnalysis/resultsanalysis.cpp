@@ -156,7 +156,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
         }
         emit containerSignal(type,conTemp[index1],checkConList[index1],isoTemp[index1]);
     }
-    updateDataBase(index1,index2);
+    updateDataBase(type,index1,index2);
 
     conTemp.clear();
     isoTemp.clear();
@@ -164,12 +164,30 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
     probabilityTemp.clear();
 }
 
-void ResultsAnalysis::updateDataBase(int index1,int index2)
+void ResultsAnalysis::updateDataBase(int type, int index1, int index2)
 {
     QStringList tmp=imgTime.split(QDir::toNativeSeparators("/"));
     QString dateTime="";
+    QString time="";
     if(tmp.count()>0){
-        dateTime=QDateTime::fromString(tmp[tmp.count()-1].split(".")[0].mid(0,14),"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+        time=tmp[tmp.count()-1].split(".")[0].mid(0,14);
+        dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+    }
+
+    emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
+
+    for (int var = 0; var < conTemp.count(); ++var) {
+        /* 识别结果写入日志,标志|时间戳|通道号|箱号|箱型|校验 */
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6]").arg("I").arg(time).arg(channel).arg(conTemp[var]).arg(isoTemp[var]).arg(QString::number(checkConList[var])));
+    }
+
+    if(index2!=-1){
+        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|箱号|箱型|校验|校验 */
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[index1]).arg(isoTemp[index1]).arg(conTemp[index2]).arg(isoTemp[index2]).arg(QString::number(checkConList[index1])).arg(QString::number(checkConList[index2])));
+    }
+    else {
+        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|校验*/
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[index1]).arg(isoTemp[index1]).arg(QString::number(checkConList[index1])));
     }
 
     QMap<QString,QString> data;
@@ -213,6 +231,7 @@ void ResultsAnalysis::updateDataBase(int index1,int index2)
         data["ImgAfterNumber"]=conTemp[5];
         data["ImgAfterCheck"]=QString::number(checkConList[5]);
     }
+
     emit updateDataBaseSignal(data);
     data.clear();
     tmp.clear();

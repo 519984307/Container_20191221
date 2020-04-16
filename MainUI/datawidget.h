@@ -30,18 +30,7 @@ private:
 
     QMutex mutex;
 
-    ///
-    /// \brief channel 通道号
-    ///
-    int channel;
-
 public slots:
-
-    ///
-    /// \brief InitializationParameterSlot 初始化参数
-    /// \param channel
-    ///
-    void InitializationParameterSlot(int channel);
 
     ///
     /// \brief logicStatusSlot 红外状态
@@ -72,13 +61,6 @@ signals:
     /// \param type 逻辑类型
     ///
     void simulateTriggerSignal(int type);
-
-    ///
-    /// \brief putCommantStateSignal 抓拍信息写入日志
-    /// \param channel
-    /// \param msg
-    ///
-    void putCommantStateSignal(const int& channel, const QString& msg);
 
 private slots:
 

@@ -397,10 +397,6 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
         connect(pInfraredlogicInterface,&InfraredlogicInterface::logicStatusSignal,pDataWidget,&DataWidget::logicStatusSlot);
         /* 模拟抓拍流程 */
         connect(pDataWidget,&DataWidget::simulateTriggerSignal,pInfraredlogicInterface,&InfraredlogicInterface::simulateTriggerSlot);
-        /* 初始化参数 */
-        connect(this,&MainWidget::InitializationParameterSignal,pDataWidget,&DataWidget::InitializationParameterSlot);
-        /* 抓拍状态写入日志 */
-        connect(pDataWidget,&DataWidget::putCommantStateSignal,this,&MainWidget::putCommantStateSlot);
     }
 
     /* 红外状态到日志 */
@@ -418,8 +414,6 @@ void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInter
     /* 抓拍状态写入日志 */
     connect(pInfraredProcessing,&InfraredProcessing::putCommantStateSignal,this,&MainWidget::putCommantStateSlot);
 
-    /* 初始化通道参数 */
-    emit InitializationParameterSignal(num);
     /*  绑定相机组抓到逻辑处理 */
     pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(num),num);
     /* 设置红外模式 */
@@ -505,11 +499,6 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
         connect(pSystemSettingWidget,&SystemSettingWidget::setSaveImgFormatTowSignal,pRecognizerProcessing,&RecognizerProcessing::setSaveImgFormatTowSlot);
         /* 识别图片 */
         connect(pRecognizerProcessing,&RecognizerProcessing::identifyImagesSignal,pRecognizerInterface,&RecognizerInterface::identifyImagesSlot);
-        /* 识别结果 */
-        connect(pRecognizerInterface,&RecognizerInterface::recognitionResultSignal,pRecognizerProcessing,&RecognizerProcessing::recognitionResultSlot);
-        /* 日志信息 */
-        connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
-
         if(pSystemSettingWidget->pSettingValues->SaveImageOne){
             /* 设置图片路径和保存协议1 */
             emit pSystemSettingWidget->setSaveImgFormatOneSignal(pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne);
@@ -519,6 +508,13 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
             emit pSystemSettingWidget->setSaveImgFormatTowSignal(pSystemSettingWidget->pSettingValues->ImgPathTow,pSystemSettingWidget->pSettingValues->ImageFormatTow);
         }
     }
+
+    /* 识别结果 */
+    connect(pRecognizerInterface,&RecognizerInterface::recognitionResultSignal,pRecognizerProcessing,&RecognizerProcessing::recognitionResultSlot);
+    /* 日志信息 */
+    connect(pRecognizerInterface,&RecognizerInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 抓拍状态写入日志 */
+    connect(pRecognizerProcessing,&RecognizerProcessing::putCommantStateSignal,this,&MainWidget::putCommantStateSlot);
 
     /* 设置通道号 */
     pRecognizerProcessing->setChannelSlot(num);
@@ -546,6 +542,8 @@ void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysi
     connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 设置通道号 */
     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setChannelSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setChannelSlot);
+    /* 识别结果写入日志 */
+    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,this,&MainWidget::resultsAnalysisStateSlot);
 
     if(pSystemSettingWidget!=nullptr){
         /* 结果校验模式 */
@@ -740,6 +738,17 @@ void MainWidget::messageSlot(const QString &type, const QString &msg)
 void MainWidget::putCommantStateSlot(const int& channel, const QString &msg)
 {
     QFile file(QDir::toNativeSeparators(tr("%1/%2_%3_Capture_log.txt").arg(logPath).arg(QDateTime::currentDateTime().toString("yyyyMMdd")).arg(channel)));
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Append)){
+        return;
+    }
+    QTextStream stream(&file);
+    stream<<tr("[%1]%2%3").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(msg).arg(QDir::toNativeSeparators("\n"));
+    file.close();
+}
+
+void MainWidget::resultsAnalysisStateSlot(const int &channel, const QString &msg)
+{
+    QFile file(QDir::toNativeSeparators(tr("%1/%2_%3_Container_log.txt").arg(logPath).arg(QDateTime::currentDateTime().toString("yyyyMMdd")).arg(channel)));
     if(!file.open(QIODevice::WriteOnly | QIODevice::Append)){
         return;
     }

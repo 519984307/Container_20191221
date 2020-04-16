@@ -288,13 +288,13 @@ private slots:
     ///
     void putCommantStateSlot(const int &channel, const QString& msg);
 
-signals:
+    ///
+    /// \brief resultsAnalysisStateSlot 抓拍信息写入日志
+    /// \param msg 信息体
+    ///
+    void resultsAnalysisStateSlot(const int& channel, const QString& msg);
 
-    ///
-    /// \brief InitializationParameterSignal 初始化参数
-    /// \param channel
-    ///
-    void InitializationParameterSignal(int channel);
+signals:
 
     ///
     /// \brief releaseResourcesSignal 释放动态库资源

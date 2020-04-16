@@ -59,13 +59,14 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         break;
     case 0:
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
-        name=timer.split('-').join("").split(':').join("").split(" ").join("");
+        name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
         emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
 
-        emit putCommantStateSignal(channel,"1,2,3,4,5,6");/* 抓拍信息写入日志 */
+        emit putCommantStateSignal(channel,tr("%1 start").arg(name));
+        emit putCommantStateSignal(channel,tr("ImgTime:%1,ImgId:%2").arg(name).arg("1,2,3,4,5,6"));/* 抓拍信息写入日志 */
 
         break;
     case 1:
@@ -91,7 +92,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         break;
     case 2:
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
-        name=timer.split('-').join("").split(':').join("").split(" ").join("");
+        name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
         emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
@@ -111,19 +112,19 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         emit insertDataBaseSignal(data);
         data.clear();
 
-        emit putCommantStateSignal(channel,"1,2,3,6");/* 抓拍信息写入日志 */
+        emit putCommantStateSignal(channel,tr("ImgTime:%1,ImgId:%2").arg(name).arg("1,2,3,6"));/* 抓拍信息写入日志 */
 
         break;
     case 3:
 
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
-        name=timer.split('-').join("").split(':').join("").split(" ").join("");
+        name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
         emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
 
-        emit putCommantStateSignal(channel,"1,2,3,4,5,6");/* 抓拍信息写入日志 */
+        emit putCommantStateSignal(channel,tr("ImgTime:%1,ImgId:%2").arg(name).arg("1,2,3,4,5,6"));/* 抓拍信息写入日志 */
 
         break;
     case 4:

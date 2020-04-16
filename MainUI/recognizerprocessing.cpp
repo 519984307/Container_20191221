@@ -84,7 +84,12 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             labelPix=nullptr;
             //emit identifyImagesSignal(image);/* 识别图片 */
         }
-        emit identifyImagesSignal(image);/* 识别图片 */
+        emit identifyImagesSignal(image);/* 识别图片 */        
+    }
+
+    if(jpgStream!=nullptr){
+        /* 抓拍状态写入日志 */
+        emit putCommantStateSignal(channel,tr("TIME:%1 ID:%2").arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(QString::number(imgNumber)));
     }
 }
 
@@ -179,7 +184,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             chanResulList.append(resulList[0]);
             resulList.removeAt(0);
         }
-        emit resultsOfAnalysisSignal(chanResulList,containertType,imageName);/* 分析结果 */
+        emit resultsOfAnalysisSignal(chanResulList,containertType,imageName);/* 分析结果 */       
 
         containerNum=0;
         containertType=0;

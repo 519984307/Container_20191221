@@ -96,6 +96,11 @@ signals:
     ///
     void resultsOfAnalysisSignal(QStringList resultList, int type,const QString& imgTime);
 
+    ///
+    /// \brief putCommantStateSignal 抓拍信息写入日志
+    /// \param msg 信息体
+    ///
+    void putCommantStateSignal(const int& channel, const QString& msg);
 
 public slots:
 
