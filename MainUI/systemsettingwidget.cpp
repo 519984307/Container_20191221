@@ -11,8 +11,6 @@ SystemSettingWidget::SystemSettingWidget(QWidget *parent) :
     connect(ui->Eliminate_pushButton,SIGNAL(clicked()),this,SLOT(conditionsOfButton_clicked()));
     connect(ui->CheckPathPushButton_1,SIGNAL(clicked()),this,SLOT(checkPathPushButton_clicked()));
     connect(ui->CheckPathPushButton_2,SIGNAL(clicked()),this,SLOT(checkPathPushButton_clicked()));
-    connect(ui->ServerModel,SIGNAL(clicked(bool)),this,SLOT(socketModel_clicked(bool)));
-    connect(ui->ClientModel,SIGNAL(clicked(bool)),this,SLOT(socketModel_clicked(bool)));
 
     pSettingValues=new SettingValues () ;
 
@@ -152,11 +150,10 @@ bool SystemSettingWidget::jsonWrite()
 
     QJsonObject jsonObj7;
     jsonObj7.insert(tr("ServerModel"),int(ui->ServerModel->isChecked()));
-    jsonObj7.insert(tr("ServerIP"),ui->ServerIP->toPlainText());
     jsonObj7.insert(tr("ClientModel"),int(ui->ClientModel->isChecked()));
-    jsonObj7.insert(tr("ClientIP"),ui->ClientIP->toPlainText());
-    jsonObj7.insert(tr("OneToOne"),int(ui->OneToOne->isChecked()));
-    jsonObj7.insert(tr("OneToMany"),int(ui->OneToMany->isChecked()));
+    jsonObj7.insert("Service_Type",ui->Service_Type_comboBox->currentIndex());
+    jsonObj7.insert("SingletonAddress",ui->Address_Singleton_lineEdit->text());
+    jsonObj7.insert("ManyCasesAddress",ui->Address_Many_textEdit->toPlainText());
     jsonChild.insert("Service",QJsonValue(jsonObj7));
 
     jsonObjRoot.insert("MAIN",QJsonValue(jsonChild));
@@ -224,11 +221,10 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
 
                     pSettingValues->ClientModel= getJsonValue("Service","ClientModel",value.toObject()).toInt();
-                    pSettingValues->ClientSIP= getJsonValue("Service","ClientSIP",value.toObject()).toString();
                     pSettingValues->ServerModel= getJsonValue("Service","ServerModel",value.toObject()).toInt();
-                    pSettingValues->ServerSIP= getJsonValue("Service","ServerSIP",value.toObject()).toString();
-                    pSettingValues->OneToOne=getJsonValue("Service","OneToOne",value.toObject()).toInt();
-                    pSettingValues->OneToMany=getJsonValue("Service","OneToMany",value.toObject()).toInt();
+                    pSettingValues->Service_Type=getJsonValue("Service","Service_Type",value.toObject()).toInt();
+                    pSettingValues->SingletonAddress=getJsonValue("Service","SingletonAddress",value.toObject()).toString();
+                    pSettingValues->ManyCasesAddress=getJsonValue("Service","ManyCasesAddress",value.toObject()).toString();
 
                     pSettingValues->DataBaseVersion=getJsonValue("DataBase","DataBaseVersion",value.toObject()).toInt();
                     pSettingValues->DataBaseUser=getJsonValue("DataBase","DataBaseUser",value.toObject()).toString();
@@ -263,11 +259,10 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->AutomaticCorrection->setChecked(pSettingValues->AutomaticCorrection);
 
     ui->ServerModel->setChecked(pSettingValues->ServerModel);
-    ui->ServerIP->setPlainText(pSettingValues->ServerSIP);
     ui->ClientModel->setChecked(pSettingValues->ClientModel);
-    ui->ClientIP->setPlainText(pSettingValues->ClientSIP);
-    ui->OneToOne->setChecked(pSettingValues->OneToOne);
-    ui->OneToMany->setChecked(pSettingValues->OneToMany);
+    ui->Service_Type_comboBox->setCurrentIndex(pSettingValues->Service_Type);
+    ui->Address_Singleton_lineEdit->setText(pSettingValues->SingletonAddress);
+    ui->Address_Many_textEdit->setText(pSettingValues->ManyCasesAddress);
 
     ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
     ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
@@ -353,27 +348,6 @@ void SystemSettingWidget::checkPathPushButton_clicked()
             ui->ImgPathlineEdit_2->setText("");
         }
         ui->ImgPathlineEdit_2->setText(tr("%1").arg(path).toLocal8Bit());
-    }
-}
-
-void SystemSettingWidget::socketModel_clicked(bool checked)
-{
-    QGroupBox* pGb=qobject_cast<QGroupBox*>(sender());
-    if(pGb==ui->ServerModel){
-        if(checked){
-            ui->ClientModel->setChecked(false);
-        }
-        else {
-            ui->ClientModel->setChecked(true);
-        }
-    }
-    else if (pGb==ui->ClientModel) {
-        if(checked){
-            ui->ServerModel->setChecked(false);
-        }
-        else {
-            ui->ServerModel->setChecked(true);
-        }
     }
 }
 

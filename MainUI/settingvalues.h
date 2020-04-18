@@ -123,6 +123,7 @@ public:
     ///
     int ColorDisplay;
 
+    ///------------------------------------------------------------------------------------------------------------------------------ SerVice
     ///
     /// \brief ClientModel 客户端模式
     ///
@@ -134,25 +135,21 @@ public:
     int ServerModel;
 
     ///
-    /// \brief ClientSIP 客户端地址
+    /// \brief SingletonAddress 单例地址
     ///
-    QString ClientSIP;
+    QString SingletonAddress;
 
     ///
-    /// \brief ServerSIP 服务器地址
+    /// \brief ManyCasesAddress 多例地址
     ///
-    QString ServerSIP;
+    QString ManyCasesAddress;
 
     ///
-    /// \brief OneToOne 一对一模式
+    /// \brief Service_Type 服务类型
     ///
-    int OneToOne;
+    int Service_Type;
 
-    ///
-    /// \brief OneToMany 一对多模式
-    ///
-    int OneToMany;
-
+    ///--------------------------------------------------------------------------------------------------------------------------------------------------------------
     ///
     /// \brief ImgPathOne 图片路径1
     ///

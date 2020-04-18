@@ -8,4 +8,5 @@ SUBDIRS += \
     DataBaseInsert \
     IdentifyImages\
     GetImages \
-    ResultsAnalysis
+    ResultsAnalysis \
+    SocketService

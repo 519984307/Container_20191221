@@ -65,7 +65,8 @@ HEADERS += \
     settingvalues.h \
     underlyinggetimagesinterface.h \
     resultsanalysisinterface.h \
-    resultsanalysisprocessing.h
+    resultsanalysisprocessing.h \
+    socketserverinterface.h
 
 FORMS += \
         mainwidget.ui \

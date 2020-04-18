@@ -92,12 +92,6 @@ private slots:
     ///
     void checkPathPushButton_clicked();
 
-    ///
-    /// \brief socketModel_clicked 网络模式设定
-    /// \param checked 选取状态
-    ///
-    void socketModel_clicked(bool checked);
-
 signals:
 
     ///
