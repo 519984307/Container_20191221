@@ -40,7 +40,8 @@ SOURCES += \
     databaseprocessing.cpp \
     infraredprocessing.cpp \
     recognizerprocessing.cpp \
-    resultsanalysisprocessing.cpp
+    resultsanalysisprocessing.cpp \
+    socketserverprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -66,7 +67,8 @@ HEADERS += \
     underlyinggetimagesinterface.h \
     resultsanalysisinterface.h \
     resultsanalysisprocessing.h \
-    socketserverinterface.h
+    socketserverinterface.h \
+    socketserverprocessing.h
 
 FORMS += \
         mainwidget.ui \

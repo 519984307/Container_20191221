@@ -78,35 +78,35 @@
             <item>
              <widget class="QLineEdit" name="FrontCamer">
               <property name="placeholderText">
-               <string>192.168.1.100;admin;123456;</string>
+               <string>192.168.1.100;8000;admin;123456</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="AfterCamer">
               <property name="placeholderText">
-               <string>192.168.1.100;admin;123456;</string>
+               <string>192.168.1.100;8000;admin;123456</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="LeftCamer">
               <property name="placeholderText">
-               <string>192.168.1.100;admin;123456;</string>
+               <string>192.168.1.100;8000;admin;123456</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="RgihtCamer">
               <property name="placeholderText">
-               <string>192.168.1.100;admin;123456;</string>
+               <string>192.168.1.100;8000;admin;123456</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="PlateCamer">
               <property name="placeholderText">
-               <string>192.168.1.100;admin;123456;</string>
+               <string>192.168.1.100;8000;admin;123456</string>
               </property>
              </widget>
             </item>

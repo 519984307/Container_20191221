@@ -2,8 +2,10 @@
 #define SOCKETSERVICE_GLOBAL_H
 
 #include <QtCore/qglobal.h>
-#include <QtNetwork/QSctpSocket>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QTimer>
+#include <QDebug>
 
 #if defined(SOCKETSERVICE_LIBRARY)
 #  define SOCKETSERVICESHARED_EXPORT Q_DECL_EXPORT

@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_System_Setting_Channel">
       <attribute name="title">
@@ -94,10 +94,10 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="ImgPathlineEdit_1">
-            <property name="placeholderText">
-             <string>/home/cc/</string>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Path Format</string>
             </property>
            </widget>
           </item>
@@ -155,10 +155,10 @@
             </item>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Path Format</string>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="ImgPathlineEdit_1">
+            <property name="placeholderText">
+             <string>/home/cc/</string>
             </property>
            </widget>
           </item>
@@ -378,108 +378,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_System_Setting_Agreement">
-      <attribute name="title">
-       <string>Agreement</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item row="3" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>146</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_9">
-         <property name="title">
-          <string>Camera version</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_14">
-          <item row="0" column="0">
-           <widget class="QComboBox" name="CameraV">
-            <item>
-             <property name="text">
-              <string>HCSDK</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>TCP</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="title">
-          <string>Protocol version</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_16">
-          <item row="0" column="0">
-           <widget class="QComboBox" name="ProtocolV">
-            <item>
-             <property name="text">
-              <string>[Number]</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>[Number|ISO]</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>[Number|ISO|Plate]</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_12">
-         <property name="title">
-          <string>HCSDK Path</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_22">
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="HcSDK_Path_lineEdit">
-            <property name="placeholderText">
-             <string>/home/cc/HCSDK</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tab_System_Setting_DataBase">
       <attribute name="title">
        <string>DataBase</string>
@@ -661,6 +559,108 @@
           </size>
          </property>
         </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_System_Setting_Agreement">
+      <attribute name="title">
+       <string>Agreement</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="3" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>146</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Camera version</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_14">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="CameraV">
+            <item>
+             <property name="text">
+              <string>HCSDK</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>TCP</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="title">
+          <string>Protocol version</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_16">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="ProtocolV">
+            <item>
+             <property name="text">
+              <string>[Number]</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>[Number|ISO]</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>[Number|ISO|Plate]</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>HCSDK Path</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_22">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="HcSDK_Path_lineEdit">
+            <property name="placeholderText">
+             <string>/home/cc/HCSDK</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -919,31 +919,18 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_10">
-         <property name="title">
-          <string>Model</string>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout_26">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="ServerModel">
-            <property name="text">
-             <string>Server</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="ClientModel">
-            <property name="text">
-             <string>Client</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>19</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_13">
@@ -951,38 +938,6 @@
           <string>Type</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_25">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="horizontalSpacing">
-           <number>0</number>
-          </property>
-          <property name="verticalSpacing">
-           <number>6</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QComboBox" name="Service_Type_comboBox">
-            <item>
-             <property name="text">
-              <string>The singleton</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Many cases</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QStackedWidget" name="Service_Type_stackedWidget">
             <property name="currentIndex">
@@ -990,6 +945,21 @@
             </property>
             <widget class="QWidget" name="page_5">
              <layout class="QGridLayout" name="gridLayout_8">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <property name="spacing">
+               <number>0</number>
+              </property>
               <item row="0" column="0">
                <widget class="QLineEdit" name="Address_Singleton_lineEdit">
                 <property name="placeholderText">
@@ -1032,7 +1002,7 @@
               <item row="0" column="0">
                <widget class="QTextEdit" name="Address_Many_textEdit">
                 <property name="placeholderText">
-                 <string>192.168.1.100:5000,192.168.1.100:5001,192.168.1.100:5002</string>
+                 <string>if(server)192.168.1.100:5000,192.168.1.100:5001,192.168.1.100:5002 if(client)192.168.1.100:5000,192.168.1.101:5000,192.168.1.102:5000</string>
                 </property>
                </widget>
               </item>
@@ -1040,21 +1010,48 @@
             </widget>
            </widget>
           </item>
+          <item row="0" column="0">
+           <widget class="QComboBox" name="Service_Type_comboBox">
+            <item>
+             <property name="text">
+              <string>The singleton</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Many cases</string>
+             </property>
+            </item>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Model</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>19</height>
-          </size>
-         </property>
-        </spacer>
+         <layout class="QGridLayout" name="gridLayout_26">
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="ClientModel">
+            <property name="text">
+             <string>Client</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="ServerModel">
+            <property name="text">
+             <string>Server</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1151,6 +1148,9 @@
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Discard|QDialogButtonBox::Save</set>
+     </property>
+     <property name="centerButtons">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

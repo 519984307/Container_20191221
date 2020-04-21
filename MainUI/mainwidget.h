@@ -24,6 +24,7 @@
 #include "recognizerinterface.h"
 #include "underlyinggetimagesinterface.h"
 #include "resultsanalysisinterface.h"
+#include "socketserverinterface.h"
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
 #include "datawidget.h"
@@ -38,6 +39,7 @@
 #include "databaseprocessing.h"
 #include "recognizerprocessing.h"
 #include "resultsanalysisprocessing.h"
+#include "socketserverprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -163,7 +165,17 @@ private:
     ///
     QMap<int,QObject*> ResultsAnalysisProcessingMap;
 
+    ///
+    /// \brief SocketServiceProcessingMap TCP处理类
+    ///
+    QMap<int,QObject*> SocketServiceProcessingMap;
+
 private:
+
+    ///
+    /// \brief loadingParameters 加载参数
+    ///
+    void loadingParameters();
 
     ///
     /// \brief closeEvent 重写窗口关闭事件
@@ -245,6 +257,13 @@ private:
     /// \param num 通道号
     ///
     void resultsAnalysisPlugin(ResultsAnalysisInterface* pResultsAnalysisInterface,int num);
+
+    ///
+    /// \brief socketServerPlugin TCP插件
+    /// \param pSocketServerInterface
+    /// \param num
+    ///
+    void socketServerPlugin(SocketServerInterface* pSocketServerInterface,int  num);
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
     ///

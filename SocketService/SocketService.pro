@@ -26,12 +26,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        socketservice.cpp
+        socketservice.cpp \
+    socketclient.cpp \
+    socketserver.cpp
 
 HEADERS += \
         socketservice.h \
         socketservice_global.h \ 
-    socketserverinterface.h
+    socketserverinterface.h \
+    socketclient.h \
+    socketserver.h
 
 unix {
     target.path = /usr/lib

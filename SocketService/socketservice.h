@@ -3,6 +3,7 @@
 
 #include "socketservice_global.h"
 #include "socketserverinterface.h"
+#include "socketserver.h"
 
 class SOCKETSERVICESHARED_EXPORT SocketService:public SocketServerInterface
 {
@@ -27,21 +28,43 @@ private:
     int port;
 
     ///
-    /// \brief tcpSocket Socket
+    /// \brief channel 通道号
     ///
-    QTcpSocket *tcpSocket;
+    int channel;
 
     ///
-    /// \brief pTimerLinkCamer 定时检测
+    /// \brief tcpSocket tcpSocket
     ///
-    QTimer *pTimerLinkCamer;
+    QTcpSocket *pTcpSocket;
+
+    SocketServer* pTcpServer;
+
+//    ///
+//    /// \brief pTcpServer tcpServer
+//    ///
+//    QTcpServer *pTcpServer;
+
+    ///
+    /// \brief pTimerLink 定时检测
+    ///
+    QTimer *pTimerLink;
+
+//    ///
+//    /// \brief clientList 客户端列表
+//    ///
+//    QList<QTcpSocket*> clientList;
 
 private:
 
     ///
-    /// \brief startLinkCamer 链接tcp
+    /// \brief startLink 链接到服务器,客户端模式
     ///
-    void startLinkCamer();
+    void startLink();
+
+    ///
+    /// \brief startListen 开始监听,服务器模式
+    ///
+    void startListen();
 
 private slots:
 
@@ -67,10 +90,9 @@ private slots:
     void displayError(QAbstractSocket::SocketError socketError);
 
     ///
-    /// \brief stateChanged 链接状态
-    /// \param socketState 状态码
+    /// \brief newClientConnectSlot 客户端接入
     ///
-    void stateChanged(QAbstractSocket::SocketState socketState);
+    void newClientConnectSlot();
 
 public:
 
@@ -78,15 +100,16 @@ public:
     /// \brief InitializationParameterSlot 初始化参数
     /// \param address 地址
     /// \param port 端口
-    /// \param reconnection 是否自动重连
+    /// \param channel 通道号
+    /// \param serviceType 服务类型
     ///
-    void  InitializationParameterSlot(const QString& address,const int& port,bool reconnection)Q_DECL_OVERRIDE;
+    void  InitializationParameterSlot(const QString& address,const int& port,const int& channel,const int& serviceType)Q_DECL_OVERRIDE;
 
     ///
     /// \brief socketSendDataSlot 发送数据
     /// \param data 数据体
     ///
-    void socketSendDataSlot(const QString& data)Q_DECL_OVERRIDE;
+    void socketSendDataSlot(const QString& data)Q_DECL_OVERRIDE;  
 };
 
 #endif // SOCKETSERVICE_H

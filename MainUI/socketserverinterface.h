@@ -28,21 +28,28 @@ signals:
     ///
     void socketLinkStateSingal(const QString& address,bool state);
 
+    ///
+    /// \brief socketReadDataSignal 接受数据
+    /// \param data 数据体
+    ///
+    void socketReadDataSignal(const QString& data);
+
 public slots:
 
     ///
     /// \brief InitializationParameterSlot 初始化参数
     /// \param address 地址
     /// \param port 端口
-    /// \param reconnection 是否自动重连
+    /// \param channel 通道号
+    /// \param serviceType 服务类型
     ///
-    virtual void  InitializationParameterSlot(const QString& address,const int& port,bool reconnection)=0;
+    virtual void  InitializationParameterSlot(const QString& address,const int& port,const int& channel,const int& serviceType=0)=0;
 
     ///
     /// \brief socketSendDataSlot 发送数据
     /// \param data 数据体
     ///
-    virtual void socketSendDataSlot(const QString& data)=0;
+    virtual void socketSendDataSlot(const QString& data)=0;    
 };
 
 #define SocketServerInterfaceIID "ZBY.ContainerServer.SocketServerInterface/1.0"
