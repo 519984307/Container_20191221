@@ -16,11 +16,11 @@ void InfraredProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel
     this->channel=channel;
     if(camerList.count()==4)
     {
-        /* 相机顺序 右,左,后,前 */
-        pPictureWidgetBEFORE=qobject_cast<PictureWidget*>(camerList[0]);
-        pPictureWidgetAFTER=qobject_cast<PictureWidget*>(camerList[1]);
-        pPictureWidgetLEFT=qobject_cast<PictureWidget*>(camerList[2]);
-        pPictureWidgetRIGHT=qobject_cast<PictureWidget*>(camerList[3]);
+        /* 相机顺序  前,后,左,右 */
+        pPictureWidgetBEFORE=qobject_cast<PictureWidget*>(camerList[3]);
+        pPictureWidgetAFTER=qobject_cast<PictureWidget*>(camerList[2]);
+        pPictureWidgetLEFT=qobject_cast<PictureWidget*>(camerList[1]);
+        pPictureWidgetRIGHT=qobject_cast<PictureWidget*>(camerList[0]);
     }
 }
 
@@ -65,7 +65,6 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
 
-        emit putCommantStateSignal(channel,tr("%1 start").arg(name));
         emit putCommantStateSignal(channel,tr("ImgTime:%1,ImgId:%2").arg(name).arg("1,2,3,4,5,6"));/* 抓拍信息写入日志 */
 
         break;

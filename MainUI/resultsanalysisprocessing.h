@@ -37,6 +37,12 @@ signals:
     ///
     void setChannelSignal(int channel);
 
+    ///
+    /// \brief setCheckTheResultsSlot 是否校验识别结果
+    /// \param correct 校验标志
+    ///
+    void setCheckTheResultsSignal(bool correct=false);
+
 public slots:
 };
 

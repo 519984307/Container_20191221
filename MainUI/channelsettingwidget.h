@@ -86,19 +86,14 @@ public:
     QString SerialAddrTow;
 
     ///
-    /// \brief SerialPortCloseState 串口常闭
-    ///
-    int SerialPortCloseState;
-
-    ///
     /// \brief SerialPortMode 串口模式
     ///
     int SerialPortMode;
 
     ///
-    /// \brief SerialPortOpenState 串口常开
+    /// \brief infraredStatus 红外状态
     ///
-    int SerialPortOpenState;
+    int infraredStatus;
 
     ///
     /// \brief SerialPortTow 串口2

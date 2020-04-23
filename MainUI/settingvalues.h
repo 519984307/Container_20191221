@@ -114,25 +114,15 @@ public:
     int DebugLog;
 
     ///
-    /// \brief AutomaticCorrection 自动校验结果
+    /// \brief CheckResult 结果校验
     ///
-    int AutomaticCorrection;
-
-    ///
-    /// \brief ColorDisplay 颜色显示识别结果
-    ///
-    int ColorDisplay;
+    int CheckResult;
 
     ///------------------------------------------------------------------------------------------------------------------------------ SerVice
     ///
-    /// \brief ClientModel 客户端模式
+    /// \brief ServiceModel 服务模式
     ///
-    int ClientModel;
-
-    ///
-    /// \brief ServerModel 服务器模式
-    ///
-    int ServerModel;
+    int ServiceModel;
 
     ///
     /// \brief SingletonAddress 单例地址
@@ -147,7 +137,7 @@ public:
     ///
     /// \brief Service_Type 服务类型
     ///
-    int Service_Type;
+    int Service_Type;    
 
     ///--------------------------------------------------------------------------------------------------------------------------------------------------------------
     ///

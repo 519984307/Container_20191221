@@ -105,8 +105,12 @@ bool SystemSettingWidget::jsonWrite()
     jsonChild.insert("Channel",QJsonValue(jsonObj));
 
     QJsonObject jsonObj1;
-    jsonObj1.insert(tr("ColorDisplay"),int(ui->ColorDisplay->isChecked()));
-    jsonObj1.insert(tr("AutomaticCorrection"),int(ui->AutomaticCorrection->isChecked()));
+    if(ui->ColorDisplay->isChecked()){
+        jsonObj1.insert(tr("CheckResult"),0);
+    }
+    if(ui->AutomaticCorrection->isChecked()){
+        jsonObj1.insert(tr("CheckResult"),1);
+    }
     jsonChild.insert("Recognizer",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
@@ -149,8 +153,12 @@ bool SystemSettingWidget::jsonWrite()
     jsonChild.insert("Log",QJsonValue(jsonObj6));
 
     QJsonObject jsonObj7;
-    jsonObj7.insert(tr("ServerModel"),int(ui->ServerModel->isChecked()));
-    jsonObj7.insert(tr("ClientModel"),int(ui->ClientModel->isChecked()));
+    if(ui->ClientModel->isChecked()){
+        jsonObj1.insert(tr("ServiceModel"),0);
+    }
+    if(ui->ServerModel->isChecked()){
+        jsonObj1.insert(tr("ServiceModel"),1);
+    }
     jsonObj7.insert("Service_Type",ui->Service_Type_comboBox->currentIndex());
     jsonObj7.insert("SingletonAddress",ui->Address_Singleton_lineEdit->text());
     jsonObj7.insert("ManyCasesAddress",ui->Address_Many_textEdit->toPlainText());
@@ -217,11 +225,9 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->InfoLog= getJsonValue("Log","InfoLog",value.toObject()).toInt();
                     pSettingValues->DebugLog= getJsonValue("Log","DebugLog",value.toObject()).toInt();
 
-                    pSettingValues->AutomaticCorrection= getJsonValue("Recognizer","AutomaticCorrection",value.toObject()).toInt();
-                    pSettingValues->ColorDisplay= getJsonValue("Recognizer","ColorDisplay",value.toObject()).toInt();
+                    pSettingValues->CheckResult=getJsonValue("Recognizer","CheckResult",value.toObject()).toInt();
 
-                    pSettingValues->ClientModel= getJsonValue("Service","ClientModel",value.toObject()).toInt();
-                    pSettingValues->ServerModel= getJsonValue("Service","ServerModel",value.toObject()).toInt();
+                    pSettingValues->ServiceModel=getJsonValue("Service","ServiceModel",value.toObject()).toInt();
                     pSettingValues->Service_Type=getJsonValue("Service","Service_Type",value.toObject()).toInt();
                     pSettingValues->SingletonAddress=getJsonValue("Service","SingletonAddress",value.toObject()).toString();
                     pSettingValues->ManyCasesAddress=getJsonValue("Service","ManyCasesAddress",value.toObject()).toString();
@@ -255,11 +261,19 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->ImgPathlineEdit_1->setText(pSettingValues->ImgPathOne);
     ui->ImgPathlineEdit_2->setText(pSettingValues->ImgPathTow);
 
-    ui->ColorDisplay->setChecked(pSettingValues->ColorDisplay);
-    ui->AutomaticCorrection->setChecked(pSettingValues->AutomaticCorrection);
+    if(!pSettingValues->CheckResult){/* 颜色显示 */
+        ui->ColorDisplay->setChecked(1);
+    }
+    else {/* 自动校验 */
+        ui->AutomaticCorrection->setChecked(1);
+    }
 
-    ui->ServerModel->setChecked(pSettingValues->ServerModel);
-    ui->ClientModel->setChecked(pSettingValues->ClientModel);
+    if(!pSettingValues->ServiceModel){/* 客户端模式 */
+        ui->ClientModel->setChecked(1);
+    }
+    else {/* 服务器模式 */
+        ui->ServerModel->setChecked(1);
+    }
     ui->Service_Type_comboBox->setCurrentIndex(pSettingValues->Service_Type);
     ui->Address_Singleton_lineEdit->setText(pSettingValues->SingletonAddress);
     ui->Address_Many_textEdit->setText(pSettingValues->ManyCasesAddress);

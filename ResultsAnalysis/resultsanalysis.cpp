@@ -109,62 +109,78 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
     /* 3:双22G1 */
     this->imgTime=imgTime;
 
-    QList<uint32_t> probabilityTemp;/* 置信度 */
+    QList<uint32_t> conProbabilityTemp;/* 箱号置信度 */
+    QList<uint32_t> isoProbabilityTemp;/* 箱型置信度 */
 
     for(auto var:resultList){
-        QString con="";        QString iso="";        uint32_t probability=0;        int check=0;
+        QString con="";        QString iso="";        uint32_t Cprobability=0;                      uint32_t Iprobability=0;        int check=0;
         if(var.startsWith("RESULT")){
             QStringList tmp=var.split(":")[1].split("|");
-            if(tmp.count()>=3){
+            if(tmp.count()==4){
                 QString conT=tmp[0].trimmed();
                 check=numberCheck(conT);
                 con=conT;
                 iso=tmp[1];
-                probability=tmp[2].toUInt();
+                Cprobability=tmp[2].toUInt();
+                Iprobability=tmp[3].toUInt();
             }
         }
-        conTemp.append(con);
-        isoTemp.append(iso);
-        checkConList.append(check);
-        probabilityTemp.append(probability);
+        conTemp.append(con);/* 箱号 */
+        isoTemp.append(iso);/* 箱型 */
+        checkConList.append(check);/* 校验结果 */
+        conProbabilityTemp.append(Cprobability);/* 箱号置信度 */
+        isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
     }
 
-    /* 双箱，分前3个结果和后3个结果独立处理 */
-    int index1=0;    int index2=-1;    uint32_t probability=0;
-    if(type==3){
+    /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标 */
+    int Cindex1=-1;    int Iindex1=-1;    int Cindex2=-1;    int Iindex2=-1;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
+    if(type==3 && conProbabilityTemp.count()==6){
         for (int var = 0; var < 3; ++var) {
-            if(probabilityTemp[var]>probability){
-                probability=probabilityTemp[var];
-                index1=var;
+            if(conProbabilityTemp[var]>Cprobability){
+                Cprobability=conProbabilityTemp[var];
+                Cindex1=var;
+            }
+            if(isoProbabilityTemp[var]>Iprobability){
+                Iprobability=isoProbabilityTemp[var];
+                Iindex1=var;
             }
         }
-        probability=0;
+        Cprobability=0; Iprobability=0;
         for (int var = 3; var < 6; ++var) {
-            if(probabilityTemp[var]>probability){
-                probability=probabilityTemp[var];
-                index2=var;
+            if(conProbabilityTemp[var]>Cprobability){
+                Cprobability=conProbabilityTemp[var];
+                Cindex2=var;
+            }
+            if(isoProbabilityTemp[var]>Iprobability){
+                Iprobability=isoProbabilityTemp[var];
+                Iindex2=var;
             }
         }
-        emit containerSignal(type,conTemp[index1],checkConList[index1],isoTemp[index1],conTemp[index2],checkConList[index2],isoTemp[index2]);
+        emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
     }
     else {
-        for (int var = 0; var < probabilityTemp.count(); ++var) {
-            if(probabilityTemp[var]>probability){
-                probability=probabilityTemp[var];
-                index1=var;
+        for (int var = 0; var < conProbabilityTemp.count(); ++var) {
+            if(conProbabilityTemp[var]>Cprobability){
+                Cprobability=conProbabilityTemp[var];
+                Cindex1=var;
+            }
+            if(isoProbabilityTemp[var]>Iprobability){
+                Iprobability=isoProbabilityTemp[var];
+                Iindex1=var;
             }
         }
-        emit containerSignal(type,conTemp[index1],checkConList[index1],isoTemp[index1]);
+        emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1]);
     }
-    updateDataBase(type,index1,index2);
+    updateDataBase(type,Cindex1,Iindex1,Cindex2,Iindex2);
 
     conTemp.clear();
     isoTemp.clear();
     checkConList.clear();
-    probabilityTemp.clear();
+    conProbabilityTemp.clear();
+    isoProbabilityTemp.clear();
 }
 
-void ResultsAnalysis::updateDataBase(int type, int index1, int index2)
+void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cindex2, int Iindex2)
 {
     QStringList tmp=imgTime.split(QDir::toNativeSeparators("/"));
     QString dateTime="";
@@ -181,30 +197,33 @@ void ResultsAnalysis::updateDataBase(int type, int index1, int index2)
         emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6]").arg("I").arg(time).arg(channel).arg(conTemp[var]).arg(isoTemp[var]).arg(QString::number(checkConList[var])));
     }
 
-    if(index2!=-1){
-        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|箱号|箱型|校验|校验 */
-        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[index1]).arg(isoTemp[index1]).arg(conTemp[index2]).arg(isoTemp[index2]).arg(QString::number(checkConList[index1])).arg(QString::number(checkConList[index2])));
-    }
-    else {
-        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|校验*/
-        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[index1]).arg(isoTemp[index1]).arg(QString::number(checkConList[index1])));
+    if(Cindex1!=-1){
+        if(Cindex2!=-1){
+            /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|箱号|箱型|校验|校验 */
+            emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(conTemp[Cindex2]).arg(isoTemp[Iindex2]).arg(QString::number(checkConList[Cindex1])).arg(QString::number(checkConList[Cindex2])));
+        }
+        else {
+            /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|校验*/
+            emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(QString::number(checkConList[Cindex1])));
+        }
     }
 
     QMap<QString,QString> data;
-
     data.insert("Timer",dateTime);
     if(channel!=-1){
          data.insert("Channel",QString::number(channel));
     }
 
-    data["ContainerFront"]=conTemp[index1];
-    data["ISOFront"]=isoTemp[index1];
-    data["CheckFront"]=QString::number(checkConList[index1]);
+    if(Cindex1!=-1){
+        data["ContainerFront"]=conTemp[Cindex1];
+        data["ISOFront"]=isoTemp[Iindex1];
+        data["CheckFront"]=QString::number(checkConList[Cindex1]);
 
-    if(index2!=-1){
-        data["ContainerAfter"]=conTemp[index2];
-        data["ISOAfter"]=isoTemp[index2];
-        data["CheckAfter"]=QString::number(checkConList[index2]);
+        if(Cindex2!=-1){
+            data["ContainerAfter"]=conTemp[Cindex2];
+            data["ISOAfter"]=isoTemp[Iindex2];
+            data["CheckAfter"]=QString::number(checkConList[Cindex2]);
+        }
     }
 
     if(conTemp.count()==4){

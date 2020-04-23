@@ -114,12 +114,6 @@ signals:
     /// \param format 保存协议
     ///
     void setSaveImgFormatTowSignal(const QString &path,int format);
-
-    ///
-    /// \brief setCheckTheResultsSlot 是否校验识别结果
-    /// \param correct 校验标志
-    ///
-    void setCheckTheResultsSignal(bool correct=false);
 };
 
 #endif // SYSTEMSETTING_H

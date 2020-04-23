@@ -18,7 +18,7 @@ void SocketServer::incomingConnection(qintptr handle)
 void SocketServer::disconnectedSlot()
 {
     SocketClient* socket=qobject_cast<SocketClient*>(sender());
-    int k= clientMap.key(socket);
+    int k= static_cast<int>(clientMap.key(socket));
     qDebug()<<k;
     clientMap.remove(k);
     qDebug()<<clientMap.count();

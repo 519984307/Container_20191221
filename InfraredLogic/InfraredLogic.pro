@@ -13,7 +13,6 @@ TARGET = InfraredLogic
 TEMPLATE = lib
 
 CONFIG += plugin
-#CONFIG+=serialport
 
 DEFINES += INFRAREDLOGIC_LIBRARY
 

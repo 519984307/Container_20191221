@@ -1,0 +1,52 @@
+[2020-04-21 16:33:08:128][ERROR][void __cdecl DataBaseInsert::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][25]Open databse  error<errorCode=unable to open database file Error opening database>
+[2020-04-21 16:33:10:776][INFO][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][71]ZBY_LOG_INFO(Create table Containers sucess
+[2020-04-21 16:33:16:401][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 16:33:16:565][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 16:33:23:901][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 17:42:04:356][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 17:42:09:190][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 17:42:09:284][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 17:42:16:761][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 17:42:26:426][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 17:42:31:230][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 17:42:31:324][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 17:42:38:730][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 17:45:13:539][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:48:21:515][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:48:24:765][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 20:48:24:828][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 20:48:29:765][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 20:49:22:969][INFO][void __cdecl ChannelSettingWidget::on_buttonBox_clicked(class QAbstractButton *)][189]Save Channel Json sucess
+[2020-04-21 20:49:27:807][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:49:30:995][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 20:49:31:057][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 20:49:36:006][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 20:51:16:153][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:51:19:356][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 20:51:19:419][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 20:51:24:356][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 20:56:38:087][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:56:41:290][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 20:56:41:352][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 20:56:46:305][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 20:58:19:088][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:58:22:275][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 20:58:22:338][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 20:58:22:338][INFO][void __cdecl CaptureImages::initCamerSlot(const class QString &,const int &,const class QString &,const class QString &)][101]IP=192.168.1.100 camera init sucess
+[2020-04-21 20:58:22:338][ERROR][void __cdecl CaptureImages::loginResultCallBack(long,unsigned long,NET_DVR_DEVICEINFO_V30 *,void *)][139]IP=192.168.1.100 camera login error<errorCOde=41>
+[2020-04-21 20:58:27:291][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 20:59:14:603][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 20:59:17:775][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 20:59:17:931][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 20:59:17:931][INFO][void __cdecl CaptureImages::initCamerSlot(const class QString &,const int &,const class QString &,const class QString &)][101]IP=192.168.1.100 camera init sucess
+[2020-04-21 20:59:19:228][INFO][void __cdecl CaptureImages::loginResultCallBack(long,unsigned long,NET_DVR_DEVICEINFO_V30 *,void *)][142]IP=192.168.1.100 camera loginsucess
+[2020-04-21 20:59:22:791][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>
+[2020-04-21 20:59:28:572][INFO][bool __cdecl CaptureImages::putCommandSlot(const int &,const class QString &)][167]IP=192.168.1.100 Put command sucess
+[2020-04-21 20:59:29:900][INFO][void __cdecl CaptureImages::playStreamSlot(unsigned int,bool)][196]IP=192.168.1.100 Open stream sucess
+[2020-04-21 20:59:29:900][ERROR][void __cdecl CaptureImages::exceptionCallBack_V30(unsigned long,long,long,void *)][127]IP=192.168.1.100 camrea exception<errorCode=32771>
+[2020-04-21 21:01:13:912][ERROR][void __cdecl DataBaseRead::initDataBaseSlot(const class QString &,const class QString &,const class QString &,const class QString &)][68]Create table containers error<errorCode=No query Unable to fetch row>
+[2020-04-21 21:01:17:146][ERROR][void __cdecl SocketService::startListen(void)][61]IP:192.168.0.116 listen error<errocCode=The address is not available>
+[2020-04-21 21:01:17:224][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][188]portName1:com0 Open error<errorCode=1>
+[2020-04-21 21:01:17:224][INFO][void __cdecl CaptureImages::initCamerSlot(const class QString &,const int &,const class QString &,const class QString &)][101]IP=192.168.1.100 camera init sucess
+[2020-04-21 21:01:18:537][INFO][void __cdecl CaptureImages::loginResultCallBack(long,unsigned long,NET_DVR_DEVICEINFO_V30 *,void *)][142]IP=192.168.1.100 camera loginsucess
+[2020-04-21 21:01:22:162][ERROR][void __cdecl InfraredLogic::startSlaveSlot(const class QString &,const class QString &)][217]portName2:com1 Open error<errorCode=11>

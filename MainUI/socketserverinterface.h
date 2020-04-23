@@ -40,10 +40,9 @@ public slots:
     /// \brief InitializationParameterSlot 初始化参数
     /// \param address 地址
     /// \param port 端口
-    /// \param channel 通道号
     /// \param serviceType 服务类型
     ///
-    virtual void  InitializationParameterSlot(const QString& address,const int& port,const int& channel,const int& serviceType=0)=0;
+    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType=0)=0;
 
     ///
     /// \brief socketSendDataSlot 发送数据

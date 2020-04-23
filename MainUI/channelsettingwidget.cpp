@@ -64,8 +64,12 @@ bool ChannelSettingWidget::jsonWrite()
     jsonObj2.insert(tr("SerialAddrTow"),ui->SerialAddrTow->text());
     jsonObj2.insert(tr("PortOne"),ui->PortOne->value());
     jsonObj2.insert(tr("PortTow"),ui->PortTow->value());
-    jsonObj2.insert(tr("SerialPortOpenState"),int(ui->SerialPortOpenState->isChecked()));
-    jsonObj2.insert(tr("SerialPortCloseState"),int(ui->SerialPortCloseState->isChecked()));
+    if(ui->SerialPortOpenState){
+        jsonObj2.insert(tr("infraredStatus"),0);
+    }
+    if(ui->SerialPortCloseState){
+        jsonObj2.insert(tr("infraredStatus"),1);
+    }
     jsonChild.insert("SerialPort",QJsonValue(jsonObj2));
 
     QJsonObject jsonObj3;
@@ -116,9 +120,8 @@ bool ChannelSettingWidget::jsonRead()
                     PortTow= getJsonValue("SerialPort","PortTow",value.toObject()).toInt();
                     SerialAddrOne= getJsonValue("SerialPort","SerialAddrOne",value.toObject()).toString();
                     SerialAddrTow= getJsonValue("SerialPort","SerialAddrTow",value.toObject()).toString();
-                    SerialPortCloseState= getJsonValue("SerialPort","SerialPortCloseState",value.toObject()).toInt();
+                    infraredStatus=getJsonValue("SerialPort","infraredStatus",value.toObject()).toInt();
                     SerialPortMode= getJsonValue("SerialPort","SerialPortMode",value.toObject()).toInt();
-                    SerialPortOpenState= getJsonValue("SerialPort","SerialPortOpenState",value.toObject()).toInt();
                     SerialPortTow= getJsonValue("SerialPort","SerialPortTow",value.toObject()).toInt();
                     SerialPortOne= getJsonValue("SerialPort","SerialPortOne",value.toObject()).toInt();
 
@@ -153,9 +156,12 @@ void ChannelSettingWidget::jsonWritetoUI()
     ui->SerialAddrTow->setText(SerialAddrTow);
     ui->PortOne->setValue(PortOne);
     ui->PortTow->setValue(PortTow);
-    ui->SerialPortOpenState->setChecked(SerialPortOpenState);
-    ui->SerialPortCloseState->setChecked(SerialPortCloseState);
-
+    if(!infraredStatus){/* 常开 */
+        ui->SerialPortOpenState->setChecked(true);
+    }
+    else {/* 常闭 */
+        ui->SerialPortCloseState->setChecked(true);
+    }
     ui->Alias->setText(Alias);
 }
 

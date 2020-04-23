@@ -15,10 +15,9 @@ signals:
     /// \brief InitializationParameterSignal 初始化参数
     /// \param address 地址
     /// \param port 端口
-    /// \param channel 通道号
     /// \param serviceType 服务类型
     ///
-    void  InitializationParameterSignal(const QString& address,const int& port,const int& channel,const int& serviceType);
+    void  InitializationParameterSignal(const QString& address,const quint16& port,const int& serviceType);
 
     ///
     /// \brief socketSendDataSlot 发送数据

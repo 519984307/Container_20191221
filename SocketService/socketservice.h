@@ -18,6 +18,11 @@ public:
 private:
 
     ///
+    /// \brief connected 客户端链接状态
+    ///
+    bool isConnected;
+
+    ///
     /// \brief address 地址
     ///
     QString address;
@@ -25,27 +30,20 @@ private:
     ///
     /// \brief port 端口
     ///
-    int port;
+    quint16 port;
 
     ///
-    /// \brief channel 通道号
-    ///
-    int channel;
-
-    ///
-    /// \brief tcpSocket tcpSocket
+    /// \brief tcpSocket 客户端
     ///
     QTcpSocket *pTcpSocket;
 
+    ///
+    /// \brief pTcpServer 服务器
+    ///
     SocketServer* pTcpServer;
 
-//    ///
-//    /// \brief pTcpServer tcpServer
-//    ///
-//    QTcpServer *pTcpServer;
-
     ///
-    /// \brief pTimerLink 定时检测
+    /// \brief pTimerLink 定时心跳包检测
     ///
     QTimer *pTimerLink;
 
@@ -55,6 +53,9 @@ private:
 //    QList<QTcpSocket*> clientList;
 
 private:
+
+
+private slots:
 
     ///
     /// \brief startLink 链接到服务器,客户端模式
@@ -66,7 +67,10 @@ private:
     ///
     void startListen();
 
-private slots:
+    ///
+    /// \brief heartbeatSlot 心跳检测
+    ///
+    void heartbeatSlot();
 
     ///
     /// \brief connected 链接成功
@@ -89,11 +93,6 @@ private slots:
     ///
     void displayError(QAbstractSocket::SocketError socketError);
 
-    ///
-    /// \brief newClientConnectSlot 客户端接入
-    ///
-    void newClientConnectSlot();
-
 public:
 
     ///
@@ -103,7 +102,7 @@ public:
     /// \param channel 通道号
     /// \param serviceType 服务类型
     ///
-    void  InitializationParameterSlot(const QString& address,const int& port,const int& channel,const int& serviceType)Q_DECL_OVERRIDE;
+    void  InitializationParameterSlot(const QString& address, const quint16 &port, const int& serviceType)Q_DECL_OVERRIDE;
 
     ///
     /// \brief socketSendDataSlot 发送数据

@@ -92,6 +92,7 @@ void MainWidget::loadingParameters()
     int var=1;
 
     for (int channel = 1; channel <= channelCounnt; ++channel) {
+
         /* 相机参数初始化 */
         if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
             QStringList FrontCamer=pChannelSettingWidget->FrontCamer.split(";");
@@ -118,17 +119,52 @@ void MainWidget::loadingParameters()
                 ++num;
             }
         }
+
         /* 红外参数初始化 */
         if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
             QString com1=QString("com%1").arg(pChannelSettingWidget->SerialPortOne);
             QString com2=QString("com%1").arg(pChannelSettingWidget->SerialPortTow);
             if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(InfraredProcessingMap[channel])){
-                emit pInfraredProcessing->startSlaveSignal(com1,com2);
                 /* 设置红外模式 */
-                emit pInfraredProcessing->setAlarmModeSignal(true);
+                emit pInfraredProcessing->setAlarmModeSignal(pChannelSettingWidget->infraredStatus);
+                /* 启动串口 */
+                emit pInfraredProcessing->startSlaveSignal(com1,com2);
                 /*  绑定相机组抓到逻辑处理 */
                 pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel),channel);
             }
+        }
+
+        if(pSystemSettingWidget!=nullptr){
+            /* 识别器设置 */
+            if(ResultsAnalysisProcessing*  pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[channel])){
+                /* 设置校验结果  */
+                emit pResultsAnalysisProcessing->setCheckTheResultsSignal(pSystemSettingWidget->pSettingValues->CheckResult);
+            }
+        }
+    } 
+
+    if(pSystemSettingWidget!=nullptr){
+        /* 服务设置 */
+        switch (pSystemSettingWidget->pSettingValues->Service_Type) {
+        case 0:/* 单例模式 */
+            if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[1])){
+                QStringList addr=pSystemSettingWidget->pSettingValues->SingletonAddress.split(":");
+                if(addr.count()==2){
+                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel);
+                }
+            }
+            break;
+        case 1:/* 多例模式 */
+            QStringList addrList=pSystemSettingWidget->pSettingValues->ManyCasesAddress.split(",");
+            for (int var = 0; var < addrList.count(); ++var) {
+                QStringList addr=addrList[var].split(":");
+                if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var])){
+                    if(addr.count()==2){
+                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel);
+                    }
+                }
+            }
+            break;
         }
     }
 }
@@ -339,7 +375,16 @@ void MainWidget::loadPlugins()
             }
             else if(SocketServerInterface* pSocketServerInterface=qobject_cast<SocketServerInterface*>(plugin)) {
                 delete  pSocketServerInterface;
-                num=1;
+                if(pSystemSettingWidget!=nullptr){
+                    switch (pSystemSettingWidget->pSettingValues->Service_Type) {
+                    case 0:/* 单例模式 */
+                        num=1;
+                        break;
+                    case 1:/* 多例模式 */
+                        num=channelCounnt;
+                        break;
+                    }
+                }
             }
             else {
                 delete  plugin;/* 暂不处理其他插件 */
@@ -589,13 +634,8 @@ void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysi
     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setChannelSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setChannelSlot);
     /* 识别结果写入日志 */
     connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,this,&MainWidget::resultsAnalysisStateSlot);
-
-    if(pSystemSettingWidget!=nullptr){
-        /* 结果校验模式 */
-        connect(pSystemSettingWidget,&SystemSettingWidget::setCheckTheResultsSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setCheckTheResultsSlot);
-        /* 是否校验结果  */
-        pSystemSettingWidget->setCheckTheResultsSignal(pSystemSettingWidget->pSettingValues->AutomaticCorrection);
-    }
+    /* 结果校验模式 */
+    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setCheckTheResultsSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setCheckTheResultsSlot);
 
     /* 设置通道号 */
     pResultsAnalysisProcessing->setChannelSignal(num);
@@ -619,8 +659,6 @@ void MainWidget::socketServerPlugin(SocketServerInterface *pSocketServerInterfac
     connect(pSocketServerProcessing,&SocketServerProcessing::socketSendDataSignal,pSocketServerInterface,&SocketServerInterface::socketSendDataSlot);
     /* 日志信息 */
     connect(pSocketServerInterface,&SocketServerInterface::messageSignal,this,&MainWidget::messageSlot);
-
-    pSocketServerProcessing->InitializationParameterSignal("192.168.0.116",6000,num,0);
 
     QThread* pThread=new QThread(this);
     pSocketServerProcessing->moveToThread(pThread);
