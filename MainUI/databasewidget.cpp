@@ -47,8 +47,24 @@ DataBaseWidget::~DataBaseWidget()
 
 void DataBaseWidget::resizeEvent(QResizeEvent *size)
 {
-    ui->Img_After_label->setMinimumWidth(size->size().width()/3-4);
-    ui->Img_After_label->setMinimumHeight(size->size().height()/2-36);
+    if(size->oldSize().height()!=-1){
+        int W=(size->size().width()-8) /3;
+        int H=(size->size().height()-170)/2;
+        if(W>0&&H>0){
+            ui->Img_After_label->setFixedSize(W,H);
+            ui->Img_After_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_LeftAfter_label->setFixedSize(W,H);
+            ui->Img_LeftAfter_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_Front_label->setFixedSize(W,H);
+            ui->Img_Front_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_RightAfter_label->setFixedSize(W,H);
+            ui->Img_RightAfter_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_LeftFront_label->setFixedSize(W,H);
+            ui->Img_LeftFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_RightFront_label->setFixedSize(W,H);
+            ui->Img_RightFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+        }
+    }
 }
 
 void DataBaseWidget::seFindtImgPathSlot(const QString &path, const int &format)
@@ -306,15 +322,22 @@ void DataBaseWidget::showImages(const QModelIndex &index)
     ui->Img_After_label->clear();
     ui->Img_plate_label->clear();
 
+    ui->label_15->clear();
+    ui->label_34->clear();
+    ui->label_30->clear();
+    ui->label_33->clear();
+    ui->label_29->clear();
+    ui->label_32->clear();
+
     if(imgPath!=""){
         QDir dir(imgPath);
         QString suffixPath="";
         bool isRoot=false;/* 如果是保存在根目录就不用CD */
-        QStringList date=index.sibling(index.row(),1).data().toString().split(" ");
-        int land=index.sibling(index.row(),2).data().toInt();
+        QStringList date=index.sibling(index.row(),Timer).data().toString().split(" ");
+        int land=index.sibling(index.row(),Channel).data().toInt();
 
         if(date.count()==2){
-            QStringList tmpList=date[0].split("-");
+            QStringList tmpList=date[0].split("-");           
             switch (imgFormat) {
             case 0:
                 suffixPath=QDir::toNativeSeparators(tr("%1/%2").arg(QString::number(land)).arg(tmpList.join("/")));
@@ -350,52 +373,59 @@ void DataBaseWidget::showImages(const QModelIndex &index)
         /* 防止图片发生偏移 */
         QPixmap  labelPixFit;
 
-        QString imgTmp=index.sibling(index.row(),ImgFront).data().toString();
+        QString imgTmp=index.sibling(index.row(),ImgFront).data().toString();       
+                qDebug()<<imgTmp;
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_Front_label->width(),ui->Img_Front_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_Front_label->setPixmap(labelPixFit);
             }
         }
         imgTmp=index.sibling(index.row(),ImgLeftFront).data().toString();
+                qDebug()<<imgTmp;
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_LeftFront_label->width(),ui->Img_LeftFront_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_LeftFront_label->setPixmap(labelPixFit);
             }
         }
         imgTmp=index.sibling(index.row(),ImgRightFront).data().toString();
+                qDebug()<<imgTmp;
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_RightFront_label->width(),ui->Img_RightFront_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_RightFront_label->setPixmap(labelPixFit);
             }
         }
         imgTmp=index.sibling(index.row(),ImgLeftAfter).data().toString();
+                qDebug()<<imgTmp;
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_LeftAfter_label->width(),ui->Img_LeftAfter_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_LeftAfter_label->setPixmap(labelPixFit);
             }
         }
         imgTmp=index.sibling(index.row(),ImgRightAfter).data().toString();
+                qDebug()<<imgTmp;
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_RightAfter_label->width(),ui->Img_RightAfter_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_RightAfter_label->setPixmap(labelPixFit);
             }
         }
         imgTmp=index.sibling(index.row(),ImgAfter).data().toString();
+                qDebug()<<imgTmp;
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_After_label->width(),ui->Img_After_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_After_label->setPixmap(labelPixFit);
             }
         }
         imgTmp=index.sibling(index.row(),PlateImg).data().toString();
+
         if(imgTmp!=""){
             if(labelPix->load(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg(imgTmp)))){
-                labelPixFit=labelPix->scaled(ui->Img_After_label->size().width()-4,ui->Img_After_label->size().height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                labelPixFit=labelPix->scaled(ui->Img_plate_label->width(),ui->Img_plate_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                 ui->Img_plate_label->setPixmap(labelPixFit);
             }
         }
@@ -416,6 +446,54 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
     ui->checkFront_label->setText(index.sibling(index.row(),ISOFront).data().toString());/* 前箱型 */
     ui->checkAfter_label->setText(index.sibling(index.row(),ISOAfter).data().toString());/* 后箱型 */
     ui->Plate_label->setText(index.sibling(index.row(),Plate).data().toString());/* 车牌 */
+
+    ui->label_15->setText(index.sibling(index.row(),ImgFrontNumber).data().toString());
+    if(index.sibling(index.row(),ImgFrontCheck).data().toBool()){
+        ui->label_15->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_15->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->label_34->setText(index.sibling(index.row(),ImgLeftFrontNumber).data().toString());
+    if(index.sibling(index.row(),ImgLeftFrontCheck).data().toBool()){
+        ui->label_34->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_34->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->label_30->setText(index.sibling(index.row(),ImgRightFrontNumber).data().toString());
+    if(index.sibling(index.row(),ImgRightFrontCheck).data().toBool()){
+        ui->label_30->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_30->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->label_33->setText(index.sibling(index.row(),ImgLeftAfterNumber).data().toString());
+    if(index.sibling(index.row(),ImgLeftAfterCheck).data().toBool()){
+        ui->label_33->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_33->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->label_29->setText(index.sibling(index.row(),ImgRightAfterNumber).data().toString());
+    if(index.sibling(index.row(),ImgRightAfterCheck).data().toBool()){
+        ui->label_29->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_29->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->label_32->setText(index.sibling(index.row(),ImgAfterNumber).data().toString());
+    if(index.sibling(index.row(),ImgAfterCheck).data().toBool()){
+        ui->label_32->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_32->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
 
     /* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
     int TYPE=index.sibling(index.row(),Type).data().toInt();

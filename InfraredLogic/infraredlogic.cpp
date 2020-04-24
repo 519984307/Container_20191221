@@ -154,6 +154,7 @@ void InfraredLogic::serialLogic(int *status)
                             if(status[4]==valueOne){
                                 emit logicPutImageSignal(3);
                                 _22G1_22G1=true;
+                                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
                             }
                         }
                     }

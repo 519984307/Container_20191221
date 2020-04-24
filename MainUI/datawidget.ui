@@ -31,10 +31,40 @@
    </property>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Rounded</enum>
+     </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
+     <property name="tabBarAutoHide">
+      <bool>false</bool>
      </property>
      <widget class="QWidget" name="tab">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <attribute name="title">
        <string>Image</string>
       </attribute>
@@ -60,9 +90,9 @@
        <item row="0" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLabel" name="Img_RightAfter_label">
+          <widget class="QLabel" name="Img_LeftAfter_label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -76,9 +106,6 @@
            <property name="text">
             <string/>
            </property>
-           <property name="pixmap">
-            <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
-           </property>
            <property name="scaledContents">
             <bool>true</bool>
            </property>
@@ -87,7 +114,7 @@
          <item>
           <widget class="QLabel" name="label_7">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -109,7 +136,7 @@
 </string>
            </property>
            <property name="text">
-            <string>5</string>
+            <string>LA</string>
            </property>
           </widget>
          </item>
@@ -118,9 +145,9 @@
        <item row="0" column="1">
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QLabel" name="Img_RightFront_label">
+          <widget class="QLabel" name="Img_LeftFront_label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -131,9 +158,6 @@
            <property name="text">
             <string/>
            </property>
-           <property name="pixmap">
-            <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
-           </property>
            <property name="scaledContents">
             <bool>true</bool>
            </property>
@@ -142,7 +166,7 @@
          <item>
           <widget class="QLabel" name="label_8">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -164,7 +188,7 @@
 </string>
            </property>
            <property name="text">
-            <string>3</string>
+            <string>LF</string>
            </property>
           </widget>
          </item>
@@ -178,7 +202,7 @@
          <item>
           <widget class="QStackedWidget" name="stackedWidget">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -191,7 +215,7 @@
            </property>
            <widget class="QWidget" name="page">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -215,7 +239,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="Img_Plate_label">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -235,7 +259,7 @@
            </widget>
            <widget class="QWidget" name="page_2">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -259,7 +283,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="Img_Front_label">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -269,9 +293,6 @@
                </property>
                <property name="text">
                 <string/>
-               </property>
-               <property name="pixmap">
-                <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
                </property>
                <property name="scaledContents">
                 <bool>true</bool>
@@ -296,7 +317,7 @@
            <item>
             <widget class="QLabel" name="label_9">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -318,7 +339,7 @@
 </string>
              </property>
              <property name="text">
-              <string>1</string>
+              <string>F</string>
              </property>
             </widget>
            </item>
@@ -356,7 +377,7 @@
          <item>
           <widget class="QLabel" name="Img_After_label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -367,9 +388,6 @@
            <property name="text">
             <string/>
            </property>
-           <property name="pixmap">
-            <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
-           </property>
            <property name="scaledContents">
             <bool>true</bool>
            </property>
@@ -378,7 +396,7 @@
          <item>
           <widget class="QLabel" name="label_10">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -400,7 +418,7 @@
 </string>
            </property>
            <property name="text">
-            <string>6</string>
+            <string>A</string>
            </property>
           </widget>
          </item>
@@ -409,9 +427,9 @@
        <item row="1" column="1">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QLabel" name="Img_LeftAfter_label">
+          <widget class="QLabel" name="Img_RightAfter_label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -421,9 +439,6 @@
            </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -455,7 +470,7 @@
 </string>
            </property>
            <property name="text">
-            <string>4</string>
+            <string>RA</string>
            </property>
           </widget>
          </item>
@@ -464,9 +479,9 @@
        <item row="1" column="2">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QLabel" name="Img_LeftFront_label">
+          <widget class="QLabel" name="Img_RightFront_label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -477,9 +492,6 @@
            <property name="text">
             <string/>
            </property>
-           <property name="pixmap">
-            <pixmap resource="ico.qrc">:/new/prefix1/ICO.ico</pixmap>
-           </property>
            <property name="scaledContents">
             <bool>true</bool>
            </property>
@@ -488,7 +500,7 @@
          <item>
           <widget class="QLabel" name="label_12">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -510,7 +522,7 @@
 </string>
            </property>
            <property name="text">
-            <string>2</string>
+            <string>RF</string>
            </property>
           </widget>
          </item>
@@ -874,8 +886,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="ico.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

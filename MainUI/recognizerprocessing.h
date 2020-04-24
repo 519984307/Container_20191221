@@ -85,8 +85,9 @@ signals:
     ///
     /// \brief identifyImagesSignal 识别图片
     /// \param image  图片名
+    /// \param imgNumber 图片编号
     ///
-    void identifyImagesSignal(const QString &image);
+    void identifyImagesSignal(const QString &image,int imgNumber);
 
     ///
     /// \brief resultsOfAnalysisSignal 分析箱号
@@ -151,9 +152,9 @@ public slots:
     ///
     /// \brief recognitionResultSlot 识别结果
     /// \param result 识别结果
-    /// \param image 图片名
+    /// \param imgNumber 图片编号
     ///
-    void recognitionResultSlot(const QString &result,const QString &image);
+    void recognitionResultSlot(const QString &result,int imgNumber);
 };
 
 #endif // RECOGNIZERPROCESSING_H

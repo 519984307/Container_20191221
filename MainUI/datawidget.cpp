@@ -18,15 +18,26 @@ DataWidget::~DataWidget()
 }
 
 void DataWidget::resizeEvent(QResizeEvent *size)
-{       
-    ui->Img_After_label->setMinimumWidth(size->size().width()/3-4);
-    ui->Img_After_label->setMinimumHeight(size->size().height()/2-36);
+{
+    if(size->oldSize().height()!=-1){
+        int W=(size->size().width()-12) /3;
+        int H=(size->size().height()-71)/2;
+        if(W>0&&H>0){
+            ui->Img_After_label->setFixedSize(W,H);
+            ui->Img_After_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_LeftAfter_label->setFixedSize(W,H);
+            ui->Img_LeftAfter_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_Front_label->setFixedSize(W,H);
+            ui->Img_Front_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_RightAfter_label->setFixedSize(W,H);
+            ui->Img_RightAfter_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_LeftFront_label->setFixedSize(W,H);
+            ui->Img_LeftFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_RightFront_label->setFixedSize(W,H);
+            ui->Img_RightFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+        }
+    }
 }
-
-//void DataWidget::InitializationParameterSlot(int channel)
-//{
-//    this->channel=channel;
-//}
 
 void DataWidget::logicStatusSlot(int *status)
 {
@@ -50,7 +61,6 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         labelPix->loadFromData(jpgStream);
         /* 防止图片发生偏移 */
         //labelPixFit=labelPix->scaled((ui->tab->width()-4)/3-4,(ui->tab->height()-36)/2-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-        labelPixFit=labelPix->scaled(ui->Img_Front_label->width()-4,ui->Img_Front_label->height()-4,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
     }
     else{
         delete labelPix;
@@ -75,31 +85,37 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         break;
     case 1:
         if(labelPix!=nullptr){
+            labelPixFit=labelPix->scaled(ui->Img_Front_label->width(),ui->Img_Front_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
             ui->Img_Front_label->setPixmap(labelPixFit);
         }
         break;
     case 2:
         if(labelPix!=nullptr){
+            labelPixFit=labelPix->scaled(ui->Img_RightFront_label->width(),ui->Img_RightFront_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
             ui->Img_LeftFront_label->setPixmap(labelPixFit);
         }
         break;
     case 3:
         if(labelPix!=nullptr){
+            labelPixFit=labelPix->scaled(ui->Img_LeftFront_label->width(),ui->Img_LeftFront_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
             ui->Img_RightFront_label->setPixmap(labelPixFit);
         }
         break;
     case 4:
         if(labelPix!=nullptr){
+            labelPixFit=labelPix->scaled(ui->Img_RightAfter_label->width(),ui->Img_RightAfter_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
             ui->Img_LeftAfter_label->setPixmap(labelPixFit);
         }
         break;
     case 5:
         if(labelPix!=nullptr){
+            labelPixFit=labelPix->scaled(ui->Img_LeftAfter_label->width(),ui->Img_LeftAfter_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
             ui->Img_RightAfter_label->setPixmap(labelPixFit);
         }
         break;
     case 6:
         if(labelPix!=nullptr){
+            labelPixFit=labelPix->scaled(ui->Img_After_label->width(),ui->Img_After_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
             ui->Img_After_label->setPixmap(labelPixFit);
         }
         break;

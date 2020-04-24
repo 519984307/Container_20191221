@@ -94,13 +94,20 @@ void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
             record.setValue("ISOFront",data.value("ISOFront"));
             record.setValue("ContainerAfter",data.value("ContainerAfter"));
             record.setValue("CheckAfter",data.value("CheckAfter"));
-            record.setValue("ISOAfter",data.value("ISOAfter"));
+            record.setValue("ISOAfter",data.value("ISOAfter"));                       
             record.setValue("ImgFrontNumber",data.value("ImgFrontNumber"));
+            record.setValue("ImgFrontCheck",data.value("ImgFrontCheck"));
             record.setValue("ImgLeftFrontNumber",data.value("ImgLeftFrontNumber"));
+            record.setValue("ImgLeftFrontCheck",data.value("ImgLeftFrontCheck"));
             record.setValue("ImgRightFrontNumber",data.value("ImgRightFrontNumber"));
+            record.setValue("ImgRightFrontCheck",data.value("ImgRightFrontCheck"));
             record.setValue("ImgLeftAfterNumber",data.value("ImgLeftAfterNumber"));
+            record.setValue("ImgLeftAfterCheck",data.value("ImgLeftAfterCheck"));
             record.setValue("ImgRightAfterNumber",data.value("ImgRightAfterNumber"));
+            record.setValue("ImgRightAfterCheck",data.value("ImgRightAfterCheck"));
             record.setValue("ImgAfterNumber",data.value("ImgAfterNumber"));
+            record.setValue("ImgAfterCheck",data.value("ImgAfterCheck"));
+
             if(!model.setRecord(0,record)){
                 emit messageSignal(ZBY_LOG("ERROR"),tr("Update data to databse  error<errorCOde=%1>").arg(model.lastError().text()));
             }

@@ -79,18 +79,16 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
             image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
             labelPixFit.save(image);
-            //labelPix->save(image);
             delete labelPix;
             labelPix=nullptr;
             //emit identifyImagesSignal(image);/* 识别图片 */
-        }
-        emit identifyImagesSignal(image);/* 识别图片 */        
-    }
 
-    if(jpgStream!=nullptr){
-        /* 抓拍状态写入日志 */
-        emit putCommantStateSignal(channel,tr("TIME:%1 ID:%2").arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(QString::number(imgNumber)));
+            /* 抓拍状态写入日志 */
+            emit putCommantStateSignal(channel,tr("TIME:%1 ID:%2").arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(QString::number(imgNumber)));
+        }
+        emit identifyImagesSignal(image,imgNumber);/* 识别图片 */
     }
+    /* 没有图片直接给结果,不经过识别器 */
 }
 
 void RecognizerProcessing::saveImageTowSlot(const QByteArray &jpgStream, const int &imgNumber, const QString &imgTime)
@@ -159,10 +157,10 @@ void RecognizerProcessing::infraredCompleteSlot(const int &type)
     queue.enqueue(type);
 }
 
-void RecognizerProcessing::recognitionResultSlot(const QString &result, const QString &image)
-{
+void RecognizerProcessing::recognitionResultSlot(const QString &result, int imgNumber)
+{   
     resulList<<result;
-
+    qDebug()<<resulList.count();
     if(containerNum==0&&queue.count()!=0){
         containertType=queue.dequeue();
         switch (containertType) {
@@ -176,7 +174,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             containerNum=6;
             break;
         }
-        imageName=image;
+        imageName=imgNumber;
     }
 
     if(resulList.count()==containerNum){
@@ -184,6 +182,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             chanResulList.append(resulList[0]);
             resulList.removeAt(0);
         }
+
         emit resultsOfAnalysisSignal(chanResulList,containertType,imageName);/* 分析结果 */       
 
         containerNum=0;

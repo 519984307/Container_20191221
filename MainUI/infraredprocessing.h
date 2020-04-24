@@ -50,9 +50,9 @@ private:
     int  channel;
 
     ///
-    /// \brief pPictureWidgetBEFORE 前相机
+    /// \brief pPictureWidgetFRONT 前相机
     ///
-    PictureWidget* pPictureWidgetBEFORE;
+    PictureWidget* pPictureWidgetFRONT;
 
     ///
     /// \brief pPictureWidgetAFTER 后相机

@@ -17,7 +17,7 @@ void InfraredProcessing::setCamerMultiMap(QList<QObject *> camerList,int channel
     if(camerList.count()==4)
     {
         /* 相机顺序  前,后,左,右 */
-        pPictureWidgetBEFORE=qobject_cast<PictureWidget*>(camerList[3]);
+        pPictureWidgetFRONT=qobject_cast<PictureWidget*>(camerList[3]);
         pPictureWidgetAFTER=qobject_cast<PictureWidget*>(camerList[2]);
         pPictureWidgetLEFT=qobject_cast<PictureWidget*>(camerList[1]);
         pPictureWidgetRIGHT=qobject_cast<PictureWidget*>(camerList[0]);
@@ -61,16 +61,16 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
-        emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
-        emit pPictureWidgetLEFT->putCommandSignal(2,timer);
-        emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
+        emit pPictureWidgetFRONT->putCommandSignal(1,timer);
+        emit pPictureWidgetLEFT->putCommandSignal(3,timer);
+        emit pPictureWidgetRIGHT->putCommandSignal(2,timer);
 
         emit putCommantStateSignal(channel,tr("ImgTime:%1,ImgId:%2").arg(name).arg("1,2,3,4,5,6"));/* 抓拍信息写入日志 */
 
         break;
     case 1:
-        emit pPictureWidgetLEFT->putCommandSignal(4,timer);
-        emit pPictureWidgetRIGHT->putCommandSignal(5,timer);
+        emit pPictureWidgetLEFT->putCommandSignal(5,timer);
+        emit pPictureWidgetRIGHT->putCommandSignal(4,timer);
         emit pPictureWidgetAFTER->putCommandSignal(6,timer);
 
         data["Timer"]=timer;
@@ -78,10 +78,10 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["Type"]=QString::number(2);
 
         data["ImgFront"]=tr("%1%2%3.jpg").arg(name).arg(1).arg(channel);
-        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
-        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
-        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(name).arg(4).arg(channel);
-        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(name).arg(5).arg(channel);
+        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
+        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
+        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(name).arg(5).arg(channel);
+        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(name).arg(4).arg(channel);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(name).arg(6).arg(channel);
 
         emit infraredCompleteSignal(2);
@@ -93,7 +93,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
-        emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
+        emit pPictureWidgetFRONT->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(2,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
         emit pPictureWidgetAFTER->putCommandSignal(6,timer);
@@ -119,16 +119,16 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
-        emit pPictureWidgetBEFORE->putCommandSignal(1,timer);
-        emit pPictureWidgetLEFT->putCommandSignal(2,timer);
-        emit pPictureWidgetRIGHT->putCommandSignal(3,timer);
+        emit pPictureWidgetFRONT->putCommandSignal(1,timer);
+        emit pPictureWidgetLEFT->putCommandSignal(3,timer);
+        emit pPictureWidgetRIGHT->putCommandSignal(2,timer);
 
         emit putCommantStateSignal(channel,tr("ImgTime:%1,ImgId:%2").arg(name).arg("1,2,3,4,5,6"));/* 抓拍信息写入日志 */
 
         break;
     case 4:
-        emit pPictureWidgetLEFT->putCommandSignal(4,timer);
-        emit pPictureWidgetRIGHT->putCommandSignal(5,timer);
+        emit pPictureWidgetLEFT->putCommandSignal(5,timer);
+        emit pPictureWidgetRIGHT->putCommandSignal(4,timer);
         emit pPictureWidgetAFTER->putCommandSignal(6,timer);
 
         data["Channel"]=QString::number(channel);/* 通道号 */
@@ -136,10 +136,10 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         data["Type"]=QString::number(3);
 
         data["ImgFront"]=tr("%1%2%3.jpg").arg(name).arg(1).arg(channel);
-        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
-        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
-        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(name).arg(4).arg(channel);
-        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(name).arg(5).arg(channel);
+        data["ImgLeftFront"]=tr("%1%2%3.jpg").arg(name).arg(3).arg(channel);
+        data["ImgRightFront"]=tr("%1%2%3.jpg").arg(name).arg(2).arg(channel);
+        data["ImgLeftAfter"]=tr("%1%2%3.jpg").arg(name).arg(5).arg(channel);
+        data["ImgRightAfter"]=tr("%1%2%3.jpg").arg(name).arg(4).arg(channel);
         data["ImgAfter"]=tr("%1%2%3.jpg").arg(name).arg(6).arg(channel);
 
         emit infraredCompleteSignal(3);

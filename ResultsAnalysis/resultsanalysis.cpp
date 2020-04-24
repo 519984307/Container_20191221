@@ -197,15 +197,13 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
         emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6]").arg("I").arg(time).arg(channel).arg(conTemp[var]).arg(isoTemp[var]).arg(QString::number(checkConList[var])));
     }
 
-    if(Cindex1!=-1){
-        if(Cindex2!=-1){
-            /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|箱号|箱型|校验|校验 */
-            emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(conTemp[Cindex2]).arg(isoTemp[Iindex2]).arg(QString::number(checkConList[Cindex1])).arg(QString::number(checkConList[Cindex2])));
-        }
-        else {
-            /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|校验*/
-            emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(QString::number(checkConList[Cindex1])));
-        }
+    if(type==3){
+        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|箱号|箱型|校验|校验 */
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(conTemp[Cindex2]).arg(isoTemp[Iindex2]).arg(QString::number(checkConList[Cindex1])).arg(QString::number(checkConList[Cindex2])));
+    }
+    else {
+        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|校验*/
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(QString::number(checkConList[Cindex1])));
     }
 
     QMap<QString,QString> data;
@@ -214,16 +212,14 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
          data.insert("Channel",QString::number(channel));
     }
 
-    if(Cindex1!=-1){
-        data["ContainerFront"]=conTemp[Cindex1];
-        data["ISOFront"]=isoTemp[Iindex1];
-        data["CheckFront"]=QString::number(checkConList[Cindex1]);
+    data["ContainerFront"]=conTemp[Cindex1];
+    data["ISOFront"]=isoTemp[Iindex1];
+    data["CheckFront"]=QString::number(checkConList[Cindex1]);
 
-        if(Cindex2!=-1){
-            data["ContainerAfter"]=conTemp[Cindex2];
-            data["ISOAfter"]=isoTemp[Iindex2];
-            data["CheckAfter"]=QString::number(checkConList[Cindex2]);
-        }
+    if(type==3){
+        data["ContainerAfter"]=conTemp[Cindex2];
+        data["ISOAfter"]=isoTemp[Iindex2];
+        data["CheckAfter"]=QString::number(checkConList[Cindex2]);
     }
 
     if(conTemp.count()==4){

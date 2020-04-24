@@ -5,6 +5,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QResizeEvent>
+#include <QtDebug>
 
 namespace Ui {
 class DataWidget;
