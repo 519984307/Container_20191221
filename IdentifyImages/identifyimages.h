@@ -30,9 +30,8 @@ public:
     ///
     /// \brief identifyResults 识别图片
     /// \param image  图片名
-    /// \param imgNumber 图片编号
     ///
-    void identifyImagesSlot(const QString &image,int imgNumber)Q_DECL_OVERRIDE;
+    void identifyImagesSlot(const QString &image)Q_DECL_OVERRIDE;
 };
 
 #endif // IDENTIFYIMAGES_H

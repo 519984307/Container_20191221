@@ -37,13 +37,10 @@ void SocketService::InitializationParameterSlot(const QString &address, const qu
     this->port=port;
 
     if(serviceType==1){/* 服务器模式 */
-        qDebug()<<"服务器模式";
         pTcpServer=new SocketServer (this);
-
         startListen();
     }
     if(serviceType==0){/* 客户端模式 */
-        qDebug()<<"客户端模式";
         pTcpSocket=new QTcpSocket(this);
         pTimerLink=new QTimer (this);
 

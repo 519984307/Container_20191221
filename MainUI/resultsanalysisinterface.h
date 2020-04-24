@@ -50,9 +50,9 @@ public slots:
     /// \brief resultsOfAnalysisSlot 分析箱号
     /// \param resultList 识别结果集
     /// \param type 逻辑类型
-    /// \param imgTime 箱号时间戳
+    /// \param imgList 图片名
     ///
-    virtual void resultsOfAnalysisSlot(QStringList resultList, int type,const QString& imgTime)=0;
+    virtual void resultsOfAnalysisSlot(QStringList resultList, int type,QStringList imgList)=0;
 
     ///
     /// \brief setCheckTheResultsSlot 是否校验识别结果

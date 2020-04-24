@@ -21,9 +21,9 @@ public:
 private:
 
      ///
-     /// \brief imageName 图片名
+     /// \brief imgList 图片名
      ///
-     QString imageName;
+     QStringList imgList;
 
     ///
     /// \brief mutex 锁
@@ -39,11 +39,6 @@ private:
     /// \brief resulList 所有识别结果列表
     ///
     QStringList resulList;
-
-    ///
-    /// \brief chanResulList 单次逻辑识别结果列表
-    ///
-    QStringList chanResulList;
 
     ///
     /// \brief containerNum 识别集装箱数量
@@ -85,17 +80,16 @@ signals:
     ///
     /// \brief identifyImagesSignal 识别图片
     /// \param image  图片名
-    /// \param imgNumber 图片编号
     ///
-    void identifyImagesSignal(const QString &image,int imgNumber);
+    void identifyImagesSignal(const QString &image);
 
     ///
     /// \brief resultsOfAnalysisSignal 分析箱号
     /// \param resultList 识别结果集
     /// \param type 逻辑类型
-    /// \param imgTime 箱号时间戳
+    /// \param imgList 图片名
     ///
-    void resultsOfAnalysisSignal(QStringList resultList, int type,const QString& imgTime);
+    void resultsOfAnalysisSignal(QStringList resultList, int type,QStringList imgList);
 
     ///
     /// \brief putCommantStateSignal 抓拍信息写入日志
@@ -152,9 +146,9 @@ public slots:
     ///
     /// \brief recognitionResultSlot 识别结果
     /// \param result 识别结果
-    /// \param imgNumber 图片编号
+    /// \param imgName 图片名
     ///
-    void recognitionResultSlot(const QString &result,int imgNumber);
+    void recognitionResultSlot(const QString &result,const QString& imgName);
 };
 
 #endif // RECOGNIZERPROCESSING_H

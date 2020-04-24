@@ -28,9 +28,9 @@ signals:
     /// \brief resultsOfAnalysisSignal 分析箱号
     /// \param resultList 识别结果集
     /// \param type 逻辑类型
-    /// \param imgTime 箱号时间戳
+    /// \param imgList 图片名
     ///
-    void resultsOfAnalysisSignal(QStringList resultList, int type,const QString& imgTime);
+    void resultsOfAnalysisSignal(QStringList resultList, int type,QStringList imgList);
 
     ///
     /// \brief setChannelSlot 设定通道号

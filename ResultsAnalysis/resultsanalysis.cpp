@@ -102,12 +102,11 @@ bool ResultsAnalysis::numberCheck(QString &number)
     return true;
 }
 
-void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, const QString &imgTime)
+void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QStringList imgList)
 {
     /* 1:22G1 */
     /* 2:45G1 */
     /* 3:双22G1 */
-    this->imgTime=imgTime;
 
     QList<uint32_t> conProbabilityTemp;/* 箱号置信度 */
     QList<uint32_t> isoProbabilityTemp;/* 箱型置信度 */
@@ -122,7 +121,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
                 con=conT;
                 iso=tmp[1];
                 Cprobability=tmp[2].toUInt();
-                Iprobability=tmp[3].toUInt();
+                Iprobability=tmp[3].toUInt();                
             }
         }
         conTemp.append(con);/* 箱号 */
@@ -132,8 +131,13 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
     }
 
+    foreach (auto imgTime, imgList) {
+        QString time=imgTime.split(QDir::toNativeSeparators("/"))[imgList.count()-1];
+        imgTimeList.append(time);
+    }
+
     /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标 */
-    int Cindex1=-1;    int Iindex1=-1;    int Cindex2=-1;    int Iindex2=-1;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
+    int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
     if(type==3 && conProbabilityTemp.count()==6){
         for (int var = 0; var < 3; ++var) {
             if(conProbabilityTemp[var]>Cprobability){
@@ -182,13 +186,16 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, co
 
 void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cindex2, int Iindex2)
 {
-    QStringList tmp=imgTime.split(QDir::toNativeSeparators("/"));
+    //QStringList tmp=imgTimeList[0];
     QString dateTime="";
     QString time="";
-    if(tmp.count()>0){
-        time=tmp[tmp.count()-1].split(".")[0].mid(0,14);
-        dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
-    }
+//    if(tmp.count()>0){
+//        //time=tmp[tmp.count()-1].split(".")[0].mid(0,14);
+//        time=imgTimeList[0].split(".")[0].mid(0,14);
+//        dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+//    }
+    time=imgTimeList[0].split(".")[0].mid(0,14);
+    dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
 
     emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
 
@@ -249,5 +256,5 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
 
     emit updateDataBaseSignal(data);
     data.clear();
-    tmp.clear();
+    //tmp.clear();
 }

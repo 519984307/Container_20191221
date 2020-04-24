@@ -15,11 +15,10 @@ class Recognition : public QObject,public QRunnable
     Q_OBJECT
 
 public:
-    explicit Recognition(QObject *parent = nullptr,const QString &image="",int imgNumber=-1);
+    explicit Recognition(QObject *parent = nullptr,const QString &image="");
 
 private:
     QString image;
-    int imgNumber;
 
 private:
 
@@ -33,9 +32,9 @@ signals:
     ///
     /// \brief recognitionResult 识别结果
     /// \param result 识别结果
-    /// \param imgNumber 图片编号
+    /// \param imgName 图片名
     ///
-    void recognitionResultSignal(const QString &result,int imgNumber);
+    void recognitionResultSignal(const QString &result,const QString& imgName);
 
     ///
     /// \brief messageSignal 日志信息

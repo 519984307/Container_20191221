@@ -21,9 +21,9 @@ public:
     /// \brief resultsOfAnalysisSlot 分析箱号
     /// \param resultList 识别结果集
     /// \param type 逻辑类型
-    /// \param imgTime 箱号时间戳
+    /// \param imgList 图片名
     ///
-    void resultsOfAnalysisSlot(QStringList resultList, int type,const QString& imgTime)Q_DECL_OVERRIDE;
+    void resultsOfAnalysisSlot(QStringList resultList, int type,QStringList imgList)Q_DECL_OVERRIDE;
 
     ///
     /// \brief setCheckTheResultsSlot 是否校验识别结果
@@ -84,6 +84,8 @@ private:
     ///
     QStringList isoTemp;
 
+    QStringList imgTimeList;
+
     ///
     /// \brief checkConList 箱号校验列表
     ///
@@ -93,11 +95,6 @@ private:
     /// \brief correct 校验标志
     ///
     bool correct;
-
-    ///
-    /// \brief imgTime 箱号时间戳
-    ///
-    QString imgTime;
 
     ///
     /// \brief channel 通道号

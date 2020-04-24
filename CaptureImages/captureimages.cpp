@@ -183,7 +183,7 @@ void CaptureImages::playStreamSlot(uint winID,bool play)
     if(dwResult){
         if(play){
             NET_DVR_PREVIEWINFO struPlayInfo = {};
-            struPlayInfo.hPlayWnd    =winID;        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
+            struPlayInfo.hPlayWnd    =reinterpret_cast<HWND>(winID);        //需要SDK解码时句柄设为有效值，仅取流不解码时可设为空
             struPlayInfo.lChannel     = 1;       //预览通道号
             struPlayInfo.dwStreamType = 0;       //0-主码流，1-子码流，2-码流3，3-码流4，以此类推
             struPlayInfo.dwLinkMode   = 1;       //0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP

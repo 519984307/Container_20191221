@@ -12,7 +12,7 @@ RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 RecognizerProcessing::~RecognizerProcessing()
 {
     resulList.clear();
-    chanResulList.clear();
+    //chanResulList.clear();
     queue.clear();
 }
 
@@ -72,23 +72,24 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         dir.mkpath(suffixPath);
         dir.cd(suffixPath);
 
-        QString image="";
         if(imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);            
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
-            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
+            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
             labelPixFit.save(image);
             delete labelPix;
             labelPix=nullptr;
-            //emit identifyImagesSignal(image);/* 识别图片 */
-
+            emit identifyImagesSignal(image);/* 识别图片 */
             /* 抓拍状态写入日志 */
             emit putCommantStateSignal(channel,tr("TIME:%1 ID:%2").arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(QString::number(imgNumber)));
         }
-        emit identifyImagesSignal(image,imgNumber);/* 识别图片 */
+        else {
+            /* 没有图片直接给结果,不经过识别器 */
+            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
+            recognitionResultSlot("RESULT: ||0|0",image);
+        }
     }
-    /* 没有图片直接给结果,不经过识别器 */
 }
 
 void RecognizerProcessing::saveImageTowSlot(const QByteArray &jpgStream, const int &imgNumber, const QString &imgTime)
@@ -157,10 +158,19 @@ void RecognizerProcessing::infraredCompleteSlot(const int &type)
     queue.enqueue(type);
 }
 
-void RecognizerProcessing::recognitionResultSlot(const QString &result, int imgNumber)
+void RecognizerProcessing::recognitionResultSlot(const QString &result, const QString& imgName)
 {   
+    ///
+    /// \brief chanResulList 单次逻辑识别结果列表
+    ///
+    //QStringList chanResulList,chanImgList;
+
+    qDebug()<<"resulList"<<result;
+    qDebug()<<"imgList"<<imgName;
+
     resulList<<result;
-    qDebug()<<resulList.count();
+    imgList<<imgName;
+
     if(containerNum==0&&queue.count()!=0){
         containertType=queue.dequeue();
         switch (containertType) {
@@ -174,20 +184,19 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, int imgN
             containerNum=6;
             break;
         }
-        imageName=imgNumber;
     }
 
     if(resulList.count()==containerNum){
-        for(int i=0;i<containerNum;i++){
-            chanResulList.append(resulList[0]);
-            resulList.removeAt(0);
-        }
+//        for(int i=0;i<containerNum;i++){
+//            chanResulList.append(resulList[0]);
+//            resulList.removeAt(0);
+//        }
 
-        emit resultsOfAnalysisSignal(chanResulList,containertType,imageName);/* 分析结果 */       
+        emit resultsOfAnalysisSignal(resulList,containertType,imgList);/* 分析结果 */
 
         containerNum=0;
         containertType=0;
-        chanResulList.clear();
-        imageName="";
+        resulList.clear();
+        imgList.clear();
     }
 }

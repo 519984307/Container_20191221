@@ -1,11 +1,10 @@
 #include "recognition.h"
 
-Recognition::Recognition(QObject *parent, const QString &image, int imgNumber) : QObject(parent)
+Recognition::Recognition(QObject *parent, const QString &image) : QObject(parent)
 {
     this->setAutoDelete(true);
     this->setParent(parent);
     this->image=image;
-    this->imgNumber=imgNumber;
 }
 
 void Recognition::run()
@@ -24,8 +23,7 @@ void Recognition::run()
         /* 等待识别结果 */
         if(Process.waitForFinished()){
             QByteArray result= Process.readAll();
-
-            emit recognitionResultSignal(result.data(),imgNumber);
+            emit recognitionResultSignal(result.data(),image);
             emit messageSignal(ZBY_LOG("INFO"),tr("Identify the results:%1").arg(result.data()));
         }
         else {
