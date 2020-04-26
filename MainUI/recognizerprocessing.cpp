@@ -88,7 +88,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         else {
             /* 没有图片直接给结果,不经过识别器 */
             QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
-            recognitionResultSlot("RESULT: ||0|0",image);
+            recognitionResultSlot("RESULT: |22g1|0|0",image);
         }
     }
 }

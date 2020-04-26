@@ -169,19 +169,19 @@ void InfraredLogic::serialLogic(int *status)
                     }
                 }
             }
-            if(_22G1_MID_22G1){/* 可能出现问题:高车头加长箱,车头能同时挡住B1,B2 */
-                if(status[0]==valueOne){
-                    if(status[1]==valueOne){
-                        if(status[3]==valueTwo){
-                            if(status[4]==valueOne){
-                                //emit logicPutImageSignal(3);
-                                _22G1_22G1=true;
-                                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
-                            }
-                        }
-                    }
-                }
-            }
+//            if(_22G1_MID_22G1){/* 可能出现问题:高车头加长箱,车头能同时挡住B1,B2 */
+//                if(status[0]==valueOne){
+//                    if(status[1]==valueOne){
+//                        if(status[3]==valueTwo){
+//                            if(status[4]==valueOne){
+//                                //emit logicPutImageSignal(3);
+//                                _22G1_22G1=true;
+//                                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             if(_22G1_22G1){
                 if(status[0]==valueTwo){
                     if(status[1]==valueTwo){

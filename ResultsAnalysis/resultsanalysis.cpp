@@ -109,7 +109,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     /* 3:双22G1 */
 
     QList<uint32_t> conProbabilityTemp;/* 箱号置信度 */
-    QList<uint32_t> isoProbabilityTemp;/* 箱型置信度 */
+    QList<uint32_t> isoProbabilityTemp;/* 箱型置信度 */   
 
     for(auto var:resultList){
         QString con=""; QString iso=""; uint32_t Cprobability=0;  uint32_t Iprobability=0;   int check=0;
@@ -129,6 +129,14 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         checkConList.append(check);/* 校验结果 */
         conProbabilityTemp.append(Cprobability);/* 箱号置信度 */
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
+    }
+
+    if(isoTemp.count()==6){/* 过滤双箱误判成长箱 */
+        foreach (auto var, isoTemp) {
+            if(var.indexOf("22")!=-1){
+                type=3;
+            }
+        }
     }
 
     /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标 */
