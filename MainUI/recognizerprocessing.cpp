@@ -7,6 +7,7 @@ RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
     this->channel=-1;
     containerNum=0;
     containertType=0;
+    imgCounts=0;
 }
 
 RecognizerProcessing::~RecognizerProcessing()
@@ -146,30 +147,35 @@ void RecognizerProcessing::saveImageTowSlot(const QByteArray &jpgStream, const i
 }
 
 void RecognizerProcessing::InfraredLogicStartSlot()
-{
-    resulList.clear();
+{    
+//    resulList.clear();
+//    imgList.clear();
+//    timeList.clear();
+//    containerNum=0;
+//    containertType=0;
+//    imgCounts=0;/* 置零 */
 }
 
-void RecognizerProcessing::infraredCompleteSlot(const int &type)
+void RecognizerProcessing::infraredCompleteSlot(const int &type,int imgCount)
 {
     /* 1:22G1 */
     /* 2:45G1 */
     /* 3:双22G1 */
-    queue.enqueue(type);
+    if(type!=-1){
+        queue.enqueue(type);
+    }
+    imgCounts+=imgCount;
+    containerNum=0;/* 防止遗留逻辑类型 */
 }
 
 void RecognizerProcessing::recognitionResultSlot(const QString &result, const QString& imgName)
-{   
-    ///
-    /// \brief chanResulList 单次逻辑识别结果列表
-    ///
-    //QStringList chanResulList,chanImgList;
-
-    qDebug()<<"resulList"<<result;
-    qDebug()<<"imgList"<<imgName;
+{
+    QStringList tmpList=imgName.split(QDir::toNativeSeparators("/"));
+    QString img=tmpList[tmpList.count()-1].split(".")[0];
 
     resulList<<result;
-    imgList<<imgName;
+    imgList<<img;
+    timeList<<img.mid(0,14);
 
     if(containerNum==0&&queue.count()!=0){
         containertType=queue.dequeue();
@@ -185,18 +191,45 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             break;
         }
     }
+    qDebug()<<"imgCounts"<<imgCounts;
+    qDebug()<<"containerNum"<<containerNum;
+    qDebug()<<"resulList.count"<<resulList.count();
 
-    if(resulList.count()==containerNum){
-//        for(int i=0;i<containerNum;i++){
-//            chanResulList.append(resulList[0]);
-//            resulList.removeAt(0);
-//        }
+    if(resulList.count()>=containerNum && imgCounts>=containerNum && containerNum!=0){
 
-        emit resultsOfAnalysisSignal(resulList,containertType,imgList);/* 分析结果 */
+        QSet<QString> set=timeList.toSet();
+        foreach (auto var, set) {
+            QList<int> indList;
+            for (int ind = 0; ind < timeList.count(); ++ind) {
+                if(var==timeList[ind]){
+                    qDebug()<<"var"<<var<<"timeList:"<<timeList[ind];
+                    indList.append(ind);
+                }
+            }
+            if(indList.count()==containerNum){
+                QStringList chanResultList,chanImgList;
+                foreach (auto var, indList) {
+                    chanResultList<<resulList[var];
+                    chanImgList<<imgList[var];
+                    qDebug()<<"imgList"<<imgList[var];
+                }
+                emit resultsOfAnalysisSignal(chanResultList,containertType,chanImgList);/* 分析结果 */
 
-        containerNum=0;
-        containertType=0;
-        resulList.clear();
-        imgList.clear();
+                chanResultList.clear();
+                chanImgList.clear();
+
+                containerNum=0;
+                containertType=0;
+                resulList.clear();
+                imgList.clear();
+                timeList.clear();
+                set.clear();
+                imgCounts=0;/* 置零 */
+                break;
+            }
+            else {
+                indList.clear();
+            }
+        }
     }
 }

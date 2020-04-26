@@ -94,8 +94,15 @@ void InfraredLogic::serialLogic(int *status)
                 if(status[1]==valueOne){
                     if(status[3]==valueOne){
                         if(status[4]==valueOne){
-                            emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
-                            emit logicPutImageSignal(0);
+                            if(!_22G1_22G1){/* 过滤双箱重复抓图 */
+                                emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
+                                emit logicPutImageSignal(0);
+                                _45G1=true;
+                                _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
+                            }
+                            else {
+                                _45G1=false;
+                            }
                             _22G1=false;
                             _45G1=true;
                             _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
@@ -126,6 +133,7 @@ void InfraredLogic::serialLogic(int *status)
                     if(status[3]==valueOne){
                         if(status[4]==valueTwo){
                             _22G1=true;
+                            _45G1=false;/* 防止高车头小箱放后面,误认为是45G1 */
                         }
                     }
                 }
@@ -137,6 +145,7 @@ void InfraredLogic::serialLogic(int *status)
                             if(status[4]==valueOne){
                                 emit logicPutImageSignal(2);
                                 _22G1=false;
+                                _45G1=false;
                                 health=false;
                             }
                         }
@@ -145,14 +154,27 @@ void InfraredLogic::serialLogic(int *status)
             }
 
             /*
-             * 22G1_22G1
+             * 22G1_22G1 两种状态
             */
             if(_22G1_MID_22G1){
                 if(status[0]==valueOne){
                     if(status[1]==valueTwo){
                         if(status[3]==valueOne){
                             if(status[4]==valueOne){
-                                emit logicPutImageSignal(3);
+                                //emit logicPutImageSignal(3);
+                                _22G1_22G1=true;
+                                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
+                            }
+                        }
+                    }
+                }
+            }
+            if(_22G1_MID_22G1){/* 可能出现问题:高车头加长箱,车头能同时挡住B1,B2 */
+                if(status[0]==valueOne){
+                    if(status[1]==valueOne){
+                        if(status[3]==valueTwo){
+                            if(status[4]==valueOne){
+                                //emit logicPutImageSignal(3);
                                 _22G1_22G1=true;
                                 _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
                             }
@@ -258,7 +280,7 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
     while (!this->exit)
     {
         QCoreApplication::processEvents();
-        QThread::msleep(10);
+        QThread::msleep(5);
 
         if(com1){
             /*A1*/

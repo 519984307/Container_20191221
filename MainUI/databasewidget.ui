@@ -559,6 +559,12 @@
        </item>
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>120</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
            <width>250</width>
@@ -735,10 +741,16 @@
        </item>
        <item row="1" column="1">
         <widget class="QGroupBox" name="groupBox_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>120</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>120</height>
           </size>
          </property>
          <property name="title">

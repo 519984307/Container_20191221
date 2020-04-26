@@ -15,6 +15,7 @@ void Recognition::run()
     Process.setWorkingDirectory(path);
     Process.start(path.append(program),QStringList()<<image<<"QRecog.dll");
     if(!Process.waitForStarted()){
+        emit recognitionResultSignal("RESULT: ||0|0",image);
         emit messageSignal(ZBY_LOG("ERROR"),tr("Recognizer startup error<errorCode=%1>").arg(Process.errorString().toLocal8Bit().data()));
     }
     else {

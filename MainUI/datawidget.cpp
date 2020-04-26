@@ -82,6 +82,8 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->lineEdit_2->clear();
         ui->lineEdit_3->clear();
         ui->lineEdit_4->clear();
+        ui->Infrared_logic_lineEdit->clear();
+
         break;
     case 1:
         if(labelPix!=nullptr){
@@ -92,25 +94,25 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
     case 2:
         if(labelPix!=nullptr){
             labelPixFit=labelPix->scaled(ui->Img_RightFront_label->width(),ui->Img_RightFront_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-            ui->Img_LeftFront_label->setPixmap(labelPixFit);
+            ui->Img_RightFront_label->setPixmap(labelPixFit);
         }
         break;
     case 3:
         if(labelPix!=nullptr){
             labelPixFit=labelPix->scaled(ui->Img_LeftFront_label->width(),ui->Img_LeftFront_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-            ui->Img_RightFront_label->setPixmap(labelPixFit);
+            ui->Img_LeftFront_label->setPixmap(labelPixFit);
         }
         break;
     case 4:
         if(labelPix!=nullptr){
             labelPixFit=labelPix->scaled(ui->Img_RightAfter_label->width(),ui->Img_RightAfter_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-            ui->Img_LeftAfter_label->setPixmap(labelPixFit);
+            ui->Img_RightAfter_label->setPixmap(labelPixFit);
         }
         break;
     case 5:
         if(labelPix!=nullptr){
             labelPixFit=labelPix->scaled(ui->Img_LeftAfter_label->width(),ui->Img_LeftAfter_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-            ui->Img_RightAfter_label->setPixmap(labelPixFit);
+            ui->Img_LeftAfter_label->setPixmap(labelPixFit);
         }
         break;
     case 6:
@@ -148,6 +150,31 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
             ui->lineEdit_3->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
         }
     }
+    else {
+        ui->lineEdit_3->clear();
+    }
+
+    /* 1:22G1 */
+    /* 2:45G1 */
+    /* 3:双22G1 */
+    QString logic="";
+    ui->Infrared_logic_lineEdit->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+
+    switch (type) {
+    case 0:
+        logic=tr("No container");
+        break;
+    case 1:
+        logic=tr("A small container");
+        break;
+    case 2:
+        logic=tr("A large container");
+        break;
+    case 3:
+        logic=tr("Two small containersr");
+        break;
+    }
+    ui->Infrared_logic_lineEdit->setText(logic);
 }
 
 void DataWidget::on_test_22_pushButton_clicked()

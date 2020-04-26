@@ -687,7 +687,7 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLineEdit" name="lineEdit_5">
+           <widget class="QLineEdit" name="Infrared_logic_lineEdit">
             <property name="font">
              <font>
               <pointsize>15</pointsize>

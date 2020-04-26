@@ -106,9 +106,10 @@ signals:
 
      ///
      /// \brief infraredCompleteSignal 逻辑抓拍完成信号
-     /// \param containerType
+     /// \param containerType 逻辑类型
+     /// \param imgCount 图片数量
      ///
-     void infraredCompleteSignal(const int &containerType);
+     void infraredCompleteSignal(const int &containerType,int imgCount);
 
      ///
      /// \brief InfraredLogicStartSignal 逻辑抓拍开始信号

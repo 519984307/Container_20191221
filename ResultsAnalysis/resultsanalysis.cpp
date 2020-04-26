@@ -112,7 +112,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     QList<uint32_t> isoProbabilityTemp;/* 箱型置信度 */
 
     for(auto var:resultList){
-        QString con="";        QString iso="";        uint32_t Cprobability=0;                      uint32_t Iprobability=0;        int check=0;
+        QString con=""; QString iso=""; uint32_t Cprobability=0;  uint32_t Iprobability=0;   int check=0;
         if(var.startsWith("RESULT")){
             QStringList tmp=var.split(":")[1].split("|");
             if(tmp.count()==4){
@@ -129,11 +129,6 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         checkConList.append(check);/* 校验结果 */
         conProbabilityTemp.append(Cprobability);/* 箱号置信度 */
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
-    }
-
-    foreach (auto imgTime, imgList) {
-        QString time=imgTime.split(QDir::toNativeSeparators("/"))[imgList.count()-1];
-        imgTimeList.append(time);
     }
 
     /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标 */
@@ -175,7 +170,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         }
         emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1]);
     }
-    updateDataBase(type,Cindex1,Iindex1,Cindex2,Iindex2);
+    updateDataBase(type,Cindex1,Iindex1,Cindex2,Iindex2,imgList);
 
     conTemp.clear();
     isoTemp.clear();
@@ -184,18 +179,14 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     isoProbabilityTemp.clear();
 }
 
-void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cindex2, int Iindex2)
-{
-    //QStringList tmp=imgTimeList[0];
-    QString dateTime="";
-    QString time="";
-//    if(tmp.count()>0){
-//        //time=tmp[tmp.count()-1].split(".")[0].mid(0,14);
-//        time=imgTimeList[0].split(".")[0].mid(0,14);
-//        dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
-//    }
-    time=imgTimeList[0].split(".")[0].mid(0,14);
-    dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cindex2, int Iindex2,QStringList imgList)
+{    
+    QString time;
+    if(imgList.count()>0){
+        time=imgList[0].mid(0,14);
+    }
+
+    QString dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
 
     emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
 
@@ -229,32 +220,39 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
         data["CheckAfter"]=QString::number(checkConList[Cindex2]);
     }
 
+    QMap<int,int> indMap;
+    for (int ind = 0; ind < imgList.count(); ++ind) {
+        indMap.insert(imgList[ind].mid(14,1).toInt(),ind);
+        qDebug()<<imgList[ind].mid(14,1).toInt();
+    }
+
     if(conTemp.count()==4){
-        data["ImgFrontNumber"]=conTemp[0];
-        data["ImgFrontCheck"]=QString::number(checkConList[0]);
-        data["ImgLeftFrontNumber"]=conTemp[1];
-        data["ImgLeftFrontCheck"]=QString::number(checkConList[1]);
-        data["ImgRightFrontNumber"]=conTemp[2];
-        data["ImgRightFrontCheck"]=QString::number(checkConList[2]);
-        data["ImgAfterNumber"]=conTemp[3];
-        data["ImgAfterCheck"]=QString::number(checkConList[3]);
+        data["ImgFrontNumber"]=conTemp[indMap.value(1)];
+        data["ImgFrontCheck"]=QString::number(checkConList[indMap.value(1)]);
+        data["ImgLeftFrontNumber"]=conTemp[indMap.value(3)];
+        data["ImgLeftFrontCheck"]=QString::number(checkConList[indMap.value(3)]);
+        data["ImgRightFrontNumber"]=conTemp[indMap.value(2)];
+        data["ImgRightFrontCheck"]=QString::number(checkConList[indMap.value(2)]);
+        data["ImgAfterNumber"]=conTemp[indMap.value(6)];
+        data["ImgAfterCheck"]=QString::number(checkConList[indMap.value(6)]);
     }
     else if (conTemp.count()==6) {
-        data["ImgFrontNumber"]=conTemp[0];
-        data["ImgFrontCheck"]=QString::number(checkConList[0]);
-        data["ImgLeftFrontNumber"]=conTemp[1];
-        data["ImgLeftFrontCheck"]=QString::number(checkConList[1]);
-        data["ImgRightFrontNumber"]=conTemp[2];
-        data["ImgRightFrontCheck"]=QString::number(checkConList[2]);
-        data["ImgLeftAfterNumber"]=conTemp[3];
-        data["ImgLeftAfterCheck"]=QString::number(checkConList[3]);
-        data["ImgRightAfterNumber"]=conTemp[4];
-        data["ImgRightAfterCheck"]=QString::number(checkConList[4]);
-        data["ImgAfterNumber"]=conTemp[5];
-        data["ImgAfterCheck"]=QString::number(checkConList[5]);
+        data["ImgFrontNumber"]=conTemp[indMap.value(1)];
+        data["ImgFrontCheck"]=QString::number(checkConList[indMap.value(1)]);
+        data["ImgLeftFrontNumber"]=conTemp[indMap.value(3)];
+        data["ImgLeftFrontCheck"]=QString::number(checkConList[indMap.value(3)]);
+        data["ImgRightFrontNumber"]=conTemp[indMap.value(2)];
+        data["ImgRightFrontCheck"]=QString::number(checkConList[indMap.value(2)]);
+        data["ImgLeftAfterNumber"]=conTemp[indMap.value(5)];
+        data["ImgLeftAfterCheck"]=QString::number(checkConList[indMap.value(5)]);
+        data["ImgRightAfterNumber"]=conTemp[indMap.value(4)];
+        data["ImgRightAfterCheck"]=QString::number(checkConList[indMap.value(4)]);
+        data["ImgAfterNumber"]=conTemp[indMap.value(6)];
+        data["ImgAfterCheck"]=QString::number(checkConList[indMap.value(6)]);
     }
 
     emit updateDataBaseSignal(data);
     data.clear();
+    indMap.clear();
     //tmp.clear();
 }

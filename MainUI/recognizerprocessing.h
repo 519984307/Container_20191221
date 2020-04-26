@@ -20,10 +20,13 @@ public:
 
 private:
 
+    int imgCounts;
      ///
      /// \brief imgList 图片名
      ///
      QStringList imgList;
+
+     QStringList timeList;
 
     ///
     /// \brief mutex 锁
@@ -135,8 +138,9 @@ public slots:
     ///
     /// \brief infraredCompleteSlot 逻辑抓拍完成
     /// \param type 逻辑类型
+    /// \param imgCount 图片数量
     ///
-    void infraredCompleteSlot(const int &type);
+    void infraredCompleteSlot(const int &type,int imgCount);
 
     ///
     /// \brief InfraredLogicStartSlot 逻辑抓拍开始

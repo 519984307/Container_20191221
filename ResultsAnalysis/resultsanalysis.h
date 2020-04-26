@@ -46,7 +46,7 @@ private:
     /// \param Cindex2 箱号下标2
     /// \param Iindex2 箱型下标
     ///
-    void updateDataBase(int type,int Cindex1, int Iindex1,int Cindex2,int Iindex2);
+    void updateDataBase(int type,int Cindex1, int Iindex1,int Cindex2,int Iindex2,QStringList imgList);
 
     ///
     /// \brief initCheckMap 初始化校验列表
@@ -83,8 +83,6 @@ private:
     /// \brief isoTemp 箱型列表
     ///
     QStringList isoTemp;
-
-    QStringList imgTimeList;
 
     ///
     /// \brief checkConList 箱号校验列表
