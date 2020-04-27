@@ -89,6 +89,7 @@ void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
         model.select();
         if(model.rowCount()==1){
             QSqlRecord record=model.record(0);
+            record.setValue("Type",data.value("Type"));
             record.setValue("ContainerFront",data.value("ContainerFront"));
             record.setValue("CheckFront",data.value("CheckFront"));
             record.setValue("ISOFront",data.value("ISOFront"));

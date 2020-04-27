@@ -351,30 +351,37 @@ void MainWidget::loadPlugins()
 
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
                 delete pGetimagesInterface;
+                pGetimagesInterface=nullptr;
                 num=channelCounnt*4;
             }
             else if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
                 delete pInfraredlogicInterface;
+                pInfraredlogicInterface=nullptr;
                 num=channelCounnt;
             }
             else if(DataBaseInsertInterface* pDataBaseInsertInterface=qobject_cast<DataBaseInsertInterface*>(plugin)){
                 delete pDataBaseInsertInterface;
+                pDataBaseInsertInterface=nullptr;
                 num=channelCounnt;
             }
             else if (DataBaseReadInterface* pDataBaseReadInterface=qobject_cast<DataBaseReadInterface*>(plugin)) {
                 delete pDataBaseReadInterface;
+                pDataBaseReadInterface=nullptr;
                 num=1;
             }
             else if (RecognizerInterface* pRecognizerInterface=qobject_cast<RecognizerInterface*>(plugin)){
                 delete pRecognizerInterface;
+                pRecognizerInterface=nullptr;
                 num=channelCounnt;
             }
             else if (ResultsAnalysisInterface* pResultsAnalysisInterface=qobject_cast<ResultsAnalysisInterface*>(plugin)) {
                 delete pResultsAnalysisInterface;
+                pResultsAnalysisInterface=nullptr;
                 num=channelCounnt;
             }
             else if(SocketServerInterface* pSocketServerInterface=qobject_cast<SocketServerInterface*>(plugin)) {
                 delete  pSocketServerInterface;
+                pSocketServerInterface=nullptr;
                 if(pSystemSettingWidget!=nullptr){
                     switch (pSystemSettingWidget->pSettingValues->Service_Type) {
                     case 0:/* 单例模式 */

@@ -455,36 +455,36 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
         ui->label_15->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
 
-    ui->label_34->setText(index.sibling(index.row(),ImgLeftFrontNumber).data().toString());
+    ui->label_30->setText(index.sibling(index.row(),ImgLeftFrontNumber).data().toString());
     if(index.sibling(index.row(),ImgLeftFrontCheck).data().toBool()){
-        ui->label_34->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
-    }
-    else {
-        ui->label_34->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-    }
-
-    ui->label_30->setText(index.sibling(index.row(),ImgRightFrontNumber).data().toString());
-    if(index.sibling(index.row(),ImgRightFrontCheck).data().toBool()){
         ui->label_30->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
     else {
         ui->label_30->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
 
-    ui->label_33->setText(index.sibling(index.row(),ImgLeftAfterNumber).data().toString());
-    if(index.sibling(index.row(),ImgLeftAfterCheck).data().toBool()){
-        ui->label_33->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    ui->label_34->setText(index.sibling(index.row(),ImgRightFrontNumber).data().toString());
+    if(index.sibling(index.row(),ImgRightFrontCheck).data().toBool()){
+        ui->label_34->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
     else {
-        ui->label_33->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+        ui->label_34->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
 
-    ui->label_29->setText(index.sibling(index.row(),ImgRightAfterNumber).data().toString());
-    if(index.sibling(index.row(),ImgRightAfterCheck).data().toBool()){
+    ui->label_29->setText(index.sibling(index.row(),ImgLeftAfterNumber).data().toString());
+    if(index.sibling(index.row(),ImgLeftAfterCheck).data().toBool()){
         ui->label_29->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
     else {
         ui->label_29->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+    }
+
+    ui->label_33->setText(index.sibling(index.row(),ImgRightAfterNumber).data().toString());
+    if(index.sibling(index.row(),ImgRightAfterCheck).data().toBool()){
+        ui->label_33->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+    }
+    else {
+        ui->label_33->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
 
     ui->label_32->setText(index.sibling(index.row(),ImgAfterNumber).data().toString());

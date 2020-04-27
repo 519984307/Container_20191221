@@ -6,6 +6,30 @@ ResultsAnalysis::ResultsAnalysis(QObject *parent)
     this->correct=false;
     this->channel=-1;
     initCheckMap();
+
+
+    QString program="QRecognition.exe";
+    QString path=QDir::toNativeSeparators(tr("%1/%2/").arg(QCoreApplication::applicationDirPath()).arg(program.split(".")[0]));
+
+    QFile file(path+("ISO.txt"),this);
+    if(file.open( QIODevice::ReadOnly ) )
+    {
+        ISOContains=file.readAll().trimmed();
+    }
+    file.close();
+
+    QFile file1(path+("ISO1.txt"),this);
+    if(file1.open( QIODevice::ReadOnly ) )
+    {
+        QTextStream in(&file1);
+        while (!in.atEnd()) {
+            QStringList str=in.readLine().trimmed().split('-');
+            if(str.count()==2){
+                ISOReplaceMap.insert(str[0],str[1]);
+            }
+        }
+    }
+    file1.close();
 }
 
 ResultsAnalysis::~ResultsAnalysis()
@@ -119,7 +143,12 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 QString conT=tmp[0].trimmed();
                 check=numberCheck(conT);
                 con=conT;
-                iso=tmp[1];
+                if(ISOContains.indexOf(tmp[1])==-1){
+                    iso=ISOReplaceMap.value(tmp[1],"");
+                }
+                else {
+                    iso=tmp[1];
+                }
                 Cprobability=tmp[2].toUInt();
                 Iprobability=tmp[3].toUInt();                
             }
@@ -131,10 +160,11 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
     }
 
-    if(isoTemp.count()==6){/* 过滤双箱误判成长箱 */
+    if(isoTemp.count()==6){/* 过滤双箱误判成长箱,系统改正双箱 */
         foreach (auto var, isoTemp) {
             if(var.indexOf("22")!=-1){
                 type=3;
+                break;
             }
         }
     }
@@ -143,37 +173,49 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
     if(type==3 && conProbabilityTemp.count()==6){
         for (int var = 0; var < 3; ++var) {
-            if(conProbabilityTemp[var]>Cprobability){
+            if(isoProbabilityTemp[var]>Iprobability){
+                Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
+                Iindex1=var;
+            }
+            if(checkConList[var]){
+                Cindex1=var;/* 结果为真,不比对置信读 */
+                continue;
+            }
+            else if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
                 Cprobability=conProbabilityTemp[var];
                 Cindex1=var;
-            }
-            if(isoProbabilityTemp[var]>Iprobability){
-                Iprobability=isoProbabilityTemp[var];
-                Iindex1=var;
             }
         }
         Cprobability=0; Iprobability=0;
         for (int var = 3; var < 6; ++var) {
-            if(conProbabilityTemp[var]>Cprobability){
-                Cprobability=conProbabilityTemp[var];
-                Cindex2=var;
-            }
-            if(isoProbabilityTemp[var]>Iprobability){
+            if(isoProbabilityTemp[var]>Iprobability){/* 比对箱型置信度 */
                 Iprobability=isoProbabilityTemp[var];
                 Iindex2=var;
+            }
+            if(checkConList[var]){
+                Cindex2=var;/* 结果为真,不比对置信读 */
+                continue;
+            }
+            else if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
+                Cprobability=conProbabilityTemp[var];
+                Cindex2=var;
             }
         }
         emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
     }
     else {
         for (int var = 0; var < conProbabilityTemp.count(); ++var) {
-            if(conProbabilityTemp[var]>Cprobability){
-                Cprobability=conProbabilityTemp[var];
-                Cindex1=var;
-            }
             if(isoProbabilityTemp[var]>Iprobability){
                 Iprobability=isoProbabilityTemp[var];
                 Iindex1=var;
+            }
+            if(checkConList[var]){
+                Cindex1=var;/* 结果为真,不比对置信读 */
+                continue;
+            }
+            else if(conProbabilityTemp[var]>Cprobability){
+                Cprobability=conProbabilityTemp[var];
+                Cindex1=var;
             }
         }
         emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1]);
@@ -218,6 +260,7 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
          data.insert("Channel",QString::number(channel));
     }
 
+    data["Type"]=QString::number(type);
     data["ContainerFront"]=conTemp[Cindex1];
     data["ISOFront"]=isoTemp[Iindex1];
     data["CheckFront"]=QString::number(checkConList[Cindex1]);

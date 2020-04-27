@@ -1,5 +1,3 @@
-[SIZE]
-
 22G1
 22R1
 22T6
@@ -45,50 +43,6 @@ L5G1
 22G
 220
 430
-
-[COUNTRY]
-
-BB
-BE
-BER
-BM
-BS
-CH
-CHX
-DE
-DK
-DKX
-FR
-FXX
-GB
-GBX
-HK
-JP
-KR
-KW
-KY
-LR
-MX
-MY
-NL
-PA
-RCX
-SE
-SG
-SGP
-SU
-SUX
-TW
-US
-USA
-ZA
-
-
-
-
-
-
-
 
 
 

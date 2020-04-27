@@ -23,7 +23,7 @@ public:
     /// \param type 逻辑类型
     /// \param imgList 图片名
     ///
-    void resultsOfAnalysisSlot(QStringList resultList, int type,QStringList imgList)Q_DECL_OVERRIDE;
+    void resultsOfAnalysisSlot(QStringList resultList, int type, QStringList imgList)Q_DECL_OVERRIDE;
 
     ///
     /// \brief setCheckTheResultsSlot 是否校验识别结果
@@ -68,6 +68,16 @@ private:
     bool numberCheck(QString &number);
 
 private:
+
+    ///
+    /// \brief ISOContains 箱型包含
+    ///
+    QByteArray ISOContains;
+
+    ///
+    /// \brief ISOReplaceMap 箱型替换
+    ///
+    QMap<QString,QString> ISOReplaceMap;
 
     ///
     /// \brief checkMap 校验列表
