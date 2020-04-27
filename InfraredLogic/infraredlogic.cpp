@@ -104,8 +104,6 @@ void InfraredLogic::serialLogic(int *status)
                                 _45G1=false;
                             }
                             _22G1=false;
-                            _45G1=true;
-                            _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
                         }
                     }
                 }
@@ -124,9 +122,8 @@ void InfraredLogic::serialLogic(int *status)
                     }
                 }
             }
-
             /*
-             * 22G1
+             * 22G1 front
             */
             if(status[0]==valueOne){
                 if(status[1]==valueOne){
@@ -138,6 +135,9 @@ void InfraredLogic::serialLogic(int *status)
                     }
                 }
             }
+            /*
+             * 22G1 after
+            */
             if(_22G1){
                 if(status[0]==valueTwo){
                     if(status[1]==valueTwo){

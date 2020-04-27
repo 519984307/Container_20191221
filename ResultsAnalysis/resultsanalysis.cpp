@@ -140,17 +140,22 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         if(var.startsWith("RESULT")){
             QStringList tmp=var.split(":")[1].split("|");
             if(tmp.count()==4){
-                QString conT=tmp[0].trimmed();
-                check=numberCheck(conT);
-                con=conT;
-                if(ISOContains.indexOf(tmp[1])==-1){
-                    iso=ISOReplaceMap.value(tmp[1],"");
+                con=tmp[0].trimmed();
+                check=numberCheck(con);
+                if(ISOContains.count()!=0 && ISOContains.indexOf(tmp[1])==-1){/* 比对箱型结果 */
+                    iso=ISOReplaceMap.value(tmp[1],"");/* 匹配不成功,置空  */
+                    if(iso==""){
+                        Iprobability=0;/* 箱型置信度置零 */
+                    }
+                    else {
+                        Iprobability=tmp[3].toUInt();
+                    }
                 }
                 else {
                     iso=tmp[1];
+                    Iprobability=tmp[3].toUInt();
                 }
-                Cprobability=tmp[2].toUInt();
-                Iprobability=tmp[3].toUInt();                
+                Cprobability=tmp[2].toUInt();                              
             }
         }
         conTemp.append(con);/* 箱号 */
@@ -172,6 +177,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标 */
     int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
     if(type==3 && conProbabilityTemp.count()==6){
+        bool checkCon=false;
         for (int var = 0; var < 3; ++var) {
             if(isoProbabilityTemp[var]>Iprobability){
                 Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
@@ -179,14 +185,17 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
             if(checkConList[var]){
                 Cindex1=var;/* 结果为真,不比对置信读 */
+                checkCon=true;
                 continue;
             }
             else if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
-                Cprobability=conProbabilityTemp[var];
-                Cindex1=var;
+                if(!checkCon){/* 有正确结果后续不再比对 */
+                    Cprobability=conProbabilityTemp[var];
+                    Cindex1=var;
+                }
             }
         }
-        Cprobability=0; Iprobability=0;
+        Cprobability=0; Iprobability=0;checkCon=false;
         for (int var = 3; var < 6; ++var) {
             if(isoProbabilityTemp[var]>Iprobability){/* 比对箱型置信度 */
                 Iprobability=isoProbabilityTemp[var];
@@ -194,16 +203,20 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
             if(checkConList[var]){
                 Cindex2=var;/* 结果为真,不比对置信读 */
+                checkCon=true;
                 continue;
             }
             else if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
-                Cprobability=conProbabilityTemp[var];
-                Cindex2=var;
+                if(!checkCon){/* 有正确结果后续不再比对 */
+                    Cprobability=conProbabilityTemp[var];
+                    Cindex2=var;
+                }
             }
         }
         emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
     }
     else {
+        bool checkCon=false;
         for (int var = 0; var < conProbabilityTemp.count(); ++var) {
             if(isoProbabilityTemp[var]>Iprobability){
                 Iprobability=isoProbabilityTemp[var];
@@ -211,11 +224,14 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
             if(checkConList[var]){
                 Cindex1=var;/* 结果为真,不比对置信读 */
+                checkCon=true;
                 continue;
-            }
+            }            
             else if(conProbabilityTemp[var]>Cprobability){
-                Cprobability=conProbabilityTemp[var];
-                Cindex1=var;
+                if(!checkCon){/* 有正确结果后续不再比对 */
+                    Cprobability=conProbabilityTemp[var];
+                    Cindex1=var;
+                }
             }
         }
         emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1]);
