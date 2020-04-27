@@ -106,9 +106,9 @@ bool ResultsAnalysis::numberCheck(QString &number)
     }
 
     int die=sum % 11;
-//    if(die==10){
-//        die=0;
-//    }
+    if(die==10){
+        die=0;
+    }
     qDebug()<<"die"<<die;
 
     if(number.count()==10){
@@ -144,8 +144,8 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         if(var.startsWith("RESULT")){
             QStringList tmp=var.split(":")[1].split("|");
             if(tmp.count()==4){
-                con="BSIU9815070";
-                //con=tmp[0].trimmed();
+                //con="BSIU9815070";
+                con=tmp[0].trimmed();
                 check=numberCheck(con);
                 if(ISOContains.count()!=0 && ISOContains.indexOf(tmp[1])==-1){/* 比对箱型结果 */
                     iso=ISOReplaceMap.value(tmp[1],"");/* 匹配不成功,置空  */

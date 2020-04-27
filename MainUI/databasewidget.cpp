@@ -47,9 +47,12 @@ DataBaseWidget::~DataBaseWidget()
 
 void DataBaseWidget::resizeEvent(QResizeEvent *size)
 {
+    //    qDebug()<<size->size().width()-ui->Img_After_label->width()-ui->Img_RightAfter_label->width()-ui->Img_RightFront_label->width();
+    //    qDebug()<<size->size().height()-ui->Img_After_label->height()-ui->Img_LeftAfter_label->height();
+
     if(size->oldSize().height()!=-1){
-        int W=(size->size().width()-8) /3;
-        int H=(size->size().height()-170)/2;
+        int W=(size->size().width()-2) /3;
+        int H=(size->size().height()-172)/2;
         if(W>0&&H>0){
             ui->Img_After_label->setFixedSize(W,H);
             ui->Img_After_label->size().scale(W,H,Qt::IgnoreAspectRatio);
