@@ -15,6 +15,7 @@
 #include <QMap>
 #include <QMetaType>
 #include <QDebug>
+#include <QMenu>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
@@ -32,7 +33,6 @@
 #include "systemsettingwidget.h"
 #include "servicewidget.h"
 #include "databasewidget.h"
-
 //------------------------------------------------------------------------------------------------------------Process
 #include "imageprocessing.h"
 #include "infraredprocessing.h"

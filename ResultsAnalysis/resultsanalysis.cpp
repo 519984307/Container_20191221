@@ -170,12 +170,40 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
     }
 
-    if(isoTemp.count()==6){/* 过滤双箱误判成长箱,系统改正双箱 */
+    if(isoTemp.count()==6 && type!=3){/* 过滤双箱误判成长箱,系统改正双箱 */
         foreach (auto var, isoTemp) {
             if(var.indexOf("22")!=-1){
                 type=3;
                 break;
             }
+        }
+    }
+
+    bool notISO=true;/* 没有识别到箱型代码就默认指定一个 */
+    foreach (auto var, isoTemp) {
+        if(var!=""){
+            notISO=false;
+            break;
+        }
+    }
+    if(notISO){
+        switch (type) {
+        case 1:
+            if(isoTemp.count()==4){
+                isoTemp[3]="22G1";
+            }
+            break;
+        case 2:
+            if(isoTemp.count()==6){
+                isoTemp[5]="45G1";
+            }
+            break;
+        case 3:
+            if(isoTemp.count()==6){
+                isoTemp[2]="22G1";
+                isoTemp[5]="22G1";
+            }
+            break;
         }
     }
 
