@@ -16,6 +16,8 @@
 #include <QMetaType>
 #include <QDebug>
 #include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"
@@ -171,6 +173,11 @@ private:
     QMap<int,QObject*> SocketServiceProcessingMap;
 
 private:
+
+    ///
+    /// \brief initalizeMenubar 初始化菜单
+    ///
+    void initalizeMenubar();
 
     ///
     /// \brief loadingParameters 加载参数

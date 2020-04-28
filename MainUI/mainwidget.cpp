@@ -18,6 +18,7 @@ MainWidget::MainWidget(QWidget *parent) :
     loadPlugins();
     publicConnect();
     loadingParameters();
+    initalizeMenubar();
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
@@ -85,6 +86,20 @@ MainWidget::~MainWidget()
     delete pStatusBar;
 
     delete ui;
+}
+
+void MainWidget::initalizeMenubar()
+{
+//    ui->Navigation->setHidden(true);
+//    ui->groupBox->setHidden(true);
+//    QMenuBar* pMenuBar=new QMenuBar (this);
+//    QMenu* pMenData=new QMenu("Data",this) ;
+//    pMenData->addAction(new QAction ("123",this) );
+//    pMenuBar->addMenu(pMenData);
+
+//    pMenuBar->setGeometry(0,80,this->width(),30);
+//    //pMenuBar->addAction(new QAction ("123",this) );
+//    ui->gridLayout_3->addWidget(pMenuBar);
 }
 
 void MainWidget::loadingParameters()
