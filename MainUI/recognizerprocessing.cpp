@@ -177,7 +177,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
     imgList<<img;
     timeList<<img.mid(0,14);
 
-    if(containerNum==0&&queue.count()!=0){
+    if(containerNum==0 && queue.count()!=0){
         containertType=queue.dequeue();
         switch (containertType) {
         case 1:
@@ -195,41 +195,45 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
     qDebug()<<"containerNum"<<containerNum;
     qDebug()<<"resulList.count"<<resulList.count();
 
-    if(resulList.count()>=containerNum && imgCounts>=containerNum && containerNum!=0){
-
+    if(resulList.count()>=containerNum && resulList.count()==imgCounts && containerNum!=0){
         QSet<QString> set=timeList.toSet();
-        foreach (auto var, set) {
-            QList<int> indList;
-            for (int ind = 0; ind < timeList.count(); ++ind) {
-                if(var==timeList[ind]){
-                    qDebug()<<"var"<<var<<"timeList:"<<timeList[ind];
-                    indList.append(ind);
+        QString setMax="";
+        foreach (auto var, set) {/* 取最后时间戳 */
+            if(var>setMax){
+                setMax=var;
+            }
+        }
+        QList<int> indList;
+        for (int ind = 0; ind < timeList.count(); ++ind) {
+            if(setMax==timeList[ind]){
+                qDebug()<<"setMax"<<setMax<<"timeList:"<<timeList[ind];
+                indList.append(ind);
+                if(indList.count()==containerNum){
+                    break;
                 }
             }
-            if(indList.count()==containerNum){
-                QStringList chanResultList,chanImgList;
-                foreach (auto var, indList) {
-                    chanResultList<<resulList[var];
-                    chanImgList<<imgList[var];
-                    qDebug()<<"imgList"<<imgList[var];
-                }
-                emit resultsOfAnalysisSignal(chanResultList,containertType,chanImgList);/* 分析结果 */
-
-                chanResultList.clear();
-                chanImgList.clear();
-
-                containerNum=0;
-                containertType=0;
-                resulList.clear();
-                imgList.clear();
-                timeList.clear();
-                set.clear();
-                imgCounts=0;/* 置零 */
-                break;
+        }
+        if(indList.count()==containerNum){
+            QStringList chanResultList,chanImgList;
+            foreach (auto var, indList) {
+                chanResultList<<resulList[var];
+                chanImgList<<imgList[var];
+                qDebug()<<"imgList"<<imgList[var];
             }
-            else {
-                indList.clear();
-            }
+            emit resultsOfAnalysisSignal(chanResultList,containertType,chanImgList);/* 分析结果 */
+            chanResultList.clear();
+            chanImgList.clear();
+
+            containerNum=0;
+            containertType=0;
+            resulList.clear();
+            imgList.clear();
+            timeList.clear();
+            set.clear();
+            imgCounts=0;/* 置零 */
+        }
+        else {
+            indList.clear();
         }
     }
 }

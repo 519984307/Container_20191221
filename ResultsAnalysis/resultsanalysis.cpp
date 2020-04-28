@@ -190,18 +190,18 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         switch (type) {
         case 1:
             if(isoTemp.count()==4){
-                isoTemp[3]="22G1";
+                isoTemp[0]="22G1";
             }
             break;
         case 2:
             if(isoTemp.count()==6){
-                isoTemp[5]="45G1";
+                isoTemp[0]="45G1";
             }
             break;
         case 3:
             if(isoTemp.count()==6){
-                isoTemp[2]="22G1";
-                isoTemp[5]="22G1";
+                isoTemp[0]="22G1";
+                isoTemp[3]="22G1";
             }
             break;
         }
@@ -217,7 +217,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 Iindex1=var;
             }
             if(checkConList[var]){
-                Cindex1=var;/* 结果为真,不比对置信读 */
+                Cindex1=var;/* 箱号结果为真,不比对置信读 */
                 checkCon=true;
                 continue;
             }
