@@ -105,6 +105,7 @@ void InfraredLogic::serialLogic(int *status)
                                 _45G1=false;
                             }
                             _22G1=false;
+                            _22G1_22G1_STATE=false;
                             return;
                         }
                     }
@@ -188,7 +189,7 @@ void InfraredLogic::serialLogic(int *status)
                         }
                     }
                 }
-                if(_22G1_22G1_STATE){
+                if(_22G1_22G1_STATE){/* 判定双箱 */
                     if(status[0]==valueOne && status[1]==valueOne && status[3]==valueTwo && status[4]==valueTwo){
                         _22G1_22G1=false;
                         _45G1=true;

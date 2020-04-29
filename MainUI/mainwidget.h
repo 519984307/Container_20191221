@@ -58,6 +58,11 @@ public:
 private:
 
     ///
+    /// \brief pMenBar 菜单栏
+    ///
+    QMenuBar* pMenBar;
+
+    ///
     /// \brief statusBar 系统状态栏
     ///
     QStatusBar *pStatusBar;
@@ -88,7 +93,13 @@ private:
     ServiceWidget* pServiceWidget;
 
 private:
+
     Ui::MainWidget *ui;
+
+    ///
+    /// \brief QActionMap 菜单按钮集
+    ///
+    QMap<QAction*,QObject*> QActionMap;
 
     ///
     /// \brief CamerNameList 通道相机列表
@@ -158,9 +169,9 @@ private:
     QMap<int,QObject*> DataBaseProcessingMap;
 
     ///
-    /// \brief RecognizerProcessingMqp 识别器处理类
+    /// \brief RecognizerProcessingMap 识别器处理类
     ///
-    QMap<int,QObject*> RecognizerProcessingMqp;
+    QMap<int,QObject*> RecognizerProcessingMap;
 
     ///
     /// \brief ResultsAnalysisProcessingMap 识别结果分析类
@@ -319,6 +330,11 @@ private slots:
     /// \param msg 信息体
     ///
     void resultsAnalysisStateSlot(const int& channel, const QString& msg);
+
+    ///
+    /// \brief avtionMapTiggered 菜单栏按钮响应
+    ///
+    void avtionMapTiggered();
 
 signals:
 

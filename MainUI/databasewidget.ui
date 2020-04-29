@@ -831,14 +831,14 @@ color: rgb(255, 255, 255);</string>
             <item>
              <widget class="QPushButton" name="Find_pushButton">
               <property name="text">
-               <string>Find</string>
+               <string>Search</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="Home_pushButton">
               <property name="text">
-               <string>Home</string>
+               <string>Before</string>
               </property>
              </widget>
             </item>

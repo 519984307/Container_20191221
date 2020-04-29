@@ -7,6 +7,7 @@ MainWidget::MainWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    initalizeMenubar();
     setStatusBar();
 
     InitializeSystemSet();
@@ -18,7 +19,6 @@ MainWidget::MainWidget(QWidget *parent) :
     loadPlugins();
     publicConnect();
     loadingParameters();
-    initalizeMenubar();
 }
 
 void MainWidget::closeEvent(QCloseEvent *event)
@@ -52,7 +52,7 @@ MainWidget::~MainWidget()
     for(auto obj:ChannelSettingWidgetMap.values()){
         delete obj;
     }
-    for(auto obj:RecognizerProcessingMqp.values()){
+    for(auto obj:RecognizerProcessingMap.values()){
         delete obj;
     }
     for(auto obj:ResultsAnalysisProcessingMap.values()){
@@ -75,7 +75,7 @@ MainWidget::~MainWidget()
     CamerNameList.clear();
     channelCamerMultiMap.clear();
     ChannelSettingWidgetMap.clear();
-    RecognizerProcessingMqp.clear();
+    RecognizerProcessingMap.clear();
     ResultsAnalysisProcessingMap.clear();
     SocketServiceProcessingMap.clear();
 
@@ -91,22 +91,7 @@ MainWidget::~MainWidget()
 void MainWidget::initalizeMenubar()
 {
     ui->Navigation->setHidden(true);/* 不显示导航栏 */
-    QMenuBar* pMenuBar=new QMenuBar (this);
-    QMenu* pMenData=new QMenu(tr("&Data"),this) ;
-    QMenu* pMenCamera=new QMenu(tr("&Camera"),this) ;
-    QMenu* pMenService=new QMenu(tr("&Service"),this) ;
-    QMenu* pMenDataBase=new QMenu(tr("DataBase"),this) ;
-    QMenu* pMenLog=new QMenu(tr("Setting"),this) ;
-    QMenu* pMenWindows=new QMenu(tr("&Window"),this) ;
-    QMenu* pMenSetting=new QMenu(tr("&Help"),this) ;
-    pMenData->addAction(new QAction ("123",this) );
-    pMenuBar->addMenu(pMenData);
-    pMenuBar->addMenu(pMenCamera);
-    pMenuBar->addMenu(pMenService);
-    pMenuBar->addMenu(pMenDataBase);
-    pMenuBar->addMenu(pMenLog);
-    pMenuBar->addMenu(pMenWindows);
-    pMenuBar->addMenu(pMenSetting);
+    pMenBar=new QMenuBar (this);
 
     QFile file(":/style.qss");
     file.open(QFile::ReadOnly);
@@ -114,9 +99,8 @@ void MainWidget::initalizeMenubar()
 
     setStyleSheet(style);
 
-    pMenuBar->setGeometry(0,80,this->width(),30);
-    //pMenuBar->addAction(new QAction ("123",this) );
-    ui->gridLayout_3->addWidget(pMenuBar);
+    pMenBar->setGeometry(0,80,this->width(),30);
+    ui->gridLayout_3->addWidget(pMenBar);
 }
 
 void MainWidget::loadingParameters()
@@ -199,6 +183,10 @@ void MainWidget::loadingParameters()
             break;
         }
     }
+
+    foreach (auto action, QActionMap.keys()) {/* 绑定菜单按钮事件 */
+        connect(action,SIGNAL(triggered()),this,SLOT(avtionMapTiggered()));
+    }
 }
 
 void MainWidget::InitializeSystemSet()
@@ -221,96 +209,168 @@ void MainWidget::InitializeSystemSet()
 
 void MainWidget::InitializeDataWindow()
 {
-    QTreeWidgetItemIterator it(ui->Navigation);
-    while(*it){
-        if((*it)->text(0)==tr("Data")){
-            /*  获取数据根   */
-            for(int i=1;i<=channelCounnt;i++){
-                auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
-                /*  添加子项    */
-                (*it)->addChild(childImte);
+    QMenu* pMenuData=new QMenu (tr("&Data"),this);
+    pMenBar->addMenu(pMenuData);
 
-                DataWidget* data=new DataWidget(this);
-                DataWidgetMap.insert(i,data);
-                ItemWidgetMap.insert(childImte,data);
+    for(int i=1;i<=channelCounnt;i++){
+        DataWidget* dataWidow=new DataWidget(this);
+        QAction* pAction=new QAction(tr("%1 # Channel").arg(i),this);
 
-                if(i==1){
-                    /*  显示第一个窗口 */
-                    on_Navigation_itemActivated(childImte);
-                }
-            }
-        }
-        ++it;
+        QActionMap.insert(pAction,dataWidow);
+        DataWidgetMap.insert(i,dataWidow);
+
+        pMenuData->addAction(pAction);
     }
+
+//    QTreeWidgetItemIterator it(ui->Navigation);
+//    while(*it){
+//        if((*it)->text(0)==tr("Data")){
+//            /*  获取数据根   */
+//            for(int i=1;i<=channelCounnt;i++){
+//                auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
+//                /*  添加子项    */
+//                (*it)->addChild(childImte);
+
+//                DataWidget* data=new DataWidget(this);
+//                DataWidgetMap.insert(i,data);
+//                ItemWidgetMap.insert(childImte,data);
+
+//                if(i==1){
+//                    /*  显示第一个窗口 */
+//                    on_Navigation_itemActivated(childImte);
+//                }
+//            }
+//        }
+//        ++it;
+//    }
 }
 
 void MainWidget::InitializeCamerWindow()
 {
-    QTreeWidgetItemIterator it(ui->Navigation);
-    while(*it){
-        if((*it)->text(0)==tr("Camera")){
-            /*  获取相机根   */
-            int j=1;
-            for(int i=1;i<=channelCounnt;i++){
-                auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
-                /*  添加子项    */
-                (*it)->addChild(childImte);
-                for(auto name:CamerNameList){
-                    auto sunItem=new QTreeWidgetItem (childImte,QStringList(name));
-                    childImte->addChild(sunItem);
-                    PictureWidget *picutre= new PictureWidget (this);
-                    /* 通道对应的几个相机 */
-                    channelCamerMultiMap.insert(i,picutre);
+    QMenu* pMenuCamera=new QMenu (tr("&Camera"),this);
+    pMenBar->addMenu(pMenuCamera);
 
-                    /*  过滤车牌界面,车牌暂时不用海康SDK  */
-                    if(name!="Plate"){
-                        PictureWidgetMap.insert(j,picutre);
-                        j++;
-                    }
-                    ItemWidgetMap.insert(sunItem,picutre);
-                }
+    int j=1;
+    for(int i=1;i<=channelCounnt;i++){
+        QMenu* pMenu_=new QMenu (tr("%1 # Channel").arg(i),this);
+        pMenuCamera->addMenu(pMenu_);
+
+        for(auto name:CamerNameList){
+            PictureWidget *picutreWindow= new PictureWidget (this);
+
+            /* 通道对应的几个相机 */
+            channelCamerMultiMap.insert(i,picutreWindow);
+
+            if(name!="Plate"){
+                PictureWidgetMap.insert(j,picutreWindow);
+                j++;
             }
+            QAction* pAction=new QAction(name,this);
+            QActionMap.insert(pAction,picutreWindow);
+            pMenu_->addAction(pAction);
         }
-        ++it;
     }
+
+//    QTreeWidgetItemIterator it(ui->Navigation);
+//    while(*it){
+//        if((*it)->text(0)==tr("Camera")){
+//            /*  获取相机根   */
+//            int j=1;
+//            for(int i=1;i<=channelCounnt;i++){
+//                auto childImte=new QTreeWidgetItem ((*it),QStringList(tr("%1 # Channel").arg(i)));
+//                /*  添加子项    */
+//                (*it)->addChild(childImte);
+//                for(auto name:CamerNameList){
+//                    auto sunItem=new QTreeWidgetItem (childImte,QStringList(name));
+//                    childImte->addChild(sunItem);
+//                    PictureWidget *picutre= new PictureWidget (this);
+//                    /* 通道对应的几个相机 */
+//                    channelCamerMultiMap.insert(i,picutre);
+
+//                    /*  过滤车牌界面,车牌暂时不用海康SDK  */
+//                    if(name!="Plate"){
+//                        PictureWidgetMap.insert(j,picutre);
+//                        j++;
+//                    }
+//                    ItemWidgetMap.insert(sunItem,picutre);
+//                }
+//            }
+//        }
+//        ++it;
+//    }
 }
 
 void MainWidget::InitializeOtherWindow()
 {
-    QTreeWidgetItemIterator it(ui->Navigation);
-    while(*it){        
-        if((*it)->text(0)==tr("Setting")){
-            /*  获取设置根   */
-            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
-            (*it)->addChild(childImte);
+    /* service */
+    QMenu* pMenuService=new QMenu (tr("&Service"),this);
+    pMenBar->addMenu(pMenuService);
 
-           // ItemWidgetMap.insert(childImte,new SystemSettingWidget(this) );
-            ItemWidgetMap.insert(childImte,pSystemSettingWidget);
-            for(int i=1;i<=channelCounnt;i++){
-                auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
-                /*  添加子项    */
-                (*it)->addChild(sunItem);
-                ChannelSettingWidget* pChannelSettingWidget=new ChannelSettingWidget (i,this);/* 构造参数通道编号 */
-                ChannelSettingWidgetMap.insert(i,pChannelSettingWidget);
-                ItemWidgetMap.insert(sunItem,pChannelSettingWidget);
-            }
-        }
-        if((*it)->text(0)==tr("Service")){
-            /*  获取服务根   */
-            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Log")));
-            (*it)->addChild(childImte);
-            pServiceWidget=new ServiceWidget (this);
-            ItemWidgetMap.insert(childImte,pServiceWidget);
-        }
-        if((*it)->text(0)==tr("Database")){
-            /*  获取数据库根  */
-            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("History")));
-            (*it)->addChild(childImte);
-            pDataBaseWidget=new DataBaseWidget (this);
-            ItemWidgetMap.insert(childImte,pDataBaseWidget);
-        }
-        ++it;
+    pServiceWidget=new ServiceWidget (this);
+    QAction* pActionLog=new QAction(tr("Log"),this);
+    QActionMap.insert(pActionLog,pServiceWidget);
+    pMenuService->addAction(pActionLog);
+
+    /* database */
+    QMenu* pMenuDataBase=new QMenu (tr("Da&tabase"),this);
+    pMenBar->addMenu(pMenuDataBase);
+
+    pDataBaseWidget=new DataBaseWidget (this);
+    QAction* pActionHistory=new QAction(tr("History"),this);
+    QActionMap.insert(pActionHistory,pDataBaseWidget);
+    pMenuDataBase->addAction(pActionHistory);
+
+    /* Setting */
+    QMenu* pMenuSetting=new QMenu (tr("&Setting"),this);
+    pMenBar->addMenu(pMenuSetting);
+
+    QAction* pActionSystem=new QAction(tr("System"),this);
+    QActionMap.insert(pActionSystem,pSystemSettingWidget);
+    pMenuSetting->addAction(pActionSystem);
+
+    for(int i=1;i<=channelCounnt;i++){
+        ChannelSettingWidget* pChannelSettingWidget=new ChannelSettingWidget (i,this);/* 构造参数通道编号 */
+        ChannelSettingWidgetMap.insert(i,pChannelSettingWidget);
+
+        QAction* pAction=new QAction(tr("%1 # Channel").arg(i),this);
+        QActionMap.insert(pAction,pChannelSettingWidget);
+        pMenuSetting->addAction(pAction);
     }
+
+//    QTreeWidgetItemIterator it(ui->Navigation);
+//    while(*it){
+//        if((*it)->text(0)==tr("Setting")){
+//            /*  获取设置根   */
+//            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("System")));
+//            (*it)->addChild(childImte);
+
+//           // ItemWidgetMap.insert(childImte,new SystemSettingWidget(this) );
+//            ItemWidgetMap.insert(childImte,pSystemSettingWidget);
+//            for(int i=1;i<=channelCounnt;i++){
+//                auto sunItem=new QTreeWidgetItem (childImte,QStringList(tr("%1 # Channel").arg(i)));
+//                /*  添加子项    */
+//                (*it)->addChild(sunItem);
+//                ChannelSettingWidget* pChannelSettingWidget=new ChannelSettingWidget (i,this);/* 构造参数通道编号 */
+//                ChannelSettingWidgetMap.insert(i,pChannelSettingWidget);
+//                ItemWidgetMap.insert(sunItem,pChannelSettingWidget);
+//            }
+//        }
+//        if((*it)->text(0)==tr("Service")){
+//            /*  获取服务根   */
+//            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("Log")));
+//            (*it)->addChild(childImte);
+//            pServiceWidget=new ServiceWidget (this);
+//            ItemWidgetMap.insert(childImte,pServiceWidget);
+//        }
+//        if((*it)->text(0)==tr("Database")){
+//            /*  获取数据库根  */
+//            auto childImte=new QTreeWidgetItem((*it),QStringList(tr("History")));
+//            (*it)->addChild(childImte);
+//            pDataBaseWidget=new DataBaseWidget (this);
+//            ItemWidgetMap.insert(childImte,pDataBaseWidget);
+//        }
+//        ++it;
+//    }
 }
 
 void MainWidget::InitializeChannelSet()
@@ -619,7 +679,7 @@ void MainWidget::dataBaseReadPlugin(DataBaseReadInterface* pDataBaseReadInterfac
 void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int num)
 {
     RecognizerProcessing* pRecognizerProcessing=new RecognizerProcessing (nullptr);
-    RecognizerProcessingMqp.insert(num,pRecognizerProcessing);
+    RecognizerProcessingMap.insert(num,pRecognizerProcessing);
 
     if(pSystemSettingWidget!=nullptr){
         /* 设置图片保存路径1 */
@@ -719,7 +779,7 @@ void MainWidget::publicConnect()
                     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::updateDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal);
                 }
             }
-            if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
+            if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMap[key])){
                 /* 逻辑抓拍完成 */
                 connect(pInfraredProcessing,&InfraredProcessing::infraredCompleteSignal,pRecognizerProcessing,&RecognizerProcessing::infraredCompleteSlot);
                 /* 逻辑抓拍开始 */
@@ -738,7 +798,7 @@ void MainWidget::publicConnect()
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
                         /* 绑定(前后左右)相机抓拍图片流到数据界面(显示图片) */
                         connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
-                        if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMqp[key])){
+                        if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMap[key])){
                             /* 相机图片流绑定到识别器处理流程(保存图片) */
                             connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);
                             /* 保存two图片地址 */
@@ -762,8 +822,9 @@ void MainWidget::publicConnect()
 
 void MainWidget::hideWindows()
 {
-    for(auto key:ItemWidgetMap.keys()){
-        auto value=ItemWidgetMap[key];
+    //for(auto key:ItemWidgetMap.keys()){
+    for(auto value:QActionMap.values()){
+        //auto value=ItemWidgetMap[key];
         if(DataWidget* tmp=qobject_cast<DataWidget*>(value)){
             tmp->setVisible(false);
         }
@@ -787,50 +848,109 @@ void MainWidget::hideWindows()
 
 void MainWidget::on_Navigation_itemActivated(QTreeWidgetItem *item)
 {
-    if(ItemWidgetMap.find(item)==ItemWidgetMap.end()){
+//    if(ItemWidgetMap.find(item)==ItemWidgetMap.end()){
+//        return;
+//    }
+
+//    hideWindows();
+
+//    auto value=ItemWidgetMap[item];
+//    if(value){
+//        if(DataWidget* tmp=qobject_cast<DataWidget*>(value)){
+//            //tmp->move(168,80);
+//            tmp->move(0,110);
+//            tmp->setVisible(true);
+//        }
+//        if(PictureWidget* tmp=qobject_cast<PictureWidget*>(value)){
+//            //tmp->move(168,80);
+//            tmp->move(0,110);
+//            tmp->setVisible(true);
+//        }
+//        if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
+//            //tmp->move(168,80);
+//            tmp->move(0,110);
+//            tmp->setVisible(true);
+//        }
+//        if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
+//            //tmp->move(168,80);
+//            tmp->move(0,110);
+//            tmp->setVisible(true);
+//        }
+//        if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
+//            //tmp->move(168,80);
+//            tmp->move(0,110);
+//            tmp->setVisible(true);
+//        }
+//        if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
+//            //tmp->move(168,80);
+//            tmp->move(0,110);
+//            tmp->setVisible(true);
+//        }
+//    }
+}
+
+void MainWidget::avtionMapTiggered()
+{
+    QAction* pAction=qobject_cast<QAction*> (sender());
+    if(QActionMap.find(pAction)==QActionMap.end()){
         return;
     }
 
     hideWindows();
 
-    auto value=ItemWidgetMap[item];
+    auto value=QActionMap[pAction];
+    int channel=-1;
+    QString text="";
+
     if(value){
         if(DataWidget* tmp=qobject_cast<DataWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,110);
             tmp->setVisible(true);
+            channel=DataWidgetMap.key(tmp);
         }
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,110);
             tmp->setVisible(true);
+            channel=PictureWidgetMap.key(tmp);
         }
         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,110);
             tmp->setVisible(true);
+            channel=ChannelSettingWidgetMap.key(tmp);
         }
         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,110);
             tmp->setVisible(true);
+            text=tr("Current  system Settings page");
         }
         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,110);
             tmp->setVisible(true);
+            text=tr("Current  service page");
         }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,110);
             tmp->setVisible(true);
+            text=tr("Current  database page");
+        }
+        if(channel==-1){
+            pStatusBarLabelPermanet->setText(text);
+        }
+        else {
+            pStatusBarLabelPermanet->setText(tr("Current preview %1 channel").arg(channel));
         }
     }
 }
 
 void MainWidget::resizeEvent(QResizeEvent *size)
 {
-    for(auto pWidget:ItemWidgetMap){
+    for(auto pWidget:QActionMap.values()){
         if(DataWidget* tmp=qobject_cast<DataWidget*>(pWidget)){
             //tmp->resize( size->size().width()-168,size->size().height()-105);
             tmp->resize( size->size().width(),size->size().height()-135);
