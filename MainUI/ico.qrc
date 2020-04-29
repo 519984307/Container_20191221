@@ -3,4 +3,7 @@
         <file>ICO.ico</file>
         <file>ICO.bmp</file>
     </qresource>
+    <qresource prefix="/">
+        <file>style.qss</file>
+    </qresource>
 </RCC>

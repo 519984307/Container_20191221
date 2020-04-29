@@ -90,16 +90,33 @@ MainWidget::~MainWidget()
 
 void MainWidget::initalizeMenubar()
 {
-//    ui->Navigation->setHidden(true);
-//    ui->groupBox->setHidden(true);
-//    QMenuBar* pMenuBar=new QMenuBar (this);
-//    QMenu* pMenData=new QMenu("Data",this) ;
-//    pMenData->addAction(new QAction ("123",this) );
-//    pMenuBar->addMenu(pMenData);
+    ui->Navigation->setHidden(true);/* 不显示导航栏 */
+    QMenuBar* pMenuBar=new QMenuBar (this);
+    QMenu* pMenData=new QMenu(tr("&Data"),this) ;
+    QMenu* pMenCamera=new QMenu(tr("&Camera"),this) ;
+    QMenu* pMenService=new QMenu(tr("&Service"),this) ;
+    QMenu* pMenDataBase=new QMenu(tr("DataBase"),this) ;
+    QMenu* pMenLog=new QMenu(tr("Setting"),this) ;
+    QMenu* pMenWindows=new QMenu(tr("&Window"),this) ;
+    QMenu* pMenSetting=new QMenu(tr("&Help"),this) ;
+    pMenData->addAction(new QAction ("123",this) );
+    pMenuBar->addMenu(pMenData);
+    pMenuBar->addMenu(pMenCamera);
+    pMenuBar->addMenu(pMenService);
+    pMenuBar->addMenu(pMenDataBase);
+    pMenuBar->addMenu(pMenLog);
+    pMenuBar->addMenu(pMenWindows);
+    pMenuBar->addMenu(pMenSetting);
 
-//    pMenuBar->setGeometry(0,80,this->width(),30);
-//    //pMenuBar->addAction(new QAction ("123",this) );
-//    ui->gridLayout_3->addWidget(pMenuBar);
+    QFile file(":/style.qss");
+    file.open(QFile::ReadOnly);
+    QString style=file.readAll();
+
+    setStyleSheet(style);
+
+    pMenuBar->setGeometry(0,80,this->width(),30);
+    //pMenuBar->addAction(new QAction ("123",this) );
+    ui->gridLayout_3->addWidget(pMenuBar);
 }
 
 void MainWidget::loadingParameters()
@@ -779,27 +796,33 @@ void MainWidget::on_Navigation_itemActivated(QTreeWidgetItem *item)
     auto value=ItemWidgetMap[item];
     if(value){
         if(DataWidget* tmp=qobject_cast<DataWidget*>(value)){
-            tmp->move(168,80);
+            //tmp->move(168,80);
+            tmp->move(0,110);
             tmp->setVisible(true);
         }
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(value)){
-            tmp->move(168,80);
+            //tmp->move(168,80);
+            tmp->move(0,110);
             tmp->setVisible(true);
         }
         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
-            tmp->move(168,80);
+            //tmp->move(168,80);
+            tmp->move(0,110);
             tmp->setVisible(true);
         }
         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
-            tmp->move(168,80);
+            //tmp->move(168,80);
+            tmp->move(0,110);
             tmp->setVisible(true);
         }
         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
-            tmp->move(168,80);
+            //tmp->move(168,80);
+            tmp->move(0,110);
             tmp->setVisible(true);
         }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
-            tmp->move(168,80);
+            //tmp->move(168,80);
+            tmp->move(0,110);
             tmp->setVisible(true);
         }
     }
@@ -809,22 +832,28 @@ void MainWidget::resizeEvent(QResizeEvent *size)
 {
     for(auto pWidget:ItemWidgetMap){
         if(DataWidget* tmp=qobject_cast<DataWidget*>(pWidget)){
-            tmp->resize( size->size().width()-168,size->size().height()-105);
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
         }
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(pWidget)){
-            tmp->resize( size->size().width()-168,size->size().height()-105);
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
         }
         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(pWidget)){
-            tmp->resize( size->size().width()-168,size->size().height()-105);
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
         }
         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(pWidget)){
-            tmp->resize( size->size().width()-168,size->size().height()-105);
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
         }
         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(pWidget)){
-            tmp->resize( size->size().width()-168,size->size().height()-105);
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
         }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(pWidget)){
-            tmp->resize( size->size().width()-168,size->size().height()-105);
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
         }
     }
 }

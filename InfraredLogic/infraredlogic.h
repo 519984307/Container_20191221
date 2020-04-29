@@ -33,6 +33,11 @@ private:
      bool _45G1,_22G1,_22G1_MID_22G1,_22G1_22G1;
 
      ///
+     /// \brief _22G1_22G1_STATE 双箱状态
+     ///
+     bool  _22G1_22G1_STATE;
+
+     ///
      /// \brief type 模拟抓拍类型
      ///
      int type;

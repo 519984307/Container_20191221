@@ -30,85 +30,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="2" column="1">
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <property name="spacing">
-      <number>0</number>
-     </property>
-    </layout>
-   </item>
-   <item row="1" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>391</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" rowspan="2">
-    <widget class="QTreeWidget" name="Navigation">
-     <property name="maximumSize">
-      <size>
-       <width>168</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
-     </property>
-     <column>
-      <property name="text">
-       <string>Navigation</string>
-      </property>
-      <property name="textAlignment">
-       <set>AlignCenter</set>
-      </property>
-     </column>
-     <item>
-      <property name="text">
-       <string>Data</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Camera</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Service</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Database</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Setting</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -553,53 +475,6 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>153</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label">
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Shenzhen zhongbaiyuan technology co. LTD</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Container number identification system (multi-channel)-V3.19.12</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0" rowspan="2">
        <widget class="QLabel" name="label_2">
         <property name="minimumSize">
@@ -628,8 +503,141 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1" colspan="3">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Shenzhen zhongbaiyuan technology co. LTD</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>153</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Container number identification system (multi-channel)-V3.19.12</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>166</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="3" colspan="2">
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
      </layout>
     </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+    </layout>
+   </item>
+   <item row="2" column="0" rowspan="2">
+    <widget class="QTreeWidget" name="Navigation">
+     <property name="maximumSize">
+      <size>
+       <width>168</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+     </property>
+     <column>
+      <property name="text">
+       <string>Navigation</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignCenter</set>
+      </property>
+     </column>
+     <item>
+      <property name="text">
+       <string>Data</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Camera</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Service</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Database</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Setting</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>391</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="1">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+    </layout>
    </item>
   </layout>
  </widget>

@@ -20,7 +20,7 @@ InfraredLogic::InfraredLogic(QObject *parent)
     health=false;
     doubleFrontPut=false;
 
-    _45G1=false;_22G1=false;_22G1_MID_22G1=false;_22G1_22G1=false;
+    _45G1=false;_22G1=false;_22G1_MID_22G1=false;_22G1_22G1=false;_22G1_22G1_STATE=false;
 }
 
 InfraredLogic::~InfraredLogic()
@@ -118,6 +118,7 @@ void InfraredLogic::serialLogic(int *status)
                                 emit logicPutImageSignal(1);
                                 _45G1=false;
                                 _22G1_MID_22G1=false;
+                                _22G1_22G1_STATE=false;
                                 health=false;
                                 return;
                             }
@@ -150,6 +151,7 @@ void InfraredLogic::serialLogic(int *status)
                                 emit logicPutImageSignal(2);
                                 _22G1=false;
                                 _45G1=false;
+                                _22G1_22G1_STATE=false;
                                 health=false;
                                 return;
                             }
@@ -175,18 +177,42 @@ void InfraredLogic::serialLogic(int *status)
                     }
                 }
             }
-            if(_22G1_MID_22G1){/* 没检测到双箱状态,中途释放A1证明不是长箱 */
-                if(status[0]==valueTwo){
+            if(_45G1){/* 没有检测到双箱状态 */
+                if(status[0]==valueOne){
                     if(status[1]==valueOne){
-                        if(status[3]==valueOne){
-                            if(status[4]==valueTwo){
-                                _22G1_22G1=true;
-                                _45G1=false;
+                        if(status[3]==valueTwo){
+                            if(status[4]==valueOne){
+                                _22G1_22G1_STATE=true;
                                 return;
                             }
                         }
                     }
                 }
+                if(_22G1_22G1_STATE){
+                    if(status[0]==valueOne && status[1]==valueOne && status[3]==valueTwo && status[4]==valueTwo){
+                        _22G1_22G1=false;
+                        _45G1=true;
+                        return;
+                    }
+                    else {
+                        _22G1_22G1=true;
+                        _45G1=false;
+                        return;
+                    }
+                }
+            }
+//            if(_22G1_MID_22G1){/* 没检测到双箱状态,中途释放A1证明不是长箱 */
+//                if(status[0]==valueTwo){
+//                    if(status[1]==valueOne){
+//                        if(status[3]==valueOne){
+//                            if(status[4]==valueTwo){
+//                                _22G1_22G1=true;
+//                                _45G1=false;
+//                                return;
+//                            }
+//                        }
+//                    }
+//                }
 //                else if(status[0]==valueTwo){/* 没检测到双箱状态,中途释放A1证明不是长箱 */
 //                    if(status[1]==valueOne){
 //                        if(status[3]==valueOne){
@@ -198,7 +224,7 @@ void InfraredLogic::serialLogic(int *status)
 //                        }
 //                    }
 //                }
-            }
+//            }
 //            if(_22G1_MID_22G1){/* 可能出现问题:高车头加长箱,车头能同时挡住B1,B2 */
 //                if(status[0]==valueOne){
 //                    if(status[1]==valueOne){
@@ -221,6 +247,7 @@ void InfraredLogic::serialLogic(int *status)
                                 _22G1_22G1=false;
                                 _22G1_MID_22G1=false;
                                 _45G1=false;
+                                _22G1_22G1_STATE=false;
                                 health=false;
                                 return;
                             }
