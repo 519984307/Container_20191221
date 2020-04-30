@@ -70,7 +70,7 @@ signals:
     /// \param winID 窗口ID
     /// \param play 播放状态
     ///
-    void playStreamSignal(uint winID,bool play);
+    void playStreamSignal(quint64 winID,bool play);
 
     ///
     /// \brief resizeEventSignal 窗口调整刷新信号

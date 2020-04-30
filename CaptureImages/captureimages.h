@@ -200,7 +200,7 @@ public:
     /// \param winID 窗口句柄
     /// \param play 播放状态
     ///
-    void playStreamSlot(uint winID, bool play) Q_DECL_OVERRIDE;
+    void playStreamSlot(quint64 winID, bool play) Q_DECL_OVERRIDE;
 
     ///
     /// \brief releaseResourcesSlot 关闭视频流

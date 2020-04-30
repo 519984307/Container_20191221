@@ -59,7 +59,7 @@ public slots:
     /// \param play 播放状态
     /// 多次实时预览,在LINUX下会出现内存不释放
     ///
-    virtual void playStreamSlot(uint winID,bool play)=0;
+    virtual void playStreamSlot(quint64 winID,bool play)=0;
 
     ///
     /// \brief resizeEventSlot 调整窗口通知动态库刷新窗口

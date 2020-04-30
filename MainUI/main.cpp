@@ -5,10 +5,14 @@
 #include <QTranslator>
 #include <QCoreApplication>
 #include <QDir>
+#include <QTextCodec>
 #include <QDebug>
 
 int main(int argc, char *argv[])
 {
+    QTextCodec *codec = QTextCodec::codecForName("utf8"); //GBK gbk
+    QTextCodec::setCodecForLocale(codec);
+
     QApplication::addLibraryPath(QDir::toNativeSeparators("./Plugins"));
     QApplication::addLibraryPath(QDir::toNativeSeparators("./qm"));
     QApplication a(argc, argv);
