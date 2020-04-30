@@ -22,6 +22,12 @@ void PictureWidget::resizeEvent(QResizeEvent *size)
     emit resizeEventSignal();
 }
 
+void PictureWidget::hideEvent(QHideEvent *event)
+{
+    emit on_pushButton_3_clicked();
+    ui->label->clear();
+}
+
 void PictureWidget::on_pushButton_2_clicked()
 {
     emit playStreamSignal(static_cast<uint>(ui->label->winId()) ,true);

@@ -204,7 +204,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             }
         }
         QList<int> indList;
-        for (int ind = 0; ind < timeList.count(); ++ind) {
+        for (int ind = timeList.count()-1; ind >= 0; --ind) {
             if(setMax==timeList[ind]){
                 qDebug()<<"setMax"<<setMax<<"timeList:"<<timeList[ind];
                 indList.append(ind);

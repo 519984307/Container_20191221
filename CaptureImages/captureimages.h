@@ -18,6 +18,11 @@ public:
 private:
 
     ///
+    /// \brief NET_DVR_Init 动态库初始化状态
+    ///
+    bool NET_DVR_Init;
+
+    ///
     /// \brief port 端口
     ///
     int port;

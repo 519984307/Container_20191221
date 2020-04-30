@@ -27,8 +27,17 @@ public:
     explicit DataBaseWidget(QWidget *parent = nullptr);
     ~DataBaseWidget()Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief resizeEvent 重写窗口调整
+    /// \param size
+    ///
     void resizeEvent(QResizeEvent *size)Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief hideEvent 重写窗口隐藏
+    /// \param event
+    ///
+    void hideEvent(QHideEvent *event)Q_DECL_OVERRIDE;
 private:
 
     ///

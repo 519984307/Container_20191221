@@ -64,10 +64,10 @@ bool ChannelSettingWidget::jsonWrite()
     jsonObj2.insert(tr("SerialAddrTow"),ui->SerialAddrTow->text());
     jsonObj2.insert(tr("PortOne"),ui->PortOne->value());
     jsonObj2.insert(tr("PortTow"),ui->PortTow->value());
-    if(ui->SerialPortOpenState){
+    if(ui->SerialPortOpenState->isChecked()){
         jsonObj2.insert(tr("infraredStatus"),0);
     }
-    if(ui->SerialPortCloseState){
+    if(ui->SerialPortCloseState->isChecked()){
         jsonObj2.insert(tr("infraredStatus"),1);
     }
     jsonChild.insert("SerialPort",QJsonValue(jsonObj2));

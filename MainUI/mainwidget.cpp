@@ -187,6 +187,9 @@ void MainWidget::loadingParameters()
     foreach (auto action, QActionMap.keys()) {/* 绑定菜单按钮事件 */
         connect(action,SIGNAL(triggered()),this,SLOT(avtionMapTiggered()));
     }
+    if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap.value(1)) ){
+         QActionMap.key(pDataWidget)->triggered(); /* 显示地一个页面 */
+    }
 }
 
 void MainWidget::InitializeSystemSet()
@@ -254,6 +257,7 @@ void MainWidget::InitializeCamerWindow()
     for(int i=1;i<=channelCounnt;i++){
         QMenu* pMenu_=new QMenu (tr("%1 # Channel").arg(i),this);
         pMenuCamera->addMenu(pMenu_);
+        CameraMenuMap.insert(i,pMenu_);
 
         for(auto name:CamerNameList){
             PictureWidget *picutreWindow= new PictureWidget (this);
@@ -376,37 +380,58 @@ void MainWidget::InitializeOtherWindow()
 void MainWidget::InitializeChannelSet()
 {
     /* 设置通道别名 */
-    QTreeWidgetItemIterator it(ui->Navigation);
-    while(*it){
-        if((*it)->text(0)==tr("Data") && (*it)->childCount()==channelCounnt){
-            for (int i=1;i<=channelCounnt;i++) {
-                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
-                    if(!pChannelSettingWidget->Alias.isEmpty()){
-                        (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
-                    }
+    for (int i=1;i<=channelCounnt;i++) {
+        if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+            if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[i])){
+                if(!pChannelSettingWidget->Alias.isEmpty()){
+                    QActionMap.key(pDataWidget)->setText(pChannelSettingWidget->Alias);
+                }
+            }
+
+            if(!pChannelSettingWidget->Alias.isEmpty()){
+                CameraMenuMap.value(i)->setTitle(pChannelSettingWidget->Alias);
+            }
+
+            if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+                if(!pChannelSettingWidget->Alias.isEmpty()){
+                    QActionMap.key(pChannelSettingWidget)->setText(pChannelSettingWidget->Alias);
                 }
             }
         }
-        if((*it)->text(0)==tr("Camera") && (*it)->childCount()==channelCounnt){
-            for (int i=1;i<=channelCounnt;i++) {
-                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
-                    if(!pChannelSettingWidget->Alias.isEmpty()){
-                        (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
-                    }
-                }
-            }
-        }
-        if((*it)->text(0)==tr("System") && (*it)->childCount()==channelCounnt){
-            for (int i=1;i<=channelCounnt;i++) {
-                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
-                    if(!pChannelSettingWidget->Alias.isEmpty()){
-                        (*it)->child(i-1) ->setText(0,pChannelSettingWidget->Alias);
-                    }
-                }
-            }
-        }
-        ++it;
     }
+
+//    /* 设置通道别名 */
+//    QTreeWidgetItemIterator it(ui->Navigation);
+//    while(*it){
+//        if((*it)->text(0)==tr("Data") && (*it)->childCount()==channelCounnt){
+//            for (int i=1;i<=channelCounnt;i++) {
+//                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+//                    if(!pChannelSettingWidget->Alias.isEmpty()){
+//                        (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
+//                    }
+//                }
+//            }
+//        }
+//        if((*it)->text(0)==tr("Camera") && (*it)->childCount()==channelCounnt){
+//            for (int i=1;i<=channelCounnt;i++) {
+//                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+//                    if(!pChannelSettingWidget->Alias.isEmpty()){
+//                        (*it)->child(i-1)->setText(0,pChannelSettingWidget->Alias);
+//                    }
+//                }
+//            }
+//        }
+//        if((*it)->text(0)==tr("System") && (*it)->childCount()==channelCounnt){
+//            for (int i=1;i<=channelCounnt;i++) {
+//                if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[i])){
+//                    if(!pChannelSettingWidget->Alias.isEmpty()){
+//                        (*it)->child(i-1) ->setText(0,pChannelSettingWidget->Alias);
+//                    }
+//                }
+//            }
+//        }
+//        ++it;
+//    }
 }
 
 void MainWidget::loadPlugins()
@@ -905,37 +930,37 @@ void MainWidget::avtionMapTiggered()
     if(value){
         if(DataWidget* tmp=qobject_cast<DataWidget*>(value)){
             //tmp->move(168,80);
-            tmp->move(0,110);
+            tmp->move(0,112);
             tmp->setVisible(true);
             channel=DataWidgetMap.key(tmp);
         }
         if(PictureWidget* tmp=qobject_cast<PictureWidget*>(value)){
             //tmp->move(168,80);
-            tmp->move(0,110);
+            tmp->move(0,112);
             tmp->setVisible(true);
             channel=PictureWidgetMap.key(tmp);
         }
         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
             //tmp->move(168,80);
-            tmp->move(0,110);
+            tmp->move(0,112);
             tmp->setVisible(true);
             channel=ChannelSettingWidgetMap.key(tmp);
         }
         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
             //tmp->move(168,80);
-            tmp->move(0,110);
+            tmp->move(0,112);
             tmp->setVisible(true);
             text=tr("Current  system Settings page");
         }
         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
             //tmp->move(168,80);
-            tmp->move(0,110);
+            tmp->move(0,112);
             tmp->setVisible(true);
             text=tr("Current  service page");
         }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
             //tmp->move(168,80);
-            tmp->move(0,110);
+            tmp->move(0,112);
             tmp->setVisible(true);
             text=tr("Current  database page");
         }

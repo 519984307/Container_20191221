@@ -25,6 +25,12 @@ private:
     ///
     void resizeEvent(QResizeEvent* size)Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief hideEvent 重写窗口隐藏事件
+    /// \param event
+    ///
+    void hideEvent(QHideEvent *event)Q_DECL_OVERRIDE;
+
 private slots:
 
     ///

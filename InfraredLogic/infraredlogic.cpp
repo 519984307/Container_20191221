@@ -331,7 +331,7 @@ void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &port
     }
 
     if(!com1 && !com2){/* com1和com2都未打开,不做后续处理 */
-        emit messageSignal(ZBY_LOG("INFO"),tr("not init"));
+        emit messageSignal(ZBY_LOG("INFO"),tr("Channel serial port exception"));
     }
     /*
      * 循环逻辑判断

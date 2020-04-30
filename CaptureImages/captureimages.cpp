@@ -6,6 +6,7 @@ CaptureImages::CaptureImages(QObject *parent)
 
     /* 登录ID,登录状态,视频流状态 */
     lUserID=-1;dwResult=0;streamID=-1;
+    NET_DVR_Init=false;
 
     NET_DVR_SetExceptionCallBack_V30_L=nullptr;
     NET_DVR_SetSDKInitCfg_L=nullptr;
@@ -90,20 +91,25 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
     LoginInfo.cbLoginResult=CaptureImages::loginResultCallBack;
     LoginInfo.pUser=this;
 
-    if(NET_DVR_Init_L){
-        if(NET_DVR_Init_L()){
-            if(NET_DVR_SetExceptionCallBack_V30_L){
-                NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
-                //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), false);
-                NET_DVR_SetConnectTime_L(20000,1);
-                NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
+    if(!NET_DVR_Init){
+        if(NET_DVR_Init_L){
+            if(NET_DVR_Init_L()){
+                if(NET_DVR_SetExceptionCallBack_V30_L){
+                    NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
+                    //NET_DVR_SetLogToFile_L(3, QString(".\\sdkLog").toLatin1().data(), false);
+                    NET_DVR_SetConnectTime_L(20000,1);
+                    NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
 
-                emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(this->camerIp));
+                    emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(this->camerIp));
+                }
+            }
+            else {
+                emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera init error<errorCode=%2>").arg(this->camerIp).arg(NET_DVR_GetLastError_L()));
             }
         }
-        else {
-            emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera init error<errorCode=%2>").arg(this->camerIp).arg(NET_DVR_GetLastError_L()));
-        }
+    }
+    else {
+        NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
     }
 }
 
@@ -135,7 +141,8 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     pThis->dwResult=dwResult;
 
     if(dwResult==0){
-        //pThis->initCamerSlot(pThis->camerIp,pThis->port,pThis->camerName,pThis->camerPow);/*第一次登录失败,重新登录*/
+        //QTimer::singleShot(1500,pThis,SLOT(pThis.initCamerSlot));
+        pThis->initCamerSlot(pThis->camerIp,pThis->port,pThis->camerName,pThis->camerPow);/* 重新登录 */
         emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camera login error<errorCOde=%2>").arg(pThis->camerIp).arg(pThis->NET_DVR_GetLastError_L()));
     }
     if(dwResult==1){

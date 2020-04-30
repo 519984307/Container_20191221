@@ -129,6 +129,11 @@ private:
 private:
 
     ///
+    /// \brief CameraMenuMap 相机子菜单字典
+    ///
+    QMap<int,QMenu*> CameraMenuMap;
+
+    ///
     /// \brief pictureWidgetMap 相机窗口字典
     ///
     QMap<int,QObject*>PictureWidgetMap;

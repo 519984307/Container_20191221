@@ -2,6 +2,7 @@
 #define SERVICEWIDGET_H
 
 #include <QWidget>
+#include <QDateTime>
 
 namespace Ui {
 class ServiceWidget;

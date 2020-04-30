@@ -23,8 +23,8 @@ void DataWidget::resizeEvent(QResizeEvent *size)
 //    qDebug()<<size->size().height()-ui->Img_After_label->height()-ui->Img_LeftAfter_label->height();
 
     if(size->oldSize().height()!=-1){
-        int W=(size->size().width()-6) /3;
-        int H=(size->size().height()-65)/2;
+        int W=(size->size().width()) /3;/* 6 */
+        int H=(size->size().height()-68)/2;/* 68 */
         if(W>0&&H>0){
             ui->Img_After_label->setFixedSize(W,H);
             ui->Img_After_label->size().scale(W,H,Qt::IgnoreAspectRatio);
@@ -40,6 +40,11 @@ void DataWidget::resizeEvent(QResizeEvent *size)
             ui->Img_RightFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
         }
     }
+}
+
+void DataWidget::hideEvent(QHideEvent *event)
+{
+    ui->tabWidget->setTabText(1,tr("Result"));
 }
 
 void DataWidget::logicStatusSlot(int *status)
@@ -87,7 +92,11 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->lineEdit_4->clear();
         ui->Infrared_logic_lineEdit->clear();
 
+        ui->tabWidget->setTabText(1,tr("Result"));
+        ui->tab->setStyleSheet("color: #2c2c2c;");
+
         break;
+
     case 1:
         if(labelPix!=nullptr){
             labelPixFit=labelPix->scaled(ui->Img_Front_label->width(),ui->Img_Front_label->height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
@@ -141,16 +150,20 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
 
     if(resultCheck1){
         ui->lineEdit->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+        ui->tab->setStyleSheet("color: rgb(0, 170, 0);");
     }
     else {
         ui->lineEdit->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+        ui->tab->setStyleSheet("color: rgb(250, 0, 0);");
     }
     if(type==3){
         if(resultCheck2){
             ui->lineEdit_3->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+            ui->tab->setStyleSheet("color: rgb(0, 170, 0);");
         }
         else {
             ui->lineEdit_3->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+            ui->tab->setStyleSheet("color: rgb(250, 0, 0);");
         }
     }
     else {
@@ -178,6 +191,8 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         break;
     }
     ui->Infrared_logic_lineEdit->setText(logic);
+
+    ui->tabWidget->setTabText(1,tr("Front:%1 | Check1:%2 | IS01:%3 | Before:%4 | Check:%5 | ISO2:%6  | Type:%7  | Plate:%8").arg(result1).arg(resultCheck1).arg(iso1).arg(result2).arg(resultCheck2).arg(iso2).arg(logic).arg(""));
 }
 
 void DataWidget::on_test_22_pushButton_clicked()

@@ -5,6 +5,8 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QResizeEvent>
+#include <QHideEvent>
+#include <QPainter>
 #include <QtDebug>
 
 namespace Ui {
@@ -24,6 +26,12 @@ public:
     /// \param size
     ///
     void resizeEvent(QResizeEvent* size)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief hideEvent 重写窗口隐藏事件
+    /// \param event
+    ///
+    void hideEvent(QHideEvent *event)Q_DECL_OVERRIDE;
 
 private:
 

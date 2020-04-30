@@ -45,6 +45,21 @@ DataBaseWidget::~DataBaseWidget()
     delete ui;
 }
 
+void DataBaseWidget::hideEvent(QHideEvent *event)
+{
+    ui->stackedWidget_2->setCurrentIndex(0);
+    ui->ImageOrData_PushButton->setText(tr("Image"));
+
+    showImg=false;
+    ui->Img_Front_label->clear();
+    ui->Img_LeftFront_label->clear();
+    ui->Img_RightFront_label->clear();
+    ui->Img_LeftAfter_label->clear();
+    ui->Img_RightAfter_label->clear();
+    ui->Img_After_label->clear();
+    ui->Img_plate_label->clear();
+}
+
 void DataBaseWidget::resizeEvent(QResizeEvent *size)
 {
     //    qDebug()<<size->size().width()-ui->Img_After_label->width()-ui->Img_RightAfter_label->width()-ui->Img_RightFront_label->width();
