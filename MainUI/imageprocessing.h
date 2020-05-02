@@ -16,7 +16,7 @@ signals:
     /// \param camerIP 相机地址
     /// \param camerPort 相机端口
     ///
-    void initCamerSignal(const QString &camerIP, const int &camerPort,const QString &CamerUser,const QString &CamerPow);
+    void initCamerSignal(const QString &camerIP, const int &camerPort,const QString &CamerUser,const QString &CamerPow,const QString& alias);
 
     ///
     /// \brief putCommand 相机指令
@@ -32,14 +32,6 @@ signals:
     ///
     void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
 
-public slots:
-
-    ///
-    /// \brief camerIDstates 相机状态
-    /// \param camerIP 相机地址
-    /// \param state 相机状态
-    ///
-    void camerIDstatesSlot(const QString &camerIP,bool state);
 };
 
 #endif // IMAGEPROCESSING_H

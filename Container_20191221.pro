@@ -9,4 +9,4 @@ SUBDIRS += \
     IdentifyImages\
     GetImages \
     ResultsAnalysis \
-    SocketService
+    SocketService \

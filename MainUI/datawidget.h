@@ -63,6 +63,13 @@ public slots:
     ///
     void containerSlot(const int& type,const QString &result1, const int &resultCheck1, const QString &iso1, const QString &result2, const int &resultCheck2, const QString &iso2);
 
+    ///
+    /// \brief camerIDstatesSlot 相机状态
+    /// \param camerIP 相机地址
+    /// \param state 相机状态
+    ///
+    void camerIDstatesSlot(const QString &camerIP,bool state,const QString& alisa);
+
 signals:
 
     ///
@@ -73,12 +80,8 @@ signals:
 
 private slots:
 
-    void on_test_22_pushButton_clicked();
-    void on_test_45_pushButton_clicked();
-    void on_test_double_22_front_pushButton_clicked();
-    void on_test_double_22_before_pushButton_clicked();
     void on_while_cycle_capture_checkBox_stateChanged(int arg1);
-    void on_clearn_image_pushButton_clicked();
+    void on_Capture_pushButton_clicked();
 };
 
 #endif // DATAWIDGET_H

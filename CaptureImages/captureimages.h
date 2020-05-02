@@ -18,9 +18,9 @@ public:
 private:
 
     ///
-    /// \brief NET_DVR_Init 动态库初始化状态
+    /// \brief NetSDKInit 动态库初始化状态
     ///
-    bool NET_DVR_Init;
+    bool NetSDKInit;
 
     ///
     /// \brief port 端口
@@ -28,9 +28,9 @@ private:
     int port;
 
     ///
-    /// \brief camerIp  地址,用户名,密码
+    /// \brief camerIp  地址,用户名,密码,别名
     ///
-    QString  camerIp,camerName,camerPow;
+    QString  camerIp,camerName,camerPow,alias;
 
     ///登录用户ID,视频流ID
     LONG lUserID,streamID;
@@ -44,6 +44,11 @@ private:
     /// \brief DLL 加载动态库
     ///
     QLibrary* pDLL;
+
+    ///
+    /// \brief pTimerState 相机状态定时器
+    ///
+    QTimer* pTimerState;
 
 private:
 
@@ -61,7 +66,7 @@ private:
 
     typedef bool (*NET_DVR_CleanupFUN)();
     ///
-    /// \brief NET_DVR_Cleanup_L 清楚内存
+    /// \brief NET_DVR_Cleanup_L 清除内存
     ///
     NET_DVR_CleanupFUN NET_DVR_Cleanup_L;
 
@@ -150,14 +155,13 @@ private:
     ///
     NET_DVR_SetConnectTimeFUN NET_DVR_SetConnectTime_L;
 
-private:
+    typedef   BOOL (*NET_DVR_SetReconnectFUN)(DWORD   dwInterval,BOOL    bEnableRecon    );
+    ///
+    /// \brief NET_DVR_SetReconnect_L 设置重连功能。
+    ///
+    NET_DVR_SetReconnectFUN NET_DVR_SetReconnect_L;
 
-    ///
-    /// \brief getDeviceStatus 获取设备运行状态
-    /// \param lUserID 登录ID
-    /// \return
-    ///
-    bool getDeviceStatus(LONG lUserID);
+private:
 
     ///
     /// \brief exceptionCallBack_V30 接收异常、重连等消息的窗口句柄或回调函数。
@@ -179,6 +183,7 @@ private:
 
 public:
 
+
     ///
     /// \brief initCamerSlot 初始化相机
     /// \param camerIP 地址
@@ -186,7 +191,7 @@ public:
     /// \param user 用户名
     /// \param pow 密码
     ///
-    void initCamerSlot(const QString &camerIP, const int & camerPort, const QString &CamerUser, const QString &CamerPow) Q_DECL_OVERRIDE;
+    void initCamerSlot(const QString &camerIP, const int & camerPort, const QString &CamerUser, const QString &CamerPow,const QString& alias) Q_DECL_OVERRIDE;
 
     ///
     /// \brief putCommandSlot 抓取图片
@@ -211,6 +216,14 @@ public:
     /// \brief resizeEventSlot 通知动态库调整窗口
     ///
     void resizeEventSlot()Q_DECL_OVERRIDE;
+
+private slots:
+    ///
+    /// \brief getDeviceStatusSlot 获取设备运行状态
+    /// \param lUserID 登录ID
+    /// \return
+    ///
+    void getDeviceStatusSlot();
 };
 
 #endif // CAPTUREIMAGES_H

@@ -23,8 +23,8 @@ void DataWidget::resizeEvent(QResizeEvent *size)
 //    qDebug()<<size->size().height()-ui->Img_After_label->height()-ui->Img_LeftAfter_label->height();
 
     if(size->oldSize().height()!=-1){
-        int W=(size->size().width()) /3;/* 6 */
-        int H=(size->size().height()-68)/2;/* 68 */
+        int W=(size->size().width()-10) /3;/* 10 */
+        int H=(size->size().height()-69)/2;/* 69 */
         if(W>0&&H>0){
             ui->Img_After_label->setFixedSize(W,H);
             ui->Img_After_label->size().scale(W,H,Qt::IgnoreAspectRatio);
@@ -44,7 +44,7 @@ void DataWidget::resizeEvent(QResizeEvent *size)
 
 void DataWidget::hideEvent(QHideEvent *event)
 {
-    ui->tabWidget->setTabText(1,tr("Result"));
+    //ui->tabWidget->setTabText(1,tr("Result"));
 }
 
 void DataWidget::logicStatusSlot(int *status)
@@ -90,10 +90,16 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->lineEdit_2->clear();
         ui->lineEdit_3->clear();
         ui->lineEdit_4->clear();
+
+        ui->lineEdit_5->clear();
+        ui->lineEdit_9->clear();
+        ui->lineEdit_7->clear();
+        ui->lineEdit_8->clear();
+
         ui->Infrared_logic_lineEdit->clear();
 
-        ui->tabWidget->setTabText(1,tr("Result"));
-        ui->tab->setStyleSheet("color: #2c2c2c;");
+        //ui->tabWidget->setTabText(1,tr("Result"));
+        //ui->tab->setStyleSheet("color: #2c2c2c;");
 
         break;
 
@@ -148,26 +154,28 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
     ui->lineEdit_3->setText(result2);
     ui->lineEdit_4->setText(iso2);
 
+    ui->lineEdit_5->setText(result1);
+    ui->lineEdit_7->setText(iso1);
+    ui->lineEdit_9->setText(result2);
+    ui->lineEdit_8->setText(iso2);
+
     if(resultCheck1){
         ui->lineEdit->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
-        ui->tab->setStyleSheet("color: rgb(0, 170, 0);");
+        ui->lineEdit_5->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
     else {
         ui->lineEdit->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-        ui->tab->setStyleSheet("color: rgb(250, 0, 0);");
+        ui->lineEdit_5->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
     if(type==3){
         if(resultCheck2){
             ui->lineEdit_3->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
-            ui->tab->setStyleSheet("color: rgb(0, 170, 0);");
+            ui->lineEdit_9->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
         }
         else {
             ui->lineEdit_3->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
-            ui->tab->setStyleSheet("color: rgb(250, 0, 0);");
+            ui->lineEdit_9->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
         }
-    }
-    else {
-        ui->lineEdit_3->clear();
     }
 
     /* 1:22G1 */
@@ -192,47 +200,76 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
     }
     ui->Infrared_logic_lineEdit->setText(logic);
 
-    ui->tabWidget->setTabText(1,tr("Front:%1 | Check1:%2 | IS01:%3 | Before:%4 | Check:%5 | ISO2:%6  | Type:%7  | Plate:%8").arg(result1).arg(resultCheck1).arg(iso1).arg(result2).arg(resultCheck2).arg(iso2).arg(logic).arg(""));
+    //ui->tabWidget->setTabText(1,tr("Front:%1 | Check1:%2 | IS01:%3 | Before:%4 | Check:%5 | ISO2:%6  | Type:%7  | Plate:%8").arg(result1).arg(resultCheck1).arg(iso1).arg(result2).arg(resultCheck2).arg(iso2).arg(logic).arg(""));
 }
 
-void DataWidget::on_test_22_pushButton_clicked()
+void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QString &alisa)
 {
-    emit simulateTriggerSignal(1);
+
+    if(alisa=="Front"){
+        if(state){
+                qDebug()<<alisa;
+            ui->Front_Camera_checkBox->setChecked(true);
+        }
+        else {
+            ui->Front_Camera_checkBox->setChecked(false);
+        }
+    }
+    if(alisa=="After"){
+        if(state){
+            ui->After_Camera_checkBox->setChecked(true);
+        }
+        else {
+            ui->After_Camera_checkBox->setChecked(false);
+        }
+    }
+    if(alisa=="Left"){
+        if(state){
+            ui->Left_Camera_checkBox->setChecked(true);
+        }
+        else {
+            ui->Left_Camera_checkBox->setChecked(false);
+        }
+    }
+    if(alisa=="Right"){
+        if(state){
+            ui->Right_Camera_checkBox->setChecked(true);
+        }
+        else {
+            ui->Right_Camera_checkBox->setChecked(false);
+        }
+    }
 }
 
-void DataWidget::on_test_45_pushButton_clicked()
-{
-    emit simulateTriggerSignal(2);
-}
-
-void DataWidget::on_test_double_22_front_pushButton_clicked()
-{
-    emit simulateTriggerSignal(3);
-}
-
-void DataWidget::on_test_double_22_before_pushButton_clicked()
-{
-    emit simulateTriggerSignal(4);
-}
-
-void DataWidget::on_clearn_image_pushButton_clicked()
-{
-    emit simulateTriggerSignal(0);
-}
 
 void DataWidget::on_while_cycle_capture_checkBox_stateChanged(int arg1)
 {
     if(arg1==Qt::Checked){
-        ui->test_22_pushButton->setEnabled(false);
-        ui->test_45_pushButton->setEnabled(false);
-        ui->test_double_22_front_pushButton->setEnabled(false);
-        ui->test_double_22_before_pushButton->setEnabled(false);
+        ui->Capture_pushButton->setEnabled(false);
     }
     else {
-        ui->test_22_pushButton->setEnabled(true);
-        ui->test_45_pushButton->setEnabled(true);
-        ui->test_double_22_front_pushButton->setEnabled(true);
-        ui->test_double_22_before_pushButton->setEnabled(true);
+        ui->Capture_pushButton->setEnabled(true);
     }
     emit simulateTriggerSignal(5);
+}
+
+void DataWidget::on_Capture_pushButton_clicked()
+{
+    switch (ui->Simulatiion_comboBox->currentIndex()) {
+    case 0:
+        emit simulateTriggerSignal(1);
+        break;
+    case 1:
+        emit simulateTriggerSignal(2);
+        break;
+    case 2:
+        emit simulateTriggerSignal(3);
+        break;
+    case 3:
+        emit simulateTriggerSignal(4);
+        break;
+    case 4:
+        emit simulateTriggerSignal(0);
+        break;
+    }
 }

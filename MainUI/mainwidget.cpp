@@ -120,16 +120,16 @@ void MainWidget::loadingParameters()
             for (;var <=channel*4 ; ++var) {
                 if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(ImageProcessingMap[var])){
                     if(FrontCamer.count()==4&&num==1){
-                        emit pImageProcessing->initCamerSignal(FrontCamer[0],FrontCamer[1].toInt(),FrontCamer[2],FrontCamer[3]);
+                        emit pImageProcessing->initCamerSignal(FrontCamer[0],FrontCamer[1].toInt(),FrontCamer[2],FrontCamer[3],"Front");
                     }
                     if(AfterCamer.count()==4&&num==2){
-                        emit pImageProcessing->initCamerSignal(AfterCamer[0],AfterCamer[1].toInt(),AfterCamer[2],AfterCamer[3]);
+                        emit pImageProcessing->initCamerSignal(AfterCamer[0],AfterCamer[1].toInt(),AfterCamer[2],AfterCamer[3],"After");
                     }
                     if(LeftCamer.count()==4&&num==3){
-                        emit pImageProcessing->initCamerSignal(LeftCamer[0],LeftCamer[1].toInt(),LeftCamer[2],LeftCamer[3]);
+                        emit pImageProcessing->initCamerSignal(LeftCamer[0],LeftCamer[1].toInt(),LeftCamer[2],LeftCamer[3],"Left");
                     }
                     if(RgihtCamer.count()==4&&num==4){
-                        emit pImageProcessing->initCamerSignal(RgihtCamer[0],RgihtCamer[1].toInt(),RgihtCamer[2],RgihtCamer[3]);
+                        emit pImageProcessing->initCamerSignal(RgihtCamer[0],RgihtCamer[1].toInt(),RgihtCamer[2],RgihtCamer[3],"Right");
                     }
                 }
                 ++num;
@@ -590,8 +590,8 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
         connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
         /* 初始化相机 */
         connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
-        /* 相机状态 */
-        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pImageProcessing, &ImageProcessing::camerIDstatesSlot);
+        /* 相机状态(信号与信号绑定) */
+        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
         /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
         connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
     }
@@ -821,8 +821,11 @@ void MainWidget::publicConnect()
                 }
                 for(auto obj:channelCamerMultiMap.values(key)){
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
-                        /* 绑定(前后左右)相机抓拍图片流到数据界面(显示图片) */
+                        /* 绑定(前后左右)相机抓拍图片流,到数据界面(显示图片) */
                         connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pDataWidget,&DataWidget::pictureStreamSlot);
+                        /* 绑定(前后左右)相机状态,到数据界面(状态显示) */
+                        connect(pPictureWidget,&PictureWidget::camerIDstatesSignal,pDataWidget,&DataWidget::camerIDstatesSlot);
+
                         if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMap[key])){
                             /* 相机图片流绑定到识别器处理流程(保存图片) */
                             connect(pPictureWidget,&PictureWidget::pictureStreamSignal,pRecognizerProcessing,&RecognizerProcessing::pictureStreamSlot);

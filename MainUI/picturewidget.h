@@ -91,6 +91,13 @@ signals:
     /// \param command
     ///
     void pictureStreamSignal(const QByteArray &jpgStream, const int &imgNumber,const QString &imgTime="");
+
+    ///
+    /// \brief camerIDstatesSignal 相机状态
+    /// \param camerIP 相机地址
+    /// \param state 相机状态
+    ///
+    void camerIDstatesSignal(const QString &camerIP,bool state,const QString& alisa);
 };
 
 #endif // PICTUREWIDGET_H
