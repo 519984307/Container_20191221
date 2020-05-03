@@ -44,7 +44,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize">
       <size>
@@ -395,6 +395,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>A1</string>
             </property>
@@ -408,6 +411,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>A2</string>
             </property>
@@ -417,6 +423,9 @@
            <widget class="QCheckBox" name="checkBox_4">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
             </property>
             <property name="text">
              <string>B1</string>
@@ -428,6 +437,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>B2</string>
             </property>
@@ -438,6 +450,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>D1</string>
             </property>
@@ -447,6 +462,9 @@
            <widget class="QCheckBox" name="checkBox_7">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
             </property>
             <property name="text">
              <string>D2</string>
@@ -473,6 +491,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>Front</string>
             </property>
@@ -489,6 +510,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>After</string>
             </property>
@@ -498,6 +522,9 @@
            <widget class="QCheckBox" name="Left_Camera_checkBox">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
             </property>
             <property name="text">
              <string>Left</string>
@@ -509,6 +536,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>Right</string>
             </property>
@@ -519,6 +549,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
+            </property>
             <property name="text">
              <string>Plate</string>
             </property>
@@ -528,6 +561,9 @@
            <widget class="QCheckBox" name="Top_Camera_checkBox">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 85, 255);</string>
             </property>
             <property name="text">
              <string>Top</string>

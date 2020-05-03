@@ -10,3 +10,4 @@ SUBDIRS += \
     GetImages \
     ResultsAnalysis \
     SocketService \
+    Encryption

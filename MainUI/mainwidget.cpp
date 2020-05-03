@@ -105,6 +105,8 @@ void MainWidget::initalizeMenubar()
 
 void MainWidget::loadingParameters()
 {
+    pEncryptionProcessing=nullptr;/* 初始化加密处理类 */
+
     int var=1;
 
     for (int channel = 1; channel <= channelCounnt; ++channel) {
@@ -341,6 +343,10 @@ void MainWidget::InitializeOtherWindow()
         pMenuSetting->addAction(pAction);
     }
 
+    /* Help */
+    QAction* pActionHelp=new QAction(tr("Help"),this);
+    pMenBar->addAction(pActionHelp);
+
 //    QTreeWidgetItemIterator it(ui->Navigation);
 //    while(*it){
 //        if((*it)->text(0)==tr("Setting")){
@@ -510,6 +516,11 @@ void MainWidget::loadPlugins()
                     }
                 }
             }
+            else if (EncryptionInterface* pEncryptionInterface=qobject_cast<EncryptionInterface*>(plugin)) {
+                delete pEncryptionInterface;
+                pEncryptionInterface=nullptr;
+                num=1;
+            }
             else {
                 delete  plugin;/* 暂不处理其他插件 */
             }
@@ -559,6 +570,9 @@ void MainWidget::processingPlugins(QDir path, int num)
             }
             else if (SocketServerInterface* pSocketServerInterface=qobject_cast<SocketServerInterface*>(plugin)) {
                 socketServerPlugin(pSocketServerInterface,num--);
+            }
+            else if (EncryptionInterface* pEncryptionInterface=qobject_cast<EncryptionInterface*>(plugin)) {
+                encryptionInterPlugin(pEncryptionInterface);
             }
             else {
                 delete plugin;
@@ -791,6 +805,18 @@ void MainWidget::socketServerPlugin(SocketServerInterface *pSocketServerInterfac
     pThread->start();
 }
 
+void MainWidget::encryptionInterPlugin(EncryptionInterface *pEncryptionInterface)
+{
+    pEncryptionProcessing=new EncryptionProcessing (this) ;
+
+    /* 日志信息 */
+    connect(pEncryptionInterface,&EncryptionInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 获取加密状态 */
+    connect(pEncryptionInterface,&EncryptionInterface::GetTheEncryptedStateSignal,pEncryptionProcessing,&EncryptionProcessing::GetTheEncryptedStateSignal);
+    /* 获取加密信息 */
+    connect(pEncryptionInterface,&EncryptionInterface::GetEncryptedInformationSignal,pEncryptionProcessing,&EncryptionProcessing::GetEncryptedInformationSignal);
+}
+
 void MainWidget::publicConnect()
 {
     /* 一条通道4台相机的数据流,绑定到一个数据界面 */
@@ -813,6 +839,8 @@ void MainWidget::publicConnect()
                     /* 分析识别结果(信号与信号绑定) */
                     connect(pRecognizerProcessing,&RecognizerProcessing::resultsOfAnalysisSignal,pResultsAnalysisProcessing,&ResultsAnalysisProcessing::resultsOfAnalysisSignal);
                 }
+                /* 判断加密状态 */
+                connect(pEncryptionProcessing,&EncryptionProcessing::GetTheEncryptedStateSignal,pRecognizerProcessing,&RecognizerProcessing::GetTheEncryptedStateSlot);
             }
             if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
                 if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
@@ -942,36 +970,38 @@ void MainWidget::avtionMapTiggered()
             tmp->move(0,112);
             tmp->setVisible(true);
             channel=PictureWidgetMap.key(tmp);
+            text=tr("Preview %1 channel %2 Camera").arg(channel/4+1).arg(channel%4);
         }
         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,112);
             tmp->setVisible(true);
             channel=ChannelSettingWidgetMap.key(tmp);
+            text=tr("Preview %1 channel Setting Page").arg(channel);
         }
         if(SystemSettingWidget* tmp=qobject_cast<SystemSettingWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,112);
             tmp->setVisible(true);
-            text=tr("Current  system Settings page");
+            text=tr("Preview System Settings Page");
         }
         if(ServiceWidget* tmp=qobject_cast<ServiceWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,112);
             tmp->setVisible(true);
-            text=tr("Current  service page");
+            text=tr("Preview Service Page");
         }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,112);
             tmp->setVisible(true);
-            text=tr("Current  database page");
+            text=tr("Preview Database Page");
         }
-        if(channel==-1){
+        if(text!=""){
             pStatusBarLabelPermanet->setText(text);
         }
         else {
-            pStatusBarLabelPermanet->setText(tr("Current preview %1 channel").arg(channel));
+            pStatusBarLabelPermanet->setText(tr("Preview %1 channel").arg(channel));
         }
     }
 }

@@ -25,6 +25,7 @@
      background-color: #a8a8a8;
      padding:6px 40px;/* 设置菜单项文字上下和左右的内边距，效果就是菜单中的条目左右上下有了间隔 */
      border-right:1px solid #4f4f4f;/* 为菜单项之间添加横线间隔 */
+     /* color:#ffffff; */
  }
 
  QMenuBar::item:selected { /* when user selects item using mouse or keyboard */

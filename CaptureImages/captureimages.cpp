@@ -7,6 +7,7 @@ CaptureImages::CaptureImages(QObject *parent)
     pTimerState=new QTimer (this);
     connect(pTimerState,SIGNAL(timeout()),this,SLOT(getDeviceStatusSlot()));
 
+    /* 动态库初始化状态 */
     NetSDKInit=false;
 
     /* 登录ID,登录状态,视频流状态 */
@@ -31,7 +32,7 @@ CaptureImages::CaptureImages(QObject *parent)
     NET_DVR_SetConnectTime_L=nullptr;
 
     /* windows下不支持设置动态库路径 */
-    //pDLL=new QLibrary("HCNetSDK.dll");
+    //pDLL=new QLibrary("HCNetSDK.dll",this);
     pDLL=new QLibrary (QDir::toNativeSeparators(tr("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
 
     if(pDLL->load()){
@@ -54,7 +55,7 @@ CaptureImages::CaptureImages(QObject *parent)
         NET_DVR_SetConnectTime_L=reinterpret_cast<NET_DVR_SetConnectTimeFUN>(pDLL->resolve("NET_DVR_SetConnectTime"));
         NET_DVR_SetReconnect_L=reinterpret_cast<NET_DVR_SetReconnectFUN>(pDLL->resolve("NET_DVR_SetReconnect"));
 
-        pTimerState->start(10000);
+        pTimerState->start(15000);/* 15秒检测一次相机状态 */
     }
     else {
         emit messageSignal(ZBY_LOG("ERROR"),tr("load the dynamic error<errorCode=%1>").arg(pDLL->errorString()));
@@ -116,7 +117,7 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
                     //NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
                     NET_DVR_SetConnectTime_L(15000,0);
-                    NET_DVR_SetReconnect_L(5000,1);
+                    NET_DVR_SetReconnect_L(10000,1);
                     NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
 
                     emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(this->camerIp));

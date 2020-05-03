@@ -2,6 +2,7 @@
 
 RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 {
+    encryption=false;
     this->imgPath1="";
     this->imgPath2="";
     this->channel=-1;
@@ -73,7 +74,8 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         dir.mkpath(suffixPath);
         dir.cd(suffixPath);
 
-        if(imgTime!="" && jpgStream!=nullptr){
+        /* 加密不存在识别.给空结果 */
+        if(encryption && imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);            
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
@@ -236,4 +238,9 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             indList.clear();
         }
     }
+}
+/*    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                     */
+void RecognizerProcessing::GetTheEncryptedStateSlot(bool state)
+{
+    encryption=state;
 }

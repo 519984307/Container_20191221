@@ -41,7 +41,8 @@ SOURCES += \
     infraredprocessing.cpp \
     recognizerprocessing.cpp \
     resultsanalysisprocessing.cpp \
-    socketserverprocessing.cpp
+    socketserverprocessing.cpp \
+    encryptionprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -68,7 +69,9 @@ HEADERS += \
     resultsanalysisinterface.h \
     resultsanalysisprocessing.h \
     socketserverinterface.h \
-    socketserverprocessing.h
+    socketserverprocessing.h \
+    encryptionprocessing.h \
+    encryptioninterface.h
 
 FORMS += \
         mainwidget.ui \
@@ -90,13 +93,9 @@ RCC_DIR=tmp/rcc
 UI_DIR=tmp/ui
 OBJECTS_DIR=tmp/obj
 
-#QMAKE_LFLAGS+="-Wl,-rpath=./plugins/,-rpath=./plugins/HCNetSDK"
-
 RESOURCES += \
     ico.qrc
 
 TRANSLATIONS = zh_hans.ts
-#DISTFILES += \
-#    libAudioRender.so \
-#    libSuperRender.so \
-#    libPlayCtrl.so
+
+#QMAKE_LFLAGS+="-Wl,-rpath=./Plugins/,-rpath=./Plugins/smartX"

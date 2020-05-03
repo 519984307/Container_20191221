@@ -28,6 +28,8 @@
 #include "underlyinggetimagesinterface.h"
 #include "resultsanalysisinterface.h"
 #include "socketserverinterface.h"
+#include "encryptioninterface.h"
+
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
 #include "datawidget.h"
@@ -35,6 +37,7 @@
 #include "systemsettingwidget.h"
 #include "servicewidget.h"
 #include "databasewidget.h"
+
 //------------------------------------------------------------------------------------------------------------Process
 #include "imageprocessing.h"
 #include "infraredprocessing.h"
@@ -42,6 +45,7 @@
 #include "recognizerprocessing.h"
 #include "resultsanalysisprocessing.h"
 #include "socketserverprocessing.h"
+#include "encryptionprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -95,6 +99,11 @@ private:
 private:
 
     Ui::MainWidget *ui;
+
+    ///
+    /// \brief pEncryptionProcessing 加密处理类
+    ///
+    EncryptionProcessing* pEncryptionProcessing;
 
     ///
     /// \brief QActionMap 菜单按钮集
@@ -287,6 +296,12 @@ private:
     /// \param num
     ///
     void socketServerPlugin(SocketServerInterface* pSocketServerInterface,int  num);
+
+    ///
+    /// \brief encryptionInterPlugin 加密工具类
+    /// \param pEncryptionInterface
+    ///
+    void encryptionInterPlugin(EncryptionInterface* pEncryptionInterface);
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
     ///

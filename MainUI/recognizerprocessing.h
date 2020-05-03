@@ -20,12 +20,24 @@ public:
 
 private:
 
+    ///
+    /// \brief encryption 加密狗状态
+    ///
+    bool encryption;
+
+    ///
+    /// \brief imgCounts 图片数据
+    ///
     int imgCounts;
+
      ///
-     /// \brief imgList 图片名
+     /// \brief imgList 图片名列表
      ///
      QStringList imgList;
 
+     ///
+     /// \brief timeList 时间戳列表
+     ///
      QStringList timeList;
 
     ///
@@ -152,7 +164,13 @@ public slots:
     /// \param result 识别结果
     /// \param imgName 图片名
     ///
-    void recognitionResultSlot(const QString &result,const QString& imgName);
+    void recognitionResultSlot(const QString &result,const QString& imgName);    
+
+    ///
+    /// \brief GetTheEncryptedState 获取加密状态
+    /// \param state
+    ///
+    void GetTheEncryptedStateSlot(bool state);
 };
 
 #endif // RECOGNIZERPROCESSING_H
