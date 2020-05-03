@@ -160,9 +160,13 @@ void RecognizerProcessing::InfraredLogicStartSlot()
 
 void RecognizerProcessing::infraredCompleteSlot(const int &type,int imgCount)
 {
-    /* 1:22G1 */
-    /* 2:45G1 */
-    /* 3:双22G1 */
+    /*  Type,集装箱类别:
+     * -1 – 未知
+     * 0 – 一个 20 集装箱
+     * 1 – 一个 40 吋/45 吋集装箱
+     * 2 – 两个 20 吋集装箱
+     */
+
     if(type!=-1){
         queue.enqueue(type);
     }
@@ -182,13 +186,13 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
     if(containerNum==0 && queue.count()!=0){
         containertType=queue.dequeue();
         switch (containertType) {
-        case 1:
+        case 0:
             containerNum=4;
             break;
-        case 2:
+        case 1:
             containerNum=6;
             break;
-        case 3:
+        case 2:
             containerNum=6;
             break;
         }
@@ -239,7 +243,7 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
         }
     }
 }
-/*    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                     */
+/*    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!加密状态       */
 void RecognizerProcessing::GetTheEncryptedStateSlot(bool state)
 {
     encryption=state;

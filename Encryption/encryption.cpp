@@ -7,12 +7,16 @@ Encryption::Encryption(QObject *parent)
 
     pTimer=new QTimer(this);
 
+    dogState=false;
+
     pDLL=nullptr;
     SmartXFind=nullptr;
     SmartXGetUid=nullptr;
     SmartXCheckExist=nullptr;
 
     connect(pTimer,SIGNAL(timeout()),this,SLOT(SmartXCheckExistSlot()));
+
+    InitializationSlot();
 }
 
 Encryption::~Encryption()
@@ -31,29 +35,27 @@ Encryption::~Encryption()
 
 void Encryption::InitializationSlot()
 {
-    pDLL=new QLibrary ("./Plugins/smartx/libsmart-xe",this);
+    pDLL=new QLibrary ("./Plugins/smartX/libsmart-xe",this);
 
     if(pDLL->load()){
         SmartXFind=reinterpret_cast<SmartXFindFUN>(pDLL->resolve("SmartXFind"));
         SmartXGetUid=reinterpret_cast<SmartXGetUidFUN>(pDLL->resolve("SmartXGetUid"));
         SmartXCheckExist=reinterpret_cast<SmartXCheckExistFUN>(pDLL->resolve("SmartXCheckExist"));
 
-        pTimer->start(10000);
+        smartXGetUidFunc();
+        pTimer->start(5000);
     }
 }
 
 void Encryption::smartXGetUidFunc()
 {
-    char appID[32]={"HCA5NT4DKKUE48ULHT"};
-    long keyNumber=0;
-
     if(SmartXFind!=nullptr && SmartXFind(appID,keyHandles,&keyNumber)==0){
         if(SmartXGetUid(keyHandles[0],UID)==0){
-            if(strncmp(UID,"ae68c66368a8e943bc260ae97003747f",32)==0){
-                emit GetTheEncryptedStateSignal(true);
+            if(strncmp(UID,"ae68c66368a8e943bc260ae97003747f",33)==0){
+                dogState=true;
             }
             else {
-                emit GetTheEncryptedStateSignal(false);
+                dogState=false;
             }
         }
     }
@@ -64,10 +66,13 @@ void Encryption::smartXGetUidFunc()
 
 void Encryption::SmartXCheckExistSlot()
 {
-    if(SmartXCheckExist(keyHandles[0])==0){
+    if(dogState && SmartXCheckExist(keyHandles[0])==0){
         emit GetTheEncryptedStateSignal(true);
+        qDebug()<<"find lock";
     }
     else {
         emit GetTheEncryptedStateSignal(false);
+        smartXGetUidFunc();
+        qDebug()<<"not find";
     }
 }

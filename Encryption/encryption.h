@@ -32,6 +32,21 @@ private:
     long keyHandles[8]={0};
 
     ///
+    /// \brief appID 程序标识符
+    ///
+    char appID[32]={"HCA5NT4DKKUE48ULHT"};
+
+    ///
+    /// \brief keyNumber 加密狗数量
+    ///
+    long keyNumber=0;
+
+    ///
+    /// \brief dogState 加密狗状态
+    ///
+    bool dogState;
+
+    ///
     /// \brief pDLL 动态库对象
     ///
     QLibrary* pDLL;

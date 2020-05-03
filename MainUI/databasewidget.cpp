@@ -99,7 +99,7 @@ QString DataBaseWidget::checkFilter()
         filterList.append(tr("Channel='%1'").arg(ui->Channel_spinBox->value()));
     }
     if(date){
-        filterList.append(tr("Timer>='%1' AND Timer<='%2'").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
+        filterList.append(tr("(Timer>='%1' AND Timer<='%2')").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
     }
     if(number){
         if(ui->Numbers_Front_lineEdit->text()!=""){
@@ -113,20 +113,20 @@ QString DataBaseWidget::checkFilter()
         filterList.append(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
     }
     if(type){
-        filterList.append(tr("Type='%1'").arg(ui->Type_comboBox->currentIndex()));
+        filterList.append(tr("Type='%1'").arg(ui->Type_comboBox->currentIndex()-1));
     }
     if(check){
         if(ui->Yes_radioButton->isChecked()){
-            filterList.append(tr("(CheckFront='%1' AND (CheckAfter='%1' OR CheckAfter!='%2'))").arg(1).arg(0));
+            filterList.append(tr("(CheckFront='%1' AND CheckAfter='%1'))").arg(1));
         }
         if(ui->No_radioButton->isChecked()){
-            filterList.append(tr("CheckFront='%1' OR CheckAfter='%1'").arg(0));
+            filterList.append(tr("(CheckFront='%1' OR CheckAfter='%1')").arg(0));
         }
     }
     if(Isotype){
         filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Iso_Type_comboBox->currentText()));
     }
-
+    qDebug()<<filterList.join(" AND ");
     return  filterList.join(" AND ");
 }
 
@@ -513,10 +513,15 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
         ui->label_32->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
 
-    /* Type 为箱型 [0没有箱,1一个小箱,2一个大箱,3两个小箱] */
+    /* Tupe,集装箱类别:
+     * -1 – 未知
+     * 0 – 一个 20 集装箱
+     * 1 – 一个 40 吋/45 吋集装箱
+     * 2 – 两个 20 吋集装箱
+     */
     int TYPE=index.sibling(index.row(),Type).data().toInt();
-    if(TYPE>0){
-        if(TYPE==3){
+    if(TYPE>=0){
+        if(TYPE==2){
             if(index.sibling(index.row(),CheckFront).data().toBool()){
                 ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             }
@@ -530,7 +535,7 @@ void DataBaseWidget::on_tableView_clicked(const QModelIndex &index)
                 ui->numberAfter_label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
             }
         }
-        else if (TYPE<3) {
+        else if (TYPE<2) {
             if(index.sibling(index.row(),CheckFront).data().toBool()){
                 ui->numberFront_label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             }
@@ -594,8 +599,10 @@ void DataBaseWidget::on_End_pushButton_clicked()
 //        ui->tableView->selectRow(pModel->rowCount()-1);
 //        emit on_tableView_clicked(pModel->index(pModel->rowCount()-1,0));
 //    }
-    ui->tableView->selectRow(ui->tableView->model()->rowCount()-1);
-    on_tableView_clicked(ui->tableView->currentIndex());
+    if(ui->tableView->model()!=nullptr){
+        ui->tableView->selectRow(ui->tableView->model()->rowCount()-1);
+        on_tableView_clicked(ui->tableView->currentIndex());
+    }
 }
 
 void DataBaseWidget::on_Front_pushButton_clicked()

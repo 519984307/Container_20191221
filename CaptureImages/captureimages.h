@@ -161,6 +161,12 @@ private:
     ///
     NET_DVR_SetReconnectFUN NET_DVR_SetReconnect_L;
 
+    typedef   BOOL (*NET_DVR_SetRecvTimeOutFUN)(DWORD   nRecvTimeOut);
+    ///
+    /// \brief NET_DVR_SetRecvTimeOut_L 设置接收超时时间
+    ///
+    NET_DVR_SetRecvTimeOutFUN NET_DVR_SetRecvTimeOut_L;
+
 private:
 
     ///

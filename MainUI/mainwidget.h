@@ -18,6 +18,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
+#include <QMessageBox>
 
 //------------------------------------------------------------------------------------------------------------Interface
 #include "getimagesinterface.h"

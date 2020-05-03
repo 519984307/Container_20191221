@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_9">
@@ -838,14 +838,14 @@ color: rgb(255, 255, 255);</string>
             <item>
              <widget class="QPushButton" name="Home_pushButton">
               <property name="text">
-               <string>Before</string>
+               <string>Home</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="Front_pushButton">
               <property name="text">
-               <string>Front</string>
+               <string>Before</string>
               </property>
              </widget>
             </item>

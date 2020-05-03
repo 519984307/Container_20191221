@@ -131,10 +131,13 @@ bool ResultsAnalysis::numberCheck(QString &number)
 }
 
 void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QStringList imgList)
-{
-    /* 1:22G1 */
-    /* 2:45G1 */
-    /* 3:双22G1 */
+{   
+    /* 外发协议,集装箱类别:
+     * -1 – 未知
+     * 0 – 一个 20 集装箱
+     * 1 – 一个 40 吋/45 吋集装箱
+     * 2 – 两个 20 吋集装箱
+     */
 
     QList<uint32_t> conProbabilityTemp;/* 箱号置信度 */
     QList<uint32_t> isoProbabilityTemp;/* 箱型置信度 */   
@@ -170,10 +173,10 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
     }
 
-    if(isoTemp.count()==6 && type!=3){/* 过滤双箱误判成长箱,系统改正双箱 */
+    if(isoTemp.count()==6 && type!=2){/* 过滤双箱误判成长箱,系统改正双箱 */
         foreach (auto var, isoTemp) {
             if(var.indexOf("22")!=-1){
-                type=3;
+                type=2;
                 break;
             }
         }
@@ -188,17 +191,17 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     }
     if(notISO){
         switch (type) {
-        case 1:
+        case 0:
             if(isoTemp.count()==4){
                 isoTemp[0]="22G1";
             }
             break;
-        case 2:
+        case 1:
             if(isoTemp.count()==6){
                 isoTemp[0]="45G1";
             }
             break;
-        case 3:
+        case 2:
             if(isoTemp.count()==6){
                 isoTemp[0]="22G1";
                 isoTemp[3]="22G1";
@@ -207,9 +210,9 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         }
     }
 
-    /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标 */
+    /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标,箱号置信度下表,箱型置信度下标 */
     int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
-    if(type==3 && conProbabilityTemp.count()==6){
+    if(type==2 && conProbabilityTemp.count()==6){
         bool checkCon=false;
         for (int var = 0; var < 3; ++var) {
             if(isoProbabilityTemp[var]>Iprobability){
@@ -289,18 +292,31 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
 
     emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
 
-    for (int var = 0; var < conTemp.count(); ++var) {
-        /* 识别结果写入日志,标志|时间戳|通道号|箱号|箱型|校验 */
-        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6]").arg("I").arg(time).arg(channel).arg(conTemp[var]).arg(isoTemp[var]).arg(QString::number(checkConList[var])));
+    /* Tupe,集装箱类别:
+     * -1 – 未知
+     * 0 – 一个 20 集装箱
+     * 1 – 一个 40 吋/45 吋集装箱
+     * 2 – 两个 20 吋集装箱
+     */
+
+    QMap<int,int> indMap;
+    for (int ind = 0; ind < imgList.count(); ++ind) {
+        indMap.insert(imgList[ind].mid(14,1).toInt(),ind);
+        qDebug()<<imgList[ind].mid(14,1).toInt();
     }
 
-    if(type==3){
-        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|箱号|箱型|校验|校验 */
-        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(conTemp[Cindex2]).arg(isoTemp[Iindex2]).arg(QString::number(checkConList[Cindex1])).arg(QString::number(checkConList[Cindex2])));
+    for (int var = 0; var < conTemp.count(); ++var) {
+        /* 识别结果写入日志,[标志|时间戳|通道号(2位)|相机号(2位)|箱号|校验|箱型] */
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("I").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(indMap.key(var),2,10,QLatin1Char('0')).arg(conTemp[var]).arg(QString::number(checkConList[var])).arg(isoTemp[var]));
+    }
+
+    if(type==2){
+        /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型] */
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(QString::number(checkConList[Cindex1])).arg(conTemp[Cindex2]).arg(QString::number(checkConList[Cindex2])).arg(isoTemp[Iindex1]).arg(isoTemp[Iindex2]));
     }
     else {
-        /* 识别结果写入日志,标志|时间戳|通道号|逻辑|箱号|箱型|校验*/
-        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel).arg(type).arg(conTemp[Cindex1]).arg(isoTemp[Iindex1]).arg(QString::number(checkConList[Cindex1])));
+        /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型]*/
+        emit resultsAnalysisStateSignal(channel,tr("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(QString::number(checkConList[Cindex1])).arg(isoTemp[Iindex1]));
     }
 
     QMap<QString,QString> data;
@@ -314,16 +330,10 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
     data["ISOFront"]=isoTemp[Iindex1];
     data["CheckFront"]=QString::number(checkConList[Cindex1]);
 
-    if(type==3){
+    if(type==2){
         data["ContainerAfter"]=conTemp[Cindex2];
         data["ISOAfter"]=isoTemp[Iindex2];
         data["CheckAfter"]=QString::number(checkConList[Cindex2]);
-    }
-
-    QMap<int,int> indMap;
-    for (int ind = 0; ind < imgList.count(); ++ind) {
-        indMap.insert(imgList[ind].mid(14,1).toInt(),ind);
-        qDebug()<<imgList[ind].mid(14,1).toInt();
     }
 
     if(conTemp.count()==4){

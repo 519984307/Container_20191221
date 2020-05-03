@@ -7,7 +7,6 @@ CaptureImages::CaptureImages(QObject *parent)
     pTimerState=new QTimer (this);
     connect(pTimerState,SIGNAL(timeout()),this,SLOT(getDeviceStatusSlot()));
 
-    /* 动态库初始化状态 */
     NetSDKInit=false;
 
     /* 登录ID,登录状态,视频流状态 */
@@ -30,6 +29,7 @@ CaptureImages::CaptureImages(QObject *parent)
     NET_DVR_RemoteControl_L=nullptr;
     NET_DVR_GetRealPlayerIndex_L=nullptr;
     NET_DVR_SetConnectTime_L=nullptr;
+    NET_DVR_SetRecvTimeOut_L=nullptr;
 
     /* windows下不支持设置动态库路径 */
     //pDLL=new QLibrary("HCNetSDK.dll",this);
@@ -54,8 +54,12 @@ CaptureImages::CaptureImages(QObject *parent)
         NET_DVR_GetRealPlayerIndex_L=reinterpret_cast<NET_DVR_GetRealPlayerIndexFUN>(pDLL->resolve("NET_DVR_GetRealPlayerIndex"));
         NET_DVR_SetConnectTime_L=reinterpret_cast<NET_DVR_SetConnectTimeFUN>(pDLL->resolve("NET_DVR_SetConnectTime"));
         NET_DVR_SetReconnect_L=reinterpret_cast<NET_DVR_SetReconnectFUN>(pDLL->resolve("NET_DVR_SetReconnect"));
+        NET_DVR_SetRecvTimeOut_L=reinterpret_cast<NET_DVR_SetRecvTimeOutFUN>(pDLL->resolve("NET_DVR_SetRecvTimeOut"));
 
-        pTimerState->start(15000);/* 15秒检测一次相机状态 */
+        if(pTimerState->isActive()){
+            pTimerState->stop();
+        }
+        pTimerState->start(10000);/* 15秒检测一次相机状态 */
     }
     else {
         emit messageSignal(ZBY_LOG("ERROR"),tr("load the dynamic error<errorCode=%1>").arg(pDLL->errorString()));
@@ -64,8 +68,8 @@ CaptureImages::CaptureImages(QObject *parent)
 
 CaptureImages::~CaptureImages()
 {
-    //pTimerState->stop();
     delete  pTimerState;
+    pTimerState=nullptr;
 
     if(NET_DVR_Cleanup_L){
         NET_DVR_Cleanup_L();
@@ -115,9 +119,12 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
 
                 if(NET_DVR_SetExceptionCallBack_V30_L){
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
-                    //NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
-                    NET_DVR_SetConnectTime_L(15000,0);
-                    NET_DVR_SetReconnect_L(10000,1);
+                   // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
+
+                    NET_DVR_SetConnectTime_L(10000,1);/* 设置网络连接超时时间和连接尝试次数 */
+                    NET_DVR_SetReconnect_L(5000,1);/* 设置重连功能 */
+                    NET_DVR_SetRecvTimeOut_L(1000);/* 设置接收超时时间 */
+
                     NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
 
                     emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 camera init sucess").arg(this->camerIp));
@@ -137,11 +144,14 @@ void CaptureImages::getDeviceStatusSlot()
 {   
     if(NET_DVR_RemoteControl_L){
         if(camerIp!=""){
+                qDebug()<<"state";
             if(NET_DVR_RemoteControl_L(lUserID,NET_DVR_CHECK_USER_STATUS,nullptr,4)){
                 emit camerStateSingal(camerIp,true,alias);
+                dwResult=1;
             }
             else {
                 emit camerStateSingal(camerIp,false,alias);
+                dwResult=0;
             }
         }
     }
@@ -150,7 +160,7 @@ void CaptureImages::getDeviceStatusSlot()
 void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
     CaptureImages* pThis=static_cast<CaptureImages*>(pUser);
-    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camrea exception<errorCode=%2>").arg(pThis->camerIp).arg(dwType));
+    emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 camrea exception<errorCode=%2>").arg(pThis->camerIp).arg(QString::number(pThis->NET_DVR_GetLastError_L())));
 }
 
 
@@ -173,17 +183,20 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
 }
 
 bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
-{
-    NET_DVR_JPEGPARA   pJpegFile={};
-    uint32_t charLen=400000;
-    LPDWORD dataLen=nullptr;
-    char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
-    pJpegFile.wPicSize=0xff;
-    pJpegFile.wPicQuality=0;
-
+{    
     if(dwResult){
         if(NET_DVR_CaptureJPEGPicture_NEW_L){
+
+            NET_DVR_JPEGPARA   pJpegFile={};
+            uint32_t charLen=400000;
+            LPDWORD dataLen=nullptr;
+            char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
+            pJpegFile.wPicSize=0xff;
+            pJpegFile.wPicQuality=0;
+
             if(!NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
+                /* 保证识别流程完成(识别流程需要完整图片编号) */
+                emit pictureStreamSignal(nullptr,imgNumber,imgTime);
                 emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put command error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
 
                 delete  dataLen;             dataLen=nullptr;
@@ -194,6 +207,9 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
                 QByteArray arrayJpg(buff,400000);
                 emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
                 emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put command sucess").arg(camerIp));
+
+                delete  dataLen;    dataLen=nullptr;
+                free(buff);        buff=nullptr;
             }
         }
     }
@@ -201,9 +217,6 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
         /* 保证识别流程完成(识别流程需要完整图片编号) */
         emit pictureStreamSignal(nullptr,imgNumber,imgTime);
     }
-
-    delete  dataLen;    dataLen=nullptr;
-    free(buff);        buff=nullptr;
     return true;
 }
 
@@ -255,6 +268,14 @@ void CaptureImages::resizeEventSlot()
 
 void CaptureImages::releaseResourcesSlot()
 {
+    //pTimerState->stop();
+
+    NET_DVR_SetConnectTime_L(1,1);/* 设置网络连接超时时间和连接尝试次数 */
+
+    if(pTimerState->isActive()){
+         pTimerState->stop();
+    }
+
     if(lUserID!=-1){
         if(streamID!=-1){
             if(NET_DVR_StopRealPlay_L){
@@ -266,7 +287,6 @@ void CaptureImages::releaseResourcesSlot()
             qDebug()<<"exit";
         }
     }
-    pTimerState->stop();
 //    if(NET_DVR_Cleanup_L){
 //        NET_DVR_Cleanup_L();
 //    }

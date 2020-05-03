@@ -149,6 +149,13 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 
 void DataWidget::containerSlot(const int& type,const QString &result1,const int& resultCheck1,const QString &iso1,const QString &result2,const int& resultCheck2,const QString &iso2)
 {
+    /* Tupe,集装箱类别:
+     * -1 – 未知
+     * 0 – 一个 20 集装箱
+     * 1 – 一个 40 吋/45 吋集装箱
+     * 2 – 两个 20 吋集装箱
+     */
+
     ui->lineEdit->setText(result1);
     ui->lineEdit_2->setText(iso1);
     ui->lineEdit_3->setText(result2);
@@ -167,7 +174,7 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         ui->lineEdit->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
         ui->lineEdit_5->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
-    if(type==3){
+    if(type==2){
         if(resultCheck2){
             ui->lineEdit_3->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
             ui->lineEdit_9->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
@@ -178,23 +185,20 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         }
     }
 
-    /* 1:22G1 */
-    /* 2:45G1 */
-    /* 3:双22G1 */
     QString logic="";
     ui->Infrared_logic_lineEdit->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
 
     switch (type) {
-    case 0:
+    case -1:
         logic=tr("No container");
         break;
-    case 1:
+    case 0:
         logic=tr("A small container");
         break;
-    case 2:
+    case 1:
         logic=tr("A large container");
         break;
-    case 3:
+    case 2:
         logic=tr("Two small containersr");
         break;
     }

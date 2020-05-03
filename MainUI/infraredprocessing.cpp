@@ -46,12 +46,16 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
      *1:45G1后面
      *2:22G1
      *3:双22G1前面
-     *4:双22G1后面*/
-    /* Type
-      * 0没有箱
-      * 1:22G1
-      * 2:45G1
-      * 3:双22G1*/
+     *4:双22G1后面
+    */
+
+    /*  Type,集装箱类别:
+     * -1 – 未知
+     * 0 – 一个 20 集装箱
+     * 1 – 一个 40 吋/45 吋集装箱
+     * 2 – 两个 20 吋集装箱
+     */
+
     switch (putCommnd) {
     case -1:
         emit InfraredLogicStartSignal();/* 通知识别器来车,清除遗留图片数据 */
@@ -72,7 +76,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         break;
     case 1:
 
-        emit infraredCompleteSignal(2,3);
+        emit infraredCompleteSignal(1,3);
 
         emit pPictureWidgetLEFT->putCommandSignal(5,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(4,timer);
@@ -97,7 +101,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
-        emit infraredCompleteSignal(1,4);
+        emit infraredCompleteSignal(0,4);
 
         emit pPictureWidgetFRONT->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(3,timer);
@@ -135,7 +139,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         break;
     case 4:
 
-        emit infraredCompleteSignal(3,3);
+        emit infraredCompleteSignal(2,3);
 
         emit pPictureWidgetLEFT->putCommandSignal(5,timer);
         emit pPictureWidgetRIGHT->putCommandSignal(4,timer);
