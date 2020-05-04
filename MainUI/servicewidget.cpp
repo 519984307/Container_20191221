@@ -17,7 +17,7 @@ ServiceWidget::~ServiceWidget()
     delete ui;
 }
 
-void ServiceWidget::messageSlot(const QString &type, const QString &msg)
+void ServiceWidget::resultsAnalysisStateSlot(const int &channel, const QString &msg)
 {
-    ui->plainTextEdit->appendPlainText(tr("[%1] [%2]").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(msg));
+    ui->plainTextEdit->appendPlainText(tr("[%1] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(msg));
 }

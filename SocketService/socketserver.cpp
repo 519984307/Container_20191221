@@ -7,11 +7,13 @@ SocketServer::SocketServer(QObject* parent):QTcpServer (parent)
 
 void SocketServer::incomingConnection(qintptr handle)
 {
+    qDebug()<<"newCon";
     SocketClient* pClient=new SocketClient (this);
     pClient->setSocketDescriptor(handle);
     clientMap.insert(handle,pClient);
     qDebug()<<handle;
 
+    emit messageSignal(ZBY_LOG("INFO"),"new client join");
     connect(pClient,&SocketClient::disconnected,this,&SocketServer::disconnectedSlot);
 }
 

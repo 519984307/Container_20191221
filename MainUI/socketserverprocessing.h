@@ -16,8 +16,9 @@ signals:
     /// \param address 地址
     /// \param port 端口
     /// \param serviceType 服务类型
+    /// \param heartBeat 心跳包
     ///
-    void  InitializationParameterSignal(const QString& address,const quint16& port,const int& serviceType);
+    void  InitializationParameterSignal(const QString& address,const quint16& port,const int& serviceType,const int& heartBeat);
 
     ///
     /// \brief socketSendDataSlot 发送数据

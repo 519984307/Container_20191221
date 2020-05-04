@@ -35,14 +35,14 @@ SOURCES += \
     servicewidget.cpp \
     databasewidget.cpp \
     channelsettingwidget.cpp \
-    imagewidget.cpp \
     imageprocessing.cpp \
     databaseprocessing.cpp \
     infraredprocessing.cpp \
     recognizerprocessing.cpp \
     resultsanalysisprocessing.cpp \
     socketserverprocessing.cpp \
-    encryptionprocessing.cpp
+    encryptionprocessing.cpp \
+    logwidget.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -52,7 +52,6 @@ HEADERS += \
     servicewidget.h \
     databasewidget.h \
     channelsettingwidget.h \
-    imagewidget.h \
     imageprocessing.h \
     databaseprocessing.h \
     infraredprocessing.h \
@@ -71,7 +70,8 @@ HEADERS += \
     socketserverinterface.h \
     socketserverprocessing.h \
     encryptionprocessing.h \
-    encryptioninterface.h
+    encryptioninterface.h \
+    logwidget.h
 
 FORMS += \
         mainwidget.ui \
@@ -81,7 +81,7 @@ FORMS += \
     servicewidget.ui \
     databasewidget.ui \
     channelsettingwidget.ui \
-    imagewidget.ui
+    logwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

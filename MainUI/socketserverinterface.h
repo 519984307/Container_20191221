@@ -41,14 +41,20 @@ public slots:
     /// \param address 地址
     /// \param port 端口
     /// \param serviceType 服务类型
+    /// \param heartBeat 心跳包
     ///
-    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType=0)=0;
+    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& heartBeat)=0;
 
     ///
     /// \brief socketSendDataSlot 发送数据
     /// \param data 数据体
     ///
     virtual void socketSendDataSlot(const QString& data)=0;    
+
+    ///
+    /// \brief releaseResourcesSlot 释放资源
+    ///
+    virtual void releaseResourcesSlot()=0;
 };
 
 #define SocketServerInterfaceIID "ZBY.ContainerServer.SocketServerInterface/1.0"

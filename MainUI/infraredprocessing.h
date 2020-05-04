@@ -122,6 +122,12 @@ signals:
      ///
      void putCommantStateSignal(const int& channel, const QString& msg);
 
+     ///
+     /// \brief rInfraredLogicStarttateSignal 开始抓拍状态
+     /// \param msg 信息体
+     ///
+     void rInfraredLogicStarttateSignal(const int& channel, const QString& msg);
+
 public slots:
 
     ///

@@ -168,7 +168,7 @@ void MainWidget::loadingParameters()
             if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[1])){
                 QStringList addr=pSystemSettingWidget->pSettingValues->SingletonAddress.split(":");
                 if(addr.count()==2){
-                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel);
+                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
                 }
             }
             break;
@@ -178,7 +178,7 @@ void MainWidget::loadingParameters()
                 QStringList addr=addrList[var].split(":");
                 if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var])){
                     if(addr.count()==2){
-                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel);
+                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
                     }
                 }
             }
@@ -309,13 +309,10 @@ void MainWidget::InitializeCamerWindow()
 void MainWidget::InitializeOtherWindow()
 {
     /* service */
-    QMenu* pMenuService=new QMenu (tr("&Service"),this);
-    pMenBar->addMenu(pMenuService);
-
     pServiceWidget=new ServiceWidget (this);
-    QAction* pActionLog=new QAction(tr("Log"),this);
-    QActionMap.insert(pActionLog,pServiceWidget);
-    pMenuService->addAction(pActionLog);
+    QAction* pActionService=new QAction (tr("&Service"),this);
+    QActionMap.insert(pActionService,pServiceWidget);
+    pMenBar->addAction(pActionService);
 
     /* database */
     QMenu* pMenuDataBase=new QMenu (tr("Da&tabase"),this);
@@ -342,6 +339,12 @@ void MainWidget::InitializeOtherWindow()
         QActionMap.insert(pAction,pChannelSettingWidget);
         pMenuSetting->addAction(pAction);
     }
+
+    /* Log */
+    pLogWidget=new LogWidget (this);
+    QAction* pActionLog=new QAction (tr("Log"),this);
+    QActionMap.insert(pActionLog,pLogWidget);
+    pMenBar->addAction(pActionLog);
 
     /* Help */
     QAction* pActionHelp=new QAction(tr("Help"),this);
@@ -771,9 +774,13 @@ void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysi
     /* 设置通道号 */
     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setChannelSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setChannelSlot);
     /* 识别结果写入日志 */
-    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,this,&MainWidget::resultsAnalysisStateSlot);
+    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,this,&MainWidget::resultsAnalysisStateSlot);            
     /* 结果校验模式 */
     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setCheckTheResultsSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setCheckTheResultsSlot);
+    /* 绑定识别结果到服务窗口 */
+    if(pServiceWidget!=nullptr){
+         connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,pServiceWidget,&ServiceWidget::resultsAnalysisStateSlot);
+    }
 
     /* 设置通道号 */
     pResultsAnalysisProcessing->setChannelSignal(num);
@@ -797,6 +804,8 @@ void MainWidget::socketServerPlugin(SocketServerInterface *pSocketServerInterfac
     connect(pSocketServerProcessing,&SocketServerProcessing::socketSendDataSignal,pSocketServerInterface,&SocketServerInterface::socketSendDataSlot);
     /* 日志信息 */
     connect(pSocketServerInterface,&SocketServerInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 释放资源 */
+    connect(this,&MainWidget::releaseResourcesSignal,pSocketServerInterface,&SocketServerInterface::releaseResourcesSlot);
 
     QThread* pThread=new QThread(this);
     pSocketServerProcessing->moveToThread(pThread);
@@ -830,6 +839,10 @@ void MainWidget::publicConnect()
                     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::updateDataBaseSignal,pDataBaseProcessing,&DataBaseProcessing::updateDataBaseSignal);
                 }
             }
+            if(pServiceWidget!=nullptr){
+                /* 开始抓拍写入服务界面 */
+                connect(pInfraredProcessing,&InfraredProcessing::rInfraredLogicStarttateSignal,pServiceWidget,&ServiceWidget::resultsAnalysisStateSlot);
+            }
             if(RecognizerProcessing* pRecognizerProcessing=qobject_cast<RecognizerProcessing*>(RecognizerProcessingMap[key])){
                 /* 逻辑抓拍完成 */
                 connect(pInfraredProcessing,&InfraredProcessing::infraredCompleteSignal,pRecognizerProcessing,&RecognizerProcessing::infraredCompleteSlot);
@@ -844,8 +857,8 @@ void MainWidget::publicConnect()
             }
             if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
                 if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
-                    /* 识别结果 */
-                    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::containerSignal,pDataWidget,&DataWidget::containerSlot);
+                    /* 识别结果到数据界面 */
+                    connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::containerSignal,pDataWidget,&DataWidget::containerSlot);                                        
                 }
                 for(auto obj:channelCamerMultiMap.values(key)){
                     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(obj)){
@@ -872,8 +885,10 @@ void MainWidget::publicConnect()
         }
     }
 
-    /* 绑定日志信息到服务窗口 */
-    connect(this,&MainWidget::messageSignal,pServiceWidget,&ServiceWidget::messageSlot);
+    /* 绑定日志信息到日志窗口 */
+    if(pLogWidget!=nullptr){
+         connect(this,&MainWidget::messageSignal,pLogWidget,&LogWidget::messageSlot);
+    }
 }
 
 void MainWidget::hideWindows()
@@ -897,6 +912,9 @@ void MainWidget::hideWindows()
              tmp->setVisible(false);
          }
          if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
+             tmp->setVisible(false);
+         }
+         if(LogWidget* tmp=qobject_cast<LogWidget*>(value)){
              tmp->setVisible(false);
          }
     }
@@ -991,6 +1009,12 @@ void MainWidget::avtionMapTiggered()
             tmp->setVisible(true);
             text=tr("Preview Service Page");
         }
+        if(LogWidget* tmp=qobject_cast<LogWidget*>(value)){
+            //tmp->move(168,80);
+            tmp->move(0,112);
+            tmp->setVisible(true);
+            text=tr("Preview Log Page");
+        }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(value)){
             //tmp->move(168,80);
             tmp->move(0,112);
@@ -1030,6 +1054,10 @@ void MainWidget::resizeEvent(QResizeEvent *size)
             tmp->resize( size->size().width(),size->size().height()-135);
         }
         if(DataBaseWidget* tmp=qobject_cast<DataBaseWidget*>(pWidget)){
+            //tmp->resize( size->size().width()-168,size->size().height()-105);
+            tmp->resize( size->size().width(),size->size().height()-135);
+        }
+        if(LogWidget* tmp=qobject_cast<LogWidget*>(pWidget)){
             //tmp->resize( size->size().width()-168,size->size().height()-105);
             tmp->resize( size->size().width(),size->size().height()-135);
         }

@@ -38,6 +38,7 @@
 #include "systemsettingwidget.h"
 #include "servicewidget.h"
 #include "databasewidget.h"
+#include "logwidget.h"
 
 //------------------------------------------------------------------------------------------------------------Process
 #include "imageprocessing.h"
@@ -96,6 +97,11 @@ private:
     /// \brief pServiceWidget f服务窗口对象
     ///
     ServiceWidget* pServiceWidget;
+
+    ///
+    /// \brief pLogWidget 日志窗口
+    ///
+    LogWidget* pLogWidget;
 
 private:
 
@@ -347,7 +353,7 @@ private slots:
     void putCommantStateSlot(const int &channel, const QString& msg);
 
     ///
-    /// \brief resultsAnalysisStateSlot 抓拍信息写入日志
+    /// \brief resultsAnalysisStateSlot 识别结果写入日志
     /// \param msg 信息体
     ///
     void resultsAnalysisStateSlot(const int& channel, const QString& msg);

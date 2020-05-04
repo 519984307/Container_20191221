@@ -34,7 +34,6 @@ DataBaseWidget::DataBaseWidget(QWidget *parent) :
     //ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
-
 }
 
 DataBaseWidget::~DataBaseWidget()
@@ -66,7 +65,7 @@ void DataBaseWidget::resizeEvent(QResizeEvent *size)
     //    qDebug()<<size->size().height()-ui->Img_After_label->height()-ui->Img_LeftAfter_label->height();
 
     if(size->oldSize().height()!=-1){
-        int W=(size->size().width()-2) /3;
+        int W=(size->size().width()-4) /3;
         int H=(size->size().height()-172)/2;
         if(W>0&&H>0){
             ui->Img_After_label->setFixedSize(W,H);
@@ -81,6 +80,8 @@ void DataBaseWidget::resizeEvent(QResizeEvent *size)
             ui->Img_LeftFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
             ui->Img_RightFront_label->setFixedSize(W,H);
             ui->Img_RightFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
+            ui->Img_plate_label->setFixedSize(W,H);
+            ui->Img_plate_label->size().scale(W,H,Qt::IgnoreAspectRatio);
         }
     }
 }
@@ -332,6 +333,9 @@ void DataBaseWidget::on_Type_checkBox_stateChanged(int arg1)
 
 void DataBaseWidget::showImages(const QModelIndex &index)
 {
+    this->resize(this->size() - QSize(1,1));
+    this->resize(this->size() + QSize(1,1));
+
     ui->Img_Front_label->clear();
     ui->Img_LeftFront_label->clear();
     ui->Img_RightFront_label->clear();

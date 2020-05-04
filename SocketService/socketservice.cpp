@@ -18,9 +18,6 @@ SocketService::~SocketService()
     if(pTcpServer!=nullptr){
          pTcpServer->close();
     }
-    if(pTimerLink!=nullptr && pTimerLink->isActive()){
-        pTimerLink->stop();
-    }
 
     delete pTcpServer;
     delete pTcpSocket;
@@ -31,16 +28,20 @@ SocketService::~SocketService()
     pTimerLink=nullptr;
 }
 
-void SocketService::InitializationParameterSlot(const QString &address, const quint16 &port, const int &serviceType)
+void SocketService::InitializationParameterSlot(const QString &address, const quint16 &port, const int &serviceType,const int& heartBeat)
 {
+    this->heartBeat=heartBeat;
     this->address=address;
     this->port=port;
 
     if(serviceType==1){/* 服务器模式 */
         pTcpServer=new SocketServer (this);
+
+        connect(pTcpServer,&SocketServer::messageSignal,this,&SocketService::messageSignal);
+
         startListen();
     }
-    if(serviceType==0){/* 客户端模式 */
+    else if (serviceType==0) {/* 客户端模式 */
         pTcpSocket=new QTcpSocket(this);
         pTimerLink=new QTimer (this);
 
@@ -68,20 +69,18 @@ void SocketService::startLink()
 
 void SocketService::startListen()
 {
-    if(!pTcpServer->listen(QHostAddress(address),port)){
-        emit messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 listen error<errocCode=%2>").arg(address).arg(pTcpServer->errorString()));
-        qDebug()<<pTcpServer->errorString();
+    if(!pTcpServer->listen(QHostAddress::Any,port)){/* 服务器使用本机地址 */
+        emit messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Listen Error<errocCode=%2>").arg(QHostAddress::Any).arg(pTcpServer->errorString()));
     }
     else {
-        emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 start listen.").arg(address));
-        qDebug()<<"sucess";
+        emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Start Listen.").arg(QHostAddress::Any));
     }
 }
 
 void SocketService::heartbeatSlot()
 {
     if(pTcpSocket->isOpen()){
-        pTcpSocket->write("");/* 心跳包空数据 */
+        pTcpSocket->write("[H]");/* 心跳包数据 */
     }
 }
 
@@ -90,10 +89,15 @@ void SocketService::connected()
     if(pTimerLink->isActive()){
         pTimerLink->stop();
     }
-    pTimerLink->start(5000);
+
+    if(heartBeat){
+         pTimerLink->start(5000);
+    }
+
+    isConnected=true;
+
     emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Socket  Link Successful").arg(address));
     emit socketLinkStateSingal(address,true);
-    isConnected=true;
 }
 
 void SocketService::readFortune()
@@ -101,7 +105,7 @@ void SocketService::readFortune()
     /* 读取客户端数据 */
     QByteArray buf=pTcpSocket->readAll();
     qDebug()<<buf;
-    //emit socketReadDataSignal();
+    //emit soc    isConnected=true;ketReadDataSignal();
 }
 
 void SocketService::socketSendDataSlot(const QString &data)
@@ -123,4 +127,11 @@ void SocketService::displayError(QAbstractSocket::SocketError socketError)
     isConnected=false;
     emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1  Socket Error<errorCode=%2>").arg(address).arg(socketError));
     QTimer::singleShot(10000, this, SLOT(startLink()));
+}
+
+void SocketService::releaseResourcesSlot()
+{
+    if(pTimerLink!=nullptr && pTimerLink->isActive()){
+        pTimerLink->stop();
+    }
 }

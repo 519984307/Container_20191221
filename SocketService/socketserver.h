@@ -4,6 +4,8 @@
 #include "socketclient.h"
 #include "socketservice_global.h"
 
+#define ZBY_LOG(type)  tr("[%1][%2][%3]").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
+
 class SocketServer : public QTcpServer
 {
     Q_OBJECT
@@ -28,7 +30,20 @@ public slots:
 
 private:
 
+    ///
+    /// \brief clientMap 客户端列表
+    ///
     QMap<qintptr,SocketClient*> clientMap;
+
+
+signals:
+
+    ///
+    /// \brief messageSignal 日志信息
+    /// \param type 日志类型
+    /// \param msg 信息体
+    ///
+    void messageSignal(const QString &type,const QString &msg);
 };
 
 #endif // SOCKETSERVER_H

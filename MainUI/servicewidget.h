@@ -22,11 +22,10 @@ private:
 public slots:
 
     ///
-    /// \brief messageSlot 日志信息
-    /// \param type 信息类型
+    /// \brief resultsAnalysisStateSlot  识别结果
     /// \param msg 信息体
     ///
-    void messageSlot(const QString &type, const QString &msg);
+    void resultsAnalysisStateSlot(const int& channel, const QString& msg);
 };
 
 #endif // SERVICEWIDGET_H

@@ -154,19 +154,22 @@ bool SystemSettingWidget::jsonWrite()
 
     QJsonObject jsonObj7;
     if(ui->ClientModel->isChecked()){
-        jsonObj1.insert(tr("ServiceModel"),0);
+        jsonObj7.insert(tr("ServiceModel"),0);
     }
     if(ui->ServerModel->isChecked()){
-        jsonObj1.insert(tr("ServiceModel"),1);
+        jsonObj7.insert(tr("ServiceModel"),1);
     }
     jsonObj7.insert("Service_Type",ui->Service_Type_comboBox->currentIndex());
     jsonObj7.insert("SingletonAddress",ui->Address_Singleton_lineEdit->text());
     jsonObj7.insert("ManyCasesAddress",ui->Address_Many_textEdit->toPlainText());
+    jsonObj7.insert("Heartbeat",int(ui->Hearbeat_checkBox->isChecked()));
+    jsonObj7.insert("Resultting",int(ui->Resulting_checkBox->isChecked()));
     jsonChild.insert("Service",QJsonValue(jsonObj7));
 
     jsonObjRoot.insert("MAIN",QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
-    QByteArray arr=jsonDoc.toJson();
+
+    QByteArray arr=jsonDoc.toJson();/* 写入日志 */
     file.write(arr);
     file.waitForBytesWritten(1000);
     file.close();
@@ -231,6 +234,8 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->Service_Type=getJsonValue("Service","Service_Type",value.toObject()).toInt();
                     pSettingValues->SingletonAddress=getJsonValue("Service","SingletonAddress",value.toObject()).toString();
                     pSettingValues->ManyCasesAddress=getJsonValue("Service","ManyCasesAddress",value.toObject()).toString();
+                    pSettingValues->Heartbeat=getJsonValue("Service","Heartbeat",value.toObject()).toInt();
+                    pSettingValues->Resultting=getJsonValue("Service","Resultting",value.toObject()).toInt();
 
                     pSettingValues->DataBaseVersion=getJsonValue("DataBase","DataBaseVersion",value.toObject()).toInt();
                     pSettingValues->DataBaseUser=getJsonValue("DataBase","DataBaseUser",value.toObject()).toString();
@@ -274,9 +279,12 @@ void SystemSettingWidget::jsonWritetoUI()
     else {/* 服务器模式 */
         ui->ServerModel->setChecked(1);
     }
+
     ui->Service_Type_comboBox->setCurrentIndex(pSettingValues->Service_Type);
     ui->Address_Singleton_lineEdit->setText(pSettingValues->SingletonAddress);
     ui->Address_Many_textEdit->setText(pSettingValues->ManyCasesAddress);
+    ui->Hearbeat_checkBox->setChecked(pSettingValues->Heartbeat);
+    ui->Resulting_checkBox->setChecked(pSettingValues->Resultting);
 
     ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
     ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);

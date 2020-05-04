@@ -290,7 +290,7 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
 
     QString dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
 
-    emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
+    //emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
 
     /* Tupe,集装箱类别:
      * -1 – 未知

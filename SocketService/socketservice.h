@@ -23,6 +23,11 @@ private:
     bool isConnected;
 
     ///
+    /// \brief heartBeat 心跳包状态
+    ///
+    int heartBeat;
+
+    ///
     /// \brief address 地址
     ///
     QString address;
@@ -46,14 +51,6 @@ private:
     /// \brief pTimerLink 定时心跳包检测
     ///
     QTimer *pTimerLink;
-
-//    ///
-//    /// \brief clientList 客户端列表
-//    ///
-//    QList<QTcpSocket*> clientList;
-
-private:
-
 
 private slots:
 
@@ -99,16 +96,21 @@ public:
     /// \brief InitializationParameterSlot 初始化参数
     /// \param address 地址
     /// \param port 端口
-    /// \param channel 通道号
     /// \param serviceType 服务类型
+    /// \param heartBeat 心跳包
     ///
-    void  InitializationParameterSlot(const QString& address, const quint16 &port, const int& serviceType)Q_DECL_OVERRIDE;
+    void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& heartBeat)Q_DECL_OVERRIDE;
 
     ///
     /// \brief socketSendDataSlot 发送数据
     /// \param data 数据体
     ///
     void socketSendDataSlot(const QString& data)Q_DECL_OVERRIDE;  
+
+    ///
+    /// \brief releaseResourcesSlot 释放动资源
+    ///
+    void releaseResourcesSlot()Q_DECL_OVERRIDE;
 };
 
 #endif // SOCKETSERVICE_H

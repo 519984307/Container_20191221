@@ -59,13 +59,15 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
     switch (putCommnd) {
     case -1:
         emit InfraredLogicStartSignal();/* 通知识别器来车,清除遗留图片数据 */
-        emit clearnPictureSignal(nullptr,-1);/* 通知来车,清除数据界面图片 */
+        emit clearnPictureSignal(nullptr,-1);/* 通知来车,清除数据界面图片 */       
+
         break;
     case 0:
         timer=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");/* 来车时间 */
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
         emit infraredCompleteSignal(-1,3);
+        emit rInfraredLogicStarttateSignal(channel,QString("[S|%2|%1]").arg(channel,2,10,QLatin1Char('0')).arg(name));
 
         emit pPictureWidgetFRONT->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(3,timer);
@@ -102,6 +104,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
         emit infraredCompleteSignal(0,4);
+        emit rInfraredLogicStarttateSignal(channel,QString("[S|%2|%1]").arg(channel,2,10,QLatin1Char('0')).arg(name));
 
         emit pPictureWidgetFRONT->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(3,timer);
@@ -129,6 +132,7 @@ void InfraredProcessing::logicPutImageSlot(const int &putCommnd)
         name=QDateTime::fromString(timer,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss");/* 图片名时间部分 */
 
         emit infraredCompleteSignal(-1,3);
+        emit rInfraredLogicStarttateSignal(channel,QString("[S|%2|%1]").arg(channel,2,10,QLatin1Char('0')).arg(name));
 
         emit pPictureWidgetFRONT->putCommandSignal(1,timer);
         emit pPictureWidgetLEFT->putCommandSignal(3,timer);
