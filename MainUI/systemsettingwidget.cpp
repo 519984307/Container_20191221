@@ -425,3 +425,14 @@ void SystemSettingWidget::conditionsOfButton_clicked()
         }
     }
 }
+
+void SystemSettingWidget::on_Service_Type_comboBox_currentIndexChanged(int index)
+{
+    if(index==0){
+        ui->ClientModel->setEnabled(false);
+        ui->ServerModel->setChecked(true);
+    }
+    else if (index==1) {
+        ui->ClientModel->setEnabled(true);
+    }
+}

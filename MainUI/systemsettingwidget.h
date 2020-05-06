@@ -92,6 +92,12 @@ private slots:
     ///
     void checkPathPushButton_clicked();
 
+    ///
+    /// \brief on_Service_Type_comboBox_currentIndexChanged 服务模式选取
+    /// \param index
+    ///
+    void on_Service_Type_comboBox_currentIndexChanged(int index);
+
 signals:
 
     ///

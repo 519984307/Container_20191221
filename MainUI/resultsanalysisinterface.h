@@ -44,6 +44,13 @@ signals:
     ///
     void resultsAnalysisStateSignal(const int& channel, const QString& msg);
 
+    ///
+    /// \brief sendResultSignal 发送识别结果
+    /// \param channel 通道号
+    /// \param result 识别结果
+    ///
+    void sendResultSignal(int channel,const QString& result);
+
 public slots:
 
     ///

@@ -34,6 +34,19 @@ signals:
     ///
     void socketReadDataSignal(const QString& data);
 
+    ///
+    /// \brief socketConnectCount socket链接数量
+    /// \param count
+    ///
+    void socketConnectCountSignal(int count);
+
+    ///
+    /// \brief sendResultSlot 发送识别结果
+    /// \param channel 通道号
+    /// \param result 识别结果
+    ///
+    void sendResultSignal(int channel,const QString& result);
+
 public slots:
 
     ///
@@ -41,9 +54,10 @@ public slots:
     /// \param address 地址
     /// \param port 端口
     /// \param serviceType 服务类型
-    /// \param heartBeat 心跳包
+    /// \param heartBeat 心跳包 状态
+    /// \param serviceMode 服务模式
     ///
-    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& heartBeat)=0;
+    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode,const int& heartBeat)=0;
 
     ///
     /// \brief socketSendDataSlot 发送数据

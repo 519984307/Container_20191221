@@ -26,6 +26,12 @@ public slots:
     /// \param msg 信息体
     ///
     void resultsAnalysisStateSlot(const int& channel, const QString& msg);
+
+    ///
+    /// \brief socketConnectCountSlot socket链接数量
+    /// \param count
+    ///
+    void socketConnectCountSlot(int count);
 };
 
 #endif // SERVICEWIDGET_H

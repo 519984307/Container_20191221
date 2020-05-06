@@ -95,7 +95,7 @@ void InfraredLogic::serialLogic(int *status)
                 if(status[1]==valueOne){
                     if(status[3]==valueOne){
                         if(status[4]==valueOne){
-                            if(!_22G1_22G1){/* 过滤双箱重复抓图 */
+                            if(!_22G1_22G1 && !_22G1_22G1_STATE){/* 过滤双箱重复抓图 */
                                 emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
                                 emit logicPutImageSignal(0);
                                 _45G1=true;
@@ -105,7 +105,6 @@ void InfraredLogic::serialLogic(int *status)
                                 _45G1=false;
                             }
                             _22G1=false;
-                            _22G1_22G1_STATE=false;
                             return;
                         }
                     }
@@ -178,7 +177,9 @@ void InfraredLogic::serialLogic(int *status)
                     }
                 }
             }
-            if(_45G1){/* 没有检测到双箱状态 */
+
+
+            if(_22G1_MID_22G1){/* 没有检测到双箱状态,只要释放B1后,再次释放B2就不再取图. */
                 if(status[0]==valueOne){
                     if(status[1]==valueOne){
                         if(status[3]==valueTwo){
@@ -189,19 +190,11 @@ void InfraredLogic::serialLogic(int *status)
                         }
                     }
                 }
-                if(_22G1_22G1_STATE){/* 判定双箱 */
-                    if(status[0]==valueOne && status[1]==valueOne && status[3]==valueTwo && status[4]==valueTwo){
-                        _22G1_22G1=false;
-                        _45G1=true;
-                        return;
-                    }
-                    else {
-                        _22G1_22G1=true;
-                        _45G1=false;
-                        return;
-                    }
-                }
             }
+            if(_22G1_22G1_STATE && status[4]==valueTwo){
+                _22G1_22G1_STATE=false;
+            }
+
 //            if(_22G1_MID_22G1){/* 没检测到双箱状态,中途释放A1证明不是长箱 */
 //                if(status[0]==valueTwo){
 //                    if(status[1]==valueOne){

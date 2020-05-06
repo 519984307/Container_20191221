@@ -97,9 +97,10 @@ public:
     /// \param address 地址
     /// \param port 端口
     /// \param serviceType 服务类型
-    /// \param heartBeat 心跳包
+    /// \param heartBeat 心跳包 状态
+    /// \param serviceMode 服务模式
     ///
-    void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& heartBeat)Q_DECL_OVERRIDE;
+    void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode,const int& heartBeat)Q_DECL_OVERRIDE;
 
     ///
     /// \brief socketSendDataSlot 发送数据
@@ -111,6 +112,13 @@ public:
     /// \brief releaseResourcesSlot 释放动资源
     ///
     void releaseResourcesSlot()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief sendResultSlot 发送识别结果
+    /// \param channel 通道号
+    /// \param result 识别结果
+    ///
+    void sendResultSlot(int channel,const QString& result);
 };
 
 #endif // SOCKETSERVICE_H

@@ -28,7 +28,7 @@ SocketService::~SocketService()
     pTimerLink=nullptr;
 }
 
-void SocketService::InitializationParameterSlot(const QString &address, const quint16 &port, const int &serviceType,const int& heartBeat)
+void SocketService::InitializationParameterSlot(const QString &address, const quint16 &port, const int &serviceType,const int& serviceMode,const int& heartBeat)
 {
     this->heartBeat=heartBeat;
     this->address=address;
@@ -74,6 +74,10 @@ void SocketService::startListen()
     }
     else {
         emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Start Listen.").arg(QHostAddress::Any));
+        /* 绑定客户端数量 */
+        connect(pTcpServer,&SocketServer::socketConnectCountSignal,this,&SocketService::socketConnectCountSignal);
+        /* 发送识别结果 */
+        connect(this,&SocketService::sendResultSignal,pTcpServer,&SocketServer::sendResultSlot);
     }
 }
 

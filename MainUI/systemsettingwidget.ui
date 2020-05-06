@@ -927,6 +927,9 @@
          <layout class="QGridLayout" name="gridLayout_26">
           <item row="0" column="1">
            <widget class="QRadioButton" name="ClientModel">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Client</string>
             </property>

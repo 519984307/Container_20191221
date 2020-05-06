@@ -168,7 +168,7 @@ void MainWidget::loadingParameters()
             if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[1])){
                 QStringList addr=pSystemSettingWidget->pSettingValues->SingletonAddress.split(":");
                 if(addr.count()==2){
-                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
+                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->Heartbeat);
                 }
             }
             break;
@@ -178,7 +178,7 @@ void MainWidget::loadingParameters()
                 QStringList addr=addrList[var].split(":");
                 if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var])){
                     if(addr.count()==2){
-                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
+                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->Heartbeat);
                     }
                 }
             }
@@ -777,8 +777,10 @@ void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysi
     connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,this,&MainWidget::resultsAnalysisStateSlot);            
     /* 结果校验模式 */
     connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::setCheckTheResultsSignal,pResultsAnalysisInterface,&ResultsAnalysisInterface::setCheckTheResultsSlot);
-    /* 绑定识别结果到服务窗口 */
+    /* 发送识别结果 */
+    connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::sendResultSignal,pResultsAnalysisProcessing,&ResultsAnalysisProcessing::sendResultSignal);
     if(pServiceWidget!=nullptr){
+            /* 绑定识别结果到服务窗口 */
          connect(pResultsAnalysisInterface,&ResultsAnalysisInterface::resultsAnalysisStateSignal,pServiceWidget,&ServiceWidget::resultsAnalysisStateSlot);
     }
 
@@ -802,10 +804,14 @@ void MainWidget::socketServerPlugin(SocketServerInterface *pSocketServerInterfac
     connect(pSocketServerProcessing,&SocketServerProcessing::InitializationParameterSignal,pSocketServerInterface,&SocketServerInterface::InitializationParameterSlot);
     /* 发送数据 */
     connect(pSocketServerProcessing,&SocketServerProcessing::socketSendDataSignal,pSocketServerInterface,&SocketServerInterface::socketSendDataSlot);
+    /* 绑定SOCKET数量到服务界面 */
+    connect(pSocketServerInterface,&SocketServerInterface::socketConnectCountSignal,pSocketServerProcessing,&SocketServerProcessing::socketConnectCountSignal);
     /* 日志信息 */
     connect(pSocketServerInterface,&SocketServerInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 释放资源 */
     connect(this,&MainWidget::releaseResourcesSignal,pSocketServerInterface,&SocketServerInterface::releaseResourcesSlot);
+    /* 发送识别结果 */
+    connect(pSocketServerProcessing,&SocketServerProcessing::sendResultSignal,pSocketServerInterface,&SocketServerInterface::sendResultSignal);
 
     QThread* pThread=new QThread(this);
     pSocketServerProcessing->moveToThread(pThread);
@@ -855,6 +861,7 @@ void MainWidget::publicConnect()
                 /* 判断加密状态 */
                 connect(pEncryptionProcessing,&EncryptionProcessing::GetTheEncryptedStateSignal,pRecognizerProcessing,&RecognizerProcessing::GetTheEncryptedStateSlot);
             }
+
             if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[key])){
                 if(ResultsAnalysisProcessing* pResultsAnalysisProcessing=qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[key])){
                     /* 识别结果到数据界面 */
@@ -882,6 +889,23 @@ void MainWidget::publicConnect()
         if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(obj)){
             /* 绑定通道设定日志 */
             connect(pChannelSettingWidget,&ChannelSettingWidget::messageSignal,this,&MainWidget::messageSlot);
+        }
+    }
+    if(pServiceWidget!=nullptr){/* 暂时处理单模 */
+        switch (pSystemSettingWidget->pSettingValues->Service_Type) {
+        case 0:/* 单例模式 */
+            if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[1])){
+                /* 客户端数量到是服务界面 */
+                connect(pSocketServerProcessing,&SocketServerProcessing::socketConnectCountSignal,pServiceWidget,&ServiceWidget::socketConnectCountSlot);
+                foreach (auto obj, ResultsAnalysisProcessingMap.values()) {
+                    if(ResultsAnalysisProcessing* pResultsAnalysisProcessing =qobject_cast<ResultsAnalysisProcessing*>(obj))
+                        /* 发送识别结果到socket */
+                        connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::sendResultSignal,pSocketServerProcessing,&SocketServerProcessing::sendResultSignal);
+                }
+            }
+            break;
+        case 1:/* 多例模式 */
+            break;
         }
     }
 
@@ -988,7 +1012,15 @@ void MainWidget::avtionMapTiggered()
             tmp->move(0,112);
             tmp->setVisible(true);
             channel=PictureWidgetMap.key(tmp);
-            text=tr("Preview %1 channel %2 Camera").arg(channel/4+1).arg(channel%4);
+            int ret=channel/4;
+            int mod=channel%4;
+            if(mod==0){
+                mod+=4;
+            }
+            else {
+                ret+=1;
+            }
+            text=tr("Preview %1 channel %2 Camera").arg(ret).arg(mod);
         }
         if(ChannelSettingWidget* tmp=qobject_cast<ChannelSettingWidget*>(value)){
             //tmp->move(168,80);
