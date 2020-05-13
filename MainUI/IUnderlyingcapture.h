@@ -1,16 +1,16 @@
-#ifndef GETIMAGESINTERFACE_H
-#define GETIMAGESINTERFACE_H
+#ifndef IUNDERLYINGCAPTURE_H
+#define IUNDERLYINGCAPTURE_H
 
 #define ZBY_LOG(type)  tr("[%1][%2][%3]").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
 
 #include <QObject>
 
-class GetImagesInterface:public QObject
+class IUnderlyingCapture : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~GetImagesInterface(){}
+    virtual ~IUnderlyingCapture(){}
 
 signals:
 
@@ -60,12 +60,12 @@ public slots:
     /// \param play 播放状态
     /// 多次实时预览,在LINUX下会出现内存不释放
     ///
-    virtual void playStreamSlot(quint64 winID,bool play)=0;
+    virtual void playStreamSlot(quint64 winID,bool play){}
 
     ///
     /// \brief resizeEventSlot 调整窗口通知动态库刷新窗口
     ///
-    virtual void resizeEventSlot()=0;
+    virtual void resizeEventSlot(){}
 
     ///
     /// \brief releaseResourcesSlot 释放动态库资源
@@ -75,10 +75,10 @@ public slots:
     ///
     /// \brief InitializationSlot 初始化参数
     ///
-    virtual bool InitializationSlot()=0;
+    virtual void InitializationSlot()=0;
 };
 
-#define GetImagesInterfaceIID "ZBY.ContainerServer.GetImagesInterface/1.0"
-Q_DECLARE_INTERFACE(GetImagesInterface,GetImagesInterfaceIID);
+#define IUnderlyingCaptureIID  "ZBY.ContainerServer.IUnderlyingCapture/1.0"
+Q_DECLARE_INTERFACE(IUnderlyingCapture,IUnderlyingCaptureIID);
 
-#endif // GETIMAGESINTERFACE_H
+#endif // IUNDERLYINGCAPTURE_H

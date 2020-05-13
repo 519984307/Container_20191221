@@ -15,5 +15,5 @@ LogWidget::~LogWidget()
 
 void LogWidget::messageSlot(const QString &type, const QString &msg)
 {
-        ui->plainTextEdit->appendPlainText(tr("[%1] [%2]").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(msg));
+    ui->plainTextEdit->appendPlainText(tr("[%1]%2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss:zzz")).arg(msg));
 }

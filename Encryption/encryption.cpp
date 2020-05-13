@@ -5,15 +5,14 @@ Encryption::Encryption(QObject *parent)
 {
     this->setParent(parent);
 
-    pTimer=new QTimer(this);
-
     dogState=false;
 
     pDLL=nullptr;
-    SmartXFind=nullptr;
-    SmartXGetUid=nullptr;
-    SmartXCheckExist=nullptr;
+    SmartX3Find=nullptr;
+    SmartX3GetUid=nullptr;
+    SmartX3CheckExist=nullptr;
 
+    pTimer=new QTimer(this);
     connect(pTimer,SIGNAL(timeout()),this,SLOT(SmartXCheckExistSlot()));
 
     InitializationSlot();
@@ -25,7 +24,6 @@ Encryption::~Encryption()
         pDLL->unload();
     }
 
-    pTimer->stop();
     delete  pTimer;
     pTimer=nullptr;
 
@@ -35,23 +33,32 @@ Encryption::~Encryption()
 
 void Encryption::InitializationSlot()
 {
-    pDLL=new QLibrary ("./Plugins/smartX/libsmart-xe",this);
+    pDLL=new QLibrary ("libsmart-xe",this);
 
     if(pDLL->load()){
-        SmartXFind=reinterpret_cast<SmartXFindFUN>(pDLL->resolve("SmartXFind"));
-        SmartXGetUid=reinterpret_cast<SmartXGetUidFUN>(pDLL->resolve("SmartXGetUid"));
-        SmartXCheckExist=reinterpret_cast<SmartXCheckExistFUN>(pDLL->resolve("SmartXCheckExist"));
+        SmartX3Find=reinterpret_cast<SmartX3FindFUN>(pDLL->resolve("SmartX3Find"));
+        SmartX3GetUid=reinterpret_cast<SmartX3GetUidFUN>(pDLL->resolve("SmartX3GetUid"));
+        SmartX3CheckExist=reinterpret_cast<SmartX3CheckExistFUN>(pDLL->resolve("SmartX3CheckExist"));
 
         smartXGetUidFunc();
         pTimer->start(5000);
     }
+//    else {
+//        emit messageSignal(ZBY_LOG("ERROR"),"DLL  not load");
+//    }
+}
+
+void Encryption::releaseResourcesSlot()
+{
+    pTimer->stop();
 }
 
 void Encryption::smartXGetUidFunc()
 {
-    if(SmartXFind!=nullptr && SmartXFind(appID,keyHandles,&keyNumber)==0){
-        if(SmartXGetUid(keyHandles[0],UID)==0){
-            if(strncmp(UID,"ae68c66368a8e943bc260ae97003747f",33)==0){
+    if(SmartX3Find!=nullptr && SmartX3Find(appID,keyHandles,&keyNumber)==0){
+        if(SmartX3GetUid!=nullptr && SmartX3GetUid(keyHandles[0],UID)==0){
+            qDebug()<<"UID:"<<UID;
+            if(strncmp(UID,"ed302361196401966c72f116402e9297",33)==0){/* ae68c66368a8e943bc260ae97003747f */
                 dogState=true;
             }
             else {
@@ -59,14 +66,14 @@ void Encryption::smartXGetUidFunc()
             }
         }
     }
-    else {
-        emit messageSignal(ZBY_LOG("ERROR"),"The encryption tool was not found");
-    }
+//    else {
+//        emit messageSignal(ZBY_LOG("ERROR"),"The encryption tool was not found");
+//    }
 }
 
 void Encryption::SmartXCheckExistSlot()
 {
-    if(dogState && SmartXCheckExist(keyHandles[0])==0){
+    if(dogState && SmartX3CheckExist!=nullptr && SmartX3CheckExist(keyHandles[0])==0){
         emit GetTheEncryptedStateSignal(true);
         qDebug()<<"find lock";
     }

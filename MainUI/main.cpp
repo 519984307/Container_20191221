@@ -7,6 +7,10 @@
 #include <QDir>
 #include <QTextCodec>
 #include <QDebug>
+#include <QMessageBox>
+
+#include <QLocalSocket>
+#include <QLocalServer>
 
 int main(int argc, char *argv[])
 {
@@ -14,11 +18,31 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForLocale(codec);
 
     QApplication::addLibraryPath(QDir::toNativeSeparators("./Plugins"));
-    QApplication::addLibraryPath(QDir::toNativeSeparators("./qm"));
+    QApplication::addLibraryPath(QDir::toNativeSeparators("./translations"));
+
     QApplication a(argc, argv);
 
+    //连接LocalServer
+    QString serverName = "localserver";
+    QLocalSocket socket;
+    socket.connectToServer(serverName);
+    if(socket.waitForConnected(1000)){
+        QMessageBox::critical(nullptr,"Container","Startup error, the program is already running.");
+        return(-1);
+    }
+
+    //创建LocalServer
+    QLocalServer server;
+    if (server.listen(serverName)){
+        if(server.serverError()== QAbstractSocket::AddressInUseError &&
+                QFile::exists(server.serverName())){
+            QFile::remove(server.serverName());
+            server.listen(serverName);
+        }
+    }
+
     QTranslator *translator = new QTranslator(&a);
-    translator->load("zh_hans.qm", QDir::toNativeSeparators("./qm"));
+    translator->load("zh_hans.qm", QDir::toNativeSeparators("./translations"));
     SystemSettingWidget  SystemSettingWidget;
     if(SystemSettingWidget.pSettingValues->Language==1){
         a.installTranslator(translator);
@@ -29,3 +53,4 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+

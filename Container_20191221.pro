@@ -7,7 +7,7 @@ SUBDIRS += \
     DataBaseRead \
     DataBaseInsert \
     IdentifyImages\
-    GetImages \
     ResultsAnalysis \
     SocketService \
-    Encryption
+    Encryption \
+    CaptureUnderlying

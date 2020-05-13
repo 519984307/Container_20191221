@@ -5,6 +5,7 @@ ResultsAnalysis::ResultsAnalysis(QObject *parent)
     this->setParent(parent);
     this->correct=false;
     this->channel=-1;
+    sendMid=false;
     initCheckMap();
 
 
@@ -45,6 +46,11 @@ void ResultsAnalysis::setCheckTheResultsSlot(bool correct)
 void ResultsAnalysis::setChannelSlot(int channel)
 {
     this->channel=channel;
+}
+
+void ResultsAnalysis::sendMidResultSlot(bool state)
+{
+    sendMid=state;
 }
 
 void ResultsAnalysis::initCheckMap()
@@ -173,15 +179,6 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         isoProbabilityTemp.append(Iprobability);/* 箱型置信度 */
     }
 
-    if(isoTemp.count()==6 && type!=2){/* 过滤双箱误判成长箱,系统改正双箱 */
-        foreach (auto var, isoTemp) {
-            if(var.indexOf("22")!=-1){
-                type=2;
-                break;
-            }
-        }
-    }
-
     bool notISO=true;/* 没有识别到箱型代码就默认指定一个 */
     foreach (auto var, isoTemp) {
         if(var!=""){
@@ -207,6 +204,19 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 isoTemp[3]="22G1";
             }
             break;
+        }
+    }
+    else {
+        if(isoTemp.count()==6){/* 过滤双箱误判成长箱,系统改正双箱 */
+            foreach (auto var, isoTemp) {
+                if(var.startsWith("2")){
+                    type=2;
+                    break;
+                }
+            }
+            if(type!=2){/* 系统修正为长箱 */
+                type=1;
+            }
         }
     }
 
@@ -309,7 +319,9 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
         /* 识别结果写入日志,[标志|时间戳|通道号(2位)|相机号(2位)|箱号|校验|箱型] */
         QString result=QString("[%1|%2|%3|%4|%5|%6|%7]").arg("I").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(indMap.key(var),2,10,QLatin1Char('0')).arg(conTemp[var]).arg(QString::number(checkConList[var])).arg(isoTemp[var]);
         emit resultsAnalysisStateSignal(channel,result);
-        emit sendResultSignal(channel,result);
+        if(!sendMid){
+            emit sendResultSignal(channel,result);
+        }
     }
 
     if(type==2){

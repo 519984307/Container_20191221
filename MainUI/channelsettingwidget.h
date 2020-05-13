@@ -13,6 +13,7 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 #include <QJsonValue>
+#include <QMessageBox>
 
 namespace Ui {
 class ChannelSettingWidget;

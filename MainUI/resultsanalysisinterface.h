@@ -71,6 +71,12 @@ public slots:
     /// \brief setChannelSlot 设定通道号
     ///
     virtual void setChannelSlot(int channel)=0;
+
+    ///
+    /// \brief sendMidResultSlot 是否发中间结果集,FLASE发送
+    /// \param state
+    ///
+    virtual void sendMidResultSlot(bool state)=0;
 };
 
 #define ResultsAnalysisInterfaceIID "ZBY.ContainerServer.ResultsAnalysisInterface/1.0"

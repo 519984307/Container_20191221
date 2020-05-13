@@ -7,6 +7,8 @@
 QT       += core gui
 QT       += widgets
 QT       +=sql
+QT       +=network
+QT       +=serialport
 
 greaterThan(QT_MAJOR_VERSION, 4):
 
@@ -42,7 +44,8 @@ SOURCES += \
     resultsanalysisprocessing.cpp \
     socketserverprocessing.cpp \
     encryptionprocessing.cpp \
-    logwidget.cpp
+    logwidget.cpp \
+    underlyinggetimagesprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -55,7 +58,6 @@ HEADERS += \
     imageprocessing.h \
     databaseprocessing.h \
     infraredprocessing.h \
-    getimagesinterface.h \
     databaselogicinterface.h \
     infraredlogicinterface.h \
     databasereadinterface.h\
@@ -64,14 +66,16 @@ HEADERS += \
     recognizerinterface.h \
     recognizerprocessing.h \
     settingvalues.h \
-    underlyinggetimagesinterface.h \
     resultsanalysisinterface.h \
     resultsanalysisprocessing.h \
     socketserverinterface.h \
     socketserverprocessing.h \
     encryptionprocessing.h \
     encryptioninterface.h \
-    logwidget.h
+    logwidget.h \
+    underlyinggetimagesprocessing.h \
+    ICaptureUnderlying.h \
+    getimagesinterface.h
 
 FORMS += \
         mainwidget.ui \

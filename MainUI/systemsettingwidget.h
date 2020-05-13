@@ -19,6 +19,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QtDebug>
+#include <QMessageBox>
 
 namespace Ui {
 class SystemSettingWidget;

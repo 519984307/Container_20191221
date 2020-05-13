@@ -113,37 +113,37 @@ bool SystemSettingWidget::jsonWrite()
     }
     jsonChild.insert("Recognizer",QJsonValue(jsonObj1));
 
-    QJsonObject jsonObj2;
-    jsonObj2.insert(tr("ProtocolVersion"),ui->ProtocolV->currentIndex());
-    jsonObj2.insert(tr("CameraVersion"),ui->CameraV->currentIndex());
-    jsonObj2.insert(tr("HcSDKPath"),ui->HcSDK_Path_lineEdit->text());
-    jsonChild.insert("Agreement",QJsonValue(jsonObj2));
+//    QJsonObject jsonObj2;
+//    jsonObj2.insert(tr("ProtocolVersion"),ui->ProtocolV->currentIndex());
+//    jsonObj2.insert(tr("CameraVersion"),ui->CameraV->currentIndex());
+//    jsonObj2.insert(tr("HcSDKPath"),ui->HcSDK_Path_lineEdit->text());
+//    jsonChild.insert("Agreement",QJsonValue(jsonObj2));
 
-    QJsonObject jsonObj3;
-    jsonObj3.insert(tr("FTP"),int(ui->FTP->isChecked()));
-    jsonObj3.insert(tr("FtpAddress"),ui->FtpAddress->text());
-    jsonObj3.insert(tr("FtpPort"),ui->FtpPort->text());
-    jsonObj3.insert(tr("FtpUser"), ui->FtpUser->text());
-    jsonObj3.insert(tr("FtpPassword"),ui->FtpPassword->text());
-    jsonObj3.insert(tr("FtpLocalImgPath"),ui->FtpLocalImgPath->text());
-    jsonObj3.insert(tr("FtpRemoteImgPath"),ui->FtpRemoteImgPath->text());
-    jsonChild.insert("FTP",QJsonValue(jsonObj3));
+//    QJsonObject jsonObj3;
+//    jsonObj3.insert(tr("FTP"),int(ui->FTP->isChecked()));
+//    jsonObj3.insert(tr("FtpAddress"),ui->FtpAddress->text());
+//    jsonObj3.insert(tr("FtpPort"),ui->FtpPort->text());
+//    jsonObj3.insert(tr("FtpUser"), ui->FtpUser->text());
+//    jsonObj3.insert(tr("FtpPassword"),ui->FtpPassword->text());
+//    jsonObj3.insert(tr("FtpLocalImgPath"),ui->FtpLocalImgPath->text());
+//    jsonObj3.insert(tr("FtpRemoteImgPath"),ui->FtpRemoteImgPath->text());
+//    jsonChild.insert("FTP",QJsonValue(jsonObj3));
 
     QJsonObject jsonObj4;
-    jsonObj4.insert(tr("Minimization"),int(ui->Minimization->isChecked()));
+    //jsonObj4.insert(tr("Minimization"),int(ui->Minimization->isChecked()));
     jsonObj4.insert(tr("Language"), ui->Language->currentIndex());
-    jsonObj4.insert(tr("Automatic"),int(ui->Automatic->isChecked()));
+    //jsonObj4.insert(tr("Automatic"),int(ui->Automatic->isChecked()));
     jsonChild.insert("Other",QJsonValue(jsonObj4));
 
-    QJsonObject jsonObj5;
-    jsonObj5.insert(tr("DataBaseVersion"), ui->DataBaseTypeV->currentIndex());
-    jsonObj5.insert(tr("DataBaseUser"),ui->DataBaseUser->text());
-    jsonObj5.insert(tr("DataBasePwd"),ui->DataBasePassword->text());
-    jsonObj5.insert(tr("DataBaseAddr"),ui->DataBaseAddress->text());
-    jsonObj5.insert(tr("DataBasePort"),ui->DataBasePort->text().toInt());
-    jsonObj5.insert(tr("TextFormat"),int(ui->TextFormat->isChecked()));
-    jsonObj5.insert(tr("TextFormatVersion"),ui->TextForamtV->currentIndex());
-    jsonChild.insert("DataBase",QJsonValue(jsonObj5));
+//    QJsonObject jsonObj5;
+//    jsonObj5.insert(tr("DataBaseVersion"), ui->DataBaseTypeV->currentIndex());
+//    jsonObj5.insert(tr("DataBaseUser"),ui->DataBaseUser->text());
+//    jsonObj5.insert(tr("DataBasePwd"),ui->DataBasePassword->text());
+//    jsonObj5.insert(tr("DataBaseAddr"),ui->DataBaseAddress->text());
+//    jsonObj5.insert(tr("DataBasePort"),ui->DataBasePort->text().toInt());
+//    jsonObj5.insert(tr("TextFormat"),int(ui->TextFormat->isChecked()));
+//    jsonObj5.insert(tr("TextFormatVersion"),ui->TextForamtV->currentIndex());
+//    jsonChild.insert("DataBase",QJsonValue(jsonObj5));
 
     QJsonObject jsonObj6;
     jsonObj6.insert(tr("SaveLog"),int(ui->SaveLog->isChecked()));
@@ -286,34 +286,34 @@ void SystemSettingWidget::jsonWritetoUI()
     ui->Hearbeat_checkBox->setChecked(pSettingValues->Heartbeat);
     ui->Resulting_checkBox->setChecked(pSettingValues->Resultting);
 
-    ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
-    ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
-    ui->HcSDK_Path_lineEdit->setText(pSettingValues->HcSDKPath);
+//    ui->ProtocolV->setCurrentIndex(pSettingValues->ProtocolVersion);
+//    ui->CameraV->setCurrentIndex(pSettingValues->CameraVersion);
+//    ui->HcSDK_Path_lineEdit->setText(pSettingValues->HcSDKPath);
 
-    ui->FTP->setChecked(pSettingValues->FTP);
-    ui->FtpAddress->setText(pSettingValues->FtpAddress);
-    ui->FtpPort->setText(pSettingValues->FtpPort);
-    ui->FtpUser->setText(pSettingValues->FtpUser);
-    ui->FtpPassword->setText(pSettingValues->FtpPassword);
-    ui->FtpLocalImgPath->setText(pSettingValues->FtpLocalImgPath);
-    ui->FtpRemoteImgPath->setText(pSettingValues->FtpRemoteImgPath);
+//    ui->FTP->setChecked(pSettingValues->FTP);
+//    ui->FtpAddress->setText(pSettingValues->FtpAddress);
+//    ui->FtpPort->setText(pSettingValues->FtpPort);
+//    ui->FtpUser->setText(pSettingValues->FtpUser);
+//    ui->FtpPassword->setText(pSettingValues->FtpPassword);
+//    ui->FtpLocalImgPath->setText(pSettingValues->FtpLocalImgPath);
+//    ui->FtpRemoteImgPath->setText(pSettingValues->FtpRemoteImgPath);
 
-    ui->Minimization->setChecked(pSettingValues->Minimization);
+    //ui->Minimization->setChecked(pSettingValues->Minimization);
     ui->Language->setCurrentIndex(pSettingValues->Language);
-    ui->Automatic->setChecked(pSettingValues->Automatic);
+    //ui->Automatic->setChecked(pSettingValues->Automatic);
 
     ui->SaveLog->setChecked(pSettingValues->SaveLog);
     ui->SaveLogV->setCurrentIndex(pSettingValues->SaveLogVersion);
     ui->InfoLog->setChecked(pSettingValues->InfoLog);
     ui->DebugLog->setChecked(pSettingValues->DebugLog);
 
-    ui->DataBaseTypeV->setCurrentIndex(pSettingValues->DataBaseVersion);
-    ui->DataBaseUser->setText(pSettingValues->DataBaseUser);
-    ui->DataBasePassword->setText(pSettingValues->DataBasePwd);
-    ui->DataBaseAddress->setText(pSettingValues->DataBaseAddr);
-    ui->DataBasePort->setText(QString::number(pSettingValues->DataBasePort));
-    ui->TextFormat->setChecked(pSettingValues->TextFormat);
-    ui->TextForamtV->setCurrentIndex(pSettingValues->TextFormatVersion);
+//    ui->DataBaseTypeV->setCurrentIndex(pSettingValues->DataBaseVersion);
+//    ui->DataBaseUser->setText(pSettingValues->DataBaseUser);
+//    ui->DataBasePassword->setText(pSettingValues->DataBasePwd);
+//    ui->DataBaseAddress->setText(pSettingValues->DataBaseAddr);
+//    ui->DataBasePort->setText(QString::number(pSettingValues->DataBasePort));
+//    ui->TextFormat->setChecked(pSettingValues->TextFormat);
+//    ui->TextForamtV->setCurrentIndex(pSettingValues->TextFormatVersion);
 }
 
 QVariant SystemSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)
@@ -343,14 +343,17 @@ void SystemSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(button==ui->buttonBox->button(QDialogButtonBox::Save)){
         if(jsonWrite()){
-            emit messageSignal(ZBY_LOG("INFO"),tr("Save System Json sucess"));
+            emit messageSignal(ZBY_LOG("INFO"),tr("Save System Json Sucess"));
+            QMessageBox::about(this,"Save System Settings","Save System Json Sucess");
         }
         else {
             emit messageSignal(ZBY_LOG("ERROR"),tr("Save System Json error"));
+            QMessageBox::critical(this,"Save System Settings","Save System Json error");
         }
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Discard)){
         emit messageSignal(ZBY_LOG("INFO"),tr("Not Save System Json"));
+        QMessageBox::warning(this,"Save System Settings","Not Save System Json");
     }
 }
 

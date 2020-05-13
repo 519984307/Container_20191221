@@ -1,20 +1,20 @@
-#ifndef IMAGEPROCESSING_H
-#define IMAGEPROCESSING_H
+#ifndef UNDERLYINGGETIMAGESPROCESSING_H
+#define UNDERLYINGGETIMAGESPROCESSING_H
 
 #include <QObject>
 
-class ImageProcessing : public QObject
+class UnderlyingGetimagesProcessing : public QObject
 {
     Q_OBJECT
 public:
-    explicit ImageProcessing(QObject *parent = nullptr);   
+    explicit UnderlyingGetimagesProcessing(QObject *parent = nullptr);
 
 signals:
 
     ///
     /// \brief InitializationSignal 初始化参数
     ///
-    bool InitializationSignal();
+    void InitializationSignal();
 
     ///
     /// \brief initCamer 初始化相机
@@ -37,6 +37,8 @@ signals:
     ///
     void pictureStreamSignal(const QByteArray &jpgStream,const int &imgNumber);
 
+
+public slots:
 };
 
-#endif // IMAGEPROCESSING_H
+#endif // UNDERLYINGGETIMAGESPROCESSING_H

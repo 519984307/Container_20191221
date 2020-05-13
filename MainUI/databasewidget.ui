@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>721</width>
-    <height>541</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1036,7 +1036,7 @@ color: rgb(255, 255, 255);</string>
          <item>
           <widget class="QCheckBox" name="Type_checkBox">
            <property name="text">
-            <string>Type</string>
+            <string>Logic Type</string>
            </property>
           </widget>
          </item>

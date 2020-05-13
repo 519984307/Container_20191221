@@ -34,7 +34,7 @@ private:
     ///
     /// \brief appID 程序标识符
     ///
-    char appID[32]={"HCA5NT4DKKUE48ULHT"};
+    char appID[32]={"HCA5NT4DKKUE48ULHT"};/* HCA5NT4DKKUE48ULHT */
 
     ///
     /// \brief keyNumber 加密狗数量
@@ -51,23 +51,23 @@ private:
     ///
     QLibrary* pDLL;
 
-    typedef   long (*SmartXFindFUN)(char appID[32], long * keyHandles, long * keyNumber);
+    typedef   long (*SmartX3FindFUN)(char appID[32], long * keyHandles, long * keyNumber);
     ///
     /// \brief SmartXFind 查找加密狗
     ///
-    SmartXFindFUN SmartXFind;
+    SmartX3FindFUN SmartX3Find;
 
-    typedef   long (*SmartXGetUidFUN)(long nKeyHandle, char uid[33]);
+    typedef   long (*SmartX3GetUidFUN)(long nKeyHandle, char uid[33]);
     ///
     /// \brief SmartXGetUid 读取加密狗ID
     ///
-    SmartXGetUidFUN SmartXGetUid;
+    SmartX3GetUidFUN SmartX3GetUid;
 
-    typedef   long (*SmartXCheckExistFUN)(long keyHandle);
+    typedef   long (*SmartX3CheckExistFUN)(long keyHandle);
     ///
     /// \brief SmartXCheckExist  检查加密狗状态
     ///
-    SmartXCheckExistFUN SmartXCheckExist;
+    SmartX3CheckExistFUN SmartX3CheckExist;
 
 private slots:
 
@@ -89,6 +89,11 @@ public:
     /// \brief InitializationSlot 初始化参数
     ///
     void InitializationSlot()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief releaseResourcesSlot 释放动资源
+    ///
+    void releaseResourcesSlot()Q_DECL_OVERRIDE;
 
 };
 

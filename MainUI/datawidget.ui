@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>792</width>
-    <height>604</height>
+    <width>654</width>
+    <height>498</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -212,14 +212,22 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>32</height>
+               <height>40</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>32</height>
+               <height>40</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+               <kerning>true</kerning>
+              </font>
              </property>
              <property name="styleSheet">
               <string notr="true">color: rgb(85, 170, 0);</string>
@@ -246,14 +254,21 @@
              <property name="minimumSize">
               <size>
                <width>80</width>
-               <height>0</height>
+               <height>40</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>80</width>
-               <height>16777215</height>
+               <height>40</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
              </property>
              <property name="styleSheet">
               <string notr="true">color: rgb(85, 170, 0);</string>
@@ -272,6 +287,25 @@
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QLineEdit" name="lineEdit_9">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
              <property name="styleSheet">
               <string notr="true">color: rgb(85, 170, 0);</string>
              </property>
@@ -294,14 +328,21 @@
              <property name="minimumSize">
               <size>
                <width>80</width>
-               <height>0</height>
+               <height>40</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>80</width>
-               <height>16777215</height>
+               <height>40</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
              </property>
              <property name="styleSheet">
               <string notr="true">color: rgb(85, 170, 0);</string>
@@ -318,6 +359,25 @@
          </item>
          <item>
           <widget class="QLineEdit" name="lineEdit_10">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(85, 170, 0);</string>
            </property>
@@ -605,9 +665,17 @@
           </property>
           <item row="1" column="1">
            <widget class="QLineEdit" name="Infrared_logic_lineEdit">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -623,11 +691,17 @@
           </item>
           <item row="0" column="0" colspan="2">
            <widget class="QLineEdit" name="lineEdit">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <pointsize>22</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <pointsize>25</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -643,6 +717,12 @@
           </item>
           <item row="1" column="0" rowspan="2">
            <widget class="QLineEdit" name="lineEdit_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>70</width>
@@ -652,6 +732,8 @@
             <property name="font">
              <font>
               <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -667,6 +749,12 @@
           </item>
           <item row="1" column="2">
            <widget class="QLineEdit" name="lineEdit_4">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>70</width>
@@ -676,6 +764,8 @@
             <property name="font">
              <font>
               <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -691,9 +781,17 @@
           </item>
           <item row="1" column="3">
            <widget class="QLineEdit" name="lineEdit_6">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -709,11 +807,17 @@
           </item>
           <item row="0" column="2" colspan="2">
            <widget class="QLineEdit" name="lineEdit_3">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>80</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <pointsize>22</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <pointsize>25</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -886,6 +990,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="QLineEdit" name="lineEdit_12">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -904,6 +1014,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QLineEdit" name="lineEdit_11">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>

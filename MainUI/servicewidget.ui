@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
-    <height>420</height>
+    <width>256</width>
+    <height>222</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -79,6 +79,13 @@
        <width>16777215</width>
        <height>30</height>
       </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="smallDecimalPoint">
       <bool>true</bool>

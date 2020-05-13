@@ -1,18 +1,19 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-12-21T16:41:13
+# Project created by QtCreator 2020-05-08T12:17:12
 #
 #-------------------------------------------------
 
-QT       -= gui
 QT       += network
 
-TARGET = GetImages
-TEMPLATE = lib
+QT       -= gui
 
 CONFIG += plugin
 
-DEFINES += GETIMAGES_LIBRARY
+TARGET = CaptureUnderlying
+TEMPLATE = lib
+
+DEFINES += CAPTUREUNDERLYING_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -26,17 +27,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        getimages.cpp
+        captureunderlying.cpp \
+    putcommand.cpp
 
 HEADERS += \
-        getimages.h \
-    getimages_global.h \
-    underlyinggetimagesinterface.h
+        captureunderlying.h \
+        captureunderlying_global.h \ 
+    ICaptureUnderlying.h \
+    putcommand.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
 
-DESTDIR+=../MainUI/Plugins
+DESTDIR +=../MainUI/Plugins
 #DESTDIR += ../MainUI/debug/Plugins
+

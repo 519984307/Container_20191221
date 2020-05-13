@@ -29,9 +29,9 @@ SOURCES += \
 
 HEADERS += \
     HCNetSDK.h \
-    getimagesinterface.h \
     captureimages.h \
     captureimages_global.h \
+    getimagesinterface.h
 
 unix {
     target.path = /usr/lib
@@ -39,6 +39,4 @@ unix {
 }
 
 DESTDIR += ../MainUI/Plugins
-#DESTDIR += ../MainUI/debug/Plugins
-
 #QMAKE_LFLAGS+="-Wl,-rpath=../MainUI/plugins/HCNetSDK/"

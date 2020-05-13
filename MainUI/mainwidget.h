@@ -26,10 +26,10 @@
 #include "databaseinsertinterface.h"
 #include "databasereadinterface.h"
 #include "recognizerinterface.h"
-#include "underlyinggetimagesinterface.h"
 #include "resultsanalysisinterface.h"
 #include "socketserverinterface.h"
 #include "encryptioninterface.h"
+#include "ICaptureUnderlying.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -48,6 +48,7 @@
 #include "resultsanalysisprocessing.h"
 #include "socketserverprocessing.h"
 #include "encryptionprocessing.h"
+#include "underlyinggetimagesprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -180,6 +181,11 @@ private:
     QMap<int,QObject*> ImageProcessingMap;
 
     ///
+    /// \brief underlyingGetimagesProcessingMap 底层图片处理类
+    ///
+    QMap<int,QObject*> underlyingGetimagesProcessingMap;
+
+    ///
     /// \brief infraredProcessingMap 红外逻辑处理类
     ///
     QMap<int,QObject*> InfraredProcessingMap;
@@ -259,14 +265,21 @@ private:
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief camerPlugin 处理相机插件
-    /// \param Camer 相机类
+    /// \param pGetimagesInterface 相机类
     /// \param num 通道号
     ///
     void getImagePlugin(GetImagesInterface* pGetimagesInterface,int num);
 
+    ///
+    /// \brief underlyingGetimagesPlugin 处理底层抓拍插件
+    /// \param pUnderlyingGetimagesInterface  底层插件类
+    /// \param num
+    ///
+    void captureUnderlyingPlugin(ICaptureUnderlying* pUnderlyingCapture,int num);
+
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief infraredLogicPlugin 处理串口插件
-    /// \param SerialPort 串口类
+    /// \param pInfraredlogicInterface 串口类
     /// \param num 通道号
     ///
     void infraredLogicPlugin(InfraredlogicInterface* pInfraredlogicInterface,int num);

@@ -48,6 +48,22 @@ public slots:
     ///
     void sendResultSlot(int channel,const QString& result);
 
+    ///
+    /// \brief heartbeatSlot 心跳检测
+    ///
+    void heartbeatSlot();
+
+    ///
+    /// \brief sendHeartPacketSlot 心跳包状态
+    /// \param state
+    ///
+    void sendHeartPacketSlot(bool state);
+
+    ///
+    /// \brief releaseResourcesSlot 释放动资源
+    ///
+    void releaseResourcesSlot();
+
 private:
 
     ///
@@ -58,8 +74,17 @@ private:
     ///
     /// \brief clientChannelMap 通道字典
     ///
-    QMap<int,qintptr> clientChannelMap;
+    QMultiMap<int,qintptr> clientChannelMap;
 
+    ///
+    /// \brief pTimerLink 定时心跳包检测
+    ///
+    QTimer *pTimerLink;
+
+    ///
+    /// \brief sendHeart 发送心跳包状态
+    ///
+    bool sendHeart;
 
 signals:
 

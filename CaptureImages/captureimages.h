@@ -15,7 +15,7 @@ public:
     CaptureImages(QObject *parent = nullptr);
     ~CaptureImages()Q_DECL_OVERRIDE;
 
-private:
+private:/* 参数  */
 
     ///
     /// \brief NetSDKInit 动态库初始化状态
@@ -49,6 +49,16 @@ private:
     /// \brief pTimerState 相机状态定时器
     ///
     QTimer* pTimerState;
+
+    ///
+    /// \brief LoginInfo 相机登录参数
+    ///
+    NET_DVR_USER_LOGIN_INFO LoginInfo={};
+
+    ///
+    /// \brief DeviceInfo 相机参数
+    ///
+    NET_DVR_DEVICEINFO_V40 DeviceInfo={};
 
 private:
 
@@ -189,7 +199,6 @@ private:
 
 public:
 
-
     ///
     /// \brief initCamerSlot 初始化相机
     /// \param camerIP 地址
@@ -214,7 +223,7 @@ public:
     void playStreamSlot(quint64 winID, bool play) Q_DECL_OVERRIDE;
 
     ///
-    /// \brief releaseResourcesSlot 关闭视频流
+    /// \brief releaseResourcesSlot 释放资源
     ///
     void releaseResourcesSlot()Q_DECL_OVERRIDE;
 
@@ -222,6 +231,11 @@ public:
     /// \brief resizeEventSlot 通知动态库调整窗口
     ///
     void resizeEventSlot()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief InitializationSlot 初始化参数
+    ///
+    bool InitializationSlot()Q_DECL_OVERRIDE;
 
 private slots:
     ///

@@ -50,6 +50,12 @@ signals:
     ///
     void sendResultSignal(int channel,const QString& result);
 
+    ///
+    /// \brief sendMidResultSignal 是否发中间结果集,FLASE发送
+    /// \param state
+    ///
+    void sendMidResultSignal(bool state);
+
 public slots:
 };
 

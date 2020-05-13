@@ -40,6 +40,11 @@ private:
      ///
      QStringList timeList;
 
+     ///
+     /// \brief imgNameLIst 识别图片列表
+     ///
+     QStringList imgNameLIst;
+
     ///
     /// \brief mutex 锁
     ///

@@ -20,7 +20,12 @@ InfraredLogic::InfraredLogic(QObject *parent)
     health=false;
     doubleFrontPut=false;
 
-    _45G1=false;_22G1=false;_22G1_MID_22G1=false;_22G1_22G1=false;_22G1_22G1_STATE=false;
+    _45G1=false;_22G1=false;
+    _22G1_MID_22G1=false;
+    _22G1_22G1=false;
+
+    _22G1_22G1_STATE=false;
+    //_45G1_CAR=false;
 }
 
 InfraredLogic::~InfraredLogic()
@@ -89,7 +94,7 @@ void InfraredLogic::serialLogic(int *status)
 
         if(health){
             /*
-             * 45G1
+             * 45G1 front
             */
             if(status[0]==valueOne){
                 if(status[1]==valueOne){
@@ -103,22 +108,30 @@ void InfraredLogic::serialLogic(int *status)
                             }
                             else {
                                 _45G1=false;
+                                _22G1_22G1=true;/* 双箱 */
                             }
                             _22G1=false;
-                            return;
                         }
                     }
                 }
             }
+
+            //_45G1_CAR=false;
+            _22G1_22G1_STATE=false;
+
+            /*
+             *  45G1 after
+            */
             if(_45G1){
                 if(status[0]==valueTwo){
                     if(status[1]==valueTwo){
                         if(status[3]==valueOne){
                             if(status[4]==valueOne){
                                 emit logicPutImageSignal(1);
-                                _45G1=false;
+                                _22G1_22G1=false;
                                 _22G1_MID_22G1=false;
                                 _22G1_22G1_STATE=false;
+                                _45G1=false;
                                 health=false;
                                 return;
                             }
@@ -135,7 +148,7 @@ void InfraredLogic::serialLogic(int *status)
                         if(status[4]==valueTwo){
                             _22G1=true;
                             _45G1=false;/* 防止高车头小箱放后面,误认为是45G1 */
-                            return;
+                            //return;//防止跳过长箱加高车头
                         }
                     }
                 }
@@ -150,8 +163,10 @@ void InfraredLogic::serialLogic(int *status)
                             if(status[4]==valueOne){
                                 emit logicPutImageSignal(2);
                                 _22G1=false;
-                                _45G1=false;
+                                _22G1_22G1=false;
+                                _22G1_MID_22G1=false;
                                 _22G1_22G1_STATE=false;
+                                _45G1=false;
                                 health=false;
                                 return;
                             }
@@ -161,16 +176,16 @@ void InfraredLogic::serialLogic(int *status)
             }
 
             /*
-             * 22G1_22G1 两种状态
+             * 22G1_22G1 检测双箱状态
             */
             if(_22G1_MID_22G1){
                 if(status[0]==valueOne){
                     if(status[1]==valueTwo){
                         if(status[3]==valueOne){
                             if(status[4]==valueOne){
-                                //emit logicPutImageSignal(3);
                                 _22G1_22G1=true;
                                 _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
+                                _22G1_MID_22G1=false;
                                 return;
                             }
                         }
@@ -178,8 +193,26 @@ void InfraredLogic::serialLogic(int *status)
                 }
             }
 
+            /*
+             *  长箱加高车头
+            */
+            if(_22G1_MID_22G1){
+                if(status[0]==valueOne){
+                    if(status[1]==valueOne){
+                        if(status[3]==valueOne){
+                            if(status[4]==valueTwo){
+                                _22G1_22G1=false;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
 
-            if(_22G1_MID_22G1){/* 没有检测到双箱状态,只要释放B1后,再次释放B2就不再取图. */
+            /*
+             * 双箱加高车头
+            */
+            if(_22G1_MID_22G1){
                 if(status[0]==valueOne){
                     if(status[1]==valueOne){
                         if(status[3]==valueTwo){
@@ -191,47 +224,7 @@ void InfraredLogic::serialLogic(int *status)
                     }
                 }
             }
-            if(_22G1_22G1_STATE && status[4]==valueTwo){
-                _22G1_22G1_STATE=false;
-            }
 
-//            if(_22G1_MID_22G1){/* 没检测到双箱状态,中途释放A1证明不是长箱 */
-//                if(status[0]==valueTwo){
-//                    if(status[1]==valueOne){
-//                        if(status[3]==valueOne){
-//                            if(status[4]==valueTwo){
-//                                _22G1_22G1=true;
-//                                _45G1=false;
-//                                return;
-//                            }
-//                        }
-//                    }
-//                }
-//                else if(status[0]==valueTwo){/* 没检测到双箱状态,中途释放A1证明不是长箱 */
-//                    if(status[1]==valueOne){
-//                        if(status[3]==valueOne){
-//                            if(status[4]==valueOne){
-//                                _22G1_22G1=true;
-//                                _45G1=false;
-//                                return;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            if(_22G1_MID_22G1){/* 可能出现问题:高车头加长箱,车头能同时挡住B1,B2 */
-//                if(status[0]==valueOne){
-//                    if(status[1]==valueOne){
-//                        if(status[3]==valueTwo){
-//                            if(status[4]==valueOne){
-//                                //emit logicPutImageSignal(3);
-//                                _22G1_22G1=true;
-//                                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
-//                            }
-//                        }
-//                    }
-//                }
-//            }
             if(_22G1_22G1){
                 if(status[0]==valueTwo){
                     if(status[1]==valueTwo){
@@ -240,8 +233,8 @@ void InfraredLogic::serialLogic(int *status)
                                 emit logicPutImageSignal(4);
                                 _22G1_22G1=false;
                                 _22G1_MID_22G1=false;
-                                _45G1=false;
                                 _22G1_22G1_STATE=false;
+                                _45G1=false;
                                 health=false;
                                 return;
                             }

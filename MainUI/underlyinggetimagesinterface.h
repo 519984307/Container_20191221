@@ -18,7 +18,7 @@ signals:
     /// \param camerIP 相机地址
     /// \param state 相机连接状态
     ///
-    void camerStateSingal(const QString &camerIP,bool state);
+    void camerStateSingal(const QString &camerIP,bool state,const QString& alias);
 
     ///
     /// \brief pictureStreamSignals 图片流信号
@@ -44,7 +44,7 @@ public slots:
     /// \param 用户名
     /// \param 密码
     ///
-    virtual void initCamerSlot(const QString &camerIP,const int &camerPort,const QString &CamerUser,const QString &CamerPow)=0;
+    virtual void initCamerSlot(const QString &camerIP,const int &camerPort,const QString &CamerUser,const QString &CamerPow,const QString& alias)=0;
 
     ///
     /// \brief putCommandSlots 抓取图片
@@ -59,7 +59,7 @@ public slots:
     /// \param play 播放状态
     /// 多次实时预览,在LINUX下会出现内存不释放
     ///
-    virtual void playStreamSlot(uint winID,bool play)=0;
+    virtual void playStreamSlot(quint64 winID,bool play)=0;
 
     ///
     /// \brief resizeEventSlot 调整窗口通知动态库刷新窗口
@@ -70,9 +70,14 @@ public slots:
     /// \brief releaseResourcesSlot 释放动态库资源
     ///
     virtual void releaseResourcesSlot()=0;
+
+    ///
+    /// \brief InitializationSlot 初始化参数
+    ///
+    virtual void InitializationSlot()=0;
 };
 
-#define UnderlyingGetimagesInterfaceIID "ZBY.ContainerServer.UnderlyingGetimagesInterface/1.0"
+#define UnderlyingGetimagesInterfaceIID  "ZBY.ContainerServer.UnderlyingGetimagesInterface/1.0"
 Q_DECLARE_INTERFACE(UnderlyingGetimagesInterface,UnderlyingGetimagesInterfaceIID);
 
 #endif // UNDERLYINGGETIMAGESINTERFACE_H

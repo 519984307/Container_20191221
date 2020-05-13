@@ -37,7 +37,10 @@ void SocketService::InitializationParameterSlot(const QString &address, const qu
     if(serviceType==1){/* 服务器模式 */
         pTcpServer=new SocketServer (this);
 
+        /* 日志信息 */
         connect(pTcpServer,&SocketServer::messageSignal,this,&SocketService::messageSignal);
+        /* 心跳包状态设置 */
+        connect(this,&SocketService::sendHeartPacketSignal,pTcpServer,&SocketServer::sendHeartPacketSlot);
 
         startListen();
     }
@@ -137,5 +140,8 @@ void SocketService::releaseResourcesSlot()
 {
     if(pTimerLink!=nullptr && pTimerLink->isActive()){
         pTimerLink->stop();
+    }   
+    if(pTcpServer!=nullptr){
+        pTcpServer->releaseResourcesSlot();
     }
 }

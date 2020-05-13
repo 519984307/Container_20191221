@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>627</width>
-    <height>473</height>
+    <width>298</width>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_System_Setting_Channel">
       <attribute name="title">
@@ -75,7 +75,7 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>2</number>
             </property>
            </widget>
           </item>
@@ -693,7 +693,7 @@
           <bool>true</bool>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_19">
           <item row="0" column="0">
@@ -922,7 +922,7 @@
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_10">
          <property name="title">
-          <string>Model</string>
+          <string>Socket Model</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_26">
           <item row="0" column="1">
@@ -931,14 +931,14 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Client</string>
+             <string>Tcp Client</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="ServerModel">
             <property name="text">
-             <string>Server</string>
+             <string>Tcp Server</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -951,13 +951,13 @@
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
-          <string>Type</string>
+          <string>Socket Type</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_25">
           <item row="1" column="0">
            <widget class="QStackedWidget" name="Service_Type_stackedWidget">
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_5">
              <layout class="QGridLayout" name="gridLayout_8">
@@ -1129,6 +1129,9 @@
          <layout class="QGridLayout" name="gridLayout_12">
           <item row="0" column="0">
            <widget class="QComboBox" name="Language">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
             <item>
              <property name="text">
               <string>English</string>
@@ -1144,7 +1147,7 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="1" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

@@ -6,7 +6,6 @@
 
 class RESULTSANALYSISSHARED_EXPORT ResultsAnalysis:public ResultsAnalysisInterface
 {
-
     Q_OBJECT
     Q_INTERFACES(ResultsAnalysisInterface)
     Q_PLUGIN_METADATA(IID ResultsAnalysisInterfaceIID)
@@ -35,6 +34,12 @@ public:
     /// \brief setChannelSlot 设定通道号
     ///
     void setChannelSlot(int channel)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief sendMidResultSlot 是否发中间结果集
+    /// \param state
+    ///
+    void sendMidResultSlot(bool state)Q_DECL_OVERRIDE;
 
 private:
 
@@ -108,6 +113,11 @@ private:
     /// \brief channel 通道号
     ///
     int channel;
+
+    ///
+    /// \brief sendMid 是否发送中间结果集
+    ///
+    bool sendMid;
 };
 
 #endif // RESULTSANALYSIS_H

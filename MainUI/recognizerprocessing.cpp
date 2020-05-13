@@ -176,9 +176,14 @@ void RecognizerProcessing::infraredCompleteSlot(const int &type,int imgCount)
 
 void RecognizerProcessing::recognitionResultSlot(const QString &result, const QString& imgName)
 {
+    imgNameLIst.append(imgName);/* 用作删除废弃的图片 */
     QStringList tmpList=imgName.split(QDir::toNativeSeparators("/"));
-    QString img=tmpList[tmpList.count()-1].split(".")[0];
+    QString img="";
+    if(tmpList.count()>1){
+        img=tmpList[tmpList.count()-1].split(".")[0];
+    }
 
+    qDebug()<<imgName;
     resulList<<result;
     imgList<<img;
     timeList<<img.mid(0,14);
@@ -210,13 +215,17 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             }
         }
         QList<int> indList;
+        QList<int> indRemoveList;/* 要删除的图片名下标 */
         for (int ind = timeList.count()-1; ind >= 0; --ind) {
             if(setMax==timeList[ind]){
                 qDebug()<<"setMax"<<setMax<<"timeList:"<<timeList[ind];
-                indList.append(ind);
                 if(indList.count()==containerNum){
-                    break;
+                    continue;
                 }
+                indList.append(ind);
+            }
+            else {
+                indRemoveList.append(ind);
             }
         }
         if(indList.count()==containerNum){
@@ -230,12 +239,19 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             chanResultList.clear();
             chanImgList.clear();
 
+            foreach (auto ind, indRemoveList) {/* 删除多余图片 */
+                qDebug()<<imgNameLIst[ind];
+                QFile::remove(imgNameLIst[ind]);
+            }
+
             containerNum=0;
             containertType=0;
             resulList.clear();
             imgList.clear();
             timeList.clear();
             set.clear();
+            indRemoveList.clear();
+            imgNameLIst.clear();
             imgCounts=0;/* 置零 */
         }
         else {

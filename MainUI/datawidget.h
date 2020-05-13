@@ -80,7 +80,15 @@ signals:
 
 private slots:
 
+    ///
+    /// \brief on_while_cycle_capture_checkBox_stateChanged 循环模拟抓拍
+    /// \param arg1
+    ///
     void on_while_cycle_capture_checkBox_stateChanged(int arg1);
+
+    ///
+    /// \brief on_Capture_pushButton_clicked 模拟抓图
+    ///
     void on_Capture_pushButton_clicked();
 };
 

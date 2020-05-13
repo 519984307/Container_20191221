@@ -1,18 +1,19 @@
-#ifndef GETIMAGES_H
-#define GETIMAGES_H
+#ifndef CAPTUREUNDERLYING_H
+#define CAPTUREUNDERLYING_H
 
-#include "getimages_global.h"
-#include "underlyinggetimagesinterface.h"
+#include "captureunderlying_global.h"
+#include "ICaptureUnderlying.h"
+#include "putcommand.h"
 
-class GETIMAGESSHARED_EXPORT GetImages: public UnderlyingGetimagesInterface
+class CAPTUREUNDERLYINGSHARED_EXPORT CaptureUnderlying:public ICaptureUnderlying
 {
     Q_OBJECT
-    Q_INTERFACES(UnderlyingGetimagesInterface)
-    Q_PLUGIN_METADATA(IID  UnderlyingGetimagesInterfaceIID)
+    Q_INTERFACES(ICaptureUnderlying)
+    Q_PLUGIN_METADATA(IID  ICaptureUnderlyingIID)
 
 public:
-    GetImages(QObject *parent = nullptr);
-    ~GetImages()Q_DECL_OVERRIDE;
+    CaptureUnderlying(QObject* parent=nullptr);
+    ~CaptureUnderlying()Q_DECL_OVERRIDE;
 
 private slots:
 
@@ -38,12 +39,13 @@ private slots:
     void displayError(QAbstractSocket::SocketError socketError);
 
     ///
-    /// \brief stateChanged 链接状态
-    /// \param socketState 状态码
+    /// \brief startLinkCamer 连接相机
     ///
-    void stateChanged(QAbstractSocket::SocketState socketState);
+    void startLinkCamer();
 
 private:
+
+    PutCommand* pPutCommand;
 
     ///
     /// \brief tcpSocket Socket
@@ -66,16 +68,24 @@ private:
     int camerPort;
 
     ///
+    /// \brief alias 相机名
+    ///
+    QString alias;
+
+    ///
     /// \brief jpgStream 图片流
     ///
     QByteArray jpgStream;
 
-private:
+    ///
+    /// \brief imgNumber 图片编号
+    ///
+    int imgNumber;
 
     ///
-    /// \brief startLinkCamer 连接相机
+    /// \brief imgTime 抓图时间戳
     ///
-    void startLinkCamer();
+    QString imgTime;
 
 public:
 
@@ -86,7 +96,7 @@ public:
     /// \param CamerUser 用户名
     /// \param CamerPow 密码
     ///
-    void initCamerSlot(const QString &camerIP,const int &camerPort,const QString &CamerUser,const QString &CamerPow) Q_DECL_OVERRIDE;
+    void initCamerSlot(const QString &camerIP,const int &camerPort,const QString &CamerUser,const QString &CamerPow,const QString& alias) Q_DECL_OVERRIDE;
 
     ///
     /// \brief putCommandSlots 抓取图片
@@ -95,21 +105,14 @@ public:
     bool putCommandSlot(const int &imgNumber,const QString &imgTime)Q_DECL_OVERRIDE;
 
     ///
-    /// \brief playStreamSlot 播放视频流
-    /// \param winID 窗口ID
-    /// \param play 播放状态
-    ///
-    void playStreamSlot(uint winID, bool play) Q_DECL_OVERRIDE;
-
-    ///
-    /// \brief resizeEventSlot 调整窗口通知动态库
-    ///
-    void resizeEventSlot()Q_DECL_OVERRIDE;
-
-    ///
     /// \brief closeStream 释放动态库资源
     ///
     void releaseResourcesSlot()Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief InitializationSlot 初始化参数
+    ///
+    void InitializationSlot()Q_DECL_OVERRIDE;
 };
 
-#endif // GETIMAGES_H
+#endif // CAPTUREUNDERLYING_H

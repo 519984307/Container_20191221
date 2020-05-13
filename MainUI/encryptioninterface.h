@@ -7,6 +7,7 @@
 class EncryptionInterface : public QObject
 {
     Q_OBJECT
+
 public:
 
     virtual ~EncryptionInterface(){}
@@ -38,6 +39,11 @@ public slots:
     /// \brief InitializationSlot 初始化参数
     ///
     virtual void InitializationSlot()=0;
+
+    ///
+    /// \brief releaseResourcesSlot 释放动资源
+    ///
+    virtual void releaseResourcesSlot()=0;
 
 };
 

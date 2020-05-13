@@ -52,9 +52,9 @@ bool ChannelSettingWidget::jsonWrite()
     jsonObj.insert(tr("PlateCamer"),ui->PlateCamer->text());
     jsonChild.insert("Camer",QJsonValue(jsonObj));
 
-    QJsonObject jsonObj1;
-    jsonObj1.insert(tr("LicensePlate"),ui->LicensePlate->currentIndex());
-    jsonChild.insert("Plate",QJsonValue(jsonObj1));
+//    QJsonObject jsonObj1;
+//    jsonObj1.insert(tr("LicensePlate"),ui->LicensePlate->currentIndex());
+//    jsonChild.insert("Plate",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
     jsonObj2.insert(tr("SerialPortMode"),ui->SerialPortMode->currentIndex());
@@ -147,7 +147,7 @@ void ChannelSettingWidget::jsonWritetoUI()
     ui->RgihtCamer->setText(RgihtCamer);
     ui->PlateCamer->setText(PlateCamer);
 
-    ui->LicensePlate->setCurrentIndex(LicensePlate);
+    //ui->LicensePlate->setCurrentIndex(LicensePlate);
 
     ui->SerialPortMode->setCurrentIndex(SerialPortMode);
     ui->SerialPortOne->setValue(SerialPortOne);
@@ -189,16 +189,19 @@ QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString 
 }
 
 void ChannelSettingWidget::on_buttonBox_clicked(QAbstractButton *button)
-{   
-    if(button==ui->buttonBox->button(QDialogButtonBox::Save)){
+{    
+    if(button==reinterpret_cast<QAbstractButton*>(ui->buttonBox->button(QDialogButtonBox::Save))){
         if(jsonWrite()){
-            emit messageSignal(ZBY_LOG("INFO"),tr("Save Channel Json sucess"));
+            emit messageSignal(ZBY_LOG("INFO"),tr("Save Channel Json Sucess"));
+            QMessageBox::about(this,"Save channel Settings","Save Channel Json Sucess");
         }
         else {
             emit messageSignal(ZBY_LOG("ERROR"),tr("Save Channel Json error"));
-        }
+            QMessageBox::critical(this,"Save channel Settings","Save Channel Json Error");
+        }        
     }
-    if(button==ui->buttonBox->button(QDialogButtonBox::Discard)){
+    if(button==reinterpret_cast<QAbstractButton*>(ui->buttonBox->button(QDialogButtonBox::Discard))){
         emit messageSignal(ZBY_LOG("INFO"),tr("Not Save Channel Json"));
+        QMessageBox::warning(this,"Save channel Settings","Not Save Channel Json");
     }
 }

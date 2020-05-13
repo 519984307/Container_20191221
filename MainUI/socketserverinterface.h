@@ -47,6 +47,12 @@ signals:
     ///
     void sendResultSignal(int channel,const QString& result);
 
+    ///
+    /// \brief sendHeartPacketSignal 心跳包状态
+    /// \param state
+    ///
+    void sendHeartPacketSignal(bool state);
+
 public slots:
 
     ///

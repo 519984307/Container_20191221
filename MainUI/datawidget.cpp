@@ -98,6 +98,17 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 
         ui->Infrared_logic_lineEdit->clear();
 
+
+        ui->lineEdit->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+        ui->lineEdit_2->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+        ui->lineEdit_3->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+        ui->lineEdit_4->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+
+        ui->lineEdit_5->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+        ui->lineEdit_7->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+        ui->lineEdit_9->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+        ui->lineEdit_8->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0, 170, 0);");
+
         //ui->tabWidget->setTabText(1,tr("Result"));
         //ui->tab->setStyleSheet("color: #2c2c2c;");
 
@@ -219,7 +230,7 @@ void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QSt
             ui->Front_Camera_checkBox->setChecked(false);
         }
     }
-    if(alisa=="After"){
+    else if(alisa=="After"){
         if(state){
             ui->After_Camera_checkBox->setChecked(true);
         }
@@ -227,7 +238,7 @@ void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QSt
             ui->After_Camera_checkBox->setChecked(false);
         }
     }
-    if(alisa=="Left"){
+    else if(alisa=="Left"){
         if(state){
             ui->Left_Camera_checkBox->setChecked(true);
         }
@@ -235,7 +246,7 @@ void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QSt
             ui->Left_Camera_checkBox->setChecked(false);
         }
     }
-    if(alisa=="Right"){
+    else if(alisa=="Right"){
         if(state){
             ui->Right_Camera_checkBox->setChecked(true);
         }

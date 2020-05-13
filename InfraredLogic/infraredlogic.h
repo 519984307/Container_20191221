@@ -37,6 +37,11 @@ private:
      ///
      bool  _22G1_22G1_STATE;
 
+//     ///
+//     /// \brief _45G1_CAR 长箱加车头
+//     ///
+//     bool _45G1_CAR;
+
      ///
      /// \brief type 模拟抓拍类型
      ///
