@@ -34,19 +34,27 @@ void SocketService::InitializationParameterSlot(const QString &address, const qu
     this->address=address;
     this->port=port;
 
-    if(serviceType==1){/* 服务器模式 */
+    if(serviceMode==1){/* 服务器模式 */
         pTcpServer=new SocketServer (this);
 
+        pTcpServer->setServiceType(serviceType);/* 设置服务模式 */
         /* 日志信息 */
         connect(pTcpServer,&SocketServer::messageSignal,this,&SocketService::messageSignal);
         /* 心跳包状态设置 */
         connect(this,&SocketService::sendHeartPacketSignal,pTcpServer,&SocketServer::sendHeartPacketSlot);
+        /* 绑定客户端数量 */
+        connect(pTcpServer,&SocketServer::socketConnectCountSignal,this,&SocketService::socketConnectCountSignal);
+        /* 发送识别结果 */
+        connect(this,&SocketService::sendResultSignal,pTcpServer,&SocketServer::sendResultSlot);
 
         startListen();
     }
-    else if (serviceType==0) {/* 客户端模式 */
+    else if (serviceMode==0) {/* 客户端模式 */
         pTcpSocket=new QTcpSocket(this);
         pTimerLink=new QTimer (this);
+
+        /* 发送识别结果 */
+        connect(this,&SocketService::sendResultSignal,this,&SocketService::sendResultSlot);
 
         connect(pTcpSocket,&QIODevice::readyRead,this,&SocketService::readFortune);
         connect(pTcpSocket,&QAbstractSocket::connected,this,&SocketService::connected);
@@ -65,22 +73,19 @@ void SocketService::startLink()
         pTcpSocket->connectToHost(address,port);
 
         if(!pTcpSocket->waitForConnected(1000)){
-            pTcpSocket->error();
+            displayError(pTcpSocket->error());
         }
     }
 }
 
+
 void SocketService::startListen()
 {
-    if(!pTcpServer->listen(QHostAddress::Any,port)){/* 服务器使用本机地址 */
-        emit messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Listen Error<errocCode=%2>").arg(QHostAddress::Any).arg(pTcpServer->errorString()));
+    if(!pTcpServer->listen(QHostAddress::AnyIPv4,port)){/* 服务器使用本机地址 */
+        emit messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Listen Error<errocCode=%2>").arg(QHostAddress::AnyIPv4).arg(pTcpServer->errorString()));
     }
     else {
-        emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Start Listen.").arg(QHostAddress::Any));
-        /* 绑定客户端数量 */
-        connect(pTcpServer,&SocketServer::socketConnectCountSignal,this,&SocketService::socketConnectCountSignal);
-        /* 发送识别结果 */
-        connect(this,&SocketService::sendResultSignal,pTcpServer,&SocketServer::sendResultSlot);
+        emit messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Start Listen.").arg(QHostAddress::AnyIPv4));
     }
 }
 
@@ -93,26 +98,26 @@ void SocketService::heartbeatSlot()
 
 void SocketService::connected()
 {
-    if(pTimerLink->isActive()){
-        pTimerLink->stop();
-    }
+    isConnected=true;
+    emit socketConnectCountSignal(1);
 
     if(heartBeat){
-         pTimerLink->start(5000);
+        if(pTimerLink->isActive()){
+            pTimerLink->stop();
+        }
+         pTimerLink->start(15000);
     }
 
-    isConnected=true;
-
-    emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Socket  Link Successful").arg(address));
-    emit socketLinkStateSingal(address,true);
+    emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1:%2 Socket  Link Successful").arg(address).arg(port));
+    //emit socketLinkStateSingal(address,true);
 }
 
 void SocketService::readFortune()
 {
-    /* 读取客户端数据 */
+    /* 读取服务器数据 */
     QByteArray buf=pTcpSocket->readAll();
     qDebug()<<buf;
-    //emit soc    isConnected=true;ketReadDataSignal();
+    //emit    isConnected=true;ketReadDataSignal();
 }
 
 void SocketService::socketSendDataSlot(const QString &data)
@@ -124,16 +129,20 @@ void SocketService::socketSendDataSlot(const QString &data)
 
 void SocketService::disconnected()
 {
-    emit socketLinkStateSingal(address,false);
+   emit socketConnectCountSignal(-1);
+    //emit socketLinkStateSingal(address,false);
     isConnected=false;
 }
 
 void SocketService::displayError(QAbstractSocket::SocketError socketError)
 {
-    emit socketLinkStateSingal(address,false);
+    //emit socketLinkStateSingal(address,false);
     isConnected=false;
-    emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1  Socket Error<errorCode=%2>").arg(address).arg(socketError));
+    emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1:%3  Socket Error<errorCode=%2>").arg(address).arg(socketError).arg(port));
     QTimer::singleShot(10000, this, SLOT(startLink()));
+    if(pTimerLink->isActive()){
+        pTimerLink->stop();
+    }
 }
 
 void SocketService::releaseResourcesSlot()
@@ -143,5 +152,12 @@ void SocketService::releaseResourcesSlot()
     }   
     if(pTcpServer!=nullptr){
         pTcpServer->releaseResourcesSlot();
+    }
+}
+
+void SocketService::sendResultSlot(int channel, const QString &result)
+{
+    if(pTcpSocket->isOpen()){
+        pTcpSocket->write(result.toLocal8Bit());
     }
 }

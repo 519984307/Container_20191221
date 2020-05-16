@@ -37,11 +37,6 @@ private:
      ///
      bool  _22G1_22G1_STATE;
 
-//     ///
-//     /// \brief _45G1_CAR 长箱加车头
-//     ///
-//     bool _45G1_CAR;
-
      ///
      /// \brief type 模拟抓拍类型
      ///
@@ -72,6 +67,31 @@ private:
      ///
      QTimer* pTimerAfter;
 
+     ///
+     /// \brief pDetectionTimer 检测红外状态定时器
+     ///
+     QTimer* pDetectionTimer;
+
+     ///
+     /// \brief pSerial1 串口1
+     ///
+     QSerialPort* pSerial1;
+
+     ///
+     /// \brief pSerial2 串口2
+     ///
+     QSerialPort* pSerial2;
+
+     ///
+     /// \brief com1 串口打开状态1
+     ///
+     bool com1=false;
+
+     ///
+     /// \brief com2 串口打开状态2
+     ///
+     bool com2=false;
+
 private:
 
      ///
@@ -88,6 +108,11 @@ private:
      ///
       void serialLogic(int *status);
 
+      ///
+      /// \brief detectionLogicStatus 检测红外状态
+      ///
+      void detectionLogicStatus(bool com1,bool com2);
+
 private slots:
 
       ///
@@ -99,6 +124,11 @@ private slots:
       /// \brief DelayFrontCaptureSlot 延时抓拍前3张图片.
       ///
       void delayFrontCaptureSlot();
+
+      ///
+      /// \brief detectionLogicSlot 定时检测红外状态
+      ///
+      void detectionLogicSlot();
 
 public:
 

@@ -4,12 +4,18 @@ InfraredLogic::InfraredLogic(QObject *parent)
 {
     this-> setParent(parent);
 
+    pSerial1=new QSerialPort(this);
+    pSerial2=new QSerialPort(this);
+
+    pDetectionTimer=new QTimer  (this);
+    connect(pDetectionTimer,SIGNAL(timeout()),this,SLOT(detectionLogicSlot()));
+
     pTimerFront=new QTimer (this) ;
     pTimerFront->setSingleShot(true);/* 单次定时器 */
+    connect(pTimerFront,SIGNAL(timeout()),this,SLOT(delayFrontCaptureSlot()));
+
     pTimerAfter=new QTimer (this);
     pTimerAfter->setSingleShot(true);/* 单次定时器 */
-
-    connect(pTimerFront,SIGNAL(timeout()),this,SLOT(delayFrontCaptureSlot()));
     connect(pTimerAfter,SIGNAL(timeout()),this,SLOT(delayAfterCaptureSlot()));
 
     memset(status,0,sizeof (status));
@@ -20,16 +26,15 @@ InfraredLogic::InfraredLogic(QObject *parent)
     health=false;
     doubleFrontPut=false;
 
-    _45G1=false;_22G1=false;
-    _22G1_MID_22G1=false;
-    _22G1_22G1=false;
-
-    _22G1_22G1_STATE=false;
-    //_45G1_CAR=false;
+    _45G1=false;_22G1=false;_22G1_MID_22G1=false;_22G1_22G1=false;_22G1_22G1_STATE=false;
 }
 
 InfraredLogic::~InfraredLogic()
-{   
+{
+    pDetectionTimer->stop();
+    delete  pDetectionTimer;
+    pDetectionTimer=nullptr;
+
     pTimerFront->stop();
     pTimerAfter->stop();
     delete pTimerFront;
@@ -54,9 +59,16 @@ void InfraredLogic::setAlarmModeSlot(bool model)
 
 void InfraredLogic::exitWhileSlot(bool EXIT)
 {
+    pDetectionTimer->stop();
     pTimerFront->stop();
     pTimerAfter->stop();
     this->exit=EXIT;
+    pSerial1->close();
+    pSerial2->close();
+    delete pSerial1;
+    pSerial1=nullptr;
+    delete pSerial2;
+    pSerial2=nullptr;
 }
 
 bool InfraredLogic::compareStatus(int *before, int *after)
@@ -75,7 +87,7 @@ void InfraredLogic::serialLogic(int *status)
      * 红外逻辑(一定要判断状态),1)如果A2无信号,过车释放A1,会导致后3张图偏移.(处理完成)
      * 常开[false|0,0,0,0]|常闭[true|1,1,1,1]
     */
-    if(compareStatus(status,tmpStatus)){
+    //if(compareStatus(status,tmpStatus)){
         /*
          * clearn
         */
@@ -185,7 +197,6 @@ void InfraredLogic::serialLogic(int *status)
                             if(status[4]==valueOne){
                                 _22G1_22G1=true;
                                 _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
-                                _22G1_MID_22G1=false;
                                 return;
                             }
                         }
@@ -243,124 +254,86 @@ void InfraredLogic::serialLogic(int *status)
                 }
             }
         }
-    }
+    //}
     //memcpy(tmpStatus,status,sizeof (tmpStatus));
 }
 
 void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &portName2)
 {
-    QSerialPort serial1,serial2;
-    bool com1=false;
-    bool com2=false;
-
-    serial1.close();
-    serial1.setPortName(portName1);
-    serial2.close();
-    serial2.setPortName(portName2);
+    pSerial1->close();
+    pSerial1->setPortName(portName1);
+    pSerial2->close();
+    pSerial2->setPortName(portName2);
 
     /*
      * COM1
     */
-    if(!serial1.open(QIODevice::ReadOnly)){
-        emit messageSignal(ZBY_LOG("ERROR"), tr("portName1:%1 Open error<errorCode=%2>").arg(portName1).arg(serial1.error()));
+    if(!pSerial1->open(QIODevice::ReadOnly)){
+        emit messageSignal(ZBY_LOG("ERROR"), tr("portName1:%1 Open error<errorCode=%2>").arg(portName1).arg(pSerial1->error()));
     }
     else{
         /*
          * 设置DTR电平高
         */
-        if(serial1.setDataTerminalReady(true)){
+        if(pSerial1->setDataTerminalReady(true)){
             emit messageSignal(ZBY_LOG("INFO"), tr("portName1:%1 Set DataTerminalReady successful").arg(portName1));
             com1=true;
         }
         else {
-            emit messageSignal(ZBY_LOG("ERROR"), tr("portName1:%1 Set DataTerminalReady  error<errorCode=%2>").arg(portName1).arg(serial1.error()));
+            emit messageSignal(ZBY_LOG("ERROR"), tr("portName1:%1 Set DataTerminalReady  error<errorCode=%2>").arg(portName1).arg(pSerial1->error()));
         }
         /*
          * 设置RTS电平高,可以不设置
         */
-        if(serial1.setRequestToSend(true))
+        if(pSerial1->setRequestToSend(true))
         {
             emit messageSignal(ZBY_LOG("INFO"),tr("portName1:%1 Set RequestToSend successful").arg(portName1));
         }
         else{
-            emit messageSignal(ZBY_LOG("ERROR"),tr("portName1:%1 Set RequestToSend error<errorCode=%2>").arg(portName1).arg(serial1.error()));
+            emit messageSignal(ZBY_LOG("ERROR"),tr("portName1:%1 Set RequestToSend error<errorCode=%2>").arg(portName1).arg(pSerial1->error()));
         }
     }
 
     /*
      * COM2
     */
-    if(!serial2.open(QIODevice::ReadOnly)){
-        emit messageSignal(ZBY_LOG("ERROR"),tr("portName2:%1 Open error<errorCode=%2>").arg(portName2).arg(serial2.error()));
+    if(!pSerial2->open(QIODevice::ReadOnly)){
+        emit messageSignal(ZBY_LOG("ERROR"),tr("portName2:%1 Open error<errorCode=%2>").arg(portName2).arg(pSerial2->error()));
     }
     else{
         /*
          * 设置DTR电平高
         */
-        if(serial2.setDataTerminalReady(true)){
+        if(pSerial2->setDataTerminalReady(true)){
             emit messageSignal(ZBY_LOG("INFO"),tr("portName2:%1 Set DataTerminalReady successful").arg(portName2));
             com2=true;
         }
         else {
-            emit messageSignal(ZBY_LOG("ERROR"),tr("portName2:%1 Set DataTerminalReady error<errorCode=%2>").arg(portName2).arg(serial2.error()));
+            emit messageSignal(ZBY_LOG("ERROR"),tr("portName2:%1 Set DataTerminalReady error<errorCode=%2>").arg(portName2).arg(pSerial2->error()));
         }
         /*
          * 设置RTS电平高,可以不设置
         */
-        if(serial2.setRequestToSend(true))
+        if(pSerial2->setRequestToSend(true))
         {
             emit messageSignal(ZBY_LOG("INFO"),tr("portName2:%1 Set RequestToSend successful").arg(portName2));
         }
         else{
-            emit messageSignal(ZBY_LOG("ERROR"),tr("portName2:%1 Set RequestToSend error<errorCode=%2>").arg(portName2).arg(serial2.error()));
+            emit messageSignal(ZBY_LOG("ERROR"),tr("portName2:%1 Set RequestToSend error<errorCode=%2>").arg(portName2).arg(pSerial2->error()));
         }
     }
 
     if(!com1 && !com2){/* com1和com2都未打开,不做后续处理 */
         emit messageSignal(ZBY_LOG("INFO"),tr("Channel serial port exception"));
+        return;
     }
-    /*
-     * 循环逻辑判断
-     */
-    while (!this->exit)
-    {
-        QCoreApplication::processEvents();
-        QThread::msleep(5);
 
-        if(com1){
-            /*A1*/
-            status[0]= (serial1.pinoutSignals()&QSerialPort::ClearToSendSignal)?1:0;
-            //A2
-            status[1]= (serial1.pinoutSignals()&QSerialPort::DataSetReadySignal)?1:0;
-            /*D1*/
-            status[2]= (serial1.pinoutSignals()&QSerialPort::DataCarrierDetectSignal)?1:0;
-        }
-
-        if(com2){
-            /*B1*/
-            status[3]= (serial2.pinoutSignals()&QSerialPort::ClearToSendSignal)?1:0;
-            /*B2*/
-            status[4]= (serial2.pinoutSignals()&QSerialPort::DataSetReadySignal)?1:0;
-            /*D2*/
-            status[5]= (serial2.pinoutSignals()&QSerialPort::DataCarrierDetectSignal)?1:0;
-        }
-
-        if(com1&&com2){
-            /* 比对红外状态有没有变化 有变化才做相应处理 */
-            if(compareStatus(status,tmpStatus)){
-                serialLogic(status); /* 逻辑判断 */
-                memcpy(tmpStatus,status,sizeof (status));
-
-                /* 传递状态 */
-                emit logicStatusSignal(status);
-            }
-        }
-    }
+    pDetectionTimer->start(1);
 }
 
 void InfraredLogic::simulateTriggerSlot(int type)
 {
-    this->type=type;    
+    this->type=type;
 
     switch (type) {
     case 0:/* 清除图片 */
@@ -419,4 +392,44 @@ void InfraredLogic::delayFrontCaptureSlot()
         pTimerAfter->stop();
     }
     pTimerAfter->start(5000);
+}
+
+void InfraredLogic::detectionLogicSlot()
+{
+    detectionLogicStatus(com1,com2);
+}
+
+void InfraredLogic::detectionLogicStatus(bool com1, bool com2)
+{
+    if(com1){
+        /*A1*/
+        status[0]= (pSerial1->pinoutSignals()&QSerialPort::ClearToSendSignal)?1:0;
+        //A2
+        status[1]= (pSerial1->pinoutSignals()&QSerialPort::DataSetReadySignal)?1:0;
+        /*D1*/
+        status[2]= (pSerial1->pinoutSignals()&QSerialPort::DataCarrierDetectSignal)?1:0;
+    }
+
+    if(com2){
+        /*B1*/
+        status[3]= (pSerial2->pinoutSignals()&QSerialPort::ClearToSendSignal)?1:0;
+        /*B2*/
+        status[4]= (pSerial2->pinoutSignals()&QSerialPort::DataSetReadySignal)?1:0;
+        /*D2*/
+        status[5]= (pSerial2->pinoutSignals()&QSerialPort::DataCarrierDetectSignal)?1:0;
+    }
+
+    if(com1&&com2){
+        /* 比对红外状态有没有变化 有变化才做相应处理 */
+        if(compareStatus(status,tmpStatus)){
+            serialLogic(status); /* 逻辑判断 */
+            memcpy(tmpStatus,status,sizeof (status));
+        }
+    }
+
+    /* 传递状态 */
+    if(compareStatus(status,tmpStatus)){
+        emit logicStatusSignal(status);
+        memcpy(tmpStatus,status,sizeof (status));
+    }
 }

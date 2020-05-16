@@ -19,6 +19,11 @@ public:
 private:
     Ui::ServiceWidget *ui;
 
+    ///
+    /// \brief countTcp TCP数量
+    ///
+    int countTcp;
+
 public slots:
 
     ///

@@ -181,9 +181,11 @@ void MainWidget::loadingParameters()
             QStringList addrList=pSystemSettingWidget->pSettingValues->ManyCasesAddress.split(",");
             for (int var = 0; var < addrList.count(); ++var) {
                 QStringList addr=addrList[var].split(":");
-                if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var])){
+                if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var+1])){/* 通道号以1开始 */
                     if(addr.count()==2){
                         pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
+                        /* 心跳包状态 */
+                        pSocketServerProcessing->sendHeartPacketSignal(pSystemSettingWidget->pSettingValues->Heartbeat);
                     }
                 }
             }
@@ -968,6 +970,16 @@ void MainWidget::publicConnect()
             }
             break;
         case 1:/* 多例模式 */
+            for (int var = 1; var <= channelCounnt; ++var) {
+                if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var])){
+                    /* 客户端数量到是服务界面 */
+                    connect(pSocketServerProcessing,&SocketServerProcessing::socketConnectCountSignal,pServiceWidget,&ServiceWidget::socketConnectCountSlot);
+                    if(ResultsAnalysisProcessing* pResultsAnalysisProcessing =qobject_cast<ResultsAnalysisProcessing*>(ResultsAnalysisProcessingMap[var])){
+                        /* 发送识别结果到socket */
+                        connect(pResultsAnalysisProcessing,&ResultsAnalysisProcessing::sendResultSignal,pSocketServerProcessing,&SocketServerProcessing::sendResultSignal);
+                    }
+                }
+            }
             break;
         }
     }

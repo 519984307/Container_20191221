@@ -12,6 +12,8 @@ ServiceWidget::ServiceWidget(QWidget *parent) :
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);  
 
     ui->label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
+
+    countTcp=0;
 }
 
 ServiceWidget::~ServiceWidget()
@@ -26,11 +28,12 @@ void ServiceWidget::resultsAnalysisStateSlot(const int &channel, const QString &
 
 void ServiceWidget::socketConnectCountSlot(int count)
 {
-    if(count>0){
+    countTcp+=count;
+    if(countTcp>0){
         ui->label->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
     }
     else {
         ui->label->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(255, 255, 255);");
     }
-    ui->Socket_lcdNumber->display(count);
+    ui->Socket_lcdNumber->display(countTcp);
 }

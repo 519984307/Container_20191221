@@ -13,6 +13,12 @@ class SocketServer : public QTcpServer
 public:
     SocketServer(QObject* parent=nullptr);
 
+    ///
+    /// \brief setServiceType 设置TCP模式
+    /// \param serviceType
+    ///
+    void setServiceType(int serviceType);
+
 private:
 
     ///
@@ -65,6 +71,11 @@ public slots:
     void releaseResourcesSlot();
 
 private:
+
+    ///
+    /// \brief serviceType TCP模式
+    ///
+    int serviceType;
 
     ///
     /// \brief clientSocketIDMap 客户端字典

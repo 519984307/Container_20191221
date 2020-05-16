@@ -15,6 +15,8 @@ public:
     CaptureImages(QObject *parent = nullptr);
     ~CaptureImages()Q_DECL_OVERRIDE;
 
+    static CaptureImages* pThis;
+
 private:/* 参数  */
 
     ///
@@ -59,6 +61,11 @@ private:/* 参数  */
     /// \brief DeviceInfo 相机参数
     ///
     NET_DVR_DEVICEINFO_V40 DeviceInfo={};
+
+    ///
+    /// \brief SDKPath 动态库路径
+    ///
+    NET_DVR_LOCAL_SDK_PATH SDKPath={};
 
 private:
 

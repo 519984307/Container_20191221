@@ -7,6 +7,11 @@ SocketServer::SocketServer(QObject* parent):QTcpServer (parent)
     connect(pTimerLink,&QTimer::timeout,this,&SocketServer::heartbeatSlot);
 }
 
+void SocketServer::setServiceType(int serviceType)
+{
+    this->serviceType=serviceType;
+}
+
 void SocketServer::incomingConnection(qintptr socketID)
 {
     if(!pTimerLink->isActive()){
@@ -17,8 +22,9 @@ void SocketServer::incomingConnection(qintptr socketID)
     pClient->setSocketDescriptor(socketID);
     clientSocketIDMap.insert(socketID,pClient);
 
-    emit messageSignal(ZBY_LOG("INFO"),tr("New Client in join"));
-    emit socketConnectCountSignal(clientSocketIDMap.count());
+    emit messageSignal(ZBY_LOG("INFO"),tr("New Client in join IP:%1 PORT:%2").arg(pClient->peerAddress().toString()).arg(pClient->peerPort()));
+    //emit socketConnectCountSignal(clientSocketIDMap.count());
+    emit socketConnectCountSignal(1);
 
     connect(pClient,&SocketClient::disconnected,this,&SocketServer::disconnectedSlot);
     connect(pClient,&SocketClient::setClientLandSignal,this,&SocketServer::setClientLandSlot);
@@ -34,7 +40,9 @@ void SocketServer::disconnectedSlot()
     int key2=clientChannelMap.key(key1);
     clientChannelMap.remove(key2,key1);
 
-    emit socketConnectCountSignal(clientSocketIDMap.count());
+    emit messageSignal(ZBY_LOG("INFO"),tr("Client offline IP:%1 PORT:%2").arg(socket->peerAddress().toString()).arg(socket->peerPort()));
+    //emit socketConnectCountSignal(clientSocketIDMap.count());
+    emit socketConnectCountSignal(-1);
 }
 
 void SocketServer::setClientLandSlot(int land, qintptr socketID)
@@ -49,18 +57,21 @@ void SocketServer::getLastResultSlot(qintptr socktID)
 
 void SocketServer::sendResultSlot(int channel, const QString &result)
 {
-    //(auto obj:channelCamerMultiMap.values(key)){
-
-    //qintptr key=clientChannelMap.value(channel);
-    foreach (auto obj, clientChannelMap.values(channel)) {
-        SocketClient* pClient=clientSocketIDMap.value(obj);
-        //QString ret=QString("%1\n").arg(result);
-        if(pClient!=nullptr){
-            pClient->write(result.toLatin1());
-
-            messageSignal(ZBY_LOG("INFO"),tr("Send Data %1:%2:%3").arg(pClient->peerAddress().toString()).arg(pClient->peerPort()).arg(result));
+    if(serviceType==1){/* 多模发送到所有链接的客户端 */
+        foreach (auto obj, clientSocketIDMap.values()) {
+            obj->write(result.toLatin1());
         }
-        pClient=nullptr;
+    }
+    else if (serviceType==0) {/* 单模只发送对应通道客户端 */
+        foreach (auto obj, clientChannelMap.values(channel)) {
+            SocketClient* pClient=clientSocketIDMap.value(obj);
+            //QString ret=QString("%1\n").arg(result);
+            if(pClient!=nullptr){
+                pClient->write(result.toLocal8Bit());
+                messageSignal(ZBY_LOG("INFO"),tr("Send Data %1:%2:%3").arg(pClient->peerAddress().toString()).arg(pClient->peerPort()).arg(result));
+            }
+            pClient=nullptr;
+        }
     }
 }
 
@@ -90,6 +101,10 @@ void SocketServer::releaseResourcesSlot()
     foreach (auto client, clientSocketIDMap.values()) {
         client->disconnect();
     }
+
+    clientChannelMap.clear();
+    clientSocketIDMap.clear();
+
     this->close();
 }
 

@@ -10,4 +10,4 @@ SUBDIRS += \
     ResultsAnalysis \
     SocketService \
     Encryption \
-    CaptureUnderlying
+    #CaptureUnderlying

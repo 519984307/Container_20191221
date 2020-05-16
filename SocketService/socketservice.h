@@ -28,6 +28,11 @@ private:
     int heartBeat;
 
     ///
+    /// \brief channel 通道号
+    ///
+    int channel;
+
+    ///
     /// \brief address 地址
     ///
     QString address;
@@ -112,6 +117,8 @@ public:
     /// \brief releaseResourcesSlot 释放动资源
     ///
     void releaseResourcesSlot()Q_DECL_OVERRIDE;
+
+private slots:
 
     ///
     /// \brief sendResultSlot 发送识别结果

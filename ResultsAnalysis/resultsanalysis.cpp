@@ -9,13 +9,20 @@ ResultsAnalysis::ResultsAnalysis(QObject *parent)
     initCheckMap();
 
 
-    QString program="QRecognition.exe";
-    QString path=QDir::toNativeSeparators(tr("%1/%2/").arg(QCoreApplication::applicationDirPath()).arg(program.split(".")[0]));
+    QString program="QRecognition";
+    QString path=QDir::toNativeSeparators(tr("%1/%2/").arg(QCoreApplication::applicationDirPath()).arg(program));
 
     QFile file(path+("ISO.txt"),this);
     if(file.open( QIODevice::ReadOnly ) )
     {
-        ISOContains=file.readAll().trimmed();
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString iso=in.readLine().trimmed();
+            if(iso!=""){
+                ISOContains.append(in.readLine().trimmed());
+                //qDebug()<<iso;
+            }
+        }
     }
     file.close();
 
@@ -35,6 +42,7 @@ ResultsAnalysis::ResultsAnalysis(QObject *parent)
 
 ResultsAnalysis::~ResultsAnalysis()
 {
+    ISOReplaceMap.clear();
     checkMap.clear();
 }
 
@@ -156,12 +164,18 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 //con="BSIU9815070";
                 con=tmp[0].trimmed();
                 check=numberCheck(con);
-                if(ISOContains.count()!=0 && ISOContains.indexOf(tmp[1])==-1){/* 比对箱型结果 */
-                    iso=ISOReplaceMap.value(tmp[1],"");/* 匹配不成功,置空  */
-                    if(iso==""){
-                        Iprobability=0;/* 箱型置信度置零 */
+                if(ISOContains.count()!=0 || ISOReplaceMap.count()!=0){/* 比对箱型结果 */
+                    if(ISOContains.indexOf(tmp[1])==-1){
+                        iso=ISOReplaceMap.value(tmp[1],"");/* 匹配不成功,置空  */
+                        if(iso==""){
+                            Iprobability=0;/* 箱型置信度置零 */
+                        }
+                        else {
+                            Iprobability=tmp[3].toUInt();
+                        }
                     }
                     else {
+                        iso=tmp[1];
                         Iprobability=tmp[3].toUInt();
                     }
                 }
@@ -169,7 +183,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                     iso=tmp[1];
                     Iprobability=tmp[3].toUInt();
                 }
-                Cprobability=tmp[2].toUInt();                              
+                Cprobability=tmp[2].toUInt();
             }
         }
         conTemp.append(con);/* 箱号 */
