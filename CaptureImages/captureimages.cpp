@@ -133,11 +133,9 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
             if(NET_DVR_Init_L()){
                 NetSDKInit=true;
 
-                qDebug()<<alias;
-
                 if(NET_DVR_SetExceptionCallBack_V30_L){
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
-                   // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
+                    // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
                     NET_DVR_SetConnectTime_L(15000,1);
                     NET_DVR_SetReconnect_L(10000,1);
                     NET_DVR_SetRecvTimeOut_L(1000);
@@ -150,11 +148,11 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
             }
         }
         else {
-            qDebug()<<"NET_DVR_Init_L  error";
             emit messageSignal(ZBY_LOG("ERROR"),tr("Init The Dynamic Error<errorCode=%1>").arg(pDLL->errorString()));
             if(pDLL!=nullptr && pDLL->isLoaded()){
                 pDLL->unload();
             }
+            NetSDKInit=false;
             initCamerSlot(camerIP, camerPort,CamerUser,CamerPow,alias);
         }
     }

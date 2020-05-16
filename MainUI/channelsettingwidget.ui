@@ -376,13 +376,6 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QSpinBox" name="SerialPortOne">
-                <property name="maximum">
-                 <number>199</number>
-                </property>
-               </widget>
-              </item>
              </layout>
             </widget>
            </item>

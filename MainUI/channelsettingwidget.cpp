@@ -35,7 +35,7 @@ bool ChannelSettingWidget::jsonWrite()
     mkPath.mkdir("Json");
     mkPath.cd("Json");
 
-    QFile file(QDir::toNativeSeparators(tr("%1/CHANNEL%2.json").arg(mkPath.path()).arg(channelNumber)));
+    QFile file(QDir::toNativeSeparators(QString("%1/CHANNEL%2.json").arg(mkPath.path()).arg(channelNumber)));
     if(!file.open(QIODevice::WriteOnly)){
         emit messageSignal(ZBY_LOG("ERROR"),tr("open CHANNEL%1.json error<errorCode=%2>").arg(channelNumber).arg(file.OpenError));
         return false;
@@ -45,11 +45,11 @@ bool ChannelSettingWidget::jsonWrite()
     QJsonObject  jsonChild, jsonObjRoot;
 
     QJsonObject jsonObj;
-    jsonObj.insert(tr("FrontCamer"),ui->FrontCamer->text());
-    jsonObj.insert(tr("AfterCamer"),ui->AfterCamer->text());
-    jsonObj.insert(tr("LeftCamer"),ui->LeftCamer->text());
-    jsonObj.insert(tr("RgihtCamer"),ui->RgihtCamer->text());
-    jsonObj.insert(tr("PlateCamer"),ui->PlateCamer->text());
+    jsonObj.insert(QString("FrontCamer"),ui->FrontCamer->text());
+    jsonObj.insert(QString("AfterCamer"),ui->AfterCamer->text());
+    jsonObj.insert(QString("LeftCamer"),ui->LeftCamer->text());
+    jsonObj.insert(QString("RgihtCamer"),ui->RgihtCamer->text());
+    jsonObj.insert(QString("PlateCamer"),ui->PlateCamer->text());
     jsonChild.insert("Camer",QJsonValue(jsonObj));
 
 //    QJsonObject jsonObj1;
@@ -57,26 +57,26 @@ bool ChannelSettingWidget::jsonWrite()
 //    jsonChild.insert("Plate",QJsonValue(jsonObj1));
 
     QJsonObject jsonObj2;
-    jsonObj2.insert(tr("SerialPortMode"),ui->SerialPortMode->currentIndex());
-    jsonObj2.insert(tr("SerialPortOne"),ui->SerialPortOne->value());
-    jsonObj2.insert(tr("SerialPortTow"),ui->SerialPortTow->value());
-    jsonObj2.insert(tr("SerialAddrOne"),ui->SerialAddrOne->text());
-    jsonObj2.insert(tr("SerialAddrTow"),ui->SerialAddrTow->text());
-    jsonObj2.insert(tr("PortOne"),ui->PortOne->value());
-    jsonObj2.insert(tr("PortTow"),ui->PortTow->value());
+    jsonObj2.insert(QString("SerialPortMode"),ui->SerialPortMode->currentIndex());
+    jsonObj2.insert(QString("SerialPortOne"),ui->SerialPortOne->value());
+    jsonObj2.insert(QString("SerialPortTow"),ui->SerialPortTow->value());
+    jsonObj2.insert(QString("SerialAddrOne"),ui->SerialAddrOne->text());
+    jsonObj2.insert(QString("SerialAddrTow"),ui->SerialAddrTow->text());
+    jsonObj2.insert(QString("PortOne"),ui->PortOne->value());
+    jsonObj2.insert(QString("PortTow"),ui->PortTow->value());
     if(ui->SerialPortOpenState->isChecked()){
-        jsonObj2.insert(tr("infraredStatus"),0);
+        jsonObj2.insert(QString("infraredStatus"),0);
     }
     if(ui->SerialPortCloseState->isChecked()){
-        jsonObj2.insert(tr("infraredStatus"),1);
+        jsonObj2.insert(QString("infraredStatus"),1);
     }
     jsonChild.insert("SerialPort",QJsonValue(jsonObj2));
 
     QJsonObject jsonObj3;
-    jsonObj3.insert(tr("Alias"),ui->Alias->text());
+    jsonObj3.insert(QString("Alias"),ui->Alias->text());
     jsonChild.insert("Other",QJsonValue(jsonObj3));
 
-    jsonObjRoot.insert(tr("Channel%1").arg(channelNumber),QJsonValue(jsonChild));
+    jsonObjRoot.insert(QString("Channel%1").arg(channelNumber),QJsonValue(jsonChild));
     jsonDoc.setObject(jsonObjRoot);
 
     QByteArray arr=jsonDoc.toJson();
@@ -89,7 +89,7 @@ bool ChannelSettingWidget::jsonWrite()
 
 bool ChannelSettingWidget::jsonRead()
 {
-    QFile file(QDir::toNativeSeparators(tr("%1/%2/CHANNEL%3.json").arg(QCoreApplication::applicationDirPath()).arg("Json").arg(channelNumber)));
+    QFile file(QDir::toNativeSeparators(QString("%1/%2/CHANNEL%3.json").arg(QCoreApplication::applicationDirPath()).arg("Json").arg(channelNumber)));
     if(!file.open(QIODevice::ReadOnly)){
         emit messageSignal(ZBY_LOG("ERROR"),tr("Failed to load the CHANNEL%1 parameter, create the default parameter error<errorCOde=%2>").arg(channelNumber).arg(file.OpenError));
         return false;
@@ -104,8 +104,8 @@ bool ChannelSettingWidget::jsonRead()
         /* 读取根目录 */
         if(jsonDoc.isObject()){
             QJsonObject obj=jsonDoc.object();
-            if(obj.contains(tr("Channel%1").arg(channelNumber))){
-                QJsonValue value=obj.value(tr("Channel%1").arg(channelNumber));
+            if(obj.contains(QString("Channel%1").arg(channelNumber))){
+                QJsonValue value=obj.value(QString("Channel%1").arg(channelNumber));
 
                 /* 读取子目录 */
                 if(value.isObject()){
