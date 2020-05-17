@@ -102,4 +102,10 @@ RESOURCES += \
 
 TRANSLATIONS = zh_hans.ts
 
+DISTFILES += \
+    ico.rc
+
+RC_FILE = \
+    ico.rc
+
 #QMAKE_LFLAGS+="-Wl,-rpath=./Plugins/,-rpath=./Plugins/smartX"

@@ -129,8 +129,8 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
                 if(NET_DVR_SetExceptionCallBack_V30_L){
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
                     // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
-                    NET_DVR_SetConnectTime_L(15000,0);
-                    NET_DVR_SetReconnect_L(15000,1);
+                    //NET_DVR_SetConnectTime_L(15000,0);
+                    //NET_DVR_SetReconnect_L(15000,1);
                     NET_DVR_SetRecvTimeOut_L(1000);
                 }
                 NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);

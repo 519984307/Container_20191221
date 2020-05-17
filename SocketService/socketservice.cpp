@@ -151,7 +151,9 @@ void SocketService::sendHeartPacketSlot(bool state)
 
 void SocketService::releaseResourcesSlot()
 {
-    pTcpSocket->abort();
+    if(pTcpSocket!=nullptr){
+         pTcpSocket->abort();
+    }
 
     isConnected=false;
 

@@ -401,7 +401,14 @@ void InfraredLogic::detectionLogicSlot()
 
 void InfraredLogic::detectionLogicStatus(bool com1, bool com2)
 {
+    if(!com1 && !com2){
+        pDetectionTimer->stop();
+    }
+
     if(com1){
+        if(pSerial1->pinoutSignals()==QSerialPort::NoSignal){
+            this->com1=false;
+        }
         /*A1*/
         status[0]= (pSerial1->pinoutSignals()&QSerialPort::ClearToSendSignal)?1:0;
         //A2
@@ -411,6 +418,9 @@ void InfraredLogic::detectionLogicStatus(bool com1, bool com2)
     }
 
     if(com2){
+        if(pSerial2->pinoutSignals()==QSerialPort::NoSignal){
+            this->com2=false;
+        }
         /*B1*/
         status[3]= (pSerial2->pinoutSignals()&QSerialPort::ClearToSendSignal)?1:0;
         /*B2*/
@@ -423,13 +433,15 @@ void InfraredLogic::detectionLogicStatus(bool com1, bool com2)
         /* 比对红外状态有没有变化 有变化才做相应处理 */
         if(compareStatus(status,tmpStatus)){
             serialLogic(status); /* 逻辑判断 */
-            memcpy(tmpStatus,status,sizeof (status));
+            //memcpy(tmpStatus,status,sizeof (status));
         }
     }
 
-    /* 传递状态 */
+    /* 比对红外状态有没有变化 有变化才做相应处理 */
     if(compareStatus(status,tmpStatus)){
+        /* 传递状态 */
         emit logicStatusSignal(status);
-        memcpy(tmpStatus,status,sizeof (status));
     }
+
+    memcpy(tmpStatus,status,sizeof (status));
 }
