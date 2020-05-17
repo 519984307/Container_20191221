@@ -203,14 +203,14 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
 {    
     if(dwResult){
         NET_DVR_JPEGPARA   pJpegFile={};
-        uint32_t charLen=250000;
+        uint32_t charLen=400000;//windows 400000,linux 250000
         LPDWORD dataLen=nullptr;
         char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
         pJpegFile.wPicSize=0xff;
         pJpegFile.wPicQuality=0;
 
         if(NET_DVR_CaptureJPEGPicture_NEW_L!=nullptr && NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
-            QByteArray arrayJpg(buff,250000);
+            QByteArray arrayJpg(buff,400000);
             emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
             emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put Command Sucess").arg(camerIp));
         }
