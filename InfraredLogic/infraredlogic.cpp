@@ -223,7 +223,7 @@ void InfraredLogic::serialLogic(int *status)
             /*
              * 双箱加高车头
             */
-            if(_22G1_MID_22G1){
+            if(_22G1_MID_22G1 && !_22G1_22G1){
                 if(status[0]==valueOne){
                     if(status[1]==valueOne){
                         if(status[3]==valueTwo){

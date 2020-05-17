@@ -15,7 +15,7 @@ void SocketServer::setServiceType(int serviceType)
 void SocketServer::incomingConnection(qintptr socketID)
 {
     if(!pTimerLink->isActive()){
-         pTimerLink->start(5000);
+         pTimerLink->start(15000);
     }
 
     SocketClient* pClient=new SocketClient (this);

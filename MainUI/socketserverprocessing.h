@@ -19,7 +19,7 @@ signals:
     /// \param heartBeat 心跳包状态
     /// \param serviceMode 服务模式
     ///
-    void  InitializationParameterSignal(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode,const int& heartBeat);
+    void  InitializationParameterSignal(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode);
 
     ///
     /// \brief socketSendDataSlot 发送数据

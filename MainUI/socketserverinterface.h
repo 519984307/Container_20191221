@@ -63,7 +63,7 @@ public slots:
     /// \param heartBeat 心跳包 状态
     /// \param serviceMode 服务模式
     ///
-    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode,const int& heartBeat)=0;
+    virtual void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode)=0;
 
     ///
     /// \brief socketSendDataSlot 发送数据

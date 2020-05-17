@@ -95,6 +95,12 @@ private slots:
     ///
     void displayError(QAbstractSocket::SocketError socketError);
 
+    ///
+    /// \brief sendHeartPacketSlot 心跳包状态
+    /// \param state
+    ///
+    void sendHeartPacketSlot(bool state);
+
 public:
 
     ///
@@ -105,7 +111,7 @@ public:
     /// \param heartBeat 心跳包 状态
     /// \param serviceMode 服务模式
     ///
-    void  InitializationParameterSlot(const QString& address,const quint16& port,const int& serviceType,const int& serviceMode,const int& heartBeat)Q_DECL_OVERRIDE;
+    void  InitializationParameterSlot(const QString& address, const quint16& port, const int& serviceType, const int& serviceMode)Q_DECL_OVERRIDE;
 
     ///
     /// \brief socketSendDataSlot 发送数据

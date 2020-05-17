@@ -171,7 +171,7 @@ void MainWidget::loadingParameters()
             if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[1])){
                 QStringList addr=pSystemSettingWidget->pSettingValues->SingletonAddress.split(":");
                 if(addr.count()==2){
-                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
+                    pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->ServiceModel);
                     /* 心跳包状态 */
                     pSocketServerProcessing->sendHeartPacketSignal(pSystemSettingWidget->pSettingValues->Heartbeat);
                 }
@@ -181,9 +181,12 @@ void MainWidget::loadingParameters()
             QStringList addrList=pSystemSettingWidget->pSettingValues->ManyCasesAddress.split(",");
             for (int var = 0; var < addrList.count(); ++var) {
                 QStringList addr=addrList[var].split(":");
+                if((var+1)>channelCounnt){
+                    break;
+                }
                 if(SocketServerProcessing* pSocketServerProcessing=qobject_cast<SocketServerProcessing*>(SocketServiceProcessingMap[var+1])){/* 通道号以1开始 */
                     if(addr.count()==2){
-                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->ServiceModel,pSystemSettingWidget->pSettingValues->Heartbeat);
+                        pSocketServerProcessing->InitializationParameterSignal(addr[0],addr[1].toUShort(),pSystemSettingWidget->pSettingValues->Service_Type,pSystemSettingWidget->pSettingValues->ServiceModel);
                         /* 心跳包状态 */
                         pSocketServerProcessing->sendHeartPacketSignal(pSystemSettingWidget->pSettingValues->Heartbeat);
                     }

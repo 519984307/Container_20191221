@@ -55,10 +55,8 @@ CaptureImages::~CaptureImages()
 
 bool CaptureImages::InitializationSlot()
 {
-    if(pDLL==nullptr){
-        //pDLL=new QLibrary("HCNetSDK.dll",this);/* windows下不支持设置动态库路径 */
-        pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
-    }
+    //pDLL=new QLibrary("HCNetSDK.dll",this);/* windows下不支持设置动态库路径 */
+    pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
 
     if(pDLL->load()){
         NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(pDLL->resolve("NET_DVR_SetExceptionCallBack_V30"));
@@ -84,12 +82,8 @@ bool CaptureImages::InitializationSlot()
         if(pTimerState==nullptr){
             pTimerState=new QTimer (this);
             connect(pTimerState,SIGNAL(timeout()),this,SLOT(getDeviceStatusSlot()));
+            pTimerState->start(15000);/* 10秒检测一次相机状态 */
         }
-
-        if(pTimerState->isActive()){
-            pTimerState->stop();
-        }
-        pTimerState->start(15000);/* 10秒检测一次相机状态 */
 
         return  true;
     }
@@ -113,7 +107,6 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
         this->alias=alias;
 
         /* 设置动态库路径 */
-
         NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
         QString path= QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK"));
         strcpy(SDKPath.sPath,path.toLocal8Bit().data());
@@ -132,12 +125,12 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
         if(NET_DVR_Init_L !=nullptr){
             if(NET_DVR_Init_L()){
                 NetSDKInit=true;
-
+                qDebug()<<"realy init";
                 if(NET_DVR_SetExceptionCallBack_V30_L){
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
                     // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
-                    NET_DVR_SetConnectTime_L(15000,1);
-                    NET_DVR_SetReconnect_L(10000,1);
+                    NET_DVR_SetConnectTime_L(15000,0);
+                    NET_DVR_SetReconnect_L(15000,1);
                     NET_DVR_SetRecvTimeOut_L(1000);
                 }
                 NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
@@ -151,12 +144,13 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
             emit messageSignal(ZBY_LOG("ERROR"),tr("Init The Dynamic Error<errorCode=%1>").arg(pDLL->errorString()));
             if(pDLL!=nullptr && pDLL->isLoaded()){
                 pDLL->unload();
+                pDLL=nullptr;
             }
-            NetSDKInit=false;
             initCamerSlot(camerIP, camerPort,CamerUser,CamerPow,alias);
         }
     }
     else {
+        qDebug()<<"realy login";
         NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
     }
 }
@@ -196,7 +190,7 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
     if(dwResult==0){
         emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Camera Login Error<errorCode=%2>").arg(pThis->camerIp).arg(pThis->NET_DVR_GetLastError_L()));
         if(pThis->NET_DVR_GetLastError_L()==7){
-                 pThis->initCamerSlot(pThis->camerIp,pThis->port,pThis->camerName,pThis->camerPow,pThis->alias);/* 重新登录 */
+            pThis->initCamerSlot(pThis->camerIp,pThis->port,pThis->camerName,pThis->camerPow,pThis->alias);/* 重新登录 */
         }
     }
     if(dwResult==1){

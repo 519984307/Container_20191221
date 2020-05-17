@@ -4,6 +4,7 @@ SocketService::SocketService(QObject *parent)
 {
     this->setParent(parent);
 
+    heartBeat=false;
     isConnected=false;
     pTcpServer=nullptr;
     pTcpSocket=nullptr;
@@ -28,9 +29,8 @@ SocketService::~SocketService()
     pTimerLink=nullptr;
 }
 
-void SocketService::InitializationParameterSlot(const QString &address, const quint16 &port, const int &serviceType,const int& serviceMode,const int& heartBeat)
+void SocketService::InitializationParameterSlot(const QString &address, const quint16 &port, const int &serviceType,const int& serviceMode)
 {
-    this->heartBeat=heartBeat;
     this->address=address;
     this->port=port;
 
@@ -55,6 +55,8 @@ void SocketService::InitializationParameterSlot(const QString &address, const qu
 
         /* 发送识别结果 */
         connect(this,&SocketService::sendResultSignal,this,&SocketService::sendResultSlot);
+        /* 心跳包状态设置 */
+        connect(this,&SocketService::sendHeartPacketSignal,this,&SocketService::sendHeartPacketSlot);
 
         connect(pTcpSocket,&QIODevice::readyRead,this,&SocketService::readFortune);
         connect(pTcpSocket,&QAbstractSocket::connected,this,&SocketService::connected);
@@ -72,9 +74,9 @@ void SocketService::startLink()
         pTcpSocket->abort();
         pTcpSocket->connectToHost(address,port);
 
-        if(!pTcpSocket->waitForConnected(1000)){
-            displayError(pTcpSocket->error());
-        }
+//        if(!pTcpSocket->waitForConnected(1000)){
+//            displayError(pTcpSocket->error());
+//        }
     }
 }
 
@@ -91,23 +93,22 @@ void SocketService::startListen()
 
 void SocketService::heartbeatSlot()
 {
-    if(pTcpSocket->isOpen()){
-        pTcpSocket->write("[H]");/* 心跳包数据 */
+    if(heartBeat){
+        if(pTcpSocket->isOpen()){
+            pTcpSocket->write("[H]");/* 心跳包数据 */
+        }
     }
 }
 
 void SocketService::connected()
 {
     isConnected=true;
-    emit socketConnectCountSignal(1);
 
-    if(heartBeat){
-        if(pTimerLink->isActive()){
-            pTimerLink->stop();
-        }
-         pTimerLink->start(15000);
+    if(!pTimerLink->isActive()){
+        pTimerLink->start(15000);
     }
 
+    emit socketConnectCountSignal(1);
     emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1:%2 Socket  Link Successful").arg(address).arg(port));
     //emit socketLinkStateSingal(address,true);
 }
@@ -129,24 +130,31 @@ void SocketService::socketSendDataSlot(const QString &data)
 
 void SocketService::disconnected()
 {
-   emit socketConnectCountSignal(-1);
-    //emit socketLinkStateSingal(address,false);
     isConnected=false;
+    emit socketConnectCountSignal(-1);
+    //emit socketLinkStateSingal(address,false);
 }
 
 void SocketService::displayError(QAbstractSocket::SocketError socketError)
 {
     //emit socketLinkStateSingal(address,false);
     isConnected=false;
+
+    QTimer::singleShot(15000, this, SLOT(startLink()));
     emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1:%3  Socket Error<errorCode=%2>").arg(address).arg(socketError).arg(port));
-    QTimer::singleShot(10000, this, SLOT(startLink()));
-    if(pTimerLink->isActive()){
-        pTimerLink->stop();
-    }
+}
+
+void SocketService::sendHeartPacketSlot(bool state)
+{
+    heartBeat=state;
 }
 
 void SocketService::releaseResourcesSlot()
 {
+    pTcpSocket->abort();
+
+    isConnected=false;
+
     if(pTimerLink!=nullptr && pTimerLink->isActive()){
         pTimerLink->stop();
     }   
