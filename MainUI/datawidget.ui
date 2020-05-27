@@ -44,7 +44,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="iconSize">
       <size>
@@ -957,7 +957,7 @@
           <property name="verticalSpacing">
            <number>0</number>
           </property>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="label_3">
             <property name="frameShape">
              <enum>QFrame::Panel</enum>
@@ -970,8 +970,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_5">
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_4">
             <property name="frameShape">
              <enum>QFrame::Panel</enum>
             </property>
@@ -1008,6 +1008,26 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>Play</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>Capture</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item row="1" column="0">
@@ -1029,6 +1049,16 @@
           <widget class="QLabel" name="label">
            <property name="text">
             <string>Plate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_13"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Time</string>
            </property>
           </widget>
          </item>

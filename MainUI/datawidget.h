@@ -70,6 +70,31 @@ public slots:
     ///
     void camerIDstatesSlot(const QString &camerIP,bool state,const QString& alisa);
 
+    ///车牌
+    ///
+    /// \brief imageFlowSlot 图片流
+    /// \param img
+    ///
+    void imageFlowSlot(QByteArray img);
+
+    ///
+    /// \brief theVideoStreamSlot 视频流
+    /// \param stream
+    ///
+    void theVideoStreamSlot(QByteArray arrImg);
+
+    ///
+    /// \brief resultsTheLicensePlateSlot 车牌结果
+    /// \param plate
+    ///
+    void resultsTheLicensePlateSlot(const QString &plate,const QString &color,const QString &time,QByteArray arrImg);
+
+    ///
+    /// \brief equipmentStateSlot  设备额在线状态
+    /// \param state
+    ///
+    void equipmentStateSlot( bool state);
+
 signals:
 
     ///
@@ -77,6 +102,27 @@ signals:
     /// \param type 逻辑类型
     ///
     void simulateTriggerSignal(int type);
+
+//    ///
+//    /// \brief initCameraSlot 初始化相机
+//    /// \param localAddr 本机地址(用户绑定网卡)
+//    /// \param addr 相机地址
+//    /// \param port 端口
+//    /// \param imgPath 图片地址
+//    /// \param channel 通道号
+//    ///
+//    void initCameraSignal(const QString &localAddr,const QString &addr, const int &port, const QString &imgPath, int imgFormat,const int &channel);
+
+    ///
+    /// \brief simulationCaptureSlot 模拟抓拍
+    ///
+    void simulationCaptureSignal();
+
+    ///
+    /// \brief openTheVideoSlot 打开视频/关闭视频
+    /// \param play
+    ///
+    void openTheVideoSignal(bool play);
 
 private slots:
 
@@ -90,6 +136,8 @@ private slots:
     /// \brief on_Capture_pushButton_clicked 模拟抓图
     ///
     void on_Capture_pushButton_clicked();
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked(bool checked);
 };
 
 #endif // DATAWIDGET_H

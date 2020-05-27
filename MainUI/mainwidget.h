@@ -30,6 +30,8 @@
 #include "socketserverinterface.h"
 #include "encryptioninterface.h"
 #include "ICaptureUnderlying.h"
+#include "INTERFACE/touploaddatainterface.h"
+#include "INTERFACE/licenseplateinterface.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -49,6 +51,8 @@
 #include "socketserverprocessing.h"
 #include "encryptionprocessing.h"
 #include "underlyinggetimagesprocessing.h"
+#include "PROCESSING/uploaddataprocessing.h"
+#include "PROCESSING/electroniclicenseplateprocessing.h"
 
 namespace Ui {
 class MainWidget;
@@ -210,6 +214,16 @@ private:
     ///
     QMap<int,QObject*> SocketServiceProcessingMap;
 
+    ///
+    /// \brief UploadDataProcessingMap 数据上传类
+    ///
+    QMap<int,QObject*> UploadDataProcessingMap;
+
+    ///
+    /// \brief ElectronicLicensePlateProcessingMap 车牌处理类
+    ///
+    QMap<int,QObject*> ElectronicLicensePlateProcessingMap;
+
 private:
 
     ///
@@ -322,6 +336,20 @@ private:
     /// \param pEncryptionInterface
     ///
     void encryptionInterPlugin(EncryptionInterface* pEncryptionInterface);
+
+    ///
+    /// \brief uploadDataPlugin 数据上传类
+    /// \param pToUploadDataInterface
+    ///
+    void uploadDataPlugin(ToUploadDataInterface* pToUploadDataInterface, int num);
+
+    ///
+    /// \brief ElectronicLicensePlatePlugin 车牌处理类
+    /// \param pLicensePlateInterface
+    /// \param num
+    ///
+    void ElectronicLicensePlatePlugin(LicensePlateInterface* pLicensePlateInterface,int num);
+
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口
     ///

@@ -117,6 +117,12 @@ signals:
     ///
     void putCommantStateSignal(const int& channel, const QString& msg);
 
+    ///
+    /// \brief uploadDataSlot 上传数据(上传图片)
+    /// \param data 数据
+    ///
+   void uploadDataSignal(const QString& data);
+
 public slots:
 
     ///

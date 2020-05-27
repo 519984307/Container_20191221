@@ -45,7 +45,9 @@ SOURCES += \
     socketserverprocessing.cpp \
     encryptionprocessing.cpp \
     logwidget.cpp \
-    underlyinggetimagesprocessing.cpp
+    underlyinggetimagesprocessing.cpp \
+    PROCESSING/uploaddataprocessing.cpp \
+    PROCESSING/electroniclicenseplateprocessing.cpp
 
 HEADERS += \
         mainwidget.h\
@@ -75,7 +77,11 @@ HEADERS += \
     logwidget.h \
     underlyinggetimagesprocessing.h \
     ICaptureUnderlying.h \
-    getimagesinterface.h
+    getimagesinterface.h \
+    INTERFACE/touploaddatainterface.h \
+    PROCESSING/uploaddataprocessing.h \
+    INTERFACE/licenseplateinterface.h \
+    PROCESSING/electroniclicenseplateprocessing.h
 
 FORMS += \
         mainwidget.ui \

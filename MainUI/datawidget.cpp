@@ -256,6 +256,35 @@ void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QSt
     }
 }
 
+void DataWidget::imageFlowSlot(QByteArray img)
+{
+    QPixmap pix;
+    pix.loadFromData(img);
+    ui->label_3->setPixmap(pix);
+}
+
+void DataWidget::theVideoStreamSlot(QByteArray arrImg)
+{
+    QPixmap pix;
+    pix.loadFromData(arrImg);
+    ui->label_3->setPixmap(pix);
+}
+
+void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString &color, const QString &time, QByteArray arrImg)
+{
+    ui->lineEdit_11->setText(plate);
+    ui->lineEdit_12->setText(color);
+    ui->lineEdit_13->setText(time);
+    QPixmap pix;
+    pix.loadFromData(arrImg);
+    ui->label_3->setPixmap(pix);
+}
+
+void DataWidget::equipmentStateSlot(bool state)
+{
+
+}
+
 
 void DataWidget::on_while_cycle_capture_checkBox_stateChanged(int arg1)
 {
@@ -287,4 +316,14 @@ void DataWidget::on_Capture_pushButton_clicked()
         emit simulateTriggerSignal(0);
         break;
     }
+}
+
+void DataWidget::on_pushButton_clicked()
+{
+    emit simulationCaptureSignal();
+}
+
+void DataWidget::on_pushButton_2_clicked(bool checked)
+{
+    emit openTheVideoSignal(checked);
 }

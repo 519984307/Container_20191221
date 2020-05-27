@@ -64,6 +64,9 @@ MainWidget::~MainWidget()
     for(auto obj:underlyingGetimagesProcessingMap.values()){
         delete  obj;
     }
+    for(auto obj:UploadDataProcessingMap.values()){
+        delete  obj;
+    }
     foreach (auto obj, ThreadList) {
         delete obj;
     }
@@ -81,6 +84,7 @@ MainWidget::~MainWidget()
     RecognizerProcessingMap.clear();
     ResultsAnalysisProcessingMap.clear();
     SocketServiceProcessingMap.clear();
+    UploadDataProcessingMap.clear();
 
 //    delete pDataBaseWidget;
 //    delete pSystemSettingWidget;
@@ -137,6 +141,10 @@ void MainWidget::loadingParameters()
                 }
                 ++num;
             }
+            /* 车牌相机初始化 */
+            if(ElectronicLicensePlateProcessing *pElectronicLicensePlateProcessing=qobject_cast<ElectronicLicensePlateProcessing*>(ElectronicLicensePlateProcessingMap[channel])){
+                pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);
+            }
         }
 
         /* 红外参数初始化 */
@@ -161,6 +169,11 @@ void MainWidget::loadingParameters()
                 /* 是否发送中间结果 */
                 emit pResultsAnalysisProcessing->sendMidResultSignal(pSystemSettingWidget->pSettingValues->Resultting);
             }
+        }
+
+        if(UploadDataProcessing* pUploadDataProcessing=qobject_cast<UploadDataProcessing*>(UploadDataProcessingMap[channel])){
+            /* 上传数据(FTP设置参数) */
+            pUploadDataProcessing->InitializationParameterSignal("test","cheng870888","./img/","192.168.0.125");
         }
     }
 
@@ -193,7 +206,7 @@ void MainWidget::loadingParameters()
                 }
             }
             break;
-        }
+        }       
     }
 
     foreach (auto action, QActionMap.keys()) {/* 绑定菜单按钮事件 */
@@ -526,6 +539,16 @@ void MainWidget::loadPlugins()
                 pResultsAnalysisInterface=nullptr;
                 num=channelCounnt;
             }
+            else if (ToUploadDataInterface* pToUploadDataInterface=qobject_cast<ToUploadDataInterface*>(plugin)) {
+                delete  pToUploadDataInterface;
+                pToUploadDataInterface=nullptr;
+                num=channelCounnt;
+            }
+            else if (LicensePlateInterface* pLicensePlateInterface=qobject_cast<LicensePlateInterface*>(plugin)) {
+                delete pLicensePlateInterface;
+                pLicensePlateInterface=nullptr;
+                num=channelCounnt;
+            }
             else if(SocketServerInterface* pSocketServerInterface=qobject_cast<SocketServerInterface*>(plugin)) {
                 delete  pSocketServerInterface;
                 pSocketServerInterface=nullptr;
@@ -601,6 +624,12 @@ void MainWidget::processingPlugins(QDir path, int num)
             else if (EncryptionInterface* pEncryptionInterface=qobject_cast<EncryptionInterface*>(plugin)) {
                 encryptionInterPlugin(pEncryptionInterface);
             }
+            else if (ToUploadDataInterface* pToUploadDataInterface=qobject_cast<ToUploadDataInterface*>(plugin)) {
+                uploadDataPlugin(pToUploadDataInterface,num--);
+            }
+            else if (LicensePlateInterface* pLicensePlateInterface=qobject_cast<LicensePlateInterface*>(plugin)) {
+                ElectronicLicensePlatePlugin(pLicensePlateInterface,num--);
+            }
             else {
                 delete plugin;
             }
@@ -613,7 +642,7 @@ void MainWidget::processingPlugins(QDir path, int num)
 
 void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
-    ImageProcessing* pImageProcessing=new ImageProcessing (nullptr);
+    ImageProcessing* pImageProcessing=new ImageProcessing (this);
     ImageProcessingMap.insert(num,pImageProcessing);
 
 //    /* 初始化动态库 */
@@ -623,7 +652,7 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     /* 日志信息 */
     connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
     /* 释放动态库资源 */
-    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot,Qt::BlockingQueuedConnection);
+    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot);//,Qt::BlockingQueuedConnection);
 
     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
         /* 抓取图片 */
@@ -640,12 +669,12 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
         connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
     }
 
-    /* 线程运行 */
-    QThread* pThread=new QThread(this);
-    pGetimagesInterface->moveToThread(pThread);
-    pImageProcessing->moveToThread(pThread);
-    ThreadList.append(pThread);
-    pThread->start();
+//    /* 线程运行 */
+//    QThread* pThread=new QThread(this);
+//    pGetimagesInterface->moveToThread(pThread);
+//    pImageProcessing->moveToThread(pThread);
+//    ThreadList.append(pThread);
+//    pThread->start();
 }
 
 void MainWidget::captureUnderlyingPlugin(ICaptureUnderlying *pUnderlyingCapture, int num)
@@ -898,6 +927,56 @@ void MainWidget::encryptionInterPlugin(EncryptionInterface *pEncryptionInterface
     connect(pEncryptionInterface,&EncryptionInterface::GetEncryptedInformationSignal,pEncryptionProcessing,&EncryptionProcessing::GetEncryptedInformationSignal);
 }
 
+void MainWidget::uploadDataPlugin(ToUploadDataInterface *pToUploadDataInterface,int num)
+{
+    /* 异步 */
+    UploadDataProcessing* pUploadDataProcessing=new UploadDataProcessing (this) ;
+    UploadDataProcessingMap.insert(num,pUploadDataProcessing);
+
+    /* 初始化参数 */
+    connect(pUploadDataProcessing,&UploadDataProcessing::InitializationParameterSignal,pToUploadDataInterface,&ToUploadDataInterface::InitializationParameterSlot);
+    /* 上传数据 */
+    connect(pUploadDataProcessing,&UploadDataProcessing::uploadDataSignal,pToUploadDataInterface,&ToUploadDataInterface::uploadDataSlot);
+    connect(pToUploadDataInterface,&ToUploadDataInterface::messageSignal,this,&MainWidget::messageSlot);
+
+//    QThread* pThread=new QThread(this);
+//    pUploadDataProcessing->moveToThread(pThread);
+//    pToUploadDataInterface->moveToThread(pThread);
+//    ThreadList.append(pThread);
+    //    pThread->start();
+}
+
+void MainWidget::ElectronicLicensePlatePlugin(LicensePlateInterface *pLicensePlateInterface, int num)
+{
+    ElectronicLicensePlateProcessing* pElectronicLicensePlateProcessing=new ElectronicLicensePlateProcessing (nullptr);
+    ElectronicLicensePlateProcessingMap.insert(num,pElectronicLicensePlateProcessing);
+
+    if(DataWidget* pDataWidget=qobject_cast<DataWidget*>(DataWidgetMap[num])){
+        /* 初始化相机 */
+        connect(pElectronicLicensePlateProcessing,&ElectronicLicensePlateProcessing::initCameraSignal,pLicensePlateInterface,&LicensePlateInterface::initCameraSlot);
+        /* 模拟抓拍 */
+        connect(pDataWidget,&DataWidget::simulationCaptureSignal,pLicensePlateInterface,&LicensePlateInterface::simulationCaptureSlot);
+        /* 识别结果 */
+        connect(pLicensePlateInterface,&LicensePlateInterface::resultsTheLicensePlateSignal,pDataWidget,&DataWidget::resultsTheLicensePlateSlot);
+        /* 图片流 */
+        connect(pLicensePlateInterface,&LicensePlateInterface::imageFlowSignal,pDataWidget,&DataWidget::imageFlowSlot);
+        /* 打开关闭车牌视频 */
+        connect(pDataWidget,&DataWidget::openTheVideoSignal,pLicensePlateInterface,&LicensePlateInterface::openTheVideoSlot);
+        /* 相机状态 */
+        connect(pLicensePlateInterface,&LicensePlateInterface::equipmentStateSignal,pDataWidget,&DataWidget::equipmentStateSlot);
+    }
+    /* 日志信息 */
+    connect(pLicensePlateInterface,&LicensePlateInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 释放资源 */
+    connect(this,&MainWidget::releaseResourcesSignal,pLicensePlateInterface,&LicensePlateInterface::releaseResourcesSlot);
+
+    QThread* pThread=new QThread(this);
+    pElectronicLicensePlateProcessing->moveToThread(pThread);
+    pLicensePlateInterface->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
+}
+
 void MainWidget::publicConnect()
 {
     /* 一条通道4台相机的数据流,绑定到一个数据界面 */
@@ -927,6 +1006,11 @@ void MainWidget::publicConnect()
                 /* 判断加密状态 */
                 if(pEncryptionProcessing!=nullptr){
                     connect(pEncryptionProcessing,&EncryptionProcessing::GetTheEncryptedStateSignal,pRecognizerProcessing,&RecognizerProcessing::GetTheEncryptedStateSlot);
+                }
+
+                if(UploadDataProcessing* pUploadDataProcessing=qobject_cast<UploadDataProcessing*>(UploadDataProcessingMap[key])){
+                    /* 上传图片(FTP信号与信号) */
+                    connect(pRecognizerProcessing,&RecognizerProcessing::uploadDataSignal,pUploadDataProcessing,&UploadDataProcessing::uploadDataSignal);
                 }
             }
 

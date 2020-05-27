@@ -74,8 +74,9 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         dir.mkpath(suffixPath);
         dir.cd(suffixPath);
 
+        qDebug()<<encryption;
         /* 加密不存在识别.给空结果 */
-        if(encryption && imgTime!="" && jpgStream!=nullptr){
+        if(!encryption && imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);            
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
@@ -242,6 +243,10 @@ void RecognizerProcessing::recognitionResultSlot(const QString &result, const QS
             foreach (auto ind, indRemoveList) {/* 删除多余图片 */
                 qDebug()<<imgNameLIst[ind];
                 QFile::remove(imgNameLIst[ind]);
+            }
+
+            foreach (auto ind, indList) {/* 上传图片 */
+                emit uploadDataSignal(imgNameLIst[ind]);
             }
 
             containerNum=0;

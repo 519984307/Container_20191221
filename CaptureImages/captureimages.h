@@ -20,9 +20,9 @@ public:
 private:/* 参数  */
 
     ///
-    /// \brief NetSDKInit 动态库初始化状态
+    /// \brief isSDKInit 动态库初始化状态
     ///
-    bool NetSDKInit;
+    bool isSDKInit;
 
     ///
     /// \brief port 端口

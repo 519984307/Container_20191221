@@ -12,7 +12,7 @@ CaptureImages::CaptureImages(QObject *parent)
 
     pDLL=nullptr;
     pTimerState=nullptr;
-    NetSDKInit=false;
+    isSDKInit=false;
 
     NET_DVR_SetExceptionCallBack_V30_L=nullptr;
     NET_DVR_SetSDKInitCfg_L=nullptr;
@@ -95,7 +95,7 @@ bool CaptureImages::InitializationSlot()
 
 void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,const QString &CamerUser,const QString &CamerPow,const QString& alias)
 {
-    if(!NetSDKInit){
+    if(!isSDKInit){
         if(!InitializationSlot()){/* 动态库初始化失败就不登录相机 */
             return;
         }
@@ -124,14 +124,14 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
 
         if(NET_DVR_Init_L !=nullptr){
             if(NET_DVR_Init_L()){
-                NetSDKInit=true;
+                isSDKInit=true;
                 qDebug()<<"realy init";
                 if(NET_DVR_SetExceptionCallBack_V30_L){
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
                     // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
-                    //NET_DVR_SetConnectTime_L(15000,0);
-                    //NET_DVR_SetReconnect_L(15000,1);
-                    NET_DVR_SetRecvTimeOut_L(1000);
+                    NET_DVR_SetConnectTime_L(15000,0);
+                    NET_DVR_SetReconnect_L(15000,1);
+                    //NET_DVR_SetRecvTimeOut_L(1000);
                 }
                 NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
                 emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 Camera Init Sucess").arg(this->camerIp));
@@ -210,12 +210,15 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
         pJpegFile.wPicQuality=0;
 
         if(NET_DVR_CaptureJPEGPicture_NEW_L!=nullptr && NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
-            QByteArray arrayJpg(buff,400000);
+            QByteArray arrayJpg(buff,*dataLen);
             emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
             emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put Command Sucess").arg(camerIp));
         }
         else {
             emit pictureStreamSignal(nullptr,imgNumber,imgTime);/* 保证识别流程完成(识别流程需要完整图片编号) */
+            if(NET_DVR_GetLastError_L!=nullptr){
+                emit messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Put Command Error<errorCode=%2>").arg(camerIp).arg(NET_DVR_GetLastError_L()));
+            }
         }
         delete  dataLen;
         dataLen=nullptr;

@@ -10,4 +10,7 @@ SUBDIRS += \
     ResultsAnalysis \
     SocketService \
     Encryption \
-    CaptureUnderlying
+    CaptureUnderlying \
+    ToUploadData \
+    DataInterchange \
+    ElectronicLicensePlate

@@ -238,7 +238,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
     if(type==2 && conProbabilityTemp.count()==6){
         bool checkCon=false;
-        for (int var = 0; var < 3; ++var) {
+        for (int var = 3; var < 6; ++var) {
             if(isoProbabilityTemp[var]>Iprobability){
                 Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
                 Iindex1=var;
@@ -256,7 +256,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
         }
         Cprobability=0; Iprobability=0;checkCon=false;
-        for (int var = 3; var < 6; ++var) {
+        for (int var = 0; var < 3; ++var) {
             if(isoProbabilityTemp[var]>Iprobability){/* 比对箱型置信度 */
                 Iprobability=isoProbabilityTemp[var];
                 Iindex2=var;
