@@ -67,6 +67,9 @@ MainWidget::~MainWidget()
     for(auto obj:UploadDataProcessingMap.values()){
         delete  obj;
     }
+    for(auto obj:ElectronicLicensePlateProcessingMap.values()){
+        delete  obj;
+    }
     foreach (auto obj, ThreadList) {
         delete obj;
     }
@@ -85,6 +88,7 @@ MainWidget::~MainWidget()
     ResultsAnalysisProcessingMap.clear();
     SocketServiceProcessingMap.clear();
     UploadDataProcessingMap.clear();
+    ElectronicLicensePlateProcessingMap.clear();
 
 //    delete pDataBaseWidget;
 //    delete pSystemSettingWidget;
@@ -143,7 +147,9 @@ void MainWidget::loadingParameters()
             }
             /* 车牌相机初始化 */
             if(ElectronicLicensePlateProcessing *pElectronicLicensePlateProcessing=qobject_cast<ElectronicLicensePlateProcessing*>(ElectronicLicensePlateProcessingMap[channel])){
-                pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);
+                if(!pChannelSettingWidget->PlateCamer.isEmpty()){
+                    pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);
+                }
             }
         }
 
@@ -962,6 +968,8 @@ void MainWidget::ElectronicLicensePlatePlugin(LicensePlateInterface *pLicensePla
         connect(pLicensePlateInterface,&LicensePlateInterface::imageFlowSignal,pDataWidget,&DataWidget::imageFlowSlot);
         /* 打开关闭车牌视频 */
         connect(pDataWidget,&DataWidget::openTheVideoSignal,pLicensePlateInterface,&LicensePlateInterface::openTheVideoSlot);
+        /* 视频流 */
+        connect(pLicensePlateInterface,&LicensePlateInterface::theVideoStreamSignal,pDataWidget,&DataWidget::theVideoStreamSlot);
         /* 相机状态 */
         connect(pLicensePlateInterface,&LicensePlateInterface::equipmentStateSignal,pDataWidget,&DataWidget::equipmentStateSlot);
     }

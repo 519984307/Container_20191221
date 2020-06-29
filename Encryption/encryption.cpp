@@ -41,7 +41,7 @@ void Encryption::InitializationSlot()
         SmartX3CheckExist=reinterpret_cast<SmartX3CheckExistFUN>(pDLL->resolve("SmartX3CheckExist"));
 
         smartXGetUidFunc();
-        pTimer->start(5000);
+        pTimer->start(10000);
     }
 //    else {
 //        emit messageSignal(ZBY_LOG("ERROR"),"DLL  not load");
@@ -73,13 +73,14 @@ void Encryption::smartXGetUidFunc()
 
 void Encryption::SmartXCheckExistSlot()
 {
-    if(dogState && SmartX3CheckExist!=nullptr && SmartX3CheckExist(keyHandles[0])==0){
-        emit GetTheEncryptedStateSignal(true);
-        qDebug()<<"find lock";
-    }
-    else {
-        emit GetTheEncryptedStateSignal(false);
-        smartXGetUidFunc();
-        qDebug()<<"not find";
-    }
+//    if(dogState && SmartX3CheckExist!=nullptr && SmartX3CheckExist(keyHandles[0])==0){
+//        emit GetTheEncryptedStateSignal(true);
+//        qDebug()<<"find lock";
+//    }
+//    else {
+//        emit GetTheEncryptedStateSignal(false);
+//        smartXGetUidFunc();
+//        qDebug()<<"not find";
+//    }
+    emit GetTheEncryptedStateSignal(true);
 }

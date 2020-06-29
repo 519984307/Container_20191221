@@ -199,15 +199,16 @@ private:
     QString imgPath;
     int imgFormat;
     int channel;
-    int port;
+    int port; 
 
     bool isSDKinit;
     QLibrary* pDLL;
 
     QByteArray arrAddr;
-    QMutex mutex;
+    QMutex mutex; 
 
     static ElectronicLicensePlate *pThis;
+    static bool complate;
 };
 
 #endif // ELECTRONICLICENSEPLATE_H

@@ -78,6 +78,9 @@
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
            <widget class="QSpinBox" name="ChannelNumber">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="frame">
              <bool>true</bool>
             </property>
@@ -91,7 +94,7 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>20</number>
+             <number>1</number>
             </property>
            </widget>
           </item>

@@ -264,20 +264,22 @@ void DataWidget::imageFlowSlot(QByteArray img)
 }
 
 void DataWidget::theVideoStreamSlot(QByteArray arrImg)
-{
+{    
     QPixmap pix;
-    pix.loadFromData(arrImg);
-    ui->label_3->setPixmap(pix);
+    if(pix.loadFromData(arrImg)){
+        ui->label_3->setPixmap(pix);
+    }
+    arrImg.clear();
 }
 
 void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString &color, const QString &time, QByteArray arrImg)
-{
+{    
     ui->lineEdit_11->setText(plate);
-    ui->lineEdit_12->setText(color);
+    ui->lineEdit_12->setText(color.toLatin1());
     ui->lineEdit_13->setText(time);
     QPixmap pix;
     pix.loadFromData(arrImg);
-    ui->label_3->setPixmap(pix);
+    ui->label_4->setPixmap(pix);
 }
 
 void DataWidget::equipmentStateSlot(bool state)

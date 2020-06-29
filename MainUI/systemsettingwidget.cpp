@@ -204,6 +204,9 @@ bool SystemSettingWidget::jsonRead()
                     pSettingValues->HcSDKPath=getJsonValue("Agreement","HcSDKPath",value.toObject()).toString();
 
                     pSettingValues->ChannelNumber= getJsonValue("Channel","ChannelNumber",value.toObject()).toInt();
+                    if(pSettingValues->ChannelNumber>ui->ChannelNumber->maximum()){/* 防止后台篡改通道数量 */
+                        pSettingValues->ChannelNumber=ui->ChannelNumber->maximum();
+                    }
                     pSettingValues->ImageFormatOne= getJsonValue("Channel","ImageFormatOne",value.toObject()).toInt();
                     pSettingValues->ImageFormatTow= getJsonValue("Channel","ImageFormatTow",value.toObject()).toInt();
                     pSettingValues->SaveImageOne= getJsonValue("Channel","SaveImageOne",value.toObject()).toInt();
@@ -258,6 +261,9 @@ bool SystemSettingWidget::jsonRead()
 
 void SystemSettingWidget::jsonWritetoUI()
 {
+    if(pSettingValues->ChannelNumber>ui->ChannelNumber->maximum()){/* 防止后台篡改通道数量 */
+        pSettingValues->ChannelNumber=ui->ChannelNumber->maximum();
+    }
     ui->ChannelNumber->setValue(pSettingValues->ChannelNumber);
     ui->SaveImage_1->setChecked(pSettingValues->SaveImageOne);
     ui->SaveImage_2->setChecked(pSettingValues->SaveImageTow);

@@ -1,6 +1,7 @@
 #include "electroniclicenseplate.h"
 
 ElectronicLicensePlate *ElectronicLicensePlate::pThis=nullptr;
+bool ElectronicLicensePlate::complate=false;
 
 ElectronicLicensePlate::ElectronicLicensePlate(QObject *parent)
 {
@@ -45,8 +46,8 @@ ElectronicLicensePlate::~ElectronicLicensePlate()
 
 bool ElectronicLicensePlate::initializationParameter()
 {
-    //pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/WTY/window/libwty")),this) ;/* windows*/
-    pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/WTY/linux/libwty")),this) ;/* linux */
+    pDLL=new QLibrary ("WTY",this) ;/* windows*/
+    //pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/WTY/linux/libwty")),this) ;/* linux */
     if(pDLL->load()){
         CLIENT_LPRC_RegCLIENTConnEvent=reinterpret_cast<CLIENT_LPRC_RegCLIENTConnEventFUN>(pDLL->resolve("CLIENT_LPRC_RegCLIENTConnEvent"));
         CLIENT_LPRC_RegDataEx2Event=reinterpret_cast<CLIENT_LPRC_RegDataEx2EventFUN>(pDLL->resolve("CLIENT_LPRC_RegDataEx2Event"));
@@ -63,8 +64,10 @@ bool ElectronicLicensePlate::initializationParameter()
         CLIENT_LPRC_RS485Send=reinterpret_cast<CLIENT_LPRC_RS485SendFUN>(pDLL->resolve("CLIENT_LPRC_RS485Send"));
         CLIENT_LPRC_QuitDevice=reinterpret_cast<CLIENT_LPRC_QuitDeviceFUN>(pDLL->resolve("CLIENT_LPRC_QuitDevice"));
 
+        emit messageSignal(ZBY_LOG("INFO"),"WTY Load sucessful");
         return true;
     }
+    emit messageSignal(ZBY_LOG("ERROR"),QString("WTY Load error<errorCode=%1>").arg(pDLL->errorString()));
     return  false;
 }
 
@@ -149,7 +152,7 @@ void ElectronicLicensePlate::initCameraSlot(const QString  &localAddr,const QStr
             messageSignal(ZBY_LOG("INFO"),tr("IP:%1 License plate camera link successful").arg(addr));           
         }
         else {
-            //ElectronicLicensePlate();
+            messageSignal(ZBY_LOG("ERROR"),QString("IP:%1 License plate camera link error").arg(addr));
         }
     }
 }
@@ -166,16 +169,21 @@ void ElectronicLicensePlate::connectCallback(char *chWTYIP, UINT nStatus, LDWORD
 void ElectronicLicensePlate::dataEx2Callback(CLIENT_LPRC_PLATE_RESULTEX *recResultEx, LDWORD dwUser)
 {
     QByteArray arrImg=QByteArray::fromRawData(reinterpret_cast<const char*>(recResultEx->pFullImage.pBuffer),recResultEx->pFullImage.nLen);
-    QString dateTime= QString("%-1%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
-    emit pThis->resultsTheLicensePlateSignal(recResultEx->chLicense,recResultEx->chColor,dateTime,arrImg);
+    QString dateTime= QString("%1-%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
+    emit pThis->resultsTheLicensePlateSignal(QString::fromUtf8(recResultEx->chLicense),QString::fromUtf8(recResultEx->chColor),dateTime.toLocal8Bit(),arrImg);
     pThis->saveImg(arrImg,dateTime);
 }
 
 void ElectronicLicensePlate::jpegCallback(CLIENT_LPRC_DEVDATA_INFO *JpegInfo, LDWORD dwUser)
-{
-    if(JpegInfo->chIp==pThis->arrAddr.data() && JpegInfo->nStatus==0){
-        QByteArray arrImg=QByteArray::fromRawData(reinterpret_cast<const char*>(JpegInfo->pchBuf),JpegInfo->nLen);
-        emit pThis->theVideoStreamSignal(arrImg);
+{        
+    QThread::msleep(200);
+    if(strcmp(JpegInfo->chIp,pThis->arrAddr.data())==0 && JpegInfo->nStatus==0 && JpegInfo->nLen>0){
+        //QByteArray arrImg(reinterpret_cast<const char*>(JpegInfo->pchBuf),JpegInfo->nLen);
+        //if(!complate){
+           emit pThis->theVideoStreamSignal(QByteArray(reinterpret_cast<const char*>(JpegInfo->pchBuf),JpegInfo->nLen));
+        //}
+        //complate=true;
+        //arrImg.clear();
     }
 }
 
@@ -239,7 +247,7 @@ void ElectronicLicensePlate::openTheVideoSlot(bool play)
         messageSignal(ZBY_LOG("INFO"),tr("IP:%1 Video streaming operation successful").arg(address));
     }
     else {
-        messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Video streaming operation successful").arg(address));
+        messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 Video streaming operation error").arg(address));
     }
 }
 

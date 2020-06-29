@@ -7,8 +7,10 @@
 #include <QDateTime>
 #include <QMutexLocker>
 #include <QMutex>
+#include <QDebug>
 #include <QPixmap>
 #include <QCoreApplication>
+#include <QThread>
 
 #if defined(ELECTRONICLICENSEPLATE_LIBRARY)
 #  define ELECTRONICLICENSEPLATESHARED_EXPORT Q_DECL_EXPORT

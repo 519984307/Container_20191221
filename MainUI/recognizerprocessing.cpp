@@ -76,7 +76,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
 
         qDebug()<<encryption;
         /* 加密不存在识别.给空结果 */
-        if(!encryption && imgTime!="" && jpgStream!=nullptr){
+        if(encryption && imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);            
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
