@@ -43,9 +43,9 @@ void Encryption::InitializationSlot()
         smartXGetUidFunc();
         pTimer->start(10000);
     }
-//    else {
-//        emit messageSignal(ZBY_LOG("ERROR"),"DLL  not load");
-//    }
+    else {
+        emit messageSignal(ZBY_LOG("ERROR"),"DLL  not load");
+    }
 }
 
 void Encryption::releaseResourcesSlot()
@@ -55,10 +55,17 @@ void Encryption::releaseResourcesSlot()
 
 void Encryption::smartXGetUidFunc()
 {
+    /* 福建达远
+     * ed302361196401966c72f116402e9297
+     * ae68c66368a8e943bc260ae97003747f
+    */
+    /* 辽宁锦州
+     * 2895743a6f3c423adfc444d16076e085
+    */
     if(SmartX3Find!=nullptr && SmartX3Find(appID,keyHandles,&keyNumber)==0){
         if(SmartX3GetUid!=nullptr && SmartX3GetUid(keyHandles[0],UID)==0){
             qDebug()<<"UID:"<<UID;
-            if(strncmp(UID,"ed302361196401966c72f116402e9297",33)==0){/* ae68c66368a8e943bc260ae97003747f */
+            if(strncmp(UID,"2895743a6f3c423adfc444d16076e085",33)==0){
                 dogState=true;
             }
             else {
@@ -73,14 +80,14 @@ void Encryption::smartXGetUidFunc()
 
 void Encryption::SmartXCheckExistSlot()
 {
-//    if(dogState && SmartX3CheckExist!=nullptr && SmartX3CheckExist(keyHandles[0])==0){
-//        emit GetTheEncryptedStateSignal(true);
-//        qDebug()<<"find lock";
-//    }
-//    else {
-//        emit GetTheEncryptedStateSignal(false);
-//        smartXGetUidFunc();
-//        qDebug()<<"not find";
-//    }
-    emit GetTheEncryptedStateSignal(true);
+    if(dogState && SmartX3CheckExist!=nullptr && SmartX3CheckExist(keyHandles[0])==0){
+        emit GetTheEncryptedStateSignal(true);
+        qDebug()<<"find lock";
+    }
+    else {
+        emit GetTheEncryptedStateSignal(false);
+        smartXGetUidFunc();
+        qDebug()<<"not find";
+    }
+//    emit GetTheEncryptedStateSignal(true);
 }

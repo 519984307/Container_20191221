@@ -14,40 +14,30 @@
         <translation type="unfinished">相机</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="126"/>
+        <location filename="channelsettingwidget.ui" line="129"/>
         <source>Front</source>
         <translation type="unfinished">前相机</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="133"/>
+        <location filename="channelsettingwidget.ui" line="136"/>
         <source>After</source>
         <translation type="unfinished">后相机</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="140"/>
+        <location filename="channelsettingwidget.ui" line="143"/>
         <source>Left</source>
         <translation type="unfinished">左相机</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="147"/>
+        <location filename="channelsettingwidget.ui" line="150"/>
         <source>Right</source>
         <translation type="unfinished">右相机</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="154"/>
-        <location filename="channelsettingwidget.ui" line="180"/>
+        <location filename="channelsettingwidget.ui" line="157"/>
+        <location filename="channelsettingwidget.ui" line="183"/>
         <source>Plate</source>
         <translation type="unfinished">车牌</translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.ui" line="81"/>
-        <location filename="channelsettingwidget.ui" line="88"/>
-        <location filename="channelsettingwidget.ui" line="95"/>
-        <location filename="channelsettingwidget.ui" line="102"/>
-        <location filename="channelsettingwidget.ui" line="109"/>
-        <source>192.168.1.100;8000;admin;123456</source>
-        <oldsource>192.168.1.100;admin;123456;</oldsource>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="channelsettingwidget.ui" line="73"/>
@@ -55,232 +45,146 @@
         <translation type="unfinished">相机参数</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="201"/>
+        <location filename="channelsettingwidget.ui" line="84"/>
+        <location filename="channelsettingwidget.ui" line="91"/>
+        <location filename="channelsettingwidget.ui" line="98"/>
+        <location filename="channelsettingwidget.ui" line="105"/>
+        <location filename="channelsettingwidget.ui" line="112"/>
+        <source>192.168.1.100;admin;123456</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="channelsettingwidget.ui" line="204"/>
         <source>License plate recognition protocol</source>
         <translation type="unfinished">车牌识别协议</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="208"/>
+        <location filename="channelsettingwidget.ui" line="211"/>
         <source>HCNet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="213"/>
+        <location filename="channelsettingwidget.ui" line="216"/>
         <source>WTY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="224"/>
+        <location filename="channelsettingwidget.ui" line="227"/>
         <source>The test data</source>
         <translation type="unfinished">测试数据</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="237"/>
+        <location filename="channelsettingwidget.ui" line="240"/>
         <source>Caputre Plate</source>
         <translation type="unfinished">抓拍车牌</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="261"/>
+        <location filename="channelsettingwidget.ui" line="264"/>
         <source>Serial Port</source>
         <translation type="unfinished">串口</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="282"/>
+        <location filename="channelsettingwidget.ui" line="285"/>
         <source>Serial interface mode</source>
         <translation type="unfinished">接口模式</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="289"/>
+        <location filename="channelsettingwidget.ui" line="292"/>
         <source>SerialPort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="294"/>
+        <location filename="channelsettingwidget.ui" line="297"/>
         <source>Tcp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="327"/>
+        <location filename="channelsettingwidget.ui" line="330"/>
         <source>A serial port</source>
         <translation type="unfinished">232串口</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="333"/>
-        <location filename="channelsettingwidget.ui" line="363"/>
         <source>Open|Close</source>
-        <translation type="unfinished">打开|关闭</translation>
+        <translation type="obsolete">打开|关闭</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="346"/>
+        <location filename="channelsettingwidget.ui" line="352"/>
         <source>SerialPort One</source>
         <translation type="unfinished">串口1</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="376"/>
+        <location filename="channelsettingwidget.ui" line="375"/>
         <source>SerialPort two</source>
         <translation type="unfinished">串口2</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="412"/>
+        <location filename="channelsettingwidget.ui" line="404"/>
         <source>Serial Port server</source>
         <translation type="unfinished">串口服务器</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="435"/>
+        <location filename="channelsettingwidget.ui" line="427"/>
         <source>192.168.1.100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="449"/>
+        <location filename="channelsettingwidget.ui" line="441"/>
         <source>192.168.0.100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="473"/>
+        <location filename="channelsettingwidget.ui" line="465"/>
         <source>Address One</source>
         <translation type="unfinished">地址1</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="480"/>
+        <location filename="channelsettingwidget.ui" line="472"/>
         <source>Port One</source>
         <translation type="unfinished">端口1</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="487"/>
+        <location filename="channelsettingwidget.ui" line="479"/>
         <source>Address Two</source>
         <translation type="unfinished">地址2</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="494"/>
+        <location filename="channelsettingwidget.ui" line="486"/>
         <source>Port Two</source>
         <translation type="unfinished">端口2</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="510"/>
+        <location filename="channelsettingwidget.ui" line="502"/>
         <source>A serial port state</source>
         <translation type="unfinished">串口模式</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="516"/>
+        <location filename="channelsettingwidget.ui" line="508"/>
         <source>Normally open</source>
         <translation type="unfinished">常开</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="526"/>
+        <location filename="channelsettingwidget.ui" line="518"/>
         <source>Normally closed</source>
         <translation type="unfinished">常闭</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="550"/>
+        <location filename="channelsettingwidget.ui" line="545"/>
         <source>Other</source>
         <translation type="unfinished">其他</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="571"/>
+        <location filename="channelsettingwidget.ui" line="566"/>
         <source>The alias</source>
         <translation type="unfinished">通道别名</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.ui" line="577"/>
+        <location filename="channelsettingwidget.ui" line="572"/>
         <source>进口1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.cpp" line="38"/>
-        <source>%1/CHANNEL%2.json</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="channelsettingwidget.cpp" line="40"/>
         <source>open CHANNEL%1.json error&lt;errorCode=%2&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="48"/>
-        <source>FrontCamer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="49"/>
-        <source>AfterCamer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="50"/>
-        <source>LeftCamer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="51"/>
-        <source>RgihtCamer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="52"/>
-        <source>PlateCamer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="56"/>
-        <source>LicensePlate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="60"/>
-        <source>SerialPortMode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="61"/>
-        <source>SerialPortOne</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="62"/>
-        <source>SerialPortTow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="63"/>
-        <source>SerialAddrOne</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="64"/>
-        <source>SerialAddrTow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="65"/>
-        <source>PortOne</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="66"/>
-        <source>PortTow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="68"/>
-        <location filename="channelsettingwidget.cpp" line="71"/>
-        <source>infraredStatus</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="76"/>
-        <source>Alias</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="79"/>
-        <location filename="channelsettingwidget.cpp" line="107"/>
-        <location filename="channelsettingwidget.cpp" line="108"/>
-        <source>Channel%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="channelsettingwidget.cpp" line="92"/>
-        <source>%1/%2/CHANNEL%3.json</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -300,16 +204,17 @@
     </message>
     <message>
         <location filename="channelsettingwidget.cpp" line="195"/>
-        <source>Save Channel Json sucess</source>
+        <source>Save Channel Json Sucess</source>
+        <oldsource>Save Channel Json sucess</oldsource>
         <translation type="unfinished">保存通道设置完成</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.cpp" line="198"/>
+        <location filename="channelsettingwidget.cpp" line="199"/>
         <source>Save Channel Json error</source>
         <translation type="unfinished">保存通道设置失败</translation>
     </message>
     <message>
-        <location filename="channelsettingwidget.cpp" line="202"/>
+        <location filename="channelsettingwidget.cpp" line="204"/>
         <source>Not Save Channel Json</source>
         <translation type="unfinished">没有保存通道设置</translation>
     </message>
@@ -443,7 +348,8 @@
     </message>
     <message>
         <location filename="databasewidget.ui" line="1039"/>
-        <source>Type</source>
+        <source>Logic Type</source>
+        <oldsource>Type</oldsource>
         <translation type="unfinished">逻辑类型</translation>
     </message>
     <message>
@@ -587,153 +493,164 @@
         <translation type="obsolete">车牌图片</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="351"/>
+        <location filename="datawidget.ui" line="411"/>
         <source>Result</source>
         <translation type="unfinished">结果</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="588"/>
+        <location filename="datawidget.ui" line="648"/>
         <source>Identify container the results</source>
         <translation type="unfinished">箱号识别结果</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="640"/>
+        <location filename="datawidget.ui" line="714"/>
         <source>Front the case number</source>
         <translation type="unfinished">前箱号</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="729"/>
+        <location filename="datawidget.ui" line="833"/>
         <source>After the case number</source>
         <translation type="unfinished">后箱号</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="664"/>
+        <location filename="datawidget.ui" line="746"/>
         <source>ISO1</source>
         <translation type="unfinished">箱型</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="234"/>
+        <location filename="datawidget.ui" line="242"/>
         <source>Front the case Number</source>
         <translation type="unfinished">前箱号</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="265"/>
-        <location filename="datawidget.ui" line="313"/>
+        <location filename="datawidget.ui" line="280"/>
+        <location filename="datawidget.ui" line="354"/>
         <source>ISO</source>
         <translation type="unfinished">箱型</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="282"/>
+        <location filename="datawidget.ui" line="316"/>
         <source>After the case Number</source>
         <translation type="unfinished">后箱号</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="328"/>
-        <location filename="datawidget.ui" line="556"/>
-        <location filename="datawidget.ui" line="808"/>
-        <location filename="datawidget.ui" line="915"/>
+        <location filename="datawidget.ui" line="388"/>
+        <location filename="datawidget.ui" line="616"/>
+        <location filename="datawidget.ui" line="912"/>
+        <location filename="datawidget.ui" line="1068"/>
         <source>Plate</source>
         <translation type="unfinished">车牌</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="375"/>
+        <location filename="datawidget.ui" line="435"/>
         <source>Detector state</source>
         <translation type="unfinished">探测器状态</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="480"/>
+        <location filename="datawidget.ui" line="540"/>
         <source>State of the camera</source>
         <translation type="unfinished">相机状态</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="498"/>
+        <location filename="datawidget.ui" line="558"/>
         <source>Front</source>
         <translation type="unfinished">前相机</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="517"/>
+        <location filename="datawidget.ui" line="577"/>
         <source>After</source>
         <translation type="unfinished">后相机</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="530"/>
+        <location filename="datawidget.ui" line="590"/>
         <source>Left</source>
         <translation type="unfinished">左相机</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="543"/>
+        <location filename="datawidget.ui" line="603"/>
         <source>Right</source>
         <translation type="unfinished">右相机</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="569"/>
+        <location filename="datawidget.ui" line="629"/>
         <source>Top</source>
         <translation type="unfinished">顶相机</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="688"/>
+        <location filename="datawidget.ui" line="778"/>
         <source>ISO2</source>
         <translation type="unfinished">箱型</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="706"/>
+        <location filename="datawidget.ui" line="804"/>
         <source>License plate number</source>
         <translation type="unfinished">车牌</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="758"/>
+        <location filename="datawidget.ui" line="862"/>
+        <location filename="datawidget.ui" line="1039"/>
         <source>Capture</source>
         <translation type="unfinished">抓拍</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="769"/>
-        <location filename="datawidget.cpp" line="196"/>
+        <location filename="datawidget.ui" line="873"/>
+        <location filename="datawidget.cpp" line="207"/>
         <source>A small container</source>
         <translation type="unfinished">一个小箱</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="774"/>
-        <location filename="datawidget.cpp" line="199"/>
+        <location filename="datawidget.ui" line="878"/>
+        <location filename="datawidget.cpp" line="210"/>
         <source>A large container</source>
         <translation type="unfinished">一个长箱</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="779"/>
+        <location filename="datawidget.ui" line="883"/>
         <source>front of two small containers</source>
         <translation type="unfinished">双箱前</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="784"/>
+        <location filename="datawidget.ui" line="888"/>
         <source>after of two small containers</source>
         <translation type="unfinished">双箱后</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="789"/>
+        <location filename="datawidget.ui" line="893"/>
         <source>Clear pictures</source>
         <translation type="unfinished">清理图片</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="797"/>
+        <location filename="datawidget.ui" line="901"/>
         <source>Loop Capture Pictures</source>
         <translation type="unfinished">循环抓拍</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="835"/>
+        <location filename="datawidget.ui" line="939"/>
         <source>Picture</source>
         <translation type="unfinished">图片</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="897"/>
+        <location filename="datawidget.ui" line="1019"/>
         <source>Color</source>
         <translation type="unfinished">颜色</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="620"/>
+        <location filename="datawidget.ui" line="1026"/>
+        <source>Play</source>
+        <translation type="unfinished">预览</translation>
+    </message>
+    <message>
+        <location filename="datawidget.ui" line="1085"/>
+        <source>Time</source>
+        <translation type="unfinished">时间</translation>
+    </message>
+    <message>
+        <location filename="datawidget.ui" line="688"/>
         <source>Infrared logic result</source>
         <translation type="unfinished">逻辑类型</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="752"/>
+        <location filename="datawidget.ui" line="856"/>
         <source>Simulation capture</source>
         <translation type="unfinished">模拟抓拍</translation>
     </message>
@@ -766,42 +683,42 @@
         <translation type="obsolete">红外状态</translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="402"/>
+        <location filename="datawidget.ui" line="462"/>
         <source>A1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="418"/>
+        <location filename="datawidget.ui" line="478"/>
         <source>A2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="431"/>
+        <location filename="datawidget.ui" line="491"/>
         <source>B1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="444"/>
+        <location filename="datawidget.ui" line="504"/>
         <source>B2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="457"/>
+        <location filename="datawidget.ui" line="517"/>
         <source>D1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="datawidget.ui" line="470"/>
+        <location filename="datawidget.ui" line="530"/>
         <source>D2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="datawidget.cpp" line="193"/>
+        <location filename="datawidget.cpp" line="204"/>
         <source>No container</source>
         <translation type="unfinished">空车</translation>
     </message>
     <message>
-        <location filename="datawidget.cpp" line="202"/>
+        <location filename="datawidget.cpp" line="213"/>
         <source>Two small containersr</source>
         <translation type="unfinished">两个小箱</translation>
     </message>
@@ -867,202 +784,231 @@
     </message>
     <message>
         <location filename="logwidget.cpp" line="18"/>
-        <source>[%1] [%2]</source>
+        <source>[%1]%2</source>
+        <oldsource>[%1] [%2]</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="mainwidget.ui" line="579"/>
+        <source>Container Number Identification System (Single channel)-V3.19.12</source>
+        <oldsource>Container Number Identification System (Signle-channel)-V3.19.12</oldsource>
+        <translation type="obsolete">集装箱号码识别系统(单通道)</translation>
+    </message>
+    <message>
+        <source>Shenzhen zhongbaiyuan technology co. LTD(www.szocr.com)</source>
+        <translation type="obsolete">深圳众百源科技有限公司 (www.szocr.com)</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.ui" line="538"/>
+        <source>Container Number Identification System (Single channel)-V3.19.12 
+[http://www.szocr.com]</source>
+        <translation type="unfinished">集装箱号码识别系统(单通道)-V3.19.12 
+[http://www.szocr.com]</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.ui" line="624"/>
         <source>Navigation</source>
         <translation type="unfinished">导航</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="587"/>
+        <location filename="mainwidget.ui" line="632"/>
         <source>Data</source>
         <translation type="unfinished">数据</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="592"/>
+        <location filename="mainwidget.ui" line="637"/>
         <source>Camera</source>
         <translation type="unfinished">相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="597"/>
+        <location filename="mainwidget.ui" line="642"/>
         <source>Service</source>
         <translation type="unfinished">服务</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="602"/>
+        <location filename="mainwidget.ui" line="647"/>
         <source>Database</source>
         <translation type="unfinished">数据库</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="607"/>
+        <location filename="mainwidget.ui" line="652"/>
         <source>Setting</source>
         <translation type="unfinished">设置</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="509"/>
         <source>Container number identification system (multi-channel)-V3.19.12</source>
-        <translation type="unfinished">集装箱号码识别系统(多通道)-V3.19.12</translation>
+        <translation type="obsolete">集装箱号码识别系统(多通道)-V3.19.12</translation>
     </message>
     <message>
-        <location filename="mainwidget.ui" line="521"/>
+        <location filename="mainwidget.ui" line="553"/>
         <source>Shenzhen zhongbaiyuan technology co. LTD</source>
         <translation type="unfinished">深圳众百源科技有限公司</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="209"/>
+        <location filename="mainwidget.cpp" line="240"/>
         <source>Front</source>
         <translation type="unfinished">前相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="209"/>
+        <location filename="mainwidget.cpp" line="240"/>
         <source>After</source>
         <translation type="unfinished">后相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="209"/>
+        <location filename="mainwidget.cpp" line="240"/>
         <source>Left</source>
         <translation type="unfinished">左相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="209"/>
+        <location filename="mainwidget.cpp" line="240"/>
         <source>Right</source>
         <translation type="unfinished">右相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="220"/>
         <source>&amp;Data</source>
-        <translation type="unfinished">&amp;数据</translation>
+        <translation type="obsolete">&amp;数据</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="225"/>
-        <location filename="mainwidget.cpp" line="263"/>
-        <location filename="mainwidget.cpp" line="341"/>
+        <location filename="mainwidget.cpp" line="256"/>
+        <location filename="mainwidget.cpp" line="294"/>
         <source>%1 # Channel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 # 通道</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="258"/>
         <source>&amp;Camera</source>
-        <translation type="unfinished">&amp;相机</translation>
+        <translation type="obsolete">&amp;相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="316"/>
         <source>&amp;Service</source>
-        <translation type="unfinished">&amp;服务</translation>
+        <translation type="obsolete">&amp;服务</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="321"/>
+        <location filename="mainwidget.cpp" line="356"/>
         <source>Da&amp;tabase</source>
         <translation type="unfinished">&amp;数据库</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="330"/>
         <source>&amp;Setting</source>
-        <translation type="unfinished">&amp;设置</translation>
+        <translation type="obsolete">&amp;设置</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="333"/>
         <source>System</source>
-        <translation type="unfinished">系统设定</translation>
+        <translation type="obsolete">系统设定</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="348"/>
+        <location filename="mainwidget.cpp" line="380"/>
         <source>Log</source>
         <translation type="unfinished">日志</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="325"/>
         <source>History</source>
-        <translation type="unfinished">历史记录</translation>
+        <translation type="obsolete">历史记录</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="353"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
+        <location filename="mainwidget.cpp" line="251"/>
+        <source>&amp;Channel To View</source>
+        <translation type="unfinished">&amp;通道预览</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="463"/>
+        <location filename="mainwidget.cpp" line="289"/>
+        <source>&amp;Camera Test</source>
+        <translation type="unfinished">&amp;相机测试</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="347"/>
+        <source>&amp;Service Status</source>
+        <translation type="unfinished">&amp;服务状态</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="362"/>
+        <source>&amp;Parameter Setting</source>
+        <translation type="unfinished">&amp;参数设置</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="365"/>
+        <source>System Settings</source>
+        <translation type="unfinished">系统设置</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="373"/>
+        <source>%1 # Channel Settings</source>
+        <translation type="unfinished">%1 # 通道设置</translation>
+    </message>
+    <message>
+        <location filename="mainwidget.cpp" line="497"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="536"/>
+        <location filename="mainwidget.cpp" line="583"/>
         <source>%1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="536"/>
+        <location filename="mainwidget.cpp" line="583"/>
         <source>%1/%2_%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1026"/>
+        <location filename="mainwidget.cpp" line="1197"/>
         <source>Preview %1 channel %2 Camera</source>
         <translation type="unfinished">当前 %1 通道 %2 相机</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1033"/>
+        <location filename="mainwidget.cpp" line="1206"/>
         <source>Preview %1 channel Setting Page</source>
         <translation type="unfinished">当前 %1 通道设置页面</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1039"/>
+        <location filename="mainwidget.cpp" line="1214"/>
         <source>Preview System Settings Page</source>
         <translation type="unfinished">当前系统设置页面</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1045"/>
+        <location filename="mainwidget.cpp" line="1222"/>
         <source>Preview Service Page</source>
         <translation type="unfinished">当前服务页面</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1051"/>
+        <location filename="mainwidget.cpp" line="1230"/>
         <source>Preview Log Page</source>
         <translation type="unfinished">当前日志页面</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1057"/>
+        <location filename="mainwidget.cpp" line="1238"/>
         <source>Preview Database Page</source>
         <translation type="unfinished">当前数据库页面</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1063"/>
+        <location filename="mainwidget.cpp" line="1247"/>
         <source>Preview %1 channel</source>
         <translation type="unfinished">当前%1通道</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1106"/>
+        <location filename="mainwidget.cpp" line="1290"/>
         <source>Program in place</source>
         <translation type="unfinished">系统就绪</translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1119"/>
+        <location filename="mainwidget.cpp" line="1304"/>
         <source>%1/%2_debug_log.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1124"/>
-        <source>[%1]%2%3%4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwidget.cpp" line="1137"/>
+        <location filename="mainwidget.cpp" line="1324"/>
         <source>%1/%2_%3_Capture_log.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1142"/>
-        <location filename="mainwidget.cpp" line="1153"/>
+        <location filename="mainwidget.cpp" line="1329"/>
+        <location filename="mainwidget.cpp" line="1342"/>
         <source>[%1]%2%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwidget.cpp" line="1148"/>
+        <location filename="mainwidget.cpp" line="1337"/>
         <source>%1/%2_%3_Container_log.txt</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1073,6 +1019,11 @@
         <location filename="picturewidget.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="picturewidget.ui" line="96"/>
+        <source>Clearn Img</source>
+        <translation type="unfinished">清除图片</translation>
     </message>
     <message>
         <location filename="picturewidget.ui" line="103"/>
@@ -1090,9 +1041,8 @@
         <translation type="unfinished">预览视频</translation>
     </message>
     <message>
-        <location filename="picturewidget.ui" line="96"/>
         <source>Identify Img</source>
-        <translation type="unfinished">清除图片</translation>
+        <translation type="obsolete">清除图片</translation>
     </message>
 </context>
 <context>
@@ -1101,9 +1051,9 @@
         <location filename="recognizerprocessing.cpp" line="48"/>
         <location filename="recognizerprocessing.cpp" line="51"/>
         <location filename="recognizerprocessing.cpp" line="54"/>
-        <location filename="recognizerprocessing.cpp" line="108"/>
-        <location filename="recognizerprocessing.cpp" line="111"/>
-        <location filename="recognizerprocessing.cpp" line="114"/>
+        <location filename="recognizerprocessing.cpp" line="109"/>
+        <location filename="recognizerprocessing.cpp" line="112"/>
+        <location filename="recognizerprocessing.cpp" line="115"/>
         <source>%1/%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1112,22 +1062,22 @@
         <location filename="recognizerprocessing.cpp" line="60"/>
         <location filename="recognizerprocessing.cpp" line="63"/>
         <location filename="recognizerprocessing.cpp" line="66"/>
-        <location filename="recognizerprocessing.cpp" line="117"/>
-        <location filename="recognizerprocessing.cpp" line="120"/>
-        <location filename="recognizerprocessing.cpp" line="123"/>
-        <location filename="recognizerprocessing.cpp" line="126"/>
+        <location filename="recognizerprocessing.cpp" line="118"/>
+        <location filename="recognizerprocessing.cpp" line="121"/>
+        <location filename="recognizerprocessing.cpp" line="124"/>
+        <location filename="recognizerprocessing.cpp" line="127"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="recognizerprocessing.cpp" line="82"/>
-        <location filename="recognizerprocessing.cpp" line="92"/>
-        <location filename="recognizerprocessing.cpp" line="142"/>
+        <location filename="recognizerprocessing.cpp" line="83"/>
+        <location filename="recognizerprocessing.cpp" line="93"/>
+        <location filename="recognizerprocessing.cpp" line="143"/>
         <source>%1/%2%3%4.jpg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="recognizerprocessing.cpp" line="88"/>
+        <location filename="recognizerprocessing.cpp" line="89"/>
         <source>TIME:%1 ID:%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1145,7 +1095,7 @@
         <translation type="unfinished">服务链接状态</translation>
     </message>
     <message>
-        <location filename="servicewidget.cpp" line="24"/>
+        <location filename="servicewidget.cpp" line="26"/>
         <source>[%1] %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1158,17 +1108,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="39"/>
+        <location filename="systemsettingwidget.ui" line="55"/>
         <source>Channel</source>
         <translation type="unfinished">通道</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="60"/>
+        <location filename="systemsettingwidget.ui" line="76"/>
         <source>The Channel Number</source>
         <translation type="unfinished">通道数量</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="88"/>
+        <location filename="systemsettingwidget.ui" line="107"/>
         <source>Save Image One</source>
         <translation type="unfinished">保存图片1</translation>
     </message>
@@ -1177,67 +1127,92 @@
         <translation type="obsolete">图片路径1</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="107"/>
-        <location filename="systemsettingwidget.ui" line="190"/>
+        <location filename="systemsettingwidget.ui" line="126"/>
+        <location filename="systemsettingwidget.ui" line="209"/>
         <source>Check Path</source>
         <translation type="unfinished">选择路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="118"/>
-        <location filename="systemsettingwidget.ui" line="201"/>
+        <location filename="systemsettingwidget.ui" line="137"/>
+        <location filename="systemsettingwidget.ui" line="220"/>
         <source>CHANNEL/YYYY/MM/DD/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="123"/>
-        <location filename="systemsettingwidget.ui" line="206"/>
+        <location filename="systemsettingwidget.ui" line="142"/>
+        <location filename="systemsettingwidget.ui" line="225"/>
         <source>CHANNEL/YYYY/MM/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="128"/>
-        <location filename="systemsettingwidget.ui" line="211"/>
+        <location filename="systemsettingwidget.ui" line="147"/>
+        <location filename="systemsettingwidget.ui" line="230"/>
         <source>CHANNEL/YYYY/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="133"/>
-        <location filename="systemsettingwidget.ui" line="216"/>
+        <location filename="systemsettingwidget.ui" line="152"/>
+        <location filename="systemsettingwidget.ui" line="235"/>
         <source>CHANNEL/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="138"/>
-        <location filename="systemsettingwidget.ui" line="221"/>
+        <location filename="systemsettingwidget.ui" line="157"/>
+        <location filename="systemsettingwidget.ui" line="240"/>
         <source>YYYY/MM/DD/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="143"/>
-        <location filename="systemsettingwidget.ui" line="226"/>
+        <location filename="systemsettingwidget.ui" line="162"/>
+        <location filename="systemsettingwidget.ui" line="245"/>
         <source>YYYY/MM/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="148"/>
-        <location filename="systemsettingwidget.ui" line="231"/>
+        <location filename="systemsettingwidget.ui" line="167"/>
+        <location filename="systemsettingwidget.ui" line="250"/>
         <source>YYYY/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="153"/>
-        <location filename="systemsettingwidget.ui" line="236"/>
+        <location filename="systemsettingwidget.ui" line="172"/>
+        <location filename="systemsettingwidget.ui" line="255"/>
         <source>/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="100"/>
-        <location filename="systemsettingwidget.ui" line="244"/>
+        <location filename="systemsettingwidget.ui" line="511"/>
+        <source>Socket Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="520"/>
+        <source>Tcp Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="527"/>
+        <source>Tcp Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="540"/>
+        <source>Socket Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="568"/>
+        <source>127.0.0.1:5000</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="systemsettingwidget.ui" line="119"/>
+        <location filename="systemsettingwidget.ui" line="263"/>
         <source>Path Format</source>
         <translation type="unfinished">路径格式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="171"/>
+        <location filename="systemsettingwidget.ui" line="190"/>
         <source>Save Image Two</source>
         <translation type="unfinished">保持图片2</translation>
     </message>
@@ -1246,27 +1221,27 @@
         <translation type="obsolete">图片路径2</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="268"/>
+        <location filename="systemsettingwidget.ui" line="287"/>
         <source>Recognizer</source>
         <translation type="unfinished">识别</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="295"/>
+        <location filename="systemsettingwidget.ui" line="314"/>
         <source>Check pattern</source>
         <translation type="unfinished">校验规则</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="304"/>
+        <location filename="systemsettingwidget.ui" line="323"/>
         <source>Color display</source>
         <translation type="unfinished">颜色显示</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="314"/>
+        <location filename="systemsettingwidget.ui" line="333"/>
         <source>Automatic correction</source>
         <translation type="unfinished">自动改正</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="324"/>
+        <location filename="systemsettingwidget.ui" line="343"/>
         <source>Identify screening</source>
         <translation type="unfinished">识别规则</translation>
     </message>
@@ -1275,7 +1250,7 @@
         <translation type="obsolete">包含规则</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="339"/>
+        <location filename="systemsettingwidget.ui" line="358"/>
         <source>Contains</source>
         <translation type="unfinished">包含</translation>
     </message>
@@ -1284,259 +1259,135 @@
         <translation type="obsolete">剔除规则</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="357"/>
+        <location filename="systemsettingwidget.ui" line="376"/>
         <source>Eliminate</source>
         <translation type="unfinished">剔除</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="567"/>
         <source>Agreement</source>
-        <translation type="unfinished">协议</translation>
+        <translation type="obsolete">协议</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="601"/>
         <source>Camera version</source>
-        <translation type="unfinished">相机协议</translation>
+        <translation type="obsolete">相机协议</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="608"/>
-        <source>HCSDK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="613"/>
-        <source>TCP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="624"/>
         <source>Protocol version</source>
-        <translation type="unfinished">数据协议</translation>
+        <translation type="obsolete">数据协议</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="631"/>
-        <source>[Number]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="636"/>
-        <source>[Number|ISO]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="641"/>
-        <source>[Number|ISO|Plate]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="652"/>
         <source>HCSDK Path</source>
-        <translation type="unfinished">海康动态库路径</translation>
+        <translation type="obsolete">海康动态库路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="383"/>
-        <location filename="systemsettingwidget.ui" line="708"/>
         <source>DataBase</source>
-        <translation type="unfinished">数据库</translation>
+        <translation type="obsolete">数据库</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="404"/>
         <source>Database Type</source>
-        <translation type="unfinished">数据库类型</translation>
+        <translation type="obsolete">数据库类型</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="161"/>
-        <location filename="systemsettingwidget.ui" line="183"/>
-        <location filename="systemsettingwidget.ui" line="825"/>
-        <location filename="systemsettingwidget.ui" line="832"/>
+        <location filename="systemsettingwidget.ui" line="180"/>
+        <location filename="systemsettingwidget.ui" line="202"/>
         <source>/home/cc/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="332"/>
+        <location filename="systemsettingwidget.ui" line="351"/>
         <source>WDFU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="350"/>
+        <location filename="systemsettingwidget.ui" line="369"/>
         <source>CCAU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="658"/>
-        <source>/home/cc/HCSDK</source>
-        <translation type="unfinished"></translation>
+        <source>User</source>
+        <translation type="obsolete">用户名</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="415"/>
-        <location filename="systemsettingwidget.ui" line="811"/>
-        <source>admin</source>
-        <translation type="unfinished"></translation>
+        <source>Password</source>
+        <translation type="obsolete">密码</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="422"/>
-        <location filename="systemsettingwidget.ui" line="818"/>
-        <source>abc123456</source>
-        <translation type="unfinished"></translation>
+        <source>Address</source>
+        <translation type="obsolete">地址</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="429"/>
-        <location filename="systemsettingwidget.ui" line="797"/>
-        <source>192.168.1.100</source>
-        <translation type="unfinished"></translation>
+        <source>Port</source>
+        <translation type="obsolete">端口</translation>
+    </message>
+    <message>
+        <source>Text Format</source>
+        <translation type="obsolete">文本格式</translation>
     </message>
     <message>
         <location filename="systemsettingwidget.ui" line="436"/>
-        <source>3000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="447"/>
-        <location filename="systemsettingwidget.ui" line="857"/>
-        <source>User</source>
-        <translation type="unfinished">用户名</translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="454"/>
-        <source>Password</source>
-        <translation type="unfinished">密码</translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="461"/>
-        <location filename="systemsettingwidget.ui" line="843"/>
-        <source>Address</source>
-        <translation type="unfinished">地址</translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="468"/>
-        <location filename="systemsettingwidget.ui" line="850"/>
-        <source>Port</source>
-        <translation type="unfinished">端口</translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="478"/>
-        <source>SQLITE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="483"/>
-        <source>SQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="488"/>
-        <source>MYSQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="493"/>
-        <source>ODBC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="498"/>
-        <source>PostgreSQL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="503"/>
-        <source>Access</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="514"/>
-        <source>Text Format</source>
-        <translation type="unfinished">文本格式</translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="527"/>
-        <source>CSV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="532"/>
-        <source>XML</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="537"/>
-        <source>JSON</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="542"/>
-        <location filename="systemsettingwidget.ui" line="703"/>
         <source>TXT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="669"/>
+        <location filename="systemsettingwidget.ui" line="402"/>
         <source>Log</source>
         <translation type="unfinished">日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="690"/>
+        <location filename="systemsettingwidget.ui" line="423"/>
         <source>Save Log</source>
         <translation type="unfinished">保存日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="719"/>
+        <location filename="systemsettingwidget.ui" line="447"/>
         <source>The level of logging</source>
         <translation type="unfinished">日志等级</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="725"/>
+        <location filename="systemsettingwidget.ui" line="453"/>
         <source>The info log</source>
         <translation type="unfinished">运行日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="735"/>
+        <location filename="systemsettingwidget.ui" line="463"/>
         <source>the debug log</source>
         <oldsource>The error log</oldsource>
         <translation type="unfinished">调试日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="925"/>
         <source>Model</source>
-        <translation type="unfinished">模式</translation>
+        <translation type="obsolete">模式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="934"/>
         <source>Client</source>
-        <translation type="unfinished">客户端</translation>
+        <translation type="obsolete">客户端</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="954"/>
         <source>Type</source>
-        <translation type="unfinished">逻辑类型</translation>
+        <translation type="obsolete">逻辑类型</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="982"/>
-        <source>192.168.1.100:5000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="1021"/>
+        <location filename="systemsettingwidget.ui" line="607"/>
         <source>if(server)192.168.1.100:5000,192.168.1.100:5001,192.168.1.100:5002 if(client)192.168.1.100:5000,192.168.1.101:5000,192.168.1.102:5000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1033"/>
+        <location filename="systemsettingwidget.ui" line="619"/>
         <source>Single mode</source>
         <translation type="unfinished">单模</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1038"/>
+        <location filename="systemsettingwidget.ui" line="624"/>
         <source>multimode</source>
         <translation type="unfinished">多模</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1049"/>
+        <location filename="systemsettingwidget.ui" line="635"/>
         <source>The heartbeat packets</source>
         <translation type="unfinished">发送心跳包</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1059"/>
+        <location filename="systemsettingwidget.ui" line="645"/>
         <source>Only the resulting data is sent</source>
         <translation type="unfinished">只发送结果数据</translation>
     </message>
@@ -1545,34 +1396,23 @@
         <translation type="obsolete">警告日志</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="762"/>
-        <location filename="systemsettingwidget.ui" line="783"/>
-        <location filename="systemsettingwidget.cpp" line="123"/>
         <source>FTP</source>
-        <translation type="unfinished">上传图片</translation>
+        <translation type="obsolete">上传图片</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="804"/>
-        <source>21</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.ui" line="864"/>
         <source>Pasword</source>
-        <translation type="unfinished">密码</translation>
+        <translation type="obsolete">密码</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="871"/>
         <source>Local image path</source>
-        <translation type="unfinished">本地图片路径</translation>
+        <translation type="obsolete">本地图片路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="878"/>
         <source>Remote image path</source>
-        <translation type="unfinished">远端图片路径</translation>
+        <translation type="obsolete">远端图片路径</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="904"/>
+        <location filename="systemsettingwidget.ui" line="490"/>
         <source>Service</source>
         <translation type="unfinished">服务</translation>
     </message>
@@ -1589,9 +1429,8 @@
         <translation type="obsolete">一对多</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="941"/>
         <source>Server</source>
-        <translation type="unfinished">服务</translation>
+        <translation type="obsolete">服务</translation>
     </message>
     <message>
         <source>Client Model</source>
@@ -1602,37 +1441,34 @@
         <translation type="obsolete">服务器模式</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1083"/>
+        <location filename="systemsettingwidget.ui" line="669"/>
         <source>Other</source>
         <translation type="unfinished">其他</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1104"/>
         <source>The other options</source>
-        <translation type="unfinished">启动设置</translation>
+        <translation type="obsolete">启动设置</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1110"/>
         <source>Startup minimization</source>
-        <translation type="unfinished">启动最小化</translation>
+        <translation type="obsolete">启动最小化</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1117"/>
         <source>Automatic startup</source>
-        <translation type="unfinished">开机自动运行</translation>
+        <translation type="obsolete">开机自动运行</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1127"/>
+        <location filename="systemsettingwidget.ui" line="690"/>
         <source>Select the language</source>
         <translation type="unfinished">选择语言</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1134"/>
+        <location filename="systemsettingwidget.ui" line="700"/>
         <source>English</source>
         <translation type="unfinished">英语</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.ui" line="1139"/>
+        <location filename="systemsettingwidget.ui" line="705"/>
         <source>Chinese</source>
         <translation type="unfinished">中文</translation>
     </message>
@@ -1649,9 +1485,9 @@
         <location filename="systemsettingwidget.cpp" line="64"/>
         <location filename="systemsettingwidget.cpp" line="67"/>
         <location filename="systemsettingwidget.cpp" line="70"/>
-        <location filename="systemsettingwidget.cpp" line="366"/>
-        <location filename="systemsettingwidget.cpp" line="372"/>
-        <location filename="systemsettingwidget.cpp" line="419"/>
+        <location filename="systemsettingwidget.cpp" line="375"/>
+        <location filename="systemsettingwidget.cpp" line="381"/>
+        <location filename="systemsettingwidget.cpp" line="428"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1703,98 +1539,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="117"/>
-        <source>ProtocolVersion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="118"/>
-        <source>CameraVersion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="119"/>
-        <source>HcSDKPath</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="124"/>
-        <source>FtpAddress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="125"/>
-        <source>FtpPort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="126"/>
-        <source>FtpUser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="127"/>
-        <source>FtpPassword</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="128"/>
-        <source>FtpLocalImgPath</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="129"/>
-        <source>FtpRemoteImgPath</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="133"/>
-        <source>Minimization</source>
+        <location filename="systemsettingwidget.cpp" line="352"/>
+        <source>Save System Json Sucess</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemsettingwidget.cpp" line="134"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="135"/>
-        <source>Automatic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="139"/>
-        <source>DataBaseVersion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="140"/>
-        <source>DataBaseUser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="141"/>
-        <source>DataBasePwd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="142"/>
-        <source>DataBaseAddr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="143"/>
-        <source>DataBasePort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="144"/>
-        <source>TextFormat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="systemsettingwidget.cpp" line="145"/>
-        <source>TextFormatVersion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1836,42 +1587,41 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="254"/>
+        <location filename="systemsettingwidget.cpp" line="257"/>
         <source>load SYSTEM.json error&lt;errorCode=%1&gt;</source>
         <translation type="unfinished">加载系统设置文件错误&lt;错误码=%1&gt;</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="338"/>
+        <location filename="systemsettingwidget.cpp" line="344"/>
         <source>load SYSTEM.json value error:%1-%2</source>
         <translation type="unfinished">加载系统设置文件错误:%1-%2</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="346"/>
         <source>Save System Json sucess</source>
-        <translation type="unfinished">保存系统设置完成</translation>
+        <translation type="obsolete">保存系统设置完成</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="349"/>
+        <location filename="systemsettingwidget.cpp" line="356"/>
         <source>Save System Json error</source>
         <translation type="unfinished">保存系统测试失败</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="353"/>
+        <location filename="systemsettingwidget.cpp" line="361"/>
         <source>Not Save System Json</source>
         <translation type="unfinished">没有保存系统设置</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="391"/>
+        <location filename="systemsettingwidget.cpp" line="400"/>
         <source>%1/%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="406"/>
+        <location filename="systemsettingwidget.cpp" line="415"/>
         <source>Whether to delete the record=%1</source>
         <translation type="unfinished">找到项,是否删除=%1</translation>
     </message>
     <message>
-        <location filename="systemsettingwidget.cpp" line="416"/>
+        <location filename="systemsettingwidget.cpp" line="425"/>
         <source>Whether to add the record=%1</source>
         <translation type="unfinished">没有找到项,是否添加=%1</translation>
     </message>

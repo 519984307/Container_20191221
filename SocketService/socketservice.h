@@ -18,6 +18,11 @@ public:
 private:
 
     ///
+    /// \brief resultOfMemory 结果集,用于主动取结果(重发)
+    ///
+    QString resultOfMemory;
+
+    ///
     /// \brief connected 客户端链接状态
     ///
     bool isConnected;

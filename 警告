@@ -1,0 +1,1 @@
+QT本程序依赖QTNetwork,QTSerialport,这两个程序不会拷贝到程序目录,需要自己手动拷贝        

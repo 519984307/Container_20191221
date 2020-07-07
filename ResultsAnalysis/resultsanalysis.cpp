@@ -223,14 +223,14 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     else {
         if(isoTemp.count()==6){/* 过滤双箱误判成长箱,系统改正双箱 */
             foreach (auto var, isoTemp) {
-                if(var.startsWith("2")){
+                if(var.startsWith("22")){
                     type=2;
                     break;
                 }
             }
-            if(type!=2){/* 系统修正为长箱 */
-                type=1;
-            }
+//            if(type!=2){/* 系统修正为长箱 */
+//                type=1;
+//            }
         }
     }
 
@@ -273,7 +273,7 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 }
             }
         }
-        emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
+        emit containerSignal(type,conTemp[Cindex1], checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
     }
     else {
         bool checkCon=false;
@@ -314,7 +314,7 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
 
     QString dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
 
-    //emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
+    emit resultsAnalysisStateSignal(channel,tr("%1 start").arg(dateTime));/* 日志起始 */
 
     /* Tupe,集装箱类别:
      * -1 – 未知
@@ -331,7 +331,7 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
 
     for (int var = 0; var < conTemp.count(); ++var) {
         /* 识别结果写入日志,[标志|时间戳|通道号(2位)|相机号(2位)|箱号|校验|箱型] */
-        QString result=QString("[%1|%2|%3|%4|%5|%6|%7]").arg("I").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(indMap.key(var),2,10,QLatin1Char('0')).arg(conTemp[var]).arg(QString::number(checkConList[var])).arg(isoTemp[var]);
+        QString result=QString("[%1|%2|%3|%4|%5|%6|%7]\r\n").arg("I").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(indMap.key(var),2,10,QLatin1Char('0')).arg(conTemp[var]).arg(checkConList[var]?"Y":"N").arg(isoTemp[var]);
         emit resultsAnalysisStateSignal(channel,result);
         if(!sendMid){
             emit sendResultSignal(channel,result);
@@ -340,13 +340,13 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
 
     if(type==2){
         /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型] */
-        QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(QString::number(checkConList[Cindex1])).arg(conTemp[Cindex2]).arg(QString::number(checkConList[Cindex2])).arg(isoTemp[Iindex1]).arg(isoTemp[Iindex2]);
+        QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(checkConList[Cindex1]?"Y":"N").arg(conTemp[Cindex2]).arg(checkConList[Cindex2]?"Y":"N").arg(isoTemp[Iindex1]).arg(isoTemp[Iindex2]);
         emit resultsAnalysisStateSignal(channel,result);
         emit sendResultSignal(channel,result);
     }
     else {
         /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型]*/
-        QString result=QString("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(QString::number(checkConList[Cindex1])).arg(isoTemp[Iindex1]);
+        QString result=QString("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(checkConList[Cindex1]?"Y":"N").arg(isoTemp[Iindex1]);
         emit resultsAnalysisStateSignal(channel,result);
         emit sendResultSignal(channel,result);
     }

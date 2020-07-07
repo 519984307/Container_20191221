@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
+    <width>855</width>
     <height>475</height>
    </rect>
   </property>
@@ -531,8 +531,12 @@
           <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 255, 0);</string>
+        </property>
         <property name="text">
-         <string>Container Number Identification System (multi-channel)-V3.19.12</string>
+         <string>Container Number Identification System (Single channel)-V3.19.12 
+[http://www.szocr.com]</string>
         </property>
        </widget>
       </item>
@@ -546,7 +550,7 @@
          </font>
         </property>
         <property name="text">
-         <string>ShenZhen ZhongBaiYuan Technology co. LTD</string>
+         <string>Shenzhen zhongbaiyuan technology co. LTD</string>
         </property>
        </widget>
       </item>

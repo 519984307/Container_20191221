@@ -116,9 +116,12 @@ void SocketService::connected()
 void SocketService::readFortune()
 {
     /* 读取服务器数据 */
-    QByteArray buf=pTcpSocket->readAll();
-    qDebug()<<buf;
-    //emit    isConnected=true;ketReadDataSignal();
+    QByteArray buf=pTcpSocket->readAll();    
+    if (buf.indexOf("[R")!=-1) {/* 找到取结果标志位 */
+        if(pTcpSocket->isOpen()){
+            pTcpSocket->write(resultOfMemory.toLocal8Bit());/* 重新发送 */
+        }
+    }
 }
 
 void SocketService::socketSendDataSlot(const QString &data)
@@ -166,7 +169,10 @@ void SocketService::releaseResourcesSlot()
 }
 
 void SocketService::sendResultSlot(int channel, const QString &result)
-{
+{    
+    //QString ret=QString("%1\n\r").arg(result);
+    resultOfMemory=result;/* 存储结果，用于主动获取 */
+
     if(pTcpSocket->isOpen()){
         pTcpSocket->write(result.toLocal8Bit());
     }

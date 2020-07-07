@@ -155,15 +155,19 @@ void MainWidget::loadingParameters()
 
         /* 红外参数初始化 */
         if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
-            QString com1=QString("com%1").arg(pChannelSettingWidget->SerialPortOne);
-            QString com2=QString("com%1").arg(pChannelSettingWidget->SerialPortTow);
+            QString com1=QString("\\\\.\\COM%1").arg(pChannelSettingWidget->SerialPortOne);
+            QString com2=QString("\\\\.\\COM%1").arg(pChannelSettingWidget->SerialPortTow);
             if(InfraredProcessing* pInfraredProcessing=qobject_cast<InfraredProcessing*>(InfraredProcessingMap[channel])){
                 /* 设置红外模式 */
                 emit pInfraredProcessing->setAlarmModeSignal(pChannelSettingWidget->infraredStatus);
                 /* 启动串口 */
                 emit pInfraredProcessing->startSlaveSignal(com1,com2);
+
                 /*  绑定相机组抓到逻辑处理 */
-                pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel),channel);
+                if(ChannelSettingWidget *pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
+                    pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel),pChannelSettingWidget->Channel_number);/* 单通道 */
+                }
+                //pInfraredProcessing->setCamerMultiMap(channelCamerMultiMap.values(channel),channel);/* 多通道 */
             }
         }
 
@@ -843,7 +847,10 @@ void MainWidget::recognizerPlugin(RecognizerInterface *pRecognizerInterface, int
     connect(pRecognizerProcessing,&RecognizerProcessing::putCommantStateSignal,this,&MainWidget::putCommantStateSlot);
 
     /* 设置通道号 */
-    pRecognizerProcessing->setChannelSlot(num);
+    //pRecognizerProcessing->setChannelSlot(num);/* 多通道 */
+    if(ChannelSettingWidget *pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[num])){
+        pRecognizerProcessing->setChannelSlot(pChannelSettingWidget->Channel_number);/* 单通道 */
+    }
 
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);
@@ -882,7 +889,10 @@ void MainWidget::resultsAnalysisPlugin(ResultsAnalysisInterface *pResultsAnalysi
     }
 
     /* 设置通道号 */
-    pResultsAnalysisProcessing->setChannelSignal(num);
+    //pResultsAnalysisProcessing->setChannelSignal(num);/* 多通道版本 */
+    if(ChannelSettingWidget *pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[num])){
+        pResultsAnalysisProcessing->setChannelSignal(pChannelSettingWidget->Channel_number);/* 单通道版本 */
+    }
 
     /* 移动到线程运行 */
     QThread* pThread=new QThread(this);

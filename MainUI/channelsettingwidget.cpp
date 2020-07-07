@@ -74,6 +74,7 @@ bool ChannelSettingWidget::jsonWrite()
 
     QJsonObject jsonObj3;
     jsonObj3.insert(QString("Alias"),ui->Alias->text());
+    jsonObj3.insert(QString("ChannelNumber"),ui->channel_number_spinBox->value());
     jsonChild.insert("Other",QJsonValue(jsonObj3));
 
     jsonObjRoot.insert(QString("Channel%1").arg(channelNumber),QJsonValue(jsonChild));
@@ -110,6 +111,7 @@ bool ChannelSettingWidget::jsonRead()
                 /* 读取子目录 */
                 if(value.isObject()){
                     Alias= getJsonValue("Other","Alias",value.toObject()).toString().toLocal8Bit();
+                    Channel_number=getJsonValue("Other","ChannelNumber",value.toObject()).toInt();
                     LicensePlate=getJsonValue("Plate","LicensePlate",value.toObject()).toInt();
                     AfterCamer= getJsonValue("Camer","AfterCamer",value.toObject()).toString();
                     FrontCamer= getJsonValue("Camer","FrontCamer",value.toObject()).toString();
@@ -163,6 +165,7 @@ void ChannelSettingWidget::jsonWritetoUI()
         ui->SerialPortCloseState->setChecked(true);
     }
     ui->Alias->setText(Alias);
+    ui->channel_number_spinBox->setValue(Channel_number);
 }
 
 QVariant ChannelSettingWidget::getJsonValue(const QString &child, const QString &key, QJsonObject obj)

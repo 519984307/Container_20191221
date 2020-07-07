@@ -32,6 +32,11 @@ public:
 public:
 
     ///
+    /// \brief Channel_number 通道号
+    ///
+    int  Channel_number;
+
+    ///
     /// \brief Alias 通道别名
     ///
     QString Alias;

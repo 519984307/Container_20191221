@@ -1087,6 +1087,9 @@ color: rgb(255, 255, 255);</string>
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>

@@ -77,7 +77,7 @@ private:
     ///
     /// \brief ISOContains 箱型包含
     ///
-    QByteArray ISOContains;
+    QStringList ISOContains;
 
     ///
     /// \brief ISOReplaceMap 箱型替换

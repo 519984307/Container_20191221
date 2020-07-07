@@ -52,14 +52,23 @@ void SocketServer::setClientLandSlot(int land, qintptr socketID)
 
 void SocketServer::getLastResultSlot(qintptr socktID)
 {
-    qDebug()<<socktID;
+    SocketClient* pClient= clientSocketIDMap.value(socktID);
+    //QString ret=QString("%1\n").arg(result);
+    if(pClient!=nullptr){
+        pClient ->write(resultOfMemory.toLocal8Bit());
+        messageSignal(ZBY_LOG("INFO"),tr("Send Data %1:%2:%3").arg(pClient->peerAddress().toString()).arg(pClient->peerPort()).arg(resultOfMemory));
+    }
+    pClient=nullptr;
 }
 
 void SocketServer::sendResultSlot(int channel, const QString &result)
 {
+    //QString ret=QString("%1\n\r").arg(result);
+    resultOfMemory=result;/* 存储结果，用于主动获取 */
+
     if(serviceType==1){/* 多模发送到所有链接的客户端 */
         foreach (auto obj, clientSocketIDMap.values()) {
-            obj->write(result.toLatin1());
+            obj->write(result.toLocal8Bit());
         }
     }
     else if (serviceType==0) {/* 单模只发送对应通道客户端 */

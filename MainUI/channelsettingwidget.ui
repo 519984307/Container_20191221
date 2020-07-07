@@ -544,7 +544,7 @@
       <attribute name="title">
        <string>Other</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_28">
+      <layout class="QGridLayout" name="gridLayout_5">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -560,7 +560,7 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <item row="0" column="0">
+       <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_14">
          <property name="title">
           <string>The alias</string>
@@ -576,7 +576,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="1">
         <spacer name="verticalSpacer_9">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -588,6 +588,25 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Channel number</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QSpinBox" name="channel_number_spinBox">
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>

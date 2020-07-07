@@ -25,9 +25,10 @@ void SocketClient::readClientSlot()
                 emit setClientLandSignal(land,this->socketDescriptor());
             }
             else if (tmp[0].indexOf('R')!=-1) {/* 找到取结果标志位 */
-                if(tmp[1].split(']')[0].toInt()==land){
-                    emit getLastResultSignal(this->socketDescriptor());
-                }
+                emit getLastResultSignal(this->socketDescriptor());
+//                if(tmp[1].split(']')[0].toInt()==land){/* 暂时不区分通道号 */
+//                    emit getLastResultSignal(this->socketDescriptor());
+//                }
             }
         }
     }
