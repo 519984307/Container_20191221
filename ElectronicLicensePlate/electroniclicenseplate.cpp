@@ -110,7 +110,8 @@ void ElectronicLicensePlate::saveImg(QByteArray arrImg, const QString &time)
         QPixmap *labelPix = new QPixmap();
         labelPix->loadFromData(arrImg);
         QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
-        QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(time,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(7).arg(channel));
+        QString image=QString("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(time,"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(7).arg(channel);
+        qDebug()<<image;
         labelPixFit.save(image);
         delete labelPix;
         labelPix=nullptr;
@@ -170,8 +171,9 @@ void ElectronicLicensePlate::dataEx2Callback(CLIENT_LPRC_PLATE_RESULTEX *recResu
 {
     QByteArray arrImg=QByteArray::fromRawData(reinterpret_cast<const char*>(recResultEx->pFullImage.pBuffer),recResultEx->pFullImage.nLen);
     QString dateTime= QString("%1-%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
-    emit pThis->resultsTheLicensePlateSignal(QString::fromUtf8(recResultEx->chLicense),QString::fromUtf8(recResultEx->chColor),dateTime.toLocal8Bit(),arrImg);
+    emit pThis->resultsTheLicensePlateSignal(QString::fromLocal8Bit(recResultEx->chLicense),QString::fromLocal8Bit(recResultEx->chColor),dateTime,nullptr);
     pThis->saveImg(arrImg,dateTime);
+    arrImg.clear();
 }
 
 void ElectronicLicensePlate::jpegCallback(CLIENT_LPRC_DEVDATA_INFO *JpegInfo, LDWORD dwUser)
@@ -253,10 +255,13 @@ void ElectronicLicensePlate::openTheVideoSlot(bool play)
 
 void ElectronicLicensePlate::releaseResourcesSlot()
 {
-    if(CLIENT_LPRC_QuitDevice!=nullptr && CLIENT_LPRC_QuitDevice(arrAddr.data())==0){
-        messageSignal(ZBY_LOG("INFO"),tr("IP:%1 The license plate camera was disconnected successfully").arg(address));
+    if(CLIENT_LPRC_QuitDevice!=nullptr){
+        CLIENT_LPRC_QuitDevice(arrAddr.data());
     }
-    else {
-        messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 The license plate camera failed to disconnect").arg(address));
-    }
+//    if(CLIENT_LPRC_QuitDevice!=nullptr && CLIENT_LPRC_QuitDevice(arrAddr.data())==0){
+//        messageSignal(ZBY_LOG("INFO"),tr("IP:%1 The license plate camera was disconnected successfully").arg(address));
+//    }
+//    else {
+//        messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 The license plate camera failed to disconnect").arg(address));
+//    }
 }

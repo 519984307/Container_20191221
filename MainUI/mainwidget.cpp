@@ -148,7 +148,11 @@ void MainWidget::loadingParameters()
             /* 车牌相机初始化 */
             if(ElectronicLicensePlateProcessing *pElectronicLicensePlateProcessing=qobject_cast<ElectronicLicensePlateProcessing*>(ElectronicLicensePlateProcessingMap[channel])){
                 if(!pChannelSettingWidget->PlateCamer.isEmpty()){
-                    pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);
+                    if(ChannelSettingWidget *pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
+                        pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,pChannelSettingWidget->Channel_number);
+                    }
+                    //多通道
+                    //pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);
                 }
             }
         }

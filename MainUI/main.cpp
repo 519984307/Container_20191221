@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-    QTextCodec *codec = QTextCodec::codecForName("utf8");
+    QTextCodec *codec = QTextCodec::codecForName("gbk");
     QTextCodec::setCodecForLocale(codec);
 
     QApplication::addLibraryPath(QDir::toNativeSeparators("./Plugins"));

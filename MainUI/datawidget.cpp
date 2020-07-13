@@ -274,12 +274,16 @@ void DataWidget::theVideoStreamSlot(QByteArray arrImg)
 
 void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString &color, const QString &time, QByteArray arrImg)
 {    
+    ui->lineEdit_6->setText(plate);
     ui->lineEdit_11->setText(plate);
-    ui->lineEdit_12->setText(color.toLatin1());
+    ui->lineEdit_10->setText(plate);
+    ui->lineEdit_12->setText(color);
     ui->lineEdit_13->setText(time);
     QPixmap pix;
-    pix.loadFromData(arrImg);
-    ui->label_4->setPixmap(pix);
+    if(arrImg!=nullptr){
+        pix.loadFromData(arrImg);
+        ui->label_4->setPixmap(pix);
+    }
 }
 
 void DataWidget::equipmentStateSlot(bool state)
