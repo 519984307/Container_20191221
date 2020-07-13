@@ -28,12 +28,6 @@ signals:
     void linkStateSingal(const QString &address,bool state);
 
     ///
-    /// \brief receiveDataSignal 接收数据
-    /// \param data 数据体
-    ///
-    void receiveDataSignal(const QString &data);
-
-    ///
     /// \brief connectCountSignal 链接数量
     /// \param count
     ///

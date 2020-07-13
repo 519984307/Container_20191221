@@ -109,7 +109,7 @@ void DataInterchange::connectedSlot()
 void DataInterchange::receiveDataSlot()
 {
     QByteArray buf=pTcpClient->readAll();
-    pTcpClient->write(buf);
+    emit toSendDataSignal(channel,buf);
 
 }
 
