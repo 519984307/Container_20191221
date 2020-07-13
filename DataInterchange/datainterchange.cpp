@@ -121,7 +121,7 @@ void DataInterchange::displayErrorSlot(QAbstractSocket::SocketError socketError)
 {
     isConnected=false;
 
-    QTimer::singleShot(15000, this, SLOT(startLink()));
+    QTimer::singleShot(15000, this, SLOT(startLinkSlot()));
     emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1:%3  link error<errorCode=%2>").arg(address).arg(socketError).arg(port));
 }
 
