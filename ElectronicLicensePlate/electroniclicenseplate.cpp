@@ -37,7 +37,7 @@ ElectronicLicensePlate::~ElectronicLicensePlate()
 {
     ElectronicLicensePlate::pThis=nullptr;
 
-    if(pDLL!=nullptr){
+    if(pDLL!=nullptr && pDLL->isLoaded()){
         pDLL->unload();
         delete pDLL;
         pDLL=nullptr;
@@ -68,6 +68,9 @@ bool ElectronicLicensePlate::initializationParameter()
         return true;
     }
     emit messageSignal(ZBY_LOG("ERROR"),QString("WTY Load error<errorCode=%1>").arg(pDLL->errorString()));
+    delete pDLL;
+    pDLL=nullptr;
+
     return  false;
 }
 
@@ -169,7 +172,7 @@ void ElectronicLicensePlate::connectCallback(char *chWTYIP, UINT nStatus, LDWORD
 
 void ElectronicLicensePlate::dataEx2Callback(CLIENT_LPRC_PLATE_RESULTEX *recResultEx, LDWORD dwUser)
 {
-    QByteArray arrImg=QByteArray::fromRawData(reinterpret_cast<const char*>(recResultEx->pFullImage.pBuffer),recResultEx->pFullImage.nLen);
+    QByteArray arrImg(reinterpret_cast<const char*>(recResultEx->pFullImage.pBuffer),recResultEx->pFullImage.nLen);
     QString dateTime= QString("%1-%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
     emit pThis->resultsTheLicensePlateSignal(QString::fromLocal8Bit(recResultEx->chLicense),QString::fromLocal8Bit(recResultEx->chColor),dateTime,nullptr);
     pThis->saveImg(arrImg,dateTime);
@@ -180,12 +183,12 @@ void ElectronicLicensePlate::jpegCallback(CLIENT_LPRC_DEVDATA_INFO *JpegInfo, LD
 {        
     QThread::msleep(200);
     if(strcmp(JpegInfo->chIp,pThis->arrAddr.data())==0 && JpegInfo->nStatus==0 && JpegInfo->nLen>0){
-        //QByteArray arrImg(reinterpret_cast<const char*>(JpegInfo->pchBuf),JpegInfo->nLen);
+        QByteArray arrImg(reinterpret_cast<const char*>(JpegInfo->pchBuf),JpegInfo->nLen);
         //if(!complate){
-           emit pThis->theVideoStreamSignal(QByteArray(reinterpret_cast<const char*>(JpegInfo->pchBuf),JpegInfo->nLen));
+           emit pThis->theVideoStreamSignal(arrImg);
         //}
         //complate=true;
-        //arrImg.clear();
+        arrImg.clear();
     }
 }
 
