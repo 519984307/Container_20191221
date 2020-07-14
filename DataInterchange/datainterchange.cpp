@@ -104,6 +104,7 @@ void DataInterchange::connectedSlot()
 
     emit connectCountSignal(1);
     emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1:%2 link successful").arg(address).arg(port));
+    emit linkStateSingal(address,true);
 }
 
 void DataInterchange::receiveDataSlot()
@@ -117,6 +118,7 @@ void DataInterchange::disconnectedSlot()
 {
     isConnected=false;
     emit connectCountSignal(-1);
+    emit linkStateSingal(address,false);
 }
 
 void DataInterchange::displayErrorSlot(QAbstractSocket::SocketError socketError)
