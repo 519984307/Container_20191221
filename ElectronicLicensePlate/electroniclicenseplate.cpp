@@ -174,7 +174,10 @@ void ElectronicLicensePlate::dataEx2Callback(CLIENT_LPRC_PLATE_RESULTEX *recResu
 {
     QByteArray arrImg(reinterpret_cast<const char*>(recResultEx->pFullImage.pBuffer),recResultEx->pFullImage.nLen);
     QString dateTime= QString("%1-%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
+
     emit pThis->resultsTheLicensePlateSignal(QString::fromLocal8Bit(recResultEx->chLicense),QString::fromLocal8Bit(recResultEx->chColor),dateTime,nullptr);
+    emit pThis->messageSignal(ZBY_LOG("INFO"),tr("License Plate recognition results:%1-%2").arg(QString::fromLocal8Bit(recResultEx->chLicense)).arg(dateTime));
+
     pThis->saveImg(arrImg,dateTime);
     arrImg.clear();
 }
