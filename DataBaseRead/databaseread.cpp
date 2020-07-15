@@ -20,7 +20,7 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
         dir.cd(pluginPath);
     }
 
-    this->connectName=connectName;
+    this->connectName=QString("DataBaseRead_").append(connectName);
 
     db=QSqlDatabase::addDatabase("QSQLITE",connectName);
     db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg("History.db")));
