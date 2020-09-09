@@ -127,21 +127,42 @@ void MainWidget::loadingParameters()
 
             int num=1;
             for (;var <=channel*4 ; ++var) {
-                //if(UnderlyingGetimagesProcessing* pImageProcessing=qobject_cast<UnderlyingGetimagesProcessing*>(underlyingGetimagesProcessingMap[var])){
-                if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(ImageProcessingMap[var])){
-                    //emit pImageProcessing->InitializationSignal();/* 初始化相机动态库,异步会导致动态库初始化没完成. */
+                /*****************************
+                * @brief:底层链接相机
+                ******************************/
+                if(UnderlyingGetimagesProcessing* pImageProcessing=qobject_cast<UnderlyingGetimagesProcessing*>(underlyingGetimagesProcessingMap[var])){
+                    emit pImageProcessing->InitializationSignal();/* 初始化链接相机 */
                     if(FrontCamer.count()>=3&&num==1){
-                        emit pImageProcessing->initCamerSignal(FrontCamer[0],8000,FrontCamer[1],FrontCamer[2],"Front");
+                        emit pImageProcessing->initCamerSignal(FrontCamer[0],23001,FrontCamer[1],FrontCamer[2],"Front");
                     }
                     else if(AfterCamer.count()>=3&&num==2){
-                        emit pImageProcessing->initCamerSignal(AfterCamer[0],8000,AfterCamer[1],AfterCamer[2],"After");
+                        emit pImageProcessing->initCamerSignal(AfterCamer[0],23001,AfterCamer[1],AfterCamer[2],"After");
                     }
                     else if(LeftCamer.count()>=3&&num==3){
-                        emit pImageProcessing->initCamerSignal(LeftCamer[0],8000,LeftCamer[1],LeftCamer[2],"Left");
+                        emit pImageProcessing->initCamerSignal(LeftCamer[0],23001,LeftCamer[1],LeftCamer[2],"Left");
                     }
                     else if(RgihtCamer.count()>=3&&num==4){
-                        emit pImageProcessing->initCamerSignal(RgihtCamer[0],8000,RgihtCamer[1],RgihtCamer[2],"Right");
+                        emit pImageProcessing->initCamerSignal(RgihtCamer[0],23001,RgihtCamer[1],RgihtCamer[2],"Right");
                     }
+
+
+                /*****************************
+                * @brief:SDK链接相机
+                ******************************/
+                //if(ImageProcessing* pImageProcessing=qobject_cast<ImageProcessing*>(ImageProcessingMap[var])){
+                    /*emit pImageProcessing->InitializationSignal();*//* 初始化相机动态库,异步会导致动态库初始化没完成. */
+//                    if(FrontCamer.count()>=3&&num==1){
+//                        emit pImageProcessing->initCamerSignal(FrontCamer[0],8000,FrontCamer[1],FrontCamer[2],"Front");
+//                    }
+//                    else if(AfterCamer.count()>=3&&num==2){
+//                        emit pImageProcessing->initCamerSignal(AfterCamer[0],8000,AfterCamer[1],AfterCamer[2],"After");
+//                    }
+//                    else if(LeftCamer.count()>=3&&num==3){
+//                        emit pImageProcessing->initCamerSignal(LeftCamer[0],8000,LeftCamer[1],LeftCamer[2],"Left");
+//                    }
+//                    else if(RgihtCamer.count()>=3&&num==4){
+//                        emit pImageProcessing->initCamerSignal(RgihtCamer[0],8000,RgihtCamer[1],RgihtCamer[2],"Right");
+//                    }
                 }
                 ++num;
             }
@@ -612,11 +633,11 @@ void MainWidget::processingPlugins(QDir path, int num)
 
         if(plugin){
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
-                getImagePlugin(pGetimagesInterface,num--);
+                //getImagePlugin(pGetimagesInterface,num--);
             }
-//            else if (ICaptureUnderlying* pICaptureUnderlying=qobject_cast<ICaptureUnderlying*>(plugin)) {
-//                captureUnderlyingPlugin(pICaptureUnderlying,num--);
-//            }
+            else if (ICaptureUnderlying* pICaptureUnderlying=qobject_cast<ICaptureUnderlying*>(plugin)) {
+                captureUnderlyingPlugin(pICaptureUnderlying,num--);
+            }
             else if(InfraredlogicInterface* pInfraredlogicInterface=qobject_cast<InfraredlogicInterface*>(plugin)){
                 infraredLogicPlugin(pInfraredlogicInterface,num--);
             }
@@ -656,32 +677,32 @@ void MainWidget::processingPlugins(QDir path, int num)
 
 void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
-    ImageProcessing* pImageProcessing=new ImageProcessing (this);
-    ImageProcessingMap.insert(num,pImageProcessing);
+//    ImageProcessing* pImageProcessing=new ImageProcessing (this);
+//    ImageProcessingMap.insert(num,pImageProcessing);
 
 //    /* 初始化动态库 */
-//    connect(pImageProcessing,&ImageProcessing::InitializationSignal,pGetimagesInterface,&GetImagesInterface::InitializationSlot);
-    /* 初始化相机 */
-    connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
-    /* 日志信息 */
-    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
-    /* 释放动态库资源 */
-    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot);//,Qt::BlockingQueuedConnection);
+/*    connect(pImageProcessing,&ImageProcessing::InitializationSignal,pGetimagesInterface,&GetImagesInterface::InitializationSlot);*/
+//    /* 初始化相机 */
+//    connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
+//    /* 日志信息 */
+//    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
+//    /* 释放动态库资源 */
+//    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot);//,Qt::BlockingQueuedConnection);
 
-    if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
-        /* 抓取图片 */
-        connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
-        /* 调整窗口 */
-        connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
-        /* 播放视频流 */
-        connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
-        /* 接收图片流 */
-        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
-        /* 相机状态(信号与信号绑定) */
-        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
-        /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
-        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
-    }
+//    if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
+//        /* 抓取图片 */
+//        connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+//        /* 调整窗口 */
+//        connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
+//        /* 播放视频流 */
+//        connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
+//        /* 接收图片流 */
+//        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
+//        /* 相机状态(信号与信号绑定) */
+//        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
+//        /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
+//        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
+//    }
 
 //    /* 线程运行 */
 //    QThread* pThread=new QThread(this);
@@ -693,35 +714,35 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
 
 void MainWidget::captureUnderlyingPlugin(ICaptureUnderlying *pUnderlyingCapture, int num)
 {
-//    UnderlyingGetimagesProcessing* pUnderlyingGetimagesProcessing=new UnderlyingGetimagesProcessing(nullptr);
-//    underlyingGetimagesProcessingMap.insert(num,pUnderlyingGetimagesProcessing);
+    UnderlyingGetimagesProcessing* pUnderlyingGetimagesProcessing=new UnderlyingGetimagesProcessing(nullptr);
+    underlyingGetimagesProcessingMap.insert(num,pUnderlyingGetimagesProcessing);
 
-//    /* 初始化动态库 */
-//    connect(pUnderlyingGetimagesProcessing,&UnderlyingGetimagesProcessing::InitializationSignal,pUnderlyingCapture,&ICaptureUnderlying::InitializationSlot);
-//    /* 初始化相机 */
-//    connect(pUnderlyingGetimagesProcessing,&UnderlyingGetimagesProcessing::initCamerSignal,pUnderlyingCapture,&ICaptureUnderlying::initCamerSlot);
-//    /* 日志信息 */
-//    connect(pUnderlyingCapture,&ICaptureUnderlying::messageSignal,this,&MainWidget::messageSlot);
-//    /* 释放动态库资源 */
-//    connect(this,&MainWidget::releaseResourcesSignal,pUnderlyingCapture,&ICaptureUnderlying::releaseResourcesSlot,Qt::BlockingQueuedConnection);
+    /* 初始化动态库 */
+    connect(pUnderlyingGetimagesProcessing,&UnderlyingGetimagesProcessing::InitializationSignal,pUnderlyingCapture,&ICaptureUnderlying::InitializationSlot);
+    /* 初始化相机 */
+    connect(pUnderlyingGetimagesProcessing,&UnderlyingGetimagesProcessing::initCamerSignal,pUnderlyingCapture,&ICaptureUnderlying::initCamerSlot);
+    /* 日志信息 */
+    connect(pUnderlyingCapture,&ICaptureUnderlying::messageSignal,this,&MainWidget::messageSlot);
+    /* 释放动态库资源 */
+    connect(this,&MainWidget::releaseResourcesSignal,pUnderlyingCapture,&ICaptureUnderlying::releaseResourcesSlot,Qt::BlockingQueuedConnection);
 
-//    if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
-//        /* 抓取图片 */
-//        connect(pPictureWidget,&PictureWidget::putCommandSignal,pUnderlyingCapture,&ICaptureUnderlying::putCommandSlot);
-//        /* 接收图片流 */
-//        connect(pUnderlyingCapture,&ICaptureUnderlying::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
-//        /* 相机状态(信号与信号绑定) */
-//        connect(pUnderlyingCapture,&ICaptureUnderlying::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
-//        /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
-//        connect(pUnderlyingCapture,&ICaptureUnderlying::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
-//    }
+    if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
+        /* 抓取图片 */
+        connect(pPictureWidget,&PictureWidget::putCommandSignal,pUnderlyingCapture,&ICaptureUnderlying::putCommandSlot);
+        /* 接收图片流 */
+        connect(pUnderlyingCapture,&ICaptureUnderlying::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
+        /* 相机状态(信号与信号绑定) */
+        connect(pUnderlyingCapture,&ICaptureUnderlying::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
+        /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
+        connect(pUnderlyingCapture,&ICaptureUnderlying::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
+    }
 
-//    /* 线程运行 */
-//    QThread* pThread=new QThread(this);
-//    pUnderlyingCapture->moveToThread(pThread);
-//    pUnderlyingGetimagesProcessing->moveToThread(pThread);
-//    ThreadList.append(pThread);
-//    pThread->start();
+    /* 线程运行 */
+    QThread* pThread=new QThread(this);
+    pUnderlyingCapture->moveToThread(pThread);
+    pUnderlyingGetimagesProcessing->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
 }
 
 void MainWidget::infraredLogicPlugin(InfraredlogicInterface *pInfraredlogicInterface, int num)

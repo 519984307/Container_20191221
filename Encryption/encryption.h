@@ -17,6 +17,17 @@ public:
 private:
 
     ///
+    /// \brief key1 唯一KEY
+    ///
+    QByteArray  key1;
+
+    ///
+    /// \brief ind 检查KEY次数
+    ///
+    int ind;
+
+
+    ///
     /// \brief pTimer 定时查找加密狗
     ///
     QTimer* pTimer;
@@ -76,12 +87,22 @@ private slots:
     ///
     void SmartXCheckExistSlot();
 
+    ///
+    /// \brief checkTheKeyFunc 校验MD5密匙
+    ///
+    void checkTheKeyFunc();
+
+
 private:
 
     ///
     /// \brief smartXGetUidFunc 获取加密狗ID
     ///
     void smartXGetUidFunc();
+
+
+    QString getKey(QByteArray arr);
+    QByteArray runPro(QString cmd,QStringList arg);
 
 public:
 

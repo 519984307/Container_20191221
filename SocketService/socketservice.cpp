@@ -175,5 +175,13 @@ void SocketService::sendResultSlot(int channel, const QString &result)
 
     if(pTcpSocket->isOpen()){
         pTcpSocket->write(result.toLocal8Bit());
+
+        /*****************************
+        * @brief:发送完成主动断开
+        ******************************/
+        pTcpSocket->waitForBytesWritten();
+        pTcpSocket->abort();
+        pTcpSocket->close();
+        QTimer::singleShot(10000,this,SLOT(startLink()));
     }
 }

@@ -55,8 +55,8 @@ CaptureImages::~CaptureImages()
 
 bool CaptureImages::InitializationSlot()
 {
-    //pDLL=new QLibrary("HCNetSDK.dll",this);/* windows下不支持设置动态库路径 */
-    pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
+    pDLL=new QLibrary("HCNetSDK",this);/* windows下不支持设置动态库路径 */
+    //pDLL=new QLibrary (QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK/libhcnetsdk")),this) ;
 
     if(pDLL->load()){
         NET_DVR_SetExceptionCallBack_V30_L=reinterpret_cast<NET_DVR_SetExceptionCallBack_V30FUN>(pDLL->resolve("NET_DVR_SetExceptionCallBack_V30"));
@@ -82,7 +82,7 @@ bool CaptureImages::InitializationSlot()
         if(pTimerState==nullptr){
             pTimerState=new QTimer (this);
             connect(pTimerState,SIGNAL(timeout()),this,SLOT(getDeviceStatusSlot()));
-            pTimerState->start(15000);/* 10秒检测一次相机状态 */
+            pTimerState->start(10000);/* 10秒检测一次相机状态 */
         }
 
         return  true;
@@ -110,7 +110,7 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
         NET_SDK_INIT_CFG_TYPE cfgType=NET_SDK_INIT_CFG_SDK_PATH;
         QString path= QDir::toNativeSeparators(QString("%1/%2").arg(QCoreApplication::applicationDirPath()).arg("Plugins/HCNetSDK"));
         strcpy(SDKPath.sPath,path.toLocal8Bit().data());
-        if(NET_DVR_SetSDKInitCfg_L){
+        if(NET_DVR_SetSDKInitCfg_L!=nullptr){
              NET_DVR_SetSDKInitCfg_L(cfgType,&SDKPath);
         }
 
@@ -126,14 +126,16 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
             if(NET_DVR_Init_L()){
                 isSDKInit=true;
                 qDebug()<<"realy init";
-                if(NET_DVR_SetExceptionCallBack_V30_L){
+                if(NET_DVR_SetExceptionCallBack_V30_L!=nullptr){
                     NET_DVR_SetExceptionCallBack_V30_L(0,nullptr,CaptureImages::exceptionCallBack_V30,this);
                     // NET_DVR_SetLogToFile_L(3, QString(".\\Log\\sdkLog").toLatin1().data(), true);
-                    NET_DVR_SetConnectTime_L(15000,0);
-                    NET_DVR_SetReconnect_L(15000,1);
-                    //NET_DVR_SetRecvTimeOut_L(1000);
+                    NET_DVR_SetConnectTime_L(10000,0);
+                    NET_DVR_SetReconnect_L(10000,0);
+                    NET_DVR_SetRecvTimeOut_L(1000);
                 }
-                NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
+                if(NET_DVR_Login_V40_L !=nullptr){
+                    NET_DVR_Login_V40_L(&LoginInfo,&DeviceInfo);
+                }
                 emit messageSignal(ZBY_LOG("INFO"),tr("IP=%1 Camera Init Sucess").arg(this->camerIp));
             }
             else {
@@ -168,49 +170,52 @@ void CaptureImages::getDeviceStatusSlot()
         else {
             emit camerStateSingal(camerIp,false,alias);
             dwResult=0;
+
+            /*****************************
+            * @brief:断开重连
+            ******************************/
+            if(lUserID!=-1){
+                if(NET_DVR_Logout_L !=nullptr){
+                    NET_DVR_Logout_L(lUserID);
+                }
+            }
+            initCamerSlot(camerIp,port,camerName,camerPow,alias);/* 重新登录 */
         }
     }
 }
 
 void CaptureImages::exceptionCallBack_V30(DWORD dwType, LONG lUserID, LONG lHandle, void *pUser)
 {
-    //pThis=static_cast<CaptureImages*>(pUser);
-    //CaptureImages* pThis=static_cast<CaptureImages*>(pUser);
     emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Camrea Exception<errorCode=%2>").arg(pThis->camerIp).arg(QString::number(pThis->NET_DVR_GetLastError_L())));
-    //pThis=nullptr;
 }
 
 void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo, void *pUser)
 {      
-    //pThis=static_cast<CaptureImages*>(pUser);;
-    //CaptureImages* pThis=static_cast<CaptureImages*>(pUser);
-    pThis->lUserID=lUserID;
-    pThis->dwResult=dwResult;
+    qDebug()<<"lUserID:"<<lUserID;
 
     if(dwResult==0){
         emit pThis->messageSignal(ZBY_LOG("ERROR"),tr("IP=%1 Camera Login Error<errorCode=%2>").arg(pThis->camerIp).arg(pThis->NET_DVR_GetLastError_L()));
-        if(pThis->NET_DVR_GetLastError_L()==7){
-            pThis->initCamerSlot(pThis->camerIp,pThis->port,pThis->camerName,pThis->camerPow,pThis->alias);/* 重新登录 */
-        }
     }
     if(dwResult==1){
         emit pThis->messageSignal(ZBY_LOG("INFO"),tr("IP=%1 Camera Login Sucess").arg(pThis->camerIp));
+
+        pThis->lUserID=lUserID;
+        pThis->dwResult=dwResult;
     }
-    //pThis=nullptr;
 }
 
 bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
 {    
     if(dwResult){
         NET_DVR_JPEGPARA   pJpegFile={};
-        uint32_t charLen=400000;//windows 400000,linux 250000
+        uint32_t charLen=IMG_BYTE;//windows 400000,linux 250000
         LPDWORD dataLen=nullptr;
         char* buff=static_cast<char*>(malloc( charLen* sizeof(char)));
         pJpegFile.wPicSize=0xff;
         pJpegFile.wPicQuality=0;
 
         if(NET_DVR_CaptureJPEGPicture_NEW_L!=nullptr && NET_DVR_CaptureJPEGPicture_NEW_L(lUserID,1,&pJpegFile,buff,charLen,dataLen)){
-            QByteArray arrayJpg(buff,*dataLen);
+            QByteArray arrayJpg(buff,IMG_BYTE);
             emit pictureStreamSignal(arrayJpg,imgNumber,imgTime);
             emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put Command Sucess").arg(camerIp));
         }
@@ -240,8 +245,8 @@ void CaptureImages::playStreamSlot(quint64 winID,bool play)
     if(dwResult){
         if(play){
             NET_DVR_PREVIEWINFO struPlayInfo = {};
-            struPlayInfo.hPlayWnd    =static_cast<HWND>(winID); /* linux */
-            //struPlayInfo.hPlayWnd= reinterpret_cast<HWND>(winID);/* windows */
+            //struPlayInfo.hPlayWnd    =static_cast<HWND>(winID); /* linux */
+            struPlayInfo.hPlayWnd= reinterpret_cast<HWND>(winID);/* windows */
             struPlayInfo.lChannel     = 1;       /* 预览通道号 */
             struPlayInfo.dwStreamType = 0;       /* 0-主码流，1-子码流，2-码流3，3-码流4，以此类推 */
             struPlayInfo.dwLinkMode   = 1;       /* 0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP */

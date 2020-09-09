@@ -22,8 +22,8 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
 
     this->connectName=QString("DataBaseRead_").append(connectName);
 
-    db=QSqlDatabase::addDatabase("QSQLITE",connectName);
-    db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2").arg(dir.path()).arg("History.db")));
+    db=QSqlDatabase::addDatabase("QSQLITE",this->connectName);
+    db.setDatabaseName(QDir::toNativeSeparators(QString("%1/%2").arg(dir.path()).arg("History.db")));
     db.setUserName(user);
     db.setPassword(pass);
     db.setHostName(ip);
@@ -80,7 +80,7 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
 
 void DataBaseRead::setDataBaseFilterSlot(const QString &filter)
 {
-    //locker.lockForRead();
+    locker.lockForRead();
 
     if(db.open()){
 
@@ -101,7 +101,7 @@ void DataBaseRead::setDataBaseFilterSlot(const QString &filter)
     }
     db.close();
 
-    //locker.unlock();
+    locker.unlock();
 }
 
 void DataBaseRead::statisticalData(QSqlTableModel* model)

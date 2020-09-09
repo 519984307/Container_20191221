@@ -220,10 +220,8 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
 
 void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QString &alisa)
 {
-
     if(alisa=="Front"){
         if(state){
-                qDebug()<<alisa;
             ui->Front_Camera_checkBox->setChecked(true);
         }
         else {

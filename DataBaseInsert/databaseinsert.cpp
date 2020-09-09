@@ -16,15 +16,13 @@ void DataBaseInsert::initDataBaseSlot(const QString &connectName,const QString &
     /*  创建插件目录  */
     QDir dir(QCoreApplication::applicationDirPath());
     const QString pluginPath="Data";
-    if(!dir.cd(pluginPath)){
-        dir.mkdir(pluginPath);
-        dir.cd(pluginPath);
-    }
+    dir.mkdir(pluginPath);
+    dir.cd(pluginPath);
 
     this->connectName=QString("DataBaseInsert_").append(connectName);
 
     db=QSqlDatabase::addDatabase("QSQLITE",this->connectName);
-    db.setDatabaseName(QDir::toNativeSeparators(tr("%1/%2/%3").arg(dir.path()).arg("History.db")));
+    db.setDatabaseName(QDir::toNativeSeparators(QString("%1/%2").arg(dir.path()).arg("History.db")));
     db.setUserName(user);
     db.setPassword(pass);
     db.setHostName(ip);

@@ -43,8 +43,21 @@ private slots:
     ///
     void startLinkCamer();
 
+    ///
+    /// \brief cameraState 相机异常检测
+    ///
+    void cameraState();
+
 private:
 
+    ///
+    /// \brief stramCount 接收图片状态
+    ///
+    bool streamState;
+
+    ///
+    /// \brief pPutCommand 抓拍指令
+    ///
     PutCommand* pPutCommand;
 
     ///

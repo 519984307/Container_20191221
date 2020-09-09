@@ -6,6 +6,8 @@ CaptureUnderlying::CaptureUnderlying(QObject *parent)
     tcpSocket=nullptr;
     pTimerLinkCamer=nullptr;
     pPutCommand=nullptr;
+
+    streamState=false;
 }
 
 CaptureUnderlying::~CaptureUnderlying()
@@ -24,18 +26,20 @@ void CaptureUnderlying::connected()
     {
         pTimerLinkCamer->stop();
     }
-    pTimerLinkCamer->start(25000);
+    pTimerLinkCamer->start(15000);
 }
 
 void CaptureUnderlying::readFortune()
-{
+{    
     if(pTimerLinkCamer->isActive())
     {
         pTimerLinkCamer->stop();
     }
-    pTimerLinkCamer->start(20000);
+    pTimerLinkCamer->start(10000);
 
-    tcpSocket = qobject_cast<QTcpSocket*>(sender());
+    QThread::msleep(10);
+
+    //tcpSocket = qobject_cast<QTcpSocket*>(sender());
     QByteArray tmpStream = tcpSocket->readAll();
     if(tmpStream!="\x00")
     {
@@ -44,7 +48,7 @@ void CaptureUnderlying::readFortune()
     /* 找到结尾标记 */
     int end=jpgStream.lastIndexOf("\xFF\xD9");
     if(end!=-1)
-    {
+    {        
         /* 找到开头标记 */
         int start=jpgStream.indexOf("\xFF\xD8");
         if(start!=-1)
@@ -52,16 +56,21 @@ void CaptureUnderlying::readFortune()
             jpgStream=jpgStream.mid(start,end-start+2);
             emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Get Camera Image Data").arg(camerIP));
             emit pictureStreamSignal(jpgStream,imgNumber,imgTime);
-            QThread::msleep(10);
+            QThread::msleep(10);            
         }
         else {
             emit pictureStreamSignal(nullptr,imgNumber,imgTime);
         }
-        jpgStream.clear();
+        jpgStream.clear();        
     }
-//    else {
-//        emit pictureStreamSignal(nullptr,imgNumber,imgTime);
-//    }
+
+    if(tmpStream.count()>1){
+        /*****************************
+        * @brief: 防止相机异常，没有结果输出
+        ******************************/
+         streamState=true;
+    }
+    qDebug()<<tmpStream.count();
 }
 
 void CaptureUnderlying::disconnected()
@@ -83,9 +92,22 @@ void CaptureUnderlying::displayError(QAbstractSocket::SocketError socketError)
 
 void CaptureUnderlying::startLinkCamer()
 {
-    tcpSocket->abort();
-    tcpSocket->connectToHost(camerIP,static_cast<quint16>(camerPort));
-    pPutCommand->linktoServerSlot(camerIP,23000);
+    if(tcpSocket->state()==QAbstractSocket:: UnconnectedState){
+        tcpSocket->abort();
+        tcpSocket->connectToHost(camerIP,static_cast<quint16>(camerPort));
+        pPutCommand->linktoServerSlot(camerIP,23000);
+    }
+}
+
+void CaptureUnderlying::cameraState()
+{
+    if(!streamState)
+    {
+        /*****************************
+        * @brief:保证流程完成
+        ******************************/
+        emit pictureStreamSignal(nullptr,imgNumber,imgTime);
+    }
 }
 
 void CaptureUnderlying::initCamerSlot(const QString &camerIP, const int &camerPort, const QString &CamerUser, const QString &CamerPow, const QString &alias)
@@ -102,8 +124,22 @@ bool CaptureUnderlying::putCommandSlot(const int &imgNumber, const QString &imgT
     this->imgNumber=imgNumber;
     this->imgTime=imgTime;
 
-    emit messageSignal(ZBY_LOG("DEBUG"),"capture 01");
-    return  pPutCommand->putCommandSlot();
+    streamState=false;
+
+    qDebug()<<"CaptureUnderlying:tcpSocket:"<<tcpSocket->state();
+    emit messageSignal(ZBY_LOG("DEBUG"),"capture");
+
+    if(!pPutCommand->putCommandSlot())
+    {
+        /*****************************
+        * @brief:保证流程完成
+        ******************************/
+        emit pictureStreamSignal(nullptr,imgNumber,imgTime);
+        return false;
+    }
+
+    QTimer::singleShot(1000,this,SLOT(cameraState()));
+    return true;
 }
 
 void CaptureUnderlying::releaseResourcesSlot()

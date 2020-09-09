@@ -74,7 +74,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         dir.mkpath(suffixPath);
         dir.cd(suffixPath);
 
-        qDebug()<<encryption;
+        qDebug()<<"encryption:"<<encryption;
         /* 加密不存在识别.给空结果 */
         if(encryption && imgTime!="" && jpgStream!=nullptr){
             QPixmap *labelPix = new QPixmap();

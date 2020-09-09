@@ -41,7 +41,7 @@ private:
 
 private:
 
-    //QReadWriteLock locker;
+    QReadWriteLock locker;
 
     ///
     /// \brief connectName 数据库链接名称

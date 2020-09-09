@@ -20,6 +20,8 @@ private:
     ///
     QTcpSocket *tcpSocket;
 
+    int capNo;
+
 signals:
 
     ///
