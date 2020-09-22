@@ -51,6 +51,11 @@ private slots:
 private:
 
     ///
+    /// \brief putState 接收本机抓拍指令
+    ///
+    bool putState;
+
+    ///
     /// \brief stramCount 接收图片状态
     ///
     bool streamState;

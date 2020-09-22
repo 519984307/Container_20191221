@@ -234,6 +234,18 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         }
     }
 
+    /*****************************
+    * @brief: 时间戳
+    ******************************/
+    QString time;
+    if(imgList.count()>0){
+        time=imgList[0].mid(0,14);
+    }
+
+    QString dateTime=QDateTime::fromString(time,"yyyyMMddhhmmss").toString("yyyy-MM-dd hh:mm:ss");
+    /*///////////////////////////////////////////////////*/
+
+
     /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标,箱号置信度下表,箱型置信度下标 */
     int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
     if(type==2 && conProbabilityTemp.count()==6){
@@ -273,7 +285,11 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 }
             }
         }
-        emit containerSignal(type,conTemp[Cindex1], checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
+
+        /*****************************
+        * @brief:时间戳供车牌使用(+"@"+dateTime+"@"+channel)
+        ******************************/
+        emit containerSignal(type,conTemp[Cindex1]+"@"+dateTime+"@"+channel, checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
     }
     else {
         bool checkCon=false;
@@ -294,7 +310,11 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
                 }
             }
         }
-        emit containerSignal(type,conTemp[Cindex1],checkConList[Cindex1],isoTemp[Iindex1]);
+
+        /*****************************
+        * @brief:时间戳供车牌使用(+"@"+dateTime+"@"+channel)
+        ******************************/
+        emit containerSignal(type,conTemp[Cindex1]+"@"+dateTime+"@"+channel,checkConList[Cindex1],isoTemp[Iindex1]);
     }
     updateDataBase(type,Cindex1,Iindex1,Cindex2,Iindex2,imgList);
 

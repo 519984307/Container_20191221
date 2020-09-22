@@ -8,6 +8,8 @@
 #include <QHideEvent>
 #include <QPainter>
 #include <QtDebug>
+#include <QTimer>
+#include <QDateTime>
 
 namespace Ui {
 class DataWidget;
@@ -33,11 +35,39 @@ public:
     ///
     void hideEvent(QHideEvent *event)Q_DECL_OVERRIDE;
 
+    ///
+    /// \brief setDataWidgetPar 设置通道号
+    /// \param channelNum
+    ///
+    void setDataWidgetPar(int channelNum);
+
 private:
 
     Ui::DataWidget *ui;
 
+    bool openStream;
+
     QMutex mutex;
+
+    ///
+    /// \brief dateTime 箱号时间戳
+    ///
+    QString dateTime;
+
+    ///
+    /// \brief logicList 红外状态
+    ///
+    QList<int> logicList;
+
+    ///
+    /// \brief isConCar 判断是不是集卡通过
+    ///
+    bool isConCar;
+
+    ///
+    /// \brief channelNum 通道号
+    ///
+    int channelNum;
 
 public slots:
 
@@ -124,6 +154,25 @@ signals:
     ///
     void openTheVideoSignal(bool play);
 
+    ///
+    /// \brief insertDataBaseSignal 插入数据库
+    /// \param data 数据字典
+    ///
+    void insertDataBaseSignal(QMap<QString, QString> data);
+
+    ///
+    /// \brief updateDataBaseSignal 更新数据
+    /// \param data 数据字典
+    ///
+    void updateDataBaseSignal(QMap<QString, QString> data);
+
+    ///
+    /// \brief sendResultSignal 发送识别结果
+    /// \param channel 通道号
+    /// \param result 识别结果
+    ///
+    void sendResultSignal(int channel,const QString& result);
+
 private slots:
 
     ///
@@ -136,6 +185,17 @@ private slots:
     /// \brief on_Capture_pushButton_clicked 模拟抓图
     ///
     void on_Capture_pushButton_clicked();
+
+    ///
+    /// \brief logicStateSlot 检测红外状态变化,车牌使用
+    ///
+    void logicStateSlot();
+
+    ///
+    /// \brief timeOutSendPlate 超时发送数据
+    ///
+    void timeOutSendPlate();
+
     void on_pushButton_clicked();
     void on_pushButton_2_clicked(bool checked);
 };

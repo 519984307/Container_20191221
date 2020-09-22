@@ -100,7 +100,7 @@ QString DataBaseWidget::checkFilter()
         filterList.append(tr("Channel='%1'").arg(ui->Channel_spinBox->value()));
     }
     if(date){
-        filterList.append(tr("(Timer>='%1' AND Timer<='%2')").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
+        filterList.append(tr("(Timer>='%1' AND Timer<='%2') OR (PlateTimer>='%1' AND PlateTimer<='%2')").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
     }
     if(number){
         if(ui->Numbers_Front_lineEdit->text()!=""){

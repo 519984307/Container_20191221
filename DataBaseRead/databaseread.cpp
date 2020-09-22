@@ -33,7 +33,7 @@ void DataBaseRead::initDataBaseSlot(const QString &connectName,const QString &us
         QSqlQuery query(db);
         query.prepare(tr("CREATE TABLE `Containers` (\
                       `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,\
-                      `Timer`	TEXT NOT NULL,\
+                      `Timer`	TEXT,\
                       `Channel`	INTEGER NOT NULL,\
                        'Type' INTEGER,\
                       `ContainerFront`	TEXT,\

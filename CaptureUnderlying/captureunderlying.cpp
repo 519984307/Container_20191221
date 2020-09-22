@@ -8,6 +8,7 @@ CaptureUnderlying::CaptureUnderlying(QObject *parent)
     pPutCommand=nullptr;
 
     streamState=false;
+    putState=false;
 }
 
 CaptureUnderlying::~CaptureUnderlying()
@@ -39,6 +40,13 @@ void CaptureUnderlying::readFortune()
 
     QThread::msleep(10);
 
+    if(!putState){
+        /*****************************
+        * @brief: 不是当前库抓拍，不处理。防止同一相机多次接收
+        ******************************/
+        return;
+    }
+
     //tcpSocket = qobject_cast<QTcpSocket*>(sender());
     QByteArray tmpStream = tcpSocket->readAll();
     if(tmpStream!="\x00")
@@ -56,10 +64,12 @@ void CaptureUnderlying::readFortune()
             jpgStream=jpgStream.mid(start,end-start+2);
             emit messageSignal(ZBY_LOG("INFO"), tr("IP:%1 Get Camera Image Data").arg(camerIP));
             emit pictureStreamSignal(jpgStream,imgNumber,imgTime);
+            putState=false;
             QThread::msleep(10);            
         }
         else {
             emit pictureStreamSignal(nullptr,imgNumber,imgTime);
+            putState=false;
         }
         jpgStream.clear();        
     }
@@ -124,6 +134,7 @@ bool CaptureUnderlying::putCommandSlot(const int &imgNumber, const QString &imgT
     this->imgNumber=imgNumber;
     this->imgTime=imgTime;
 
+    putState=true;
     streamState=false;
 
     qDebug()<<"CaptureUnderlying:tcpSocket:"<<tcpSocket->state();
