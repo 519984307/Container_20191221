@@ -356,8 +356,8 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         /*****************************
         * @brief:发送车牌数据
         ******************************/
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
-
+        //emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(dateTime).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
     }
 
     ui->lineEdit_11->clear();
