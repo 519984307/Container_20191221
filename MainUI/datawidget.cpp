@@ -10,10 +10,18 @@ DataWidget::DataWidget(QWidget *parent) :
     this->setParent(parent);
     this->setHidden(true);
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
+
+    pTimer=new QTimer(this);
+    QTimer::singleShot(6000,this,SLOT(timeOutSendPlate()));
+    connect(pTimer,SIGNAL(timeout()),this,SLOT(timeOutSendPlate));
 }
 
 DataWidget::~DataWidget()
 {
+    if(pTimer->isActive()){
+        pTimer->stop();
+    }
+
     delete ui;
 }
 
@@ -103,9 +111,16 @@ void DataWidget::logicStateSlot()
         * @brief:发送车牌数据
         ******************************/
         emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
+
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
     }
     else {
-        QTimer::singleShot(5000,this,SLOT(timeOutSendPlate()));
+        if(pTimer->isActive()){
+            pTimer->stop();
+        }
+        pTimer->start(10000);
     }
 }
 
@@ -131,6 +146,10 @@ void DataWidget::timeOutSendPlate()
     }
 
     emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
+
+    ui->lineEdit_11->clear();
+    ui->lineEdit_12->clear();
+    ui->lineEdit_13->clear();
 }
 
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
@@ -172,10 +191,10 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
         ui->lineEdit_7->clear();
         ui->lineEdit_8->clear();
 
-        ui->lineEdit_10->clear();
-        ui->lineEdit_11->clear();
-        ui->lineEdit_12->clear();
-        ui->lineEdit_13->clear();
+//        ui->lineEdit_10->clear();
+//        ui->lineEdit_11->clear();
+//        ui->lineEdit_12->clear();
+//        ui->lineEdit_13->clear();
 
         ui->Infrared_logic_lineEdit->clear();
 
@@ -241,6 +260,13 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 
 void DataWidget::containerSlot(const int& type,const QString &result1,const int& resultCheck1,const QString &iso1,const QString &result2,const int& resultCheck2,const QString &iso2)
 {
+    /*****************************
+    * @brief: 停止等待箱号超时
+    ******************************/
+    if(pTimer->isActive()){
+        pTimer->stop();
+    }
+
     /* Tupe,集装箱类别:
      * -1 – 未知
      * 0 – 一个 20 集装箱
@@ -307,33 +333,36 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
     }
     ui->Infrared_logic_lineEdit->setText(logic);
 
-//    /*****************************
-//    * @brief:更新车牌
-//    ******************************/
-//    if(isConCar){
-//        QMap<QString ,QString> data;
+    /*****************************
+    * @brief:更新车牌
+    ******************************/
+    if(ui->lineEdit_13->text()!=""){
+        QMap<QString ,QString> data;
 
-//        data.insert("Timer",dateTime);
-//        data.insert("Channel",QString::number(channelNum));
-//        data.insert("PlateTimer",QString("%1").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyy-MM-dd hh:mm:ss")));
-//        data.insert("Plate",ui->lineEdit_11->text());
-//        data.insert("PlateImg",QString("%1%2%3.jpg").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(7).arg(channelNum));
+        data.insert("Timer",dateTime);
+        data.insert("Channel",QString::number(channelNum));
+        data.insert("PlateTimer",QString("%1").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyy-MM-dd hh:mm:ss")));
+        data.insert("Plate",ui->lineEdit_11->text());
+        data.insert("PlateImg",QString("%1%2%3.jpg").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(7).arg(channelNum));
 
-//        emit updateDataBaseSignal(data);
-//        data.clear();
-//    }
+        emit updateDataBaseSignal(data);
+        data.clear();
 
-//    int color=1;
-//    if(ui->lineEdit_12->text()=="蓝"){
-//        color=0;
-//    }
+        int color=1;
+        if(ui->lineEdit_12->text()=="蓝"){
+            color=0;
+        }
 
-//    /*****************************
-//    * @brief:发送车牌数据
-//    ******************************/
-//    emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
+        /*****************************
+        * @brief:发送车牌数据
+        ******************************/
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
 
-    //ui->tabWidget->setTabText(1,tr("Front:%1 | Check1:%2 | IS01:%3 | Before:%4 | Check:%5 | ISO2:%6  | Type:%7  | Plate:%8").arg(result1).arg(resultCheck1).arg(iso1).arg(result2).arg(resultCheck2).arg(iso2).arg(logic).arg(""));
+    }
+
+    ui->lineEdit_11->clear();
+    ui->lineEdit_12->clear();
+    ui->lineEdit_13->clear();
 }
 
 void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QString &alisa)
@@ -377,6 +406,8 @@ void DataWidget::imageFlowSlot(QByteArray img)
     QPixmap pix;
     pix.loadFromData(img);
     ui->label_3->setPixmap(pix);
+
+    img.clear();
 }
 
 void DataWidget::theVideoStreamSlot(QByteArray arrImg)

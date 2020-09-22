@@ -43,6 +43,10 @@ public:
 
 private:
 
+
+    QTimer* pTimer;
+
+
     Ui::DataWidget *ui;
 
     bool openStream;

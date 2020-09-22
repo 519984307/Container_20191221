@@ -42,6 +42,11 @@ public:
     QString Alias;
 
     ///
+    /// \brief LocalAddr 车牌绑定本机地址
+    ///
+    QString LocalAddr;
+
+    ///
     /// \brief LicensePlate 车牌协议
     ///
     int LicensePlate;

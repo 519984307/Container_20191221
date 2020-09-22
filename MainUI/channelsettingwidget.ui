@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>276</width>
+    <width>315</width>
     <height>406</height>
    </rect>
   </property>
@@ -45,13 +45,13 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget_2">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_One_Channel_Camer">
       <attribute name="title">
        <string>Camer</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
+      <layout class="QGridLayout" name="gridLayout_2">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -72,9 +72,21 @@
          <property name="title">
           <string>Parameter</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QLineEdit" name="FrontCamer">
               <property name="whatsThis">
@@ -113,10 +125,17 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLineEdit" name="Local_Addr">
+              <property name="placeholderText">
+               <string>192.168.1.100</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item row="0" column="1">
-           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QLabel" name="label_67">
               <property name="sizePolicy">
@@ -155,6 +174,13 @@
              <widget class="QLabel" name="label_71">
               <property name="text">
                <string>Plate</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_72">
+              <property name="text">
+               <string>LocalAddr</string>
               </property>
              </widget>
             </item>

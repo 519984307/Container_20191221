@@ -178,7 +178,7 @@ void MainWidget::loadingParameters()
             if(ElectronicLicensePlateProcessing *pElectronicLicensePlateProcessing=qobject_cast<ElectronicLicensePlateProcessing*>(ElectronicLicensePlateProcessingMap[channel])){
                 if(!pChannelSettingWidget->PlateCamer.isEmpty()){
                     if(ChannelSettingWidget *pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
-                        pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,pChannelSettingWidget->Channel_number);
+                        pElectronicLicensePlateProcessing->initCameraSignal(pChannelSettingWidget->LocalAddr,pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,pChannelSettingWidget->Channel_number);
                     }
                     //多通道
                     //pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);

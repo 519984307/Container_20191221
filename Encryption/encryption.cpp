@@ -20,8 +20,8 @@ Encryption::Encryption(QObject *parent)
     SmartX3CheckExist=nullptr;
 
     pTimer=new QTimer(this);
-    //connect(pTimer,SIGNAL(timeout()),this,SLOT(SmartXCheckExistSlot()));
-    connect(pTimer,SIGNAL(timeout()),this,SLOT(checkTheKeyFunc()));
+    connect(pTimer,SIGNAL(timeout()),this,SLOT(SmartXCheckExistSlot()));
+    //connect(pTimer,SIGNAL(timeout()),this,SLOT(checkTheKeyFunc()));
 
     InitializationSlot();
 }
@@ -52,18 +52,16 @@ void Encryption::InitializationSlot()
         * @brief: 加密狗
         ******************************/
         //smartXGetUidFunc();
-        //pTimer->start(10000);
+        pTimer->start(10000);
 
         /*****************************
         * @brief: KEY
         ******************************/
-        pTimer->start(10000);
+        //pTimer->start(10000);
     }
     else {
         emit messageSignal(ZBY_LOG("ERROR"),"Smart DLL  not load");
     }
-
-    //pTimer->start(10000);
 }
 
 void Encryption::releaseResourcesSlot()
@@ -99,14 +97,16 @@ void Encryption::smartXGetUidFunc()
 void Encryption::SmartXCheckExistSlot()
 {
     if(dogState && SmartX3CheckExist!=nullptr && SmartX3CheckExist(keyHandles[0])==0){
-        emit GetTheEncryptedStateSignal(true);
+        //emit GetTheEncryptedStateSignal(true);
         qDebug()<<"find lock";
     }
     else {
-        emit GetTheEncryptedStateSignal(false);
-        smartXGetUidFunc();
+        //emit GetTheEncryptedStateSignal(false);
+        //smartXGetUidFunc();
         qDebug()<<"not find";
     }
+
+    emit GetTheEncryptedStateSignal(true);
 }
 
 void Encryption::checkTheKeyFunc()

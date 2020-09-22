@@ -50,6 +50,7 @@ bool ChannelSettingWidget::jsonWrite()
     jsonObj.insert(QString("LeftCamer"),ui->LeftCamer->text());
     jsonObj.insert(QString("RgihtCamer"),ui->RgihtCamer->text());
     jsonObj.insert(QString("PlateCamer"),ui->PlateCamer->text());
+    jsonObj.insert(QString("LocalAddr"),ui->Local_Addr->text());
     jsonChild.insert("Camer",QJsonValue(jsonObj));
 
 //    QJsonObject jsonObj1;
@@ -118,6 +119,7 @@ bool ChannelSettingWidget::jsonRead()
                     LeftCamer= getJsonValue("Camer","LeftCamer",value.toObject()).toString();
                     RgihtCamer= getJsonValue("Camer","RgihtCamer",value.toObject()).toString();
                     PlateCamer= getJsonValue("Camer","PlateCamer",value.toObject()).toString();
+                    LocalAddr=getJsonValue("Camer","LocalAddr",value.toObject()).toString();
                     PortOne= getJsonValue("SerialPort","PortOne",value.toObject()).toInt();
                     PortTow= getJsonValue("SerialPort","PortTow",value.toObject()).toInt();
                     SerialAddrOne= getJsonValue("SerialPort","SerialAddrOne",value.toObject()).toString();
@@ -148,6 +150,7 @@ void ChannelSettingWidget::jsonWritetoUI()
     ui->LeftCamer->setText(LeftCamer);
     ui->RgihtCamer->setText(RgihtCamer);
     ui->PlateCamer->setText(PlateCamer);
+    ui->Local_Addr->setText(LocalAddr);
 
     //ui->LicensePlate->setCurrentIndex(LicensePlate);
 
