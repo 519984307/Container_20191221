@@ -209,6 +209,14 @@ private:
 
     static ElectronicLicensePlate *pThis;
     static bool complate;
+
+
+private slots:
+
+    ///
+    /// \brief autoLinkCamer 链接事变自动重连
+    ///
+    void autoLinkCamer();
 };
 
 #endif // ELECTRONICLICENSEPLATE_H

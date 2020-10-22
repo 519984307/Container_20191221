@@ -92,6 +92,16 @@ private:
      ///
      bool com2=false;
 
+     ///
+     /// \brief port1 串口1
+     ///
+     QString port1;
+
+     ///
+     /// \brief port2 串口2
+     ///
+     QString port2;
+
 private:
 
      ///
@@ -129,6 +139,11 @@ private slots:
       /// \brief detectionLogicSlot 定时检测红外状态
       ///
       void detectionLogicSlot();
+
+      ///
+      /// \brief realyTheSerialport  串口打开失败重复打开
+      ///
+      void realyTheSerialport();
 
 public:
 

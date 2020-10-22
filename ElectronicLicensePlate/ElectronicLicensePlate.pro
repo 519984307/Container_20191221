@@ -8,7 +8,6 @@ QT        += gui
 
 CONFIG += plugin
 
-VERSION = 1.0
 
 TARGET = ElectronicLicensePlate
 TEMPLATE = lib

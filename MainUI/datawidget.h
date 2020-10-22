@@ -44,7 +44,8 @@ public:
 private:
 
 
-    QTimer* pTimer;
+    QTimer* pTimer1;
+    QTimer* pTimer2;
 
 
     Ui::DataWidget *ui;

@@ -139,8 +139,8 @@ void ElectronicLicensePlate::initCameraSlot(const QString  &localAddr,const QStr
         CLIENT_LPRC_RegWTYGetGpioState(ElectronicLicensePlate::getGpioStateCallback);
         CLIENT_LPRC_RegSerialDataEvent(ElectronicLicensePlate::serialDataCallback);
 
-        QByteArray arr=imgPath.toLatin1();
-        CLIENT_LPRC_SetSavePath(arr.data());
+        //QByteArray arr=imgPath.toLatin1();
+        //CLIENT_LPRC_SetSavePath(arr.data());
 
         arrAddr=localAddr.toLatin1();
         if(CLIENT_LPRC_SetNetworkCardBind(arrAddr.data())==0){
@@ -161,6 +161,17 @@ void ElectronicLicensePlate::initCameraSlot(const QString  &localAddr,const QStr
     }
 }
 
+void ElectronicLicensePlate::autoLinkCamer()
+{
+    if(isSDKinit){
+        /*****************************
+        * @brief:链接失败重新链接
+        ******************************/
+        CLIENT_LPRC_InitSDK(static_cast<uint>(port),nullptr,0,arrAddr.data(),0);
+    }
+}
+
+
 void ElectronicLicensePlate::connectCallback(char *chWTYIP, UINT nStatus, LDWORD dwUser)
 {
     bool state=false;
@@ -168,14 +179,23 @@ void ElectronicLicensePlate::connectCallback(char *chWTYIP, UINT nStatus, LDWORD
         state=true;
     }
     emit pThis->equipmentStateSignal(state);
+
+    if(!state){
+        QTimer::singleShot(10000,pThis,SLOT(autoLinkCamer()));
+    }
 }
 
 void ElectronicLicensePlate::dataEx2Callback(CLIENT_LPRC_PLATE_RESULTEX *recResultEx, LDWORD dwUser)
 {
     QByteArray arrImg(reinterpret_cast<const char*>(recResultEx->pFullImage.pBuffer),recResultEx->pFullImage.nLen);
-    QString dateTime= QString("%1-%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
 
-    emit pThis->resultsTheLicensePlateSignal(QString::fromLocal8Bit(recResultEx->chLicense),QString::fromLocal8Bit(recResultEx->chColor),dateTime,nullptr);
+    /* 车牌相机时间，部分出现异常 */
+    //QString dateTime= QString("%1-%2-%3 %4:%5:%6").arg(recResultEx->shootTime.Year).arg(recResultEx->shootTime.Month).arg(recResultEx->shootTime.Day).arg(recResultEx->shootTime.Hour).arg(recResultEx->shootTime.Minute).arg(recResultEx->shootTime.Second);
+
+    /* 系统时间 */
+    QString dateTime=QDateTime::currentDateTime().toString("yyyy-M-d h:m:s");
+
+    emit pThis->resultsTheLicensePlateSignal(QString::fromLocal8Bit(recResultEx->chLicense),QString::fromLocal8Bit(recResultEx->chColor),dateTime,arrImg);
     emit pThis->messageSignal(ZBY_LOG("INFO"),tr("License Plate recognition results:%1-%2").arg(QString::fromLocal8Bit(recResultEx->chLicense)).arg(dateTime));
 
     pThis->saveImg(arrImg,dateTime);

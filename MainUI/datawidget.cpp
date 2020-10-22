@@ -11,15 +11,23 @@ DataWidget::DataWidget(QWidget *parent) :
     this->setHidden(true);
     this->setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
 
-    pTimer=new QTimer(this);
-    QTimer::singleShot(6000,this,SLOT(timeOutSendPlate()));
-    connect(pTimer,SIGNAL(timeout()),this,SLOT(timeOutSendPlate));
+    pTimer1=new QTimer(this);
+    pTimer2=new QTimer(this);
+    //QTimer::singleShot(6000,this,SLOT(timeOutSendPlate()));
+    pTimer1->setSingleShot(true);
+    pTimer2->setSingleShot(true);
+    connect(pTimer1,SIGNAL(timeout()),this,SLOT(logicStateSlot()));
+    connect(pTimer2,SIGNAL(timeout()),this,SLOT(timeOutSendPlate()));
+
 }
 
 DataWidget::~DataWidget()
 {
-    if(pTimer->isActive()){
-        pTimer->stop();
+    if(pTimer1->isActive()){
+        pTimer1->stop();
+    }
+    if(pTimer2->isActive()){
+        pTimer2->stop();
     }
 
     delete ui;
@@ -68,29 +76,40 @@ void DataWidget::logicStatusSlot(int *status)
     ui->checkBox_4->setChecked(status[3]);
     ui->checkBox_5->setChecked(status[4]);
     ui->checkBox_6->setChecked(status[2]);
+    ui->checkBox_7->setChecked(status[5]);
 
     logicList.clear();
 
     for(int i=0;i<5;i++){
+        if(i==2){
+            continue;
+        }
         logicList<<status[i];
     }
 }
 
 void DataWidget::logicStateSlot()
 {
-    QSet<int> set= logicList.toSet();
-    if(set.count()==2){
-        isConCar=true;
-    }else {
-        isConCar=false;
+    isConCar=false;
+
+    /*****************************
+    * @brief:记录红外状态
+    ******************************/
+    QList<int> tmpList;
+    tmpList<<ui->checkBox_2->checkState()<<ui->checkBox_3->checkState()<<ui->checkBox_4->checkState()<<ui->checkBox_5->checkState();
+    for (int var = 0; var < logicList.count(); ++var) {
+        if(logicList[var]!=tmpList[var]){
+            isConCar=true;
+        }
     }
 
-
+    logicList.clear();
+    tmpList.clear();
 
     /*****************************
     * @brief: 不是集卡车通过，直接写入数据库。
     ******************************/
-    if(!isConCar){
+    if(!isConCar && ui->lineEdit_13->text()!=""){
 
         QMap<QString ,QString> data;
 
@@ -110,46 +129,49 @@ void DataWidget::logicStateSlot()
         /*****************************
         * @brief:发送车牌数据
         ******************************/
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
 
         ui->lineEdit_11->clear();
         ui->lineEdit_12->clear();
         ui->lineEdit_13->clear();
     }
-    else {
-        if(pTimer->isActive()){
-            pTimer->stop();
+
+    if(isConCar && ui->lineEdit_13->text()!=""){
+        if(pTimer2->isActive()){
+            pTimer2->stop();
         }
-        pTimer->start(10000);
+        pTimer2->start(15000);
     }
 }
 
 void DataWidget::timeOutSendPlate()
 {
-    QMap<QString ,QString> data;
+    if(isConCar && ui->lineEdit_13->text()!=""){
+        QMap<QString ,QString> data;
 
-    data.insert("Channel",QString::number(channelNum));
-    data.insert("PlateTimer",QString("%1").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyy-MM-dd hh:mm:ss")));
-    data.insert("Plate",ui->lineEdit_11->text());
-    data.insert("PlateImg",QString("%1%2%3.jpg").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(7).arg(channelNum));
+        data.insert("Channel",QString::number(channelNum));
+        data.insert("PlateTimer",QString("%1").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyy-MM-dd hh:mm:ss")));
+        data.insert("Plate",ui->lineEdit_11->text());
+        data.insert("PlateImg",QString("%1%2%3.jpg").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(7).arg(channelNum));
 
-    emit insertDataBaseSignal(data);
-    data.clear();
+        emit insertDataBaseSignal(data);
+        data.clear();
 
-    /*****************************
-    * @brief:发送车牌数据
-    ******************************/
+        /*****************************
+        * @brief:发送车牌数据
+        ******************************/
 
-    int color=1;
-    if(ui->lineEdit_12->text()=="蓝"){
-        color=0;
+        int color=1;
+        if(ui->lineEdit_12->text()=="蓝"){
+            color=0;
+        }
+
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
     }
-
-    emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
-
-    ui->lineEdit_11->clear();
-    ui->lineEdit_12->clear();
-    ui->lineEdit_13->clear();
 }
 
 void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNumber)
@@ -263,8 +285,11 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
     /*****************************
     * @brief: 停止等待箱号超时
     ******************************/
-    if(pTimer->isActive()){
-        pTimer->stop();
+    if(pTimer1->isActive()){
+        pTimer1->stop();
+    }
+    if(pTimer2->isActive()){
+        pTimer2->stop();
     }
 
     /* Tupe,集装箱类别:
@@ -357,12 +382,12 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         * @brief:发送车牌数据
         ******************************/
         //emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(dateTime).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
-    }
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
 
-    ui->lineEdit_11->clear();
-    ui->lineEdit_12->clear();
-    ui->lineEdit_13->clear();
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
+    }
 }
 
 void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QString &alisa)
@@ -422,6 +447,39 @@ void DataWidget::theVideoStreamSlot(QByteArray arrImg)
 
 void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString &color, const QString &time, QByteArray arrImg)
 {    
+    if(ui->lineEdit_13->text()!=""){
+        QMap<QString ,QString> data;
+
+        data.insert("Channel",QString::number(channelNum));
+        data.insert("PlateTimer",QString("%1").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyy-MM-dd hh:mm:ss")));
+        data.insert("Plate",ui->lineEdit_11->text());
+        data.insert("PlateImg",QString("%1%2%3.jpg").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(7).arg(channelNum));
+
+        emit insertDataBaseSignal(data);
+        data.clear();
+
+        /*****************************
+        * @brief:发送车牌数据
+        ******************************/
+
+        int color=1;
+        if(ui->lineEdit_12->text()=="蓝"){
+            color=0;
+        }
+
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
+    }
+
+    /*****************************
+    * @brief:记录红外状态
+    ******************************/
+    logicList.clear();
+    logicList<<ui->checkBox_2->checkState()<<ui->checkBox_3->checkState()<<ui->checkBox_4->checkState()<<ui->checkBox_5->checkState();
+
     ui->lineEdit_6->setText(plate);
     ui->lineEdit_11->setText(plate);
     ui->lineEdit_10->setText(plate);
@@ -436,7 +494,14 @@ void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString 
 
     arrImg.clear();
 
-    QTimer::singleShot(2000,this,SLOT(logicStateSlot()));
+    if(color=="黄"){
+        pTimer1->start(6000);
+    }
+    else {
+        isConCar=false;
+        pTimer1->start(0);
+    }
+    //QTimer::singleShot(5000,this,SLOT(logicStateSlot()));
 }
 
 void DataWidget::equipmentStateSlot(bool state)

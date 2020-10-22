@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QCoreApplication>
 #include <QThread>
+#include <QTimer>
 
 #if defined(ELECTRONICLICENSEPLATE_LIBRARY)
 #  define ELECTRONICLICENSEPLATESHARED_EXPORT Q_DECL_EXPORT
