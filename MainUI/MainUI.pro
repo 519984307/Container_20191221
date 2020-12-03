@@ -51,6 +51,7 @@ SOURCES += \
 
 HEADERS += \
         mainwidget.h\
+    middlewareinterface.h \
     picturewidget.h \
     datawidget.h \
     systemsettingwidget.h \

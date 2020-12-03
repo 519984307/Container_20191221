@@ -157,7 +157,7 @@ signals:
     /// \brief openTheVideoSlot 打开视频/关闭视频
     /// \param play
     ///
-    void openTheVideoSignal(bool play);
+    void openTheVideoSignal(bool play,quint64 winID);
 
     ///
     /// \brief insertDataBaseSignal 插入数据库

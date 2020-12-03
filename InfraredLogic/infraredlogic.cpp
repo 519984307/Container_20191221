@@ -82,215 +82,215 @@ bool InfraredLogic::compareStatus(int *before, int *after)
 }
 
 // 標準邏輯
-//void InfraredLogic::serialLogic(int *status)
-//{
-//    /*
-//     * 红外逻辑(一定要判断状态),1)如果A2无信号,过车释放A1,会导致后3张图偏移.(处理完成)
-//     * 常开[false|0,0,0,0]|常闭[true|1,1,1,1]
-//    */
-//    //if(compareStatus(status,tmpStatus)){
-//        /*
-//         * clearn
-//        */
-//        if(status[0]==valueOne && status[1]==valueTwo && status[3]==valueTwo && status[4]==valueTwo){
-//            emit logicPutImageSignal(-1);
-//            health=true;
-//            return;
-//        }
+void InfraredLogic::serialLogic(int *status)
+{
+    /*
+     * 红外逻辑(一定要判断状态),1)如果A2无信号,过车释放A1,会导致后3张图偏移.(处理完成)
+     * 常开[false|0,0,0,0]|常闭[true|1,1,1,1]
+    */
+    //if(compareStatus(status,tmpStatus)){
+        /*
+         * clearn
+        */
+        if(status[0]==valueOne && status[1]==valueTwo && status[3]==valueTwo && status[4]==valueTwo){
+            emit logicPutImageSignal(-1);
+            health=true;
+            return;
+        }
 
-//        if(health){
-//            /*
-//             * 45G1 front
-//            */
-//            if(status[0]==valueOne && status[1]==valueOne && status[3]==valueOne && status[4]==valueOne){
-//                if(!_22G1_22G1 && !_22G1_22G1_STATE){/* 过滤双箱重复抓图 */
-//                    emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
-//                    emit logicPutImageSignal(0);
-//                    _45G1=true;
-//                    _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
-//                }
-//                else {
-//                    _45G1=false;
-//                    _22G1_22G1=true;/* 双箱 */
-//                }
-//                _22G1=false;
-//            }
+        if(health){
+            /*
+             * 45G1 front
+            */
+            if(status[0]==valueOne && status[1]==valueOne && status[3]==valueOne && status[4]==valueOne){
+                if(!_22G1_22G1 && !_22G1_22G1_STATE){/* 过滤双箱重复抓图 */
+                    emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
+                    emit logicPutImageSignal(0);
+                    _45G1=true;
+                    _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
+                }
+                else {
+                    _45G1=false;
+                    _22G1_22G1=true;/* 双箱 */
+                }
+                _22G1=false;
+            }
 
-//            //_45G1_CAR=false;
-//            _22G1_22G1_STATE=false;
+            //_45G1_CAR=false;
+            _22G1_22G1_STATE=false;
 
-//            /*
-//             *  45G1 after
-//            */
-//            if(_45G1){
-//                if(status[0]==valueTwo && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-//                    emit logicPutImageSignal(1);
-//                    _22G1_22G1=false;
-//                    _22G1_MID_22G1=false;
-//                    _22G1_22G1_STATE=false;
-//                    _45G1=false;
-//                    health=false;
-//                    return;
-//                }
-//            }
-//            /*
-//             * 22G1 front
-//            */
-//            if(status[0]==valueOne && status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
-//                _22G1=true;
-//                _45G1=false;/* 防止高车头小箱放后面,误认为是45G1 */
-//                //return;//防止跳过长箱加高车头
-//            }
-//            /*
-//             * 22G1 after
-//            */
-//            if(_22G1 && status[0]==valueTwo && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-//                emit logicPutImageSignal(2);
-//                _22G1=false;
-//                _22G1_22G1=false;
-//                _22G1_MID_22G1=false;
-//                _22G1_22G1_STATE=false;
-//                _45G1=false;
-//                health=false;
-//                return;
-//            }
+            /*
+             *  45G1 after
+            */
+            if(_45G1){
+                if(status[0]==valueTwo && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+                    emit logicPutImageSignal(1);
+                    _22G1_22G1=false;
+                    _22G1_MID_22G1=false;
+                    _22G1_22G1_STATE=false;
+                    _45G1=false;
+                    health=false;
+                    return;
+                }
+            }
+            /*
+             * 22G1 front
+            */
+            if(status[0]==valueOne && status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
+                _22G1=true;
+                _45G1=false;/* 防止高车头小箱放后面,误认为是45G1 */
+                //return;//防止跳过长箱加高车头
+            }
+            /*
+             * 22G1 after
+            */
+            if(_22G1 && status[0]==valueTwo && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+                emit logicPutImageSignal(2);
+                _22G1=false;
+                _22G1_22G1=false;
+                _22G1_MID_22G1=false;
+                _22G1_22G1_STATE=false;
+                _45G1=false;
+                health=false;
+                return;
+            }
 
-//            /*
-//             * 22G1_22G1 检测双箱状态
-//            */
-//            if(_22G1_MID_22G1 && status[0]==valueOne && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-//                _22G1_22G1=true;
-//                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
-//                return;
-//            }
+            /*
+             * 22G1_22G1 检测双箱状态
+            */
+            if(_22G1_MID_22G1 && status[0]==valueOne && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+                _22G1_22G1=true;
+                _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
+                return;
+            }
 
-//            /*
-//             *  长箱加高车头
-//            */
-//            if(_22G1_MID_22G1 && status[0]==valueOne && status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
-//                _22G1_22G1=false;
-//                return;
-//            }
+            /*
+             *  长箱加高车头
+            */
+            if(_22G1_MID_22G1 && status[0]==valueOne && status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
+                _22G1_22G1=false;
+                return;
+            }
 
-//            /*
-//             * 双箱加高车头
-//            */
-//            if(_22G1_MID_22G1 && !_22G1_22G1 && status[0]==valueOne && status[1]==valueOne && status[3]==valueTwo && status[4]==valueOne){
-//                _22G1_22G1_STATE=true;
-//                return;
-//            }
+            /*
+             * 双箱加高车头
+            */
+            if(_22G1_MID_22G1 && !_22G1_22G1 && status[0]==valueOne && status[1]==valueOne && status[3]==valueTwo && status[4]==valueOne){
+                _22G1_22G1_STATE=true;
+                return;
+            }
 
-//            if(_22G1_22G1 && status[0]==valueTwo && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-//                emit logicPutImageSignal(4);
-//                _22G1_22G1=false;
-//                _22G1_MID_22G1=false;
-//                _22G1_22G1_STATE=false;
-//                _45G1=false;
-//                health=false;
-//                return;
-//            }
-//        }
-//    //}
-//    //memcpy(tmpStatus,status,sizeof (tmpStatus));
-//}
+            if(_22G1_22G1 && status[0]==valueTwo && status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+                emit logicPutImageSignal(4);
+                _22G1_22G1=false;
+                _22G1_MID_22G1=false;
+                _22G1_22G1_STATE=false;
+                _45G1=false;
+                health=false;
+                return;
+            }
+        }
+    //}
+    //memcpy(tmpStatus,status,sizeof (tmpStatus));
+}
 
 /*****************************
 * @brief: 福州軟著-陳學文-A1不釋放
 ******************************/
-void InfraredLogic::serialLogic(int *status)
-{
-    /*
-     * 45G1 front
-    */
-    if(/*status[0]==valueOne && */status[1]==valueOne && status[3]==valueOne && status[4]==valueOne){
-        if(!_22G1_22G1 && !_22G1_22G1_STATE){/* 过滤双箱重复抓图 */
-            emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
-            emit logicPutImageSignal(0);
-            _45G1=true;
-            _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
-        }
-        else {
-            _45G1=false;
-            _22G1_22G1=true;/* 双箱 */
-        }
-        _22G1=false;
-    }
+//void InfraredLogic::serialLogic(int *status)
+//{
+//    /*
+//     * 45G1 front
+//    */
+//    if(/*status[0]==valueOne && */status[1]==valueOne && status[3]==valueOne && status[4]==valueOne){
+//        if(!_22G1_22G1 && !_22G1_22G1_STATE){/* 过滤双箱重复抓图 */
+//            emit logicPutImageSignal(-1);/* 过滤高车头抓拍的无效图片 */
+//            emit logicPutImageSignal(0);
+//            _45G1=true;
+//            _22G1_MID_22G1=true;/* 双22尺箱和45尺箱前3张图片触发逻辑一样 */
+//        }
+//        else {
+//            _45G1=false;
+//            _22G1_22G1=true;/* 双箱 */
+//        }
+//        _22G1=false;
+//    }
 
-    //_45G1_CAR=false;
-    _22G1_22G1_STATE=false;
+//    //_45G1_CAR=false;
+//    _22G1_22G1_STATE=false;
 
-    /*
-     *  45G1 after
-    */
-    if(_45G1){
-        if(/*status[0]==valueTwo && */status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-            emit logicPutImageSignal(1);
-            _22G1_22G1=false;
-            _22G1_MID_22G1=false;
-            _22G1_22G1_STATE=false;
-            _45G1=false;
-            health=false;
-            return;
-        }
-    }
-    /*
-     * 22G1 front
-    */
-    if(/*status[0]==valueOne && */status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
-        _22G1=true;
-        _45G1=false;/* 防止高车头小箱放后面,误认为是45G1 */
-        //return;//防止跳过长箱加高车头
-    }
-    /*
-     * 22G1 after
-    */
-    if(_22G1 && /*status[0]==valueTwo &&*/ status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-        emit logicPutImageSignal(-1);
-        emit logicPutImageSignal(2);
-        _22G1=false;
-        _22G1_22G1=false;
-        _22G1_MID_22G1=false;
-        _22G1_22G1_STATE=false;
-        _45G1=false;
-        health=false;
-        return;
-    }
+//    /*
+//     *  45G1 after
+//    */
+//    if(_45G1){
+//        if(/*status[0]==valueTwo && */status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+//            emit logicPutImageSignal(1);
+//            _22G1_22G1=false;
+//            _22G1_MID_22G1=false;
+//            _22G1_22G1_STATE=false;
+//            _45G1=false;
+//            health=false;
+//            return;
+//        }
+//    }
+//    /*
+//     * 22G1 front
+//    */
+//    if(/*status[0]==valueOne && */status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
+//        _22G1=true;
+//        _45G1=false;/* 防止高车头小箱放后面,误认为是45G1 */
+//        //return;//防止跳过长箱加高车头
+//    }
+//    /*
+//     * 22G1 after
+//    */
+//    if(_22G1 && /*status[0]==valueTwo &&*/ status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+//        emit logicPutImageSignal(-1);
+//        emit logicPutImageSignal(2);
+//        _22G1=false;
+//        _22G1_22G1=false;
+//        _22G1_MID_22G1=false;
+//        _22G1_22G1_STATE=false;
+//        _45G1=false;
+//        health=false;
+//        return;
+//    }
 
-    /*
-     * 22G1_22G1 检测双箱状态
-    */
-    if(_22G1_MID_22G1 && /*status[0]==valueOne &&*/ status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-        _22G1_22G1=true;
-        _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
-        return;
-    }
+//    /*
+//     * 22G1_22G1 检测双箱状态
+//    */
+//    if(_22G1_MID_22G1 && /*status[0]==valueOne &&*/ status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+//        _22G1_22G1=true;
+//        _45G1=false;/* 判断是双箱,双箱和长箱前3张逻辑一样 */
+//        return;
+//    }
 
-    /*
-     *  长箱加高车头
-    */
-    if(_22G1_MID_22G1 && /*status[0]==valueOne &&*/ status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
-        _22G1_22G1=false;
-        return;
-    }
+//    /*
+//     *  长箱加高车头
+//    */
+//    if(_22G1_MID_22G1 && /*status[0]==valueOne &&*/ status[1]==valueOne && status[3]==valueOne && status[4]==valueTwo){
+//        _22G1_22G1=false;
+//        return;
+//    }
 
-    /*
-     * 双箱加高车头
-    */
-    if(_22G1_MID_22G1 && !_22G1_22G1 && /*status[0]==valueOne &&*/ status[1]==valueOne && status[3]==valueTwo && status[4]==valueOne){
-        _22G1_22G1_STATE=true;
-        return;
-    }
+//    /*
+//     * 双箱加高车头
+//    */
+//    if(_22G1_MID_22G1 && !_22G1_22G1 && /*status[0]==valueOne &&*/ status[1]==valueOne && status[3]==valueTwo && status[4]==valueOne){
+//        _22G1_22G1_STATE=true;
+//        return;
+//    }
 
-    if(_22G1_22G1 && /*status[0]==valueTwo &&*/ status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
-        emit logicPutImageSignal(4);
-        _22G1_22G1=false;
-        _22G1_MID_22G1=false;
-        _22G1_22G1_STATE=false;
-        _45G1=false;
-        health=false;
-        return;
-    }
-}
+//    if(_22G1_22G1 && /*status[0]==valueTwo &&*/ status[1]==valueTwo && status[3]==valueOne && status[4]==valueOne){
+//        emit logicPutImageSignal(4);
+//        _22G1_22G1=false;
+//        _22G1_MID_22G1=false;
+//        _22G1_22G1_STATE=false;
+//        _45G1=false;
+//        health=false;
+//        return;
+//    }
+//}
 
 void InfraredLogic::startSlaveSlot(const QString &portName1, const QString &portName2)
 {

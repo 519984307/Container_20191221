@@ -72,6 +72,13 @@ private:
     ///
     bool numberCheck(QString &number);
 
+    ///
+    /// \brief queueContainerNumber 统计箱号出现次数，分析箱号
+    /// \param QString
+    /// \return
+    ///
+    QString queueContainerNumber(QList<QString> list);
+
 private:
 
     ///

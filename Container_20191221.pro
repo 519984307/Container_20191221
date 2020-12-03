@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    ElectronicLicensePlateHCNET \
     MainUI \
     InfraredLogic\
     CaptureImages\
@@ -11,6 +12,7 @@ SUBDIRS += \
     SocketService \
     Encryption \
     CaptureUnderlying \
+    TheMiddlewareHCNET \
     ToUploadData \
     DataInterchange \
     ElectronicLicensePlate

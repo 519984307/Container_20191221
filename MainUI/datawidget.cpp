@@ -56,6 +56,7 @@ void DataWidget::resizeEvent(QResizeEvent *size)
             ui->Img_RightFront_label->size().scale(W,H,Qt::IgnoreAspectRatio);
         }
     }
+    QWidget::resizeEvent(size);
 }
 
 void DataWidget::hideEvent(QHideEvent *event)
@@ -129,7 +130,7 @@ void DataWidget::logicStateSlot()
         /*****************************
         * @brief:发送车牌数据
         ******************************/
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()));
 
         ui->lineEdit_11->clear();
         ui->lineEdit_12->clear();
@@ -146,6 +147,9 @@ void DataWidget::logicStateSlot()
 
 void DataWidget::timeOutSendPlate()
 {
+    /*****************************
+    * @brief:超时没有收到集装箱数据，直接发送车牌
+    ******************************/
     if(isConCar && ui->lineEdit_13->text()!=""){
         QMap<QString ,QString> data;
 
@@ -166,7 +170,7 @@ void DataWidget::timeOutSendPlate()
             color=0;
         }
 
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()));
 
         ui->lineEdit_11->clear();
         ui->lineEdit_12->clear();
@@ -282,6 +286,7 @@ void DataWidget::pictureStreamSlot(const QByteArray &jpgStream, const int &imgNu
 
 void DataWidget::containerSlot(const int& type,const QString &result1,const int& resultCheck1,const QString &iso1,const QString &result2,const int& resultCheck2,const QString &iso2)
 {
+
     /*****************************
     * @brief: 停止等待箱号超时
     ******************************/
@@ -300,7 +305,7 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
      */
 
     /*****************************
-    * @brief: 前箱结果附加时间戳,通道号
+    * @brief: 前箱结果后期附加时间戳,通道号
     ******************************/
     QStringList tmp=result1.split('@');
 
@@ -378,15 +383,33 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
             color=0;
         }
 
+        //----------------------------------------------
         /*****************************
         * @brief:发送车牌数据
         ******************************/
         //emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum).arg(ui->lineEdit_10->text()).arg(color));
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+        //emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+
+
+        QString time=QString("%1").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss"));
+        if(type==2){
+            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型|车牌|颜色] *//* 颜色暂时不需要 */
+            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10|%11]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(result2).arg(resultCheck2?"Y":"N").arg(iso1).arg(iso2).arg(ui->lineEdit_11->text());
+            emit sendResultSignal(channelNum,result);
+        }
+        else {
+            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型|车牌|颜色]*//* 颜色暂时不需要 */
+            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(iso1).arg(ui->lineEdit_11->text());
+            emit sendResultSignal(channelNum,result);
+        }
+
+
+        //---------------------------------------------
 
         ui->lineEdit_11->clear();
         ui->lineEdit_12->clear();
         ui->lineEdit_13->clear();
+
     }
 }
 
@@ -430,7 +453,7 @@ void DataWidget::imageFlowSlot(QByteArray img)
 {
     QPixmap pix;
     pix.loadFromData(img);
-    ui->label_3->setPixmap(pix);
+    ui->label_4->setPixmap(pix);
 
     img.clear();
 }
@@ -446,7 +469,8 @@ void DataWidget::theVideoStreamSlot(QByteArray arrImg)
 }
 
 void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString &color, const QString &time, QByteArray arrImg)
-{    
+{     
+    ui->label_3->setText(plate+color+time);
     if(ui->lineEdit_13->text()!=""){
         QMap<QString ,QString> data;
 
@@ -467,7 +491,7 @@ void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString 
             color=0;
         }
 
-        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
+        emit sendResultSignal(channelNum,QString("[U|%1|%2|%3]").arg(QDateTime::fromString(ui->lineEdit_13->text(),"yyyy-M-d h:m:s").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()));
 
         ui->lineEdit_11->clear();
         ui->lineEdit_12->clear();
@@ -494,12 +518,12 @@ void DataWidget::resultsTheLicensePlateSlot(const QString &plate, const QString 
 
     arrImg.clear();
 
-    if(color=="黄"){
-        pTimer1->start(6000);
+    if(color=="黄" || color==""){
+        pTimer1->start(10000);
     }
     else {
         isConCar=false;
-        pTimer1->start(0);
+        pTimer1->start(1);
     }
     //QTimer::singleShot(5000,this,SLOT(logicStateSlot()));
 }
@@ -551,4 +575,5 @@ void DataWidget::on_pushButton_2_clicked(bool checked)
 {
     //emit openTheVideoSignal(checked);
     openStream=checked;
+    emit openTheVideoSignal(openStream,ui->label_3->winId());
 }

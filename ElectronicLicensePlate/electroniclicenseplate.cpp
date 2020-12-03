@@ -265,7 +265,7 @@ void ElectronicLicensePlate::transparentTransmission485Slot(const QString &msg)
     }    
 }
 
-void ElectronicLicensePlate::openTheVideoSlot(bool play)
+void ElectronicLicensePlate::openTheVideoSlot(bool play,quint64 winID)
 {
     int mark=0;
     if(play){
@@ -289,5 +289,46 @@ void ElectronicLicensePlate::releaseResourcesSlot()
 //    }
 //    else {
 //        messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 The license plate camera failed to disconnect").arg(address));
+//    }
+}
+
+
+
+/*****************************
+* @brief:海康相机其它实现
+******************************/
+
+void ElectronicLicensePlate::slot_pictureStream(int ID, QByteArray arrJpg)
+{
+//    if(ID==camerID){
+//        emit pictureStreamSignal(arrJpg,imgNumber,imgTime);
+//        //emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put Command Sucess").arg(camerIP));
+//    }
+    /*****************************
+    * @brief:车牌不处理箱号信息
+    ******************************/
+}
+
+void ElectronicLicensePlate::slot_setCameraID(int ID, QString cameraIP)
+{
+//    if(camerIP==cameraIP){
+//        camerID=ID;
+//        emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Set the ID[%2]").arg(cameraIP).arg(ID));
+//    }
+}
+
+void ElectronicLicensePlate::slot_resultsTheLicensePlate(int ID, const QString &plate, const QString &color, const QString &time, QByteArray arrImg)
+{
+//    if(camerID==ID){
+//        saveImg(arrImg,time);
+//        emit resultsTheLicensePlateSignal(plate,color,time,arrImg);
+//        emit messageSignal(ZBY_LOG("INFO"),tr("License Plate recognition results:%1 %2").arg(plate).arg(time));
+//    }
+}
+
+void ElectronicLicensePlate::slot_equipmentState(int ID, bool state)
+{
+//    if(camerID==ID){
+//        emit equipmentStateSignal(state);
 //    }
 }

@@ -32,6 +32,7 @@
 #include "ICaptureUnderlying.h"
 #include "INTERFACE/touploaddatainterface.h"
 #include "INTERFACE/licenseplateinterface.h"
+#include "middlewareinterface.h"
 
 //------------------------------------------------------------------------------------------------------------UI
 #include "picturewidget.h"
@@ -224,6 +225,23 @@ private:
     ///
     QMap<int,QObject*> ElectronicLicensePlateProcessingMap;
 
+
+    ///---------------------------------------------------------------
+    ///
+    /// \brief MiddlewareHCNETProcessingMap 海康相机海康相机中间件处理类
+    ///
+    QMap<int,QObject*> MiddlewareHCNETProcessingMap;
+
+    ///
+    /// \brief GetImageInterfaceMap 海康相机接口类，供海康相机中间件处理类使用
+    ///
+    QMap<int,QObject*> GetImageInterfaceMap;
+
+    ///
+    /// \brief LicenseInterfaceMap 海康相机(车牌)接口类，供海康相机中间件处理类使用
+    ///
+    QMap<int,QObject*> LicenseInterfaceMap;
+
 private:
 
     ///
@@ -349,6 +367,13 @@ private:
     /// \param num
     ///
     void ElectronicLicensePlatePlugin(LicensePlateInterface* pLicensePlateInterface,int num);
+
+    ///
+    /// \brief middlewareHCNETPlugin 海康相机中间键插件，和getImageInterface，不同实现。
+    /// \param pMiddlewareInterface
+    /// \param num
+    ///
+    void middlewareHCNETPlugin(MiddlewareInterface* pMiddlewareInterface,int num);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口

@@ -97,35 +97,40 @@ QString DataBaseWidget::checkFilter()
     QStringList filterList;    
 
     if(channel){
-        filterList.append(tr("Channel='%1'").arg(ui->Channel_spinBox->value()));
+        filterList.append(QString("Channel='%1'").arg(ui->Channel_spinBox->value()));
     }
     if(date){
-        filterList.append(tr("(Timer>='%1' AND Timer<='%2') OR (PlateTimer>='%1' AND PlateTimer<='%2')").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
+        filterList.append(QString("((Timer>='%1' AND Timer<='%2') OR (PlateTimer>='%1' AND PlateTimer<='%2'))").arg(ui->DateTime_Statrt_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")).arg(ui->DataTime_End_dateTimeEdit->dateTime().toString("yyyy-MM-dd HH:mm:ss")));
+    }
+    if(type){
+        if(ui->Type_comboBox->currentIndex()==4){/* 重箱 */
+            filterList.append(QString("(Type='%1' OR Type='%2' OR Type='%3')").arg(0).arg(1).arg(2));
+        }
+        else {
+            filterList.append(QString("Type='%1'").arg(ui->Type_comboBox->currentIndex()-1));
+        }
     }
     if(number){
         if(ui->Numbers_Front_lineEdit->text()!=""){
-            filterList.append(tr("ContainerFront='%1'").arg(ui->Numbers_Front_lineEdit->text()));
+            filterList.append(QString("ContainerFront='%1'").arg(ui->Numbers_Front_lineEdit->text()));
         }
         if(ui->Numbers_End_lineEdit->text()!=""){
-            filterList.append(tr("ContainerAfter='%1'").arg(ui->Numbers_End_lineEdit->text()));
+            filterList.append(QString("ContainerAfter='%1'").arg(ui->Numbers_End_lineEdit->text()));
         }
     }
     if(plate){
-        filterList.append(tr("Plate='%1'").arg(ui->Plate_lineEdit->text()));
-    }
-    if(type){
-        filterList.append(tr("Type='%1'").arg(ui->Type_comboBox->currentIndex()-1));
+        filterList.append(QString("Plate='%1'").arg(ui->Plate_lineEdit->text()));
     }
     if(check){
         if(ui->Yes_radioButton->isChecked()){
-            filterList.append(tr("(CheckFront='%1' AND CheckAfter='%1'))").arg(1));
+            filterList.append(QString("(CheckFront='%1' AND CheckAfter='%1'))").arg(1));
         }
         if(ui->No_radioButton->isChecked()){
-            filterList.append(tr("(CheckFront='%1' OR CheckAfter='%1')").arg(0));
+            filterList.append(QString("(CheckFront='%1' OR CheckAfter='%1')").arg(0));
         }
     }
     if(Isotype){
-        filterList.append(tr("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Iso_Type_comboBox->currentText()));
+        filterList.append(QString("(ISOFront='%1' OR ISOAfter='%1')").arg(ui->Iso_Type_comboBox->currentText()));
     }
     qDebug()<<filterList.join(" AND ");
     return  filterList.join(" AND ");
@@ -136,7 +141,7 @@ void DataBaseWidget::statisticalDataSlot(int rows, double correct, double error,
     ui->total_label->setText(QString::number(rows));
     ui->correct_label->setText(QString::number(correct));
     ui->error_label->setText(QString::number(error));
-    ui->rate_label->setText(tr("%1%").arg(QString::number(statistical,'f',2)));
+    ui->rate_label->setText(QString("%1%").arg(QString::number(statistical,'f',2)));
 }
 
 void DataBaseWidget::returnModelSlot( QSqlTableModel *model)
@@ -217,7 +222,7 @@ void DataBaseWidget::on_buttonBox_clicked(QAbstractButton *button)
         ui->tableView->clearSpans();
     }
     if(button==ui->buttonBox->button(QDialogButtonBox::Ok)){
-        setDataBaseFilterSignal(checkFilter());
+        emit setDataBaseFilterSignal(checkFilter());
     }
     else if (button==ui->buttonBox->button(QDialogButtonBox::Cancel)) {
         statisticalDataSlot(0,0,0,0);

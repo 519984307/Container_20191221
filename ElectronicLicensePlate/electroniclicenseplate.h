@@ -53,7 +53,7 @@ public:
     /// \brief openTheVideoSlot 打开视频/关闭视频
     /// \param play
     ///
-    void openTheVideoSlot(bool play)Q_DECL_OVERRIDE;
+    void openTheVideoSlot(bool play,quint64 winID=0)Q_DECL_OVERRIDE;
 
     ///
     /// \brief releaseResourcesSlot 释放动态库资源
@@ -217,6 +217,43 @@ private slots:
     /// \brief autoLinkCamer 链接事变自动重连
     ///
     void autoLinkCamer();
+
+
+
+
+    /*****************************
+    * @brief:海康相机其它实现
+    ******************************/
+public:
+    ///
+    /// \brief slot_pictureStream 分发图片数据
+    /// \param ID
+    /// \param arrJpg
+    ///
+    void slot_pictureStream(int ID,QByteArray arrJpg)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief slot_setCameraID 设置通道登录相机ID
+    /// \param ID 登录ID
+    /// \param cameraIP 相机地址
+    ///
+    void slot_setCameraID(int ID,QString cameraIP)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief slot_resultsTheLicensePlate 车牌结果
+    /// \param plate
+    ///
+    void slot_resultsTheLicensePlate(int ID,const QString &plate,const QString &color,const QString &time,QByteArray arrImg)Q_DECL_OVERRIDE;
+
+    ///
+    /// \brief slot_equipmentState  设备额在线状态
+    /// \param state
+    ///
+    void slot_equipmentState(int ID, bool state)Q_DECL_OVERRIDE;
+
+    /*****************************
+    * @brief:海康相机其它实现
+    ******************************/
 };
 
 #endif // ELECTRONICLICENSEPLATE_H

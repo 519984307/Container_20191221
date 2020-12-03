@@ -144,6 +144,27 @@ bool ResultsAnalysis::numberCheck(QString &number)
     return true;
 }
 
+QString ResultsAnalysis::queueContainerNumber(QList<QString> list)
+{
+    QMap<int,QString> conMap;
+    QSet<QString> set=list.toSet();
+    set.remove("");
+    QList<QString> tmpList=set.toList();
+
+    if(set.count()>1 && set.count()<list.count()){
+        for(int i=0;i<tmpList.count();i++){
+            foreach (auto var, list) {
+                if(var==tmpList[i]){
+                    conMap.insertMulti(i,var);
+                }
+            }
+        }
+    }
+
+    set.clear();
+    conMap.clear();
+}
+
 void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QStringList imgList)
 {   
     /* 外发协议,集装箱类别:
@@ -249,6 +270,13 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
     /* 双箱，分前3个结果和后3个结果独立处理,前箱下标,前箱型下标,后箱下标,后箱型下标,箱号置信度下表,箱型置信度下标 */
     int Cindex1=0;    int Iindex1=0;    int Cindex2=0;    int Iindex2=0;    uint32_t Cprobability=0;    uint32_t Iprobability=0;
     if(type==2 && conProbabilityTemp.count()==6){
+        /*****************************
+        * @brief:20201203 11：52
+        ******************************/
+        QList<QString> list={conTemp[3],conTemp[4],conTemp[5]};
+        QString number=queueContainerNumber(list);
+        list.clear();
+
         //bool checkCon=false;
         for (int var = 3; var < 6; ++var) {
             if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
@@ -374,13 +402,31 @@ void ResultsAnalysis::updateDataBase(int type, int Cindex1,int Iindex1, int Cind
         /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型] */
         QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(checkConList[Cindex1]?"Y":"N").arg(conTemp[Cindex2]).arg(checkConList[Cindex2]?"Y":"N").arg(isoTemp[Iindex1]).arg(isoTemp[Iindex2]);
         emit resultsAnalysisStateSignal(channel,result);
-        emit sendResultSignal(channel,result);
+
+        //-------------------
+
+        //emit sendResultSignal(channel,result);
+        /* dataWidget发送，这里不发送 */
+
+        //------------------
+
+
     }
     else {
         /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型]*/
         QString result=QString("[%1|%2|%3|%4|%5|%6|%7]").arg("C").arg(time).arg(channel,2,10,QLatin1Char('0')).arg(type).arg(conTemp[Cindex1]).arg(checkConList[Cindex1]?"Y":"N").arg(isoTemp[Iindex1]);
         emit resultsAnalysisStateSignal(channel,result);
-        emit sendResultSignal(channel,result);
+
+
+        //----------------------
+
+        //emit sendResultSignal(channel,result);
+        /* dataWidget发送，这里不发送 */
+
+
+
+        //------------------------
+
     }
 
     QMap<QString,QString> data;

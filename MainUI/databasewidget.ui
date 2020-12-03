@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>721</width>
+    <width>812</width>
     <height>592</height>
    </rect>
   </property>
@@ -1088,7 +1088,7 @@ color: rgb(255, 255, 255);</string>
             <bool>false</bool>
            </property>
            <property name="readOnly">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -1185,6 +1185,11 @@ color: rgb(255, 255, 255);</string>
            <item>
             <property name="text">
              <string>Double container</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>重车</string>
             </property>
            </item>
           </widget>

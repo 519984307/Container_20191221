@@ -128,10 +128,10 @@ void MainWidget::loadingParameters()
                 pDataWidget->setDataWidgetPar(pChannelSettingWidget->Channel_number);
             }
 
-            QStringList FrontCamer=pChannelSettingWidget->FrontCamer.split(";");
-            QStringList AfterCamer=pChannelSettingWidget->AfterCamer.split(";");
-            QStringList LeftCamer=pChannelSettingWidget->LeftCamer.split(";");
-            QStringList RgihtCamer=pChannelSettingWidget->RgihtCamer.split(";");
+            QStringList FrontCamer=pChannelSettingWidget->FrontCamer.trimmed().split(";");
+            QStringList AfterCamer=pChannelSettingWidget->AfterCamer.trimmed().split(";");
+            QStringList LeftCamer=pChannelSettingWidget->LeftCamer.trimmed().split(";");
+            QStringList RgihtCamer=pChannelSettingWidget->RgihtCamer.trimmed().split(";");
 
             int num=1;
             for (;var <=channel*4 ; ++var) {
@@ -176,9 +176,9 @@ void MainWidget::loadingParameters()
             }
             /* 车牌相机初始化 */
             if(ElectronicLicensePlateProcessing *pElectronicLicensePlateProcessing=qobject_cast<ElectronicLicensePlateProcessing*>(ElectronicLicensePlateProcessingMap[channel])){
-                if(!pChannelSettingWidget->PlateCamer.isEmpty()){
+                if(!pChannelSettingWidget->PlateCamer.isEmpty()){/* if WTY port 8080 else if HCNET port 8000 */
                     if(ChannelSettingWidget *pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(ChannelSettingWidgetMap[channel])){
-                        pElectronicLicensePlateProcessing->initCameraSignal(pChannelSettingWidget->LocalAddr,pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,pChannelSettingWidget->Channel_number);
+                        pElectronicLicensePlateProcessing->initCameraSignal(pChannelSettingWidget->LocalAddr,pChannelSettingWidget->PlateCamer,8000,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,pChannelSettingWidget->Channel_number);
                     }
                     //多通道
                     //pElectronicLicensePlateProcessing->initCameraSignal("192.168.1.100",pChannelSettingWidget->PlateCamer,8080,pSystemSettingWidget->pSettingValues->ImgPathOne,pSystemSettingWidget->pSettingValues->ImageFormatOne,channel);
@@ -551,6 +551,10 @@ void MainWidget::loadPlugins()
                 delete pGetimagesInterface;
                 pGetimagesInterface=nullptr;
                 num=channelCounnt*4;
+            }else if (MiddlewareInterface* pMiddlewareInterface=qobject_cast<MiddlewareInterface*>(plugin)) {
+                delete pMiddlewareInterface;
+                pMiddlewareInterface=nullptr;
+                num=1;
             }
             else if(ICaptureUnderlying* pICaptureUnderlying=qobject_cast<ICaptureUnderlying*>(plugin)) {
                 delete  pICaptureUnderlying;
@@ -643,6 +647,9 @@ void MainWidget::processingPlugins(QDir path, int num)
             if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
                 getImagePlugin(pGetimagesInterface,num--);
             }
+            else if (MiddlewareInterface* pMiddlewareInterface=qobject_cast<MiddlewareInterface*>(plugin)) {
+                middlewareHCNETPlugin(pMiddlewareInterface,num--);
+            }
             else if (ICaptureUnderlying* pICaptureUnderlying=qobject_cast<ICaptureUnderlying*>(plugin)) {
                 //captureUnderlyingPlugin(pICaptureUnderlying,num--);
             }
@@ -685,6 +692,8 @@ void MainWidget::processingPlugins(QDir path, int num)
 
 void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
 {
+    GetImageInterfaceMap.insert(num,pGetimagesInterface);
+
     ImageProcessing* pImageProcessing=new ImageProcessing (this);
     ImageProcessingMap.insert(num,pImageProcessing);
 
@@ -997,6 +1006,11 @@ void MainWidget::uploadDataPlugin(ToUploadDataInterface *pToUploadDataInterface,
 
 void MainWidget::ElectronicLicensePlatePlugin(LicensePlateInterface *pLicensePlateInterface, int num)
 {
+    /*****************************
+    * @brief:供海康车牌使用
+    ******************************/
+    LicenseInterfaceMap.insert(num,pLicensePlateInterface);
+
     ElectronicLicensePlateProcessing* pElectronicLicensePlateProcessing=new ElectronicLicensePlateProcessing (nullptr);
     ElectronicLicensePlateProcessingMap.insert(num,pElectronicLicensePlateProcessing);
 
@@ -1024,6 +1038,21 @@ void MainWidget::ElectronicLicensePlatePlugin(LicensePlateInterface *pLicensePla
     QThread* pThread=new QThread(this);
     pElectronicLicensePlateProcessing->moveToThread(pThread);
     pLicensePlateInterface->moveToThread(pThread);
+    ThreadList.append(pThread);
+    pThread->start();
+}
+
+void MainWidget::middlewareHCNETPlugin(MiddlewareInterface *pMiddlewareInterface, int num)
+{
+    MiddlewareHCNETProcessingMap.insert(num,pMiddlewareInterface);
+
+    /* 日志信息 */
+    connect(pMiddlewareInterface,&MiddlewareInterface::messageSignal,this,&MainWidget::messageSlot);
+    /* 释放资源 */
+    connect(this,&MainWidget::releaseResourcesSignal,pMiddlewareInterface,&MiddlewareInterface::releaseResourcesSlot);
+
+    QThread* pThread=new QThread(this);
+    pMiddlewareInterface->moveToThread(pThread);
     ThreadList.append(pThread);
     pThread->start();
 }
@@ -1100,6 +1129,44 @@ void MainWidget::publicConnect()
             }
         }
     }
+    /*****************************
+    * @brief:海康相机中间件，处理程序(一个DLL注册所有相机),改动注意！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    ******************************/
+    if(MiddlewareInterface* pMiddlewareInterface=qobject_cast<MiddlewareInterface*>(MiddlewareHCNETProcessingMap.value(1))){
+        foreach (auto obj, GetImageInterfaceMap.values()) {
+            if(GetImagesInterface* pGetImagesInterface=qobject_cast<GetImagesInterface*>(obj)){
+                connect(pGetImagesInterface,&GetImagesInterface::signal_initCamera,pMiddlewareInterface,&MiddlewareInterface::initCameraSlot);
+                connect(pGetImagesInterface,&GetImagesInterface::signal_openTheVideo,pMiddlewareInterface,&MiddlewareInterface::openTheVideoSlot);
+                connect(pGetImagesInterface,&GetImagesInterface::signal_simulationCapture,pMiddlewareInterface,&MiddlewareInterface::simulationCaptureSlot);
+                connect(pGetImagesInterface,&GetImagesInterface::signal_liftingElectronicRailing,pMiddlewareInterface,&MiddlewareInterface::liftingElectronicRailingSlot);
+                connect(pGetImagesInterface,&GetImagesInterface::signal_transparentTransmission485,pMiddlewareInterface,&MiddlewareInterface::transparentTransmission485Slot);
+
+                //connect(pMiddlewareInterface,&MiddlewareInterface::signal_message,pGetImagesInterface,&GetImagesInterface::initCameraSlot);
+                connect(pMiddlewareInterface,&MiddlewareInterface::signal_pictureStream,pGetImagesInterface,&GetImagesInterface::slot_pictureStream);
+                connect(pMiddlewareInterface,&MiddlewareInterface::signal_setCameraID,pGetImagesInterface,&GetImagesInterface::slot_setCameraID);
+                connect(pMiddlewareInterface,&MiddlewareInterface::equipmentStateSignal,pGetImagesInterface,&GetImagesInterface::slot_equipmentState);
+                connect(pMiddlewareInterface,&MiddlewareInterface::resultsTheLicensePlateSignal,pGetImagesInterface,&GetImagesInterface::slot_resultsTheLicensePlate);
+            }
+        }
+        /*****************************
+        * @brief:海康车牌
+        ******************************/
+        if(LicensePlateInterface* pLicensePlateInterface=qobject_cast<LicensePlateInterface*>(LicenseInterfaceMap[1])){
+            connect(pLicensePlateInterface,&LicensePlateInterface::signal_initCamera,pMiddlewareInterface,&MiddlewareInterface::initCameraSlot);
+            connect(pLicensePlateInterface,&LicensePlateInterface::signal_openTheVideo,pMiddlewareInterface,&MiddlewareInterface::openTheVideoSlot);
+            connect(pLicensePlateInterface,&LicensePlateInterface::signal_simulationCapture,pMiddlewareInterface,&MiddlewareInterface::simulationCaptureSlot);
+            connect(pLicensePlateInterface,&LicensePlateInterface::signal_liftingElectronicRailing,pMiddlewareInterface,&MiddlewareInterface::liftingElectronicRailingSlot);
+            connect(pLicensePlateInterface,&LicensePlateInterface::signal_transparentTransmission485,pMiddlewareInterface,&MiddlewareInterface::transparentTransmission485Slot);
+
+            //connect(pMiddlewareInterface,&MiddlewareInterface::signal_message,pGetImagesInterface,&GetImagesInterface::initCameraSlot);
+            connect(pMiddlewareInterface,&MiddlewareInterface::signal_pictureStream,pLicensePlateInterface,&LicensePlateInterface::slot_pictureStream);
+            connect(pMiddlewareInterface,&MiddlewareInterface::signal_setCameraID,pLicensePlateInterface,&LicensePlateInterface::slot_setCameraID);
+            connect(pMiddlewareInterface,&MiddlewareInterface::equipmentStateSignal,pLicensePlateInterface,&LicensePlateInterface::slot_equipmentState);
+            connect(pMiddlewareInterface,&MiddlewareInterface::resultsTheLicensePlateSignal,pLicensePlateInterface,&LicensePlateInterface::slot_resultsTheLicensePlate);
+        }
+    }
+
+
     foreach (auto obj, ChannelSettingWidgetMap.values()) {
         if(ChannelSettingWidget* pChannelSettingWidget=qobject_cast<ChannelSettingWidget*>(obj)){
             /* 绑定通道设定日志 */

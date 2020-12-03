@@ -76,7 +76,7 @@ void DataBaseInsert::insertDataBaseSlot(QMap<QString, QString> data)
         }
 
         if(!model.insertRecord(0,record)){
-            emit messageSignal(ZBY_LOG("ERROR"),tr("Insert data to databse  error<errorCOde=%1>").arg(model.lastError().text()));
+            emit messageSignal(ZBY_LOG("ERROR"),tr("Insert data to databse  error<errorCode=%1>").arg(model.lastError().text()));
         }
         else {
             emit messageSignal(ZBY_LOG("INFO"),tr("Insert data to databse  sucessful"));
@@ -142,10 +142,17 @@ void DataBaseInsert::updateDataBaseSlot(QMap<QString, QString> data)
             }
 
             if(!model.setRecord(0,record)){
-                emit messageSignal(ZBY_LOG("ERROR"),tr("Update data to databse  error<errorCOde=%1>").arg(model.lastError().text()));
+                emit messageSignal(ZBY_LOG("ERROR"),tr("Update data to databse  error<errorCode=%1>").arg(model.lastError().text()));
             }
             else {
-                emit messageSignal(ZBY_LOG("INFO"),tr("Update data to databse  sucessful time=%1").arg(data.value("Timer")));
+                QString timer="";
+                if(!data.value("Timer","").isEmpty()){
+                    timer=data.value("Timer");
+                }
+                else {
+                    timer=data.value("PlateTimer");
+                }
+                emit messageSignal(ZBY_LOG("INFO"),tr("Update data to databse  sucessful time=%1").arg(timer));
             }
             model.submitAll();
 
