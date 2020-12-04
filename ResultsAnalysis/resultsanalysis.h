@@ -74,10 +74,10 @@ private:
 
     ///
     /// \brief queueContainerNumber 统计箱号出现次数，分析箱号
-    /// \param QString
+    /// \param QStringList
     /// \return
     ///
-    QString queueContainerNumber(QList<QString> list);
+    QStringList queueContainerNumber(QStringList list);
 
 private:
 
