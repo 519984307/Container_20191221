@@ -303,33 +303,35 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
         }
         else {
-            bool checkCon=false;
-            for (int var = 3; var < 6; ++var) {
-                if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
-                    Cprobability=conProbabilityTemp[var];
+            int i=0;
+            for (int var = 3; var < 6; ++var) {/* 箱号校验 */
+                if(checkConList[var]){/* 只有一个检验正确，直接输出 */
                     Cindex1=var;
-                    checkCon=false;
+                    i++;
                 }
-                else if (conProbabilityTemp[var]==Cprobability) {
-                    checkCon=true;
-                }
-
                 if(isoProbabilityTemp[var]>Iprobability){
                     Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
                     Iindex1=var;
                 }
             }
-            if(checkCon){/* 多个置信度多个相同，比较校验位 */
-                for (int var = 3; var < 6; ++var) {
-                    if(conProbabilityTemp[var]==Cprobability){
-                        if(checkConList[var]){
-                            Cindex1=var;
-                            continue;
-                        }
+            if(i>1){
+                for (int var = 3; var < 6; ++var) {/* 箱号校验正确大于1个，对比置信度 */
+                    if(checkConList[var] && conProbabilityTemp[var]>Cprobability){
+                        Cindex1=var;
                     }
                 }
             }
+            if(i==0){/* 箱号校验都错，直接对比置信度 */
+                for (int var = 3; var < 6; ++var) {
+                    if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
+                        Cprobability=conProbabilityTemp[var];
+                        Cindex1=var;
+                    }
+                }
+            }
+
         }
+
 
         Cprobability=0; Iprobability=0;//checkCon=false;
         numberList.clear();
@@ -342,32 +344,33 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
         }
         else {
-            bool checkCon=false;
-            for (int var = 0; var < 3; ++var) {
-                if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
-                    Cprobability=conProbabilityTemp[var];
+            int i=0;
+            for (int var = 0; var < 3; ++var) {/* 箱号校验 */
+                if(checkConList[var]){/* 只有一个检验正确，直接输出 */
                     Cindex2=var;
-                    checkCon=false;
+                    i++;
                 }
-                else if (conProbabilityTemp[var]==Cprobability) {
-                    checkCon=true;
-                }
-
                 if(isoProbabilityTemp[var]>Iprobability){
                     Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
                     Iindex2=var;
                 }
             }
-            if(checkCon){/* 多个置信度多个相同，比较校验位 */
-                for (int var = 0; var < 3; ++var) {
-                    if(conProbabilityTemp[var]==Cprobability){
-                        if(checkConList[var]){
-                            Cindex2=var;
-                            continue;
-                        }
+            if(i>1){
+                for (int var = 0; var < 3; ++var) {/* 箱号校验正确大于1个，对比置信度 */
+                    if(checkConList[var] && conProbabilityTemp[var]>Cprobability){
+                        Cindex2=var;
                     }
                 }
             }
+            if(i==0){/* 箱号校验都错，直接对比置信度 */
+                for (int var = 0; var < 3; ++var) {
+                    if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
+                        Cprobability=conProbabilityTemp[var];
+                        Cindex2=var;
+                    }
+                }
+            }
+
         }
 
 
@@ -376,6 +379,9 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             /*****************************
             * @brief:时间戳供车牌使用(+"@"+dateTime+"@"+channel)
             ******************************/
+            if(isoTemp[Iindex1]==""){
+                isoTemp[Iindex1]="45G1";
+            }
             emit containerSignal(type,conTemp[Cindex1]+"@"+dateTime+"@"+channel,checkConList[Cindex1],isoTemp[Iindex1]);
             Cindex2=0;
             Iindex2=0;
@@ -384,6 +390,12 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             /*****************************
             * @brief:时间戳供车牌使用(+"@"+dateTime+"@"+channel)
             ******************************/
+            if(isoTemp[Iindex1]==""){
+                isoTemp[Iindex1]="22G1";
+            }
+            if(isoTemp[Iindex2]==""){
+                isoTemp[Iindex2]="22G1";
+            }
             emit containerSignal(type,conTemp[Cindex1]+"@"+dateTime+"@"+channel, checkConList[Cindex1],isoTemp[Iindex1],conTemp[Cindex2],checkConList[Cindex2],isoTemp[Iindex2]);
         }
 //        Cprobability=0; Iprobability=0;//checkCon=false;
@@ -425,33 +437,64 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
             }
         }
         else {
-            bool checkCon=false;
-            for (int var = 0; var < conProbabilityTemp.count(); ++var) {
-                if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
-                    Cprobability=conProbabilityTemp[var];
+            int i=0;
+            for (int var = 0; var < checkConList.count(); ++var) {/* 箱号校验 */
+                if(checkConList[var]){/* 只有一个检验正确，直接输出 */
                     Cindex1=var;
-                    checkCon=false;
+                    i++;
                 }
-                else if (conProbabilityTemp[var]==Cprobability) {
-                    checkCon=true;
-                }
-
                 if(isoProbabilityTemp[var]>Iprobability){
                     Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
                     Iindex1=var;
                 }
             }
-            if(checkCon){/* 多个置信度多个相同，比较校验位 */
-                for (int var = 0; var < conProbabilityTemp.count(); ++var) {
-                    if(conProbabilityTemp[var]==Cprobability){
-                        if(checkConList[var]){
-                            Cindex1=var;
-                            continue;
-                        }
+            if(i>1){
+                for (int var = 0; var < checkConList.count(); ++var) {/* 箱号校验正确大于1个，对比置信度 */
+                    if(checkConList[var] && conProbabilityTemp[var]>Cprobability){
+                        Cindex1=var;
                     }
                 }
             }
+            if(i==0){/* 箱号校验都错，直接对比置信度 */
+                for (int var = 0; var < checkConList.count(); ++var) {
+                    if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
+                        Cprobability=conProbabilityTemp[var];
+                        Cindex1=var;
+                    }
+                }
+            }
+
         }
+
+//        else {//202012042145
+//            bool checkCon=false;
+//            for (int var = 0; var < conProbabilityTemp.count(); ++var) {
+//                if(conProbabilityTemp[var]>Cprobability){/* 比对箱号置信度 */
+//                    Cprobability=conProbabilityTemp[var];
+//                    Cindex1=var;
+//                    checkCon=false;
+//                }
+//                else if (conProbabilityTemp[var]==Cprobability) {
+//                    checkCon=true;
+//                }
+
+//                if(isoProbabilityTemp[var]>Iprobability){
+//                    Iprobability=isoProbabilityTemp[var];/* 比对箱型置信度 */
+//                    Iindex1=var;
+//                }
+//            }
+//            if(checkCon){/* 多个置信度多个相同，比较校验位 */
+//                for (int var = 0; var < conProbabilityTemp.count(); ++var) {
+//                    if(conProbabilityTemp[var]==Cprobability){
+//                        if(checkConList[var]){
+//                            Cindex1=var;
+//                            continue;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
 //        for (int var = 0; var < conProbabilityTemp.count(); ++var) {
 //            if(conProbabilityTemp[var]>Cprobability){/* 对比箱号置信度 */
 //                Cprobability=conProbabilityTemp[var];
@@ -477,6 +520,9 @@ void ResultsAnalysis::resultsOfAnalysisSlot(QStringList resultList, int type, QS
         /*****************************
         * @brief:时间戳供车牌使用(+"@"+dateTime+"@"+channel)
         ******************************/
+        if(isoTemp[Iindex1]==""){
+            isoTemp[Iindex1]="45G1";
+        }
         emit containerSignal(type,conTemp[Cindex1]+"@"+dateTime+"@"+channel,checkConList[Cindex1],isoTemp[Iindex1]);
     }
     updateDataBase(type,Cindex1,Iindex1,Cindex2,Iindex2,imgList);
