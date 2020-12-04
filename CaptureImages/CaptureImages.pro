@@ -29,9 +29,10 @@ SOURCES += \
 
 HEADERS += \
     HCNetSDK.h \
+    ICaptureImages getimagesinterface.h \
+    ICaptureImages.h \
     captureimages.h \
-    captureimages_global.h \
-    getimagesinterface.h
+    captureimages_global.h
 
 unix {
     target.path = /usr/lib

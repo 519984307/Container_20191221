@@ -50,6 +50,7 @@ SOURCES += \
     PROCESSING/electroniclicenseplateprocessing.cpp
 
 HEADERS += \
+    ICaptureImages.h \
         mainwidget.h\
     middlewareinterface.h \
     picturewidget.h \
@@ -78,7 +79,6 @@ HEADERS += \
     logwidget.h \
     underlyinggetimagesprocessing.h \
     ICaptureUnderlying.h \
-    getimagesinterface.h \
     INTERFACE/touploaddatainterface.h \
     PROCESSING/uploaddataprocessing.h \
     INTERFACE/licenseplateinterface.h \

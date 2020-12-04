@@ -1,17 +1,18 @@
-#ifndef GETIMAGESINTERFACE_H
-#define GETIMAGESINTERFACE_H
+#ifndef ICAPTUREIMAGES_H
+#define ICAPTUREIMAGES_H
+
 
 #define ZBY_LOG(type)  tr("[%1][%2][%3]").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
 #define IMG_BYTE 1920*1080+1
 
 #include <QObject>
 
-class GetImagesInterface:public QObject
+class ICaptureImages:public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~GetImagesInterface(){}
+    virtual ~ICaptureImages(){}
 
 signals:
 
@@ -148,7 +149,7 @@ signals:
     ******************************/
 };
 
-#define GetImagesInterfaceIID "ZBY.ContainerServer.GetImagesInterface/1.0"
-Q_DECLARE_INTERFACE(GetImagesInterface,GetImagesInterfaceIID);
+#define ICaptureImagesIID "ZBY.ContainerServer.ICaptureImages/1.0"
+Q_DECLARE_INTERFACE(ICaptureImages,ICaptureImagesIID);
 
-#endif // GETIMAGESINTERFACE_H
+#endif // ICAPTUREIMAGES_H

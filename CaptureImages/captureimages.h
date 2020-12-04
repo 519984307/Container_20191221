@@ -3,15 +3,15 @@
 
 #include "HCNetSDK.h"
 #include "captureimages_global.h"
-#include "getimagesinterface.h"
+#include "ICaptureImages.h"
 
 #define CAMERA_TYPE 2
 
-class CAPTUREIMAGESSHARED_EXPORT CaptureImages:public GetImagesInterface
+class CAPTUREIMAGESSHARED_EXPORT CaptureImages:public ICaptureImages
 {
     Q_OBJECT
-    Q_INTERFACES(GetImagesInterface)
-    Q_PLUGIN_METADATA(IID  GetImagesInterfaceIID)
+    Q_INTERFACES(ICaptureImages)
+    Q_PLUGIN_METADATA(IID  ICaptureImagesIID)
 
 public:
     CaptureImages(QObject *parent = nullptr);

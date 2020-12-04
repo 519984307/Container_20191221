@@ -21,7 +21,7 @@
 #include <QMessageBox>
 
 //------------------------------------------------------------------------------------------------------------Interface
-#include "getimagesinterface.h"
+#include "ICaptureImages.h"
 #include "infraredlogicinterface.h"
 #include "databaseinsertinterface.h"
 #include "databasereadinterface.h"
@@ -300,7 +300,7 @@ private:
     /// \param pGetimagesInterface 相机类
     /// \param num 通道号
     ///
-    void getImagePlugin(GetImagesInterface* pGetimagesInterface,int num);
+    void getImagePlugin(ICaptureImages* pGetimagesInterface,int num);
 
     ///
     /// \brief underlyingGetimagesPlugin 处理底层抓拍插件

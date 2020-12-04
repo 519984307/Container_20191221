@@ -547,7 +547,7 @@ void MainWidget::loadPlugins()
             }
 
             int num=0;/* 通道数量 */
-            if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
+            if(ICaptureImages* pGetimagesInterface=qobject_cast<ICaptureImages*>(plugin)){
                 delete pGetimagesInterface;
                 pGetimagesInterface=nullptr;
                 num=channelCounnt*4;
@@ -644,7 +644,7 @@ void MainWidget::processingPlugins(QDir path, int num)
         QObject* plugin = pluginLoader.instance();
 
         if(plugin){
-            if(GetImagesInterface* pGetimagesInterface=qobject_cast<GetImagesInterface*>(plugin)){
+            if(ICaptureImages* pGetimagesInterface=qobject_cast<ICaptureImages*>(plugin)){
                 getImagePlugin(pGetimagesInterface,num--);
             }
             else if (MiddlewareInterface* pMiddlewareInterface=qobject_cast<MiddlewareInterface*>(plugin)) {
@@ -690,7 +690,7 @@ void MainWidget::processingPlugins(QDir path, int num)
     }
 }
 
-void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num)
+void MainWidget::getImagePlugin(ICaptureImages *pGetimagesInterface, int num)
 {
     GetImageInterfaceMap.insert(num,pGetimagesInterface);
 
@@ -700,25 +700,25 @@ void MainWidget::getImagePlugin(GetImagesInterface *pGetimagesInterface, int num
     /* 初始化动态库 */
 /*    connect(pImageProcessing,&ImageProcessing::InitializationSignal,pGetimagesInterface,&GetImagesInterface::InitializationSlot);*/
     /* 初始化相机 */
-    connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&GetImagesInterface::initCamerSlot);
+    connect(pImageProcessing,&ImageProcessing::initCamerSignal,pGetimagesInterface,&ICaptureImages::initCamerSlot);
     /* 日志信息 */
-    connect(pGetimagesInterface,&GetImagesInterface::messageSignal,this,&MainWidget::messageSlot);
+    connect(pGetimagesInterface,&ICaptureImages::messageSignal,this,&MainWidget::messageSlot);
     /* 释放动态库资源 */
-    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&GetImagesInterface::releaseResourcesSlot);//,Qt::BlockingQueuedConnection);
+    connect(this,&MainWidget::releaseResourcesSignal,pGetimagesInterface,&ICaptureImages::releaseResourcesSlot);//,Qt::BlockingQueuedConnection);
 
     if(PictureWidget* pPictureWidget=qobject_cast<PictureWidget*>(PictureWidgetMap[num])){
         /* 抓取图片 */
-        connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&GetImagesInterface::putCommandSlot);
+        connect(pPictureWidget,&PictureWidget::putCommandSignal,pGetimagesInterface,&ICaptureImages::putCommandSlot);
         /* 调整窗口 */
-        connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&GetImagesInterface::resizeEventSlot);
+        connect(pPictureWidget,&PictureWidget::resizeEventSignal,pGetimagesInterface,&ICaptureImages::resizeEventSlot);
         /* 播放视频流 */
-        connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&GetImagesInterface::playStreamSlot);
+        connect(pPictureWidget, &PictureWidget::playStreamSignal,pGetimagesInterface,&ICaptureImages::playStreamSlot);
         /* 接收图片流 */
-        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
+        connect(pGetimagesInterface,&ICaptureImages::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSlot);
         /* 相机状态(信号与信号绑定) */
-        connect(pGetimagesInterface,&GetImagesInterface::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
+        connect(pGetimagesInterface,&ICaptureImages::camerStateSingal,pPictureWidget, &PictureWidget::camerIDstatesSignal);
         /* 转发图片流信号,分流到数据界面(信号与信号绑定) */
-        connect(pGetimagesInterface,&GetImagesInterface::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
+        connect(pGetimagesInterface,&ICaptureImages::pictureStreamSignal,pPictureWidget,&PictureWidget::pictureStreamSignal);
     }
 
 //    /* 线程运行 */
@@ -1134,18 +1134,18 @@ void MainWidget::publicConnect()
     ******************************/
     if(MiddlewareInterface* pMiddlewareInterface=qobject_cast<MiddlewareInterface*>(MiddlewareHCNETProcessingMap.value(1))){
         foreach (auto obj, GetImageInterfaceMap.values()) {
-            if(GetImagesInterface* pGetImagesInterface=qobject_cast<GetImagesInterface*>(obj)){
-                connect(pGetImagesInterface,&GetImagesInterface::signal_initCamera,pMiddlewareInterface,&MiddlewareInterface::initCameraSlot);
-                connect(pGetImagesInterface,&GetImagesInterface::signal_openTheVideo,pMiddlewareInterface,&MiddlewareInterface::openTheVideoSlot);
-                connect(pGetImagesInterface,&GetImagesInterface::signal_simulationCapture,pMiddlewareInterface,&MiddlewareInterface::simulationCaptureSlot);
-                connect(pGetImagesInterface,&GetImagesInterface::signal_liftingElectronicRailing,pMiddlewareInterface,&MiddlewareInterface::liftingElectronicRailingSlot);
-                connect(pGetImagesInterface,&GetImagesInterface::signal_transparentTransmission485,pMiddlewareInterface,&MiddlewareInterface::transparentTransmission485Slot);
+            if(ICaptureImages* pGetImagesInterface=qobject_cast<ICaptureImages*>(obj)){
+                connect(pGetImagesInterface,&ICaptureImages::signal_initCamera,pMiddlewareInterface,&MiddlewareInterface::initCameraSlot);
+                connect(pGetImagesInterface,&ICaptureImages::signal_openTheVideo,pMiddlewareInterface,&MiddlewareInterface::openTheVideoSlot);
+                connect(pGetImagesInterface,&ICaptureImages::signal_simulationCapture,pMiddlewareInterface,&MiddlewareInterface::simulationCaptureSlot);
+                connect(pGetImagesInterface,&ICaptureImages::signal_liftingElectronicRailing,pMiddlewareInterface,&MiddlewareInterface::liftingElectronicRailingSlot);
+                connect(pGetImagesInterface,&ICaptureImages::signal_transparentTransmission485,pMiddlewareInterface,&MiddlewareInterface::transparentTransmission485Slot);
 
                 //connect(pMiddlewareInterface,&MiddlewareInterface::signal_message,pGetImagesInterface,&GetImagesInterface::initCameraSlot);
-                connect(pMiddlewareInterface,&MiddlewareInterface::signal_pictureStream,pGetImagesInterface,&GetImagesInterface::slot_pictureStream);
-                connect(pMiddlewareInterface,&MiddlewareInterface::signal_setCameraID,pGetImagesInterface,&GetImagesInterface::slot_setCameraID);
-                connect(pMiddlewareInterface,&MiddlewareInterface::equipmentStateSignal,pGetImagesInterface,&GetImagesInterface::slot_equipmentState);
-                connect(pMiddlewareInterface,&MiddlewareInterface::resultsTheLicensePlateSignal,pGetImagesInterface,&GetImagesInterface::slot_resultsTheLicensePlate);
+                connect(pMiddlewareInterface,&MiddlewareInterface::signal_pictureStream,pGetImagesInterface,&ICaptureImages::slot_pictureStream);
+                connect(pMiddlewareInterface,&MiddlewareInterface::signal_setCameraID,pGetImagesInterface,&ICaptureImages::slot_setCameraID);
+                connect(pMiddlewareInterface,&MiddlewareInterface::equipmentStateSignal,pGetImagesInterface,&ICaptureImages::slot_equipmentState);
+                connect(pMiddlewareInterface,&MiddlewareInterface::resultsTheLicensePlateSignal,pGetImagesInterface,&ICaptureImages::slot_resultsTheLicensePlate);
             }
         }
         /*****************************
