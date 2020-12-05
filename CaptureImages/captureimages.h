@@ -347,6 +347,8 @@ private slots:
     ///
     void getDeviceStatusSlot();
 
+    void imgTimeOutSlot();
+
 
 
 
@@ -385,6 +387,7 @@ public:
     int imgNumber;
     QString imgTime;
     bool put;
+    QTimer *imgTimeOut;
     /*****************************
     * @brief:海康相机其它实现
     ******************************/

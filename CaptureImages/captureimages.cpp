@@ -12,6 +12,9 @@ CaptureImages::CaptureImages(QObject *parent)
     imgNumber=-1;
     camerID=-1;
     put=false;
+    imgTimeOut=new QTimer(this);
+    imgTimeOut->setSingleShot(true);
+    connect(imgTimeOut,SIGNAL(timeout()),this,SLOT(imgTimeOutSlot()));
 
 
 
@@ -263,8 +266,9 @@ void CaptureImages::getDeviceStatusSlot()
 //            }
 //            initCamerSlot(camerIp,port,camerName,camerPow,alias);/* 重新登录 */
 //        }
-//    }
+    //    }
 }
+
 
 WINBOOL CaptureImages::exceptionMSGCallBack_V31(LONG lCommand, NET_DVR_ALARMER *pAlarmer, char *pAlarmInfo, DWORD dwBufLen, void *pUser)
 {
@@ -362,6 +366,12 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
 //    }
 }
 
+void CaptureImages::imgTimeOutSlot()
+{
+    emit pictureStreamSignal(nullptr,imgNumber,imgTime);
+    put=false;
+}
+
 bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
 {
     /*****************************
@@ -375,6 +385,8 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
     this->imgNumber=imgNumber;
     this->imgTime=imgTime;
     emit signal_simulationCapture(camerID);
+    imgTimeOut->start(3000);
+
 
 
 
@@ -525,6 +537,9 @@ void CaptureImages::releaseResourcesSlot()
 //            }
 //        }
 //    }
+    if(imgTimeOut!=nullptr && imgTimeOut->isActive()){
+        imgTimeOut->stop();
+    }
 }
 
 
@@ -541,6 +556,7 @@ void CaptureImages::slot_pictureStream(int ID, QByteArray arrJpg)
         emit pictureStreamSignal(arrJpg,imgNumber,imgTime);
         //emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put Command Sucess").arg(camerIP));
         put=false;
+        imgTimeOut->stop();
     }
 }
 
