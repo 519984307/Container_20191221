@@ -382,7 +382,7 @@ bool CaptureImages::putCommandSlot( int imgNumber, QString imgTime)
         return false;
     }
     if(imgTimeOut->isActive()){
-        emit pictureStreamSignal(nullptr,imgNumber,imgTime);
+        emit pictureStreamSignal(nullptr,this->imgNumber,this->imgTime);
         imgTimeOut->stop();
     }
     put=true;
