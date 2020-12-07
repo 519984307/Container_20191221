@@ -54,7 +54,7 @@ public slots:
     /// \param command 图片编号
     /// \param imgTime 时间戳
     ///
-    virtual bool putCommandSlot(const int &imgNumber,const QString &imgTime)=0;
+    virtual bool putCommandSlot(int imgNumber,QString imgTime)=0;
 
     ///
     /// \brief playViedoStreamSlot 预览实时视频

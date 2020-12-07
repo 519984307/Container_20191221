@@ -368,11 +368,11 @@ void CaptureImages::loginResultCallBack(LONG lUserID, DWORD dwResult, LPNET_DVR_
 
 void CaptureImages::imgTimeOutSlot()
 {
-    emit pictureStreamSignal(nullptr,imgNumber,imgTime);
     put=false;
+    emit pictureStreamSignal(nullptr,imgNumber,imgTime);
 }
 
-bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
+bool CaptureImages::putCommandSlot( int imgNumber, QString imgTime)
 {
     /*****************************
     * @brief:海康相机其它实现
@@ -385,7 +385,7 @@ bool CaptureImages::putCommandSlot(const int &imgNumber,const QString &imgTime)
     this->imgNumber=imgNumber;
     this->imgTime=imgTime;
     emit signal_simulationCapture(camerID);
-    imgTimeOut->start(3000);
+    imgTimeOut->start(1800);
 
 
 
@@ -553,10 +553,10 @@ void CaptureImages::releaseResourcesSlot()
 void CaptureImages::slot_pictureStream(int ID, QByteArray arrJpg)
 {
     if(put && ID==camerID){
+        imgTimeOut->stop();
         emit pictureStreamSignal(arrJpg,imgNumber,imgTime);
         //emit messageSignal(ZBY_LOG("INFO"), tr("IP=%1 Put Command Sucess").arg(camerIP));
         put=false;
-        imgTimeOut->stop();
     }
 }
 
