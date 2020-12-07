@@ -381,11 +381,15 @@ bool CaptureImages::putCommandSlot( int imgNumber, QString imgTime)
         emit pictureStreamSignal(nullptr,imgNumber,imgTime);
         return false;
     }
+    if(imgTimeOut->isActive()){
+        emit pictureStreamSignal(nullptr,imgNumber,imgTime);
+        imgTimeOut->stop();
+    }
     put=true;
     this->imgNumber=imgNumber;
     this->imgTime=imgTime;
     emit signal_simulationCapture(camerID);
-    imgTimeOut->start(1800);
+    imgTimeOut->start(3000);
 
 
 
