@@ -155,7 +155,7 @@ QStringList ResultsAnalysis::queueContainerNumber(QStringList list)
         return resultList;
     }
 
-    if(tmpList.count()>1 && tmpList.count()<tmpList.count()){
+    if(tmpList.count()>=1){
         for(int i=0;i<tmpList.count();i++){
             int j=0;
             foreach (auto var, list) {
@@ -172,7 +172,7 @@ QStringList ResultsAnalysis::queueContainerNumber(QStringList list)
 
 
     if(!tmp.isEmpty() && tmp.last()>1){
-        QList<int> indList= conCountMap.values(tmp.last());
+        QList<int> indList= conCountMap.keys(tmp.last());
         foreach (auto var, indList) {
             resultList.append(tmpList.value(var));
         }
