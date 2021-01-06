@@ -29,7 +29,6 @@ SOURCES += \
 
 HEADERS += \
     HCNetSDK.h \
-    ICaptureImages getimagesinterface.h \
     ICaptureImages.h \
     captureimages.h \
     captureimages_global.h

@@ -1,4 +1,4 @@
-#include "datawidget.h"
+﻿#include "datawidget.h"
 #include "ui_datawidget.h"
 
 DataWidget::DataWidget(QWidget *parent) :
@@ -391,17 +391,17 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         //emit sendResultSignal(channelNum,QString("[U|%1|%2|%3|%4]").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channelNum,2,10,QLatin1Char('0')).arg(ui->lineEdit_11->text()).arg(color));
 
 
-        QString time=QString("%1").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss"));
-        if(type==2){
-            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型|车牌|颜色] *//* 颜色暂时不需要 */
-            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10|%11]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(result2).arg(resultCheck2?"Y":"N").arg(iso1).arg(iso2).arg(ui->lineEdit_11->text());
-            emit sendResultSignal(channelNum,result);
-        }
-        else {
-            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型|车牌|颜色]*//* 颜色暂时不需要 */
-            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(iso1).arg(ui->lineEdit_11->text());
-            emit sendResultSignal(channelNum,result);
-        }
+//        QString time=QString("%1").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss"));
+//        if(type==2){
+//            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型|车牌|颜色] *//* 颜色暂时不需要 */
+//            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10|%11]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(result2).arg(resultCheck2?"Y":"N").arg(iso1).arg(iso2).arg(ui->lineEdit_11->text());
+//            emit sendResultSignal(channelNum,result);
+//        }
+//        else {
+//            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型|车牌|颜色]*//* 颜色暂时不需要 */
+//            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(iso1).arg(ui->lineEdit_11->text());
+//            emit sendResultSignal(channelNum,result);
+//        }
 
 
         //---------------------------------------------
@@ -411,19 +411,19 @@ void DataWidget::containerSlot(const int& type,const QString &result1,const int&
         ui->lineEdit_13->clear();
 
     }
-    else {
-        QString time=QString("%1").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss"));
-        if(type==2){
-            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型|] */
-            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10|%11]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(result2).arg(resultCheck2?"Y":"N").arg(iso1).arg(iso2);
-            emit sendResultSignal(channelNum,result);
-        }
-        else {
-            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型]*/
-            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(iso1);
-            emit sendResultSignal(channelNum,result);
-        }
-    }
+//    else {
+//        QString time=QString("%1").arg(QDateTime::fromString(dateTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss"));
+//        if(type==2){
+//            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱号|校验|箱型|箱型|] */
+//            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8|%9|%10|%11]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(result2).arg(resultCheck2?"Y":"N").arg(iso1).arg(iso2);
+//            emit sendResultSignal(channelNum,result);
+//        }
+//        else {
+//            /* 识别结果写入日志,[标志|时间戳|通道号(2位)|逻辑|箱号|校验|箱型]*/
+//            QString result=QString("[%1|%2|%3|%4|%5|%6|%7|%8]").arg("C").arg(time).arg(channelNum,2,10,QLatin1Char('0')).arg(type).arg(tmp[0]).arg(resultCheck1?"Y":"N").arg(iso1);
+//            emit sendResultSignal(channelNum,result);
+//        }
+//    }
 }
 
 void DataWidget::camerIDstatesSlot(const QString &camerIP, bool state, const QString &alisa)

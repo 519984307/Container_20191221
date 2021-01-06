@@ -1,4 +1,4 @@
-#ifndef MAINWIDGET_H
+﻿#ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
 #include <QWidget>
@@ -373,7 +373,7 @@ private:
     /// \param pMiddlewareInterface
     /// \param num
     ///
-    void middlewareHCNETPlugin(MiddlewareInterface* pMiddlewareInterface,int num);
+    void middlewareHCNETPlugin(IMiddleware* pMiddlewareInterface,int num);
 
     ///------------------------------------------------------------------------------------------------------------MainUI
     /// \brief hideWindows 隐藏所有窗口

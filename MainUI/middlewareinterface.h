@@ -1,14 +1,19 @@
-#ifndef MIDDLEWAREINTERDACE_H
-#define MIDDLEWAREINTERDACE_H
-
+﻿#ifndef IMIDDLEWARE_H
+#define IMIDDLEWARE_H
 
 #include <QObject>
 
-class MiddlewareInterface : public QObject
+class IMiddleware : public QObject
 {
     Q_OBJECT
 public:
-    ~ MiddlewareInterface(){}
+    ~ IMiddleware(){}
+
+    ///
+    /// \brief InterfaceType 插件类型，多插件调用统一接口
+    /// \return
+    ///
+    virtual QString InterfaceType()=0;
 
 signals:
 
@@ -75,7 +80,6 @@ public slots:
     ///
     virtual void simulationCaptureSlot(int ID)=0;
 
-
     ///
     /// \brief liftingElectronicRailingSlot 抬杆/落杆
     ///
@@ -93,7 +97,7 @@ public slots:
     virtual void releaseResourcesSlot()=0;
 };
 
-#define MiddlewareInterfaceIID "ZBY.ContainerServer.MiddlewareInterface/1.0"
-Q_DECLARE_INTERFACE(MiddlewareInterface,MiddlewareInterfaceIID);
+#define IMiddlewareIID "ZBY.ContainerServer.IMiddleware/1.2.1"
+Q_DECLARE_INTERFACE(IMiddleware,IMiddlewareIID);
 
-#endif // MIDDLEWAREINTERDACE_H
+#endif // IMIDDLEWARE_H

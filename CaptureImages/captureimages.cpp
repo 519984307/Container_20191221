@@ -1,4 +1,4 @@
-#include "captureimages.h"
+﻿#include "captureimages.h"
 
 //CaptureImages* CaptureImages::pThis=nullptr;
 
@@ -9,6 +9,7 @@ CaptureImages::CaptureImages(QObject *parent)
     /*****************************
     * @brief:海康相机其它实现
     ******************************/
+    alias="";
     imgNumber=-1;
     camerID=-1;
     put=false;
@@ -148,6 +149,9 @@ void CaptureImages::initCamerSlot(const QString &camerIP, const int &camerPort,c
     ******************************/
     this->camerIP=camerIP;
     this->alias=alias;
+    if(camerIP.isEmpty()){
+        return;
+    }
     emit signal_initCamera("",camerIP,camerPort,CamerUser,CamerPow);
 
 

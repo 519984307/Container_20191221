@@ -1,4 +1,4 @@
-#include "themiddlewarehcnet.h"
+﻿#include "themiddlewarehcnet.h"
 
 TheMiddlewareHCNET* TheMiddlewareHCNET::pThis=nullptr;
 
@@ -369,7 +369,7 @@ WINBOOL TheMiddlewareHCNET::exceptionMSGCallBack_V31(LONG lCommand, NET_DVR_ALAR
         memcpy(&struPlateResult, pAlarmInfo, sizeof(struPlateResult));
 
         QString plate=QString::fromLocal8Bit(struPlateResult.struPlateInfo.sLicense);
-        if(plate!="无车牌" && !plate.isEmpty()){
+        if(plate!=QString::fromLocal8Bit("无车牌") && !plate.isEmpty()){
             plate=plate.mid(1);
         }
 

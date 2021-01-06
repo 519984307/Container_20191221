@@ -1,11 +1,11 @@
-#ifndef CAPTUREIMAGES_H
+﻿#ifndef CAPTUREIMAGES_H
 #define CAPTUREIMAGES_H
 
 #include "HCNetSDK.h"
 #include "captureimages_global.h"
 #include "ICaptureImages.h"
 
-#define CAMERA_TYPE 2
+#define CAMERA_TYPE 4
 
 class CAPTUREIMAGESSHARED_EXPORT CaptureImages:public ICaptureImages
 {
