@@ -1,4 +1,6 @@
-QT -= gui
+QT += gui concurrent
+
+CONFIG += plugin
 
 TEMPLATE = lib
 DEFINES += THEMIDDLEWAREHCNET_LIBRARY
@@ -25,6 +27,7 @@ HEADERS += \
     HCNetSDK.h \
     TheMiddlewareHCNET_global.h \
     middlewareinterface.h \
+    plaympeg4.h \
     themiddlewarehcnet.h
 
 # Default rules for deployment.

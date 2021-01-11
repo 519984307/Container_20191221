@@ -592,5 +592,8 @@ void CaptureImages::slot_equipmentState(int ID, bool state)
 {
     if(camerID==ID){
          emit camerStateSingal(camerIP,state,alias);
+        if(!state){
+            camerID=-1;
+        }
     }
 }

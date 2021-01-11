@@ -4,22 +4,25 @@
 #define ZBY_LOG(type)  tr("[%1][%2][%3]").arg(type).arg(Q_FUNC_INFO).arg(__LINE__)
 
 #define IMG_BYTE 1920*1080+1
-#define CAMERA_TYPE 3
+#define CAMERA_TYPE 4
 
 
 #include "TheMiddlewareHCNET_global.h"
 #include "middlewareinterface.h"
 #include "HCNetSDK.h"
+#include "plaympeg4.h"
 
-class THEMIDDLEWAREHCNET_EXPORT TheMiddlewareHCNET:public MiddlewareInterface
+class THEMIDDLEWAREHCNET_EXPORT TheMiddlewareHCNET:public IMiddleware
 {
     Q_OBJECT
-    Q_INTERFACES(MiddlewareInterface)
-    Q_PLUGIN_METADATA(IID MiddlewareInterfaceIID)
+    Q_INTERFACES(IMiddleware)
+    Q_PLUGIN_METADATA(IID IMiddlewareIID)
 
 public:
     TheMiddlewareHCNET(QObject *parent=nullptr);
     ~TheMiddlewareHCNET()Q_DECL_OVERRIDE;
+
+    QString InterfaceType()Q_DECL_OVERRIDE;
 
     static TheMiddlewareHCNET *pThis;
 
@@ -69,7 +72,6 @@ public:
     ///
     bool initializationParameter();
 
-
 private:/* 参数  */
 
     QString localAddr;
@@ -100,6 +102,11 @@ private:/* 参数  */
     QLibrary* pDLL;
 
     ///
+    /// \brief pDLLplay 加载播放动态库
+    ///
+    QLibrary* pDLLplay;
+
+    ///
     /// \brief pTimerState 相机状态定时器
     ///
     QTimer* pTimerState;
@@ -128,6 +135,16 @@ private:/* 参数  */
     /// \brief manualsnap 手动抓拍参数
     ///
     NET_DVR_MANUALSNAP manualsnap={};
+
+    ///
+    /// \brief playMap 视频流绑定ID
+    ///
+    QMap<int,LONG> playMap;
+
+    ///
+    /// \brief putID 当前抓图ID
+    ///
+    int putID;
 
 private:
 
@@ -299,7 +316,79 @@ private:
     ///
     NET_DVR_SetRecvTimeOutFUN NET_DVR_SetRecvTimeOut_L;
 
+
+
+    /*****************************
+    * @brief:海康播放库
+    ******************************/
+
+    typedef   BOOL  (*PlayM4_GetPortFUN)(  LONG*    nPort);
+    ///
+    /// \brief PlayM4_GetPort 获取未使用的通道号。
+    /// nport 播放通道号，指向用于获取端口号的LONG型变量指针
+    ///
+    PlayM4_GetPortFUN PlayM4_GetPort_L;
+
+    typedef   BOOL  (*PlayM4_OpenStreamFUN)(  LONG nPort,  PBYTE pFileHeadBuf, DWORD nSize,  DWORD nBufPoolSize);
+    ///
+    /// \brief PlayM4_OpenStream 打开流。
+    /// nPort  播放通道号
+    /// pFileHeadBuf  文件头数据
+    /// nSize  文件头长度
+    ///nBufPoolSize 设置播放器中存放数据流的缓冲区大小。范围是SOURCE_BUF_MIN~ SOURCE_BUF_MAX。该值过小会导致无法解码。
+    ///
+    PlayM4_OpenStreamFUN PlayM4_OpenStream_L;
+
+    typedef   BOOL (*PlayM4_SetDecCallBackFUN)(  LONG     nPort,  void (CALLBACK* CallBack)(long nPort, char *pBuf, long nSize, FRAME_INFO *pFrameInfo, long luser, long nReserved2));
+    ///
+    /// \brief PlayM4_SetDecCallBack 解码回调
+    /// nPort 播放通道号
+    /// DecCallBack 解码回调函数指针，若不需要调用回调函数则置为NULL，否则不能为NULL
+    ///
+    PlayM4_SetDecCallBackFUN PlayM4_SetDecCallBack_L;
+
+    typedef BOOL (*PlayM4_PlayFUN)(LONG   nPort, HWND   hWnd);
+    ///
+    /// \brief PlayM4_Play 开启播放。
+    /// nPort 播放通道号
+    /// HWND 播放视频的窗口句柄
+    ///
+    PlayM4_PlayFUN PlayM4_Play_L;
+
+    typedef BOOL (*PlayM4_InputDataFUN)(  LONG      nPort,  PBYTE     pBuf,  DWORD     nSize);
+    ///
+    /// \brief PlayM4_InputData 输入流数据。
+    /// nPort  播放通道号
+    /// pBuf 流数据缓冲区地址
+    /// nSize 流数据缓冲区大小
+    ///
+    PlayM4_InputDataFUN PlayM4_InputData_L;
+
+    typedef   BOOL (*PlayM4_StopFUN)(  LONG     nPort);
+    ///
+    /// \brief PlayM4_Stop 关闭播放。
+    ///
+    PlayM4_StopFUN PlayM4_Stop_L;
+
+    typedef BOOL (*PlayM4_CloseStreamFUN)(  LONG  nPort);
+    ///
+    /// \brief PlayM4_CloseStream 关闭流。
+    ///
+    PlayM4_CloseStreamFUN PlayM4_CloseStream_L;
+
+    typedef   BOOL  (*PlayM4_FreePortFUN)(  LONG      nPort);
+    ///
+    /// \brief PlayM4_FreePort 释放已使用的通道号
+    ///
+    PlayM4_FreePortFUN PlayM4_FreePort_L;
+
+    typedef   DWORD  (*PlayM4_GetLastErrorFUN)(  LONG   nPort);
+    PlayM4_GetLastErrorFUN PlayM4_GetLastError_L;
+
+
 private:
+
+
 
     ///
     /// \brief exceptionCallBack_V30 接收异常、重连等消息的窗口句柄或回调函数。
@@ -318,6 +407,44 @@ private:
     /// \param pUser 用户数据
     ///
     static void CALLBACK loginResultCallBack(LONG lUserID,DWORD dwResult,LPNET_DVR_DEVICEINFO_V30 lpDeviceInfo,void *pUser);
+
+    ///
+    /// \brief g_RealDataCallBack_V30 预览回调函数
+    /// \param lRealHandle 当前的预览句柄，NET_DVR_RealPlay_V40的返回值
+    /// \param dwDataType 数据类型 宏定义 宏定义值 含义
+    /// \param pBuffer 存放数据的缓冲区指针
+    /// \param dwBufSize 缓冲区大小
+    /// \param dwUser 用户数据
+    ///
+    static void CALLBACK g_RealDataCallBack_V30(LONG lRealHandle, DWORD dwDataType, BYTE *pBuffer,DWORD dwBufSize,void* dwUser);
+
+    ///
+    /// \brief DecCallBack 解码流回调函数
+    /// \param nPort
+    /// \param pBuf
+    /// \param nSize
+    /// \param pFrameInfo
+    /// \param luser
+    /// \param nReserved2
+    ///
+    static void CALLBACK DecCallBack(long nPort, char *pBuf, long nSize, FRAME_INFO *pFrameInfo, long luser, long nReserved2);
+
+    ///
+    /// \brief yv12ToRGB888 yv12转RGB888
+    /// \param yv12
+    /// \param rgb888
+    /// \param width
+    /// \param height
+    /// \return
+    ///
+    void yv12ToRGB888(int ID, int width, int height, unsigned char *yv12, long nPort);
+
+    ///
+    /// \brief initVideoStream 视频流抓图
+    /// \param ID
+    /// \param play
+    ///
+    void initVideoStream(int ID,bool play);
 
 private slots:
     ///
