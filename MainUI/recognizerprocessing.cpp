@@ -1,4 +1,4 @@
-#include "recognizerprocessing.h"
+﻿#include "recognizerprocessing.h"
 
 RecognizerProcessing::RecognizerProcessing(QObject *parent) : QObject(parent)
 {
@@ -80,7 +80,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);            
             QPixmap labelPixFit=  labelPix->scaled(1280,720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
-            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
+            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channel).arg(imgNumber));
             labelPixFit.save(image);
             delete labelPix;
             labelPix=nullptr;
@@ -90,7 +90,7 @@ void RecognizerProcessing::pictureStreamSlot(const QByteArray &jpgStream, const 
         }
         else {
             /* 没有图片直接给结果,不经过识别器 */
-            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
+            QString image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channel).arg(imgNumber));
             recognitionResultSlot("RESULT: ||0|0",image);
         }
     }
@@ -140,7 +140,7 @@ void RecognizerProcessing::saveImageTowSlot(const QByteArray &jpgStream, const i
             QPixmap *labelPix = new QPixmap();
             labelPix->loadFromData(jpgStream);
             //QPixmap labelPixFit=  labelPix->scaled(1920,1080, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);/* 缩放图片 */
-            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(imgNumber).arg(channel));
+            image=QDir::toNativeSeparators(tr("%1/%2%3%4.jpg").arg(dir.path()).arg(QDateTime::fromString(imgTime,"yyyy-MM-dd hh:mm:ss").toString("yyyyMMddhhmmss")).arg(channel).arg(imgNumber));
             //labelPixFit.save(image);
             labelPix->save(image);
             delete labelPix;

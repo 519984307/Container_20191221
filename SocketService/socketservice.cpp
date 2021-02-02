@@ -1,4 +1,4 @@
-#include "socketservice.h"
+﻿#include "socketservice.h"
 
 SocketService::SocketService(QObject *parent)
 {
@@ -173,15 +173,24 @@ void SocketService::sendResultSlot(int channel, const QString &result)
     //QString ret=QString("%1\n\r").arg(result);
     resultOfMemory=result;/* 存储结果，用于主动获取 */
 
+    /*****************************
+    * @brief:20210202软著需求改动，发送完结果断开，有结果再次链接
+    ******************************/
+    startLink();
+    pTcpSocket->waitForConnected(3000);
+
     if(pTcpSocket->isOpen()){
         pTcpSocket->write(result.toLocal8Bit());
 
         /*****************************
-        * @brief:发送完成主动断开
+        * @brief:发送完成主动断开        
         ******************************/
         pTcpSocket->waitForBytesWritten();
         pTcpSocket->abort();
         pTcpSocket->close();
-        QTimer::singleShot(10000,this,SLOT(startLink()));
+        //QTimer::singleShot(10000,this,SLOT(startLink()));/* 20210202软著需求改动，发送完结果断开，有结果再次链接 */
+    }
+    else {
+        emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1:%3  Socket Error<errorCode=%2>").arg(address).arg(-1).arg(port));/* 20210202软著需求改动，发送完结果断开，有结果再次链接 */
     }
 }

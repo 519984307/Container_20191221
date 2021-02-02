@@ -1,4 +1,4 @@
-#include "electroniclicenseplate.h"
+﻿#include "electroniclicenseplate.h"
 
 ElectronicLicensePlate *ElectronicLicensePlate::pThis=nullptr;
 bool ElectronicLicensePlate::complate=false;
@@ -258,7 +258,7 @@ void ElectronicLicensePlate::transparentTransmission485Slot(const QString &msg)
 {
     QByteArray arrMsg=msg.toLatin1();
     if(CLIENT_LPRC_RS485Send!=nullptr && CLIENT_LPRC_RS485Send(arrAddr.data(),9110,arrMsg.data(),arrMsg.length())==0){
-        messageSignal(ZBY_LOG("INFO"),tr("IP:%1 485 data forwarding was successful").arg(address));
+        messageSignal(ZBY_LOG("INFO"),tr("IP:%1 485 data forwarding was successful:%2").arg(address).arg(arrMsg.data()));
     }
     else {
         messageSignal(ZBY_LOG("ERROR"),tr("IP:%1 485 data forwarding was successful").arg(address));
