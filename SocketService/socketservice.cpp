@@ -143,7 +143,7 @@ void SocketService::displayError(QAbstractSocket::SocketError socketError)
     //emit socketLinkStateSingal(address,false);
     isConnected=false;
 
-    QTimer::singleShot(15000, this, SLOT(startLink()));
+    //QTimer::singleShot(15000, this, SLOT(startLink()));/* 20210202软著需求改动，发送完结果断开，有结果再次链接 */
     emit messageSignal(ZBY_LOG("ERROR"), tr("IP:%1:%3  Socket Error<errorCode=%2>").arg(address).arg(socketError).arg(port));
 }
 
